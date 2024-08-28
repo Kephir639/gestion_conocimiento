@@ -17,9 +17,14 @@ class GruposController extends Controller
         return view('gruposInvestigacion')->with($lista);
     }
 
-    public function showRegistrarGrupos()
+    public function showModalRegistrar()
     {
-        return view('registrarGrupos');
+        return view('modals.grupos.crearGrupos');
+    }
+
+    public function showModalActualizar()
+    {
+        return view('modals.grupos.modificarGrupos');
     }
 
     public function registrarGrupo(Request $request)
@@ -112,7 +117,6 @@ class GruposController extends Controller
                 $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
                 GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo);
-
 
                 return view('alertas.modifcarExitoso');
             }
