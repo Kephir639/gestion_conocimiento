@@ -1,45 +1,37 @@
 $(document).ready(function () {
     //Metodo para abrir la modal de modificar
-    $('#BtnModificarRed').on('click', function () {
+    let button = '';
+    //Metodo para abrir la modal de modificar
+    $('.iconoModificar').on('click', function () {
+        button = $(this);
+        let nombreGrupo = $(this).parents('tr').find('td:eq(0)').text().trim();
+        let estadoGrupo = $(this).parents('tr').find('td:eq(1)').text().trim();
+        let estado = (estadoGrupo == "Activo") ? 1 : (estadoGrupo == "Inactivo") ? 0 : -1;
         $.ajax({
             type: "GET",
             url: "showModalActualizar",
             success: function (data) {
                 $('#ModalSection').html(data);
-                $('#modalModificarRedes').modal('show');
-                console.log('SI abre');
+
+                $(this).find('#inputNombreRed').val(nombreGrupo);
+                $(this).find('#inputEstadoRed').val(estado);
+
+                $('#modalModificarRed').modal('show');                
             }
         });
     });
 
     //Metodo para abrir la modal de registrar
     $('#BtnRegistrarRed').on('click', function () {
+        button = $(this);
         $.ajax({
             type: "GET",
             url: "showModalRegistrar",
             success: function (data) {
                 $('#ModalSection').html(data);
-                $('#modalRegistrarRedes').modal('show');
+                $('#modalRegistrarRed').modal('show');
             }
         });
-    });
-    
-    let modal = $('#modalModificarRedes');
-    $(modal).on('show.bs.modal', function (e) {
-        //Metodo para traer la informacion de la tabla hacia la modal de modificar
-        console.log('SI se pudo')
-        let button = $(e.relatedTarget);
-        let nombreRed = button.parents('tr').find('td:eq(0)').text().trim();
-        let estadoRedText = button.parents('tr').find('td:eq(1)').text().trim();
-        let valueEstado = -1;
-
-        if (estadoRedText == "Activo") {
-            valueEstado = 1
-        } else {
-            valueEstado = 0
-        }
-        $(this).find('#inputNombreRed').val(nombreRed);
-        $(this).find('#inputEstadoRed').val(valueEstado);
     });
 
     $('#formModificar').submit(function (e) {
@@ -63,6 +55,8 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $('#alertasModificar').html(data);
+                button.parents('tr').find('td:eq(0)').val(nombre);
+                button.parents('tr').find('td:eq(1)').val(estado);
             }
         });
     });
@@ -86,6 +80,12 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $('#alertasRegistrar').html(data);
+                
+                //Mostrar los registros actualizados
+                $('#tablebody_grupos').html(data.tabla);
+
+                //Mostrar Alerta
+                $('#alertasRegistrar').html(data.alerta);
             }
         });
     });

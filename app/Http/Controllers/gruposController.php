@@ -48,8 +48,10 @@ class GruposController extends Controller
             // dd($validacion->errors());
         } else {
             $respuestas['error'] = false;
-            if (GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])) {
-                return response()->json(['estado' => false], 200);
+            $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
+
+            if (count($ajax)) {
+                return view('alertas.repetido');
             } else {
                 $grupo = new GrupoInvestigacion();
 
@@ -57,7 +59,18 @@ class GruposController extends Controller
                 $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
                 GrupoInvestigacion::create($grupo);
-                return response()->json(['estado' => true], 200);
+
+
+                $listaGrupos = GrupoInvestigacion::paginate('10')->orderBy('id_grupo', 'desc');
+                $controladores = $request->controladores;
+
+                $tabla = view('modals.grupos.tablaGrupo', ['listaGrupos' => $listaGrupos, 'controladores' => $controladores])->render();
+                $alerta = view('alertas.registrarExitoso')->render();
+
+                return response()->json([
+                    'tabla' => $tabla,
+                    'alerta' => $alerta
+                ]);
             }
         }
     }
@@ -88,8 +101,10 @@ class GruposController extends Controller
             // dd($validacion->errors());
         } else {
             $respuestas['error'] = false;
-            if (GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])) {
-                return 'Variable de JSON recibida por el Ajax para mostrar el alerta';
+            $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
+
+            if (count($ajax)) {
+                return view('alertas.repetido');
             } else {
                 $grupo = new GrupoInvestigacion();
 
@@ -98,7 +113,8 @@ class GruposController extends Controller
 
                 GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo);
 
-                return response()->json(['estado' => true], 200);
+
+                return view('alertas.modifcarExitoso');
             }
         }
     }
