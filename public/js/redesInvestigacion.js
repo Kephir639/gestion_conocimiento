@@ -63,13 +63,10 @@ $(document).ready(function () {
 
     $('#formRegistrar').submit(function (e) {
         //Solicitud de Ajax para realizar la actualizacion del elemento
-        e.preventDefault();
-        let boton = $('#BtnRegistrarRed');
-
+        e.preventDefault();        
+        
         let nombre = $('#inputNombreRed').val();
         let token = $('#_token').val();
-
-        let modal = $('#modalModificar');
 
         $.ajax({
             type: "POST",
@@ -78,9 +75,7 @@ $(document).ready(function () {
                 '_token': token,
                 'nombre_red': nombre,
             },
-            success: function (data) {
-                $('#alertasRegistrar').html(data);
-                
+            success: function (data) {                            
                 //Mostrar los registros actualizados
                 $('#tablebody_grupos').html(data.tabla);
 

@@ -29,7 +29,6 @@ Route::middleware('auth')->group(function () {
             Route::post('index/redes/registrarRedes', [redesController::class, 'registrarRed']);
             Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
             Route::post('index/redes/actualizarRedes', [redesController::class, 'actualizarRed']);
-
             //Gurpos de investigacion
             Route::get('index/grupos/consultar_grupos', [gruposController::class], 'showGrupos');
             Route::get('index/grupos/crear_grupos', [gruposController::class, 'showRegistrarGrupos']);

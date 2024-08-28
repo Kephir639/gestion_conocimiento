@@ -1,38 +1,40 @@
 @extends('layouts.plantillaIndex')
 
-@section('title', 'Redes de Investigacion')
+@section('title', 'Centros Formativos')
 @push('styles')
-    <link rel="stylesheet" href="{{ url('css/redes.css') }}">
+    <link rel="stylesheet" href="{{ url('css/centros.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">
         <div class="row p-3">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <table id="datatable_redes" class="table tablaRed">
+                <table class="table">
                     <thead class="tableHeadre">
                         <tr class="tituloTabla">
+                            <th>CODIGO</th>
                             <th id="nombre">NOMBRE</th>
                             <th>ESTADO</th>
                             <th id="acciones">ACCIONES</th>
                         </tr>
                     </thead>
-                    <tbody id="tablebody_redes">
-                        @foreach ($listaRedes as $redes)
+                    <tbody id="tablebody_centros">
+                        @foreach ($listaCentros as $centros)
                             <tr>
-                                <td>{{ $redes->nombre_red }}</td>
+                                <td>{{ $centros->codigo_centro }}</td>
+                                <td>{{ $centros->nombre_centro }}</td>
                                 <td>
-                                    @if ($redes->estado_red == 1)
+                                    @if ($centros->estado_centro == 1)
                                         Activo
-                                    @elseif ($redes->estado_red == 0)
+                                    @elseif ($centros->estado_centro == 0)
                                         Inactivo
                                     @endif
                                 </td>
                                 <td>
                                     @foreach ($controladores as $controlador)
-                                        @if ($controlador['nombre_controlador'] == 'redes')
+                                        @if ($controlador['nombre_controlador'] == 'centros')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_red')
-                                                    <button title="Modificar Red" class="btn iconoModificar"><svg
+                                                @if ($func['nombre_funcion'] == 'modificar_centro')
+                                                    <button title="Modificar Centro" class="btn iconoModificar"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
                                                             <path
@@ -63,5 +65,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ url('js/redesInvestigacion.js') }}"></script>
+    <script src="{{ url('js/centros.js') }}"></script>
 @endsection
