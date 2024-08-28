@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>@yield('title')</title>
+    <link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/plantilla.css') }}">
+    @stack('styles')
+
+</head>
+
+<body>
+    <div class="app">
+        <div id="sidebar" class="">
+            <div class="h-100">
+                <div class="sidebar-logo p-2">
+                    <img class="logoSenova" src="{{ asset('iconos/Sennova.png') }}" alt="Senova">
+                </div>
+                <ul class="list-unstyled mb-0 ml-0 pl-0 flex-grow-1">
+                    <div class="d-flex align-items-center justify-content-end p-3 pe-1">
+                        <li class="sidebar-header">
+                            {{-- Administrador --}}
+                            {{-- {{ $rol_usuario }} --}}
+                            <button class="btn btnToggler p-2 mr-1" id="sidebar-toggle-close" type="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="iconoToggler toggler-sidebar"
+                                    viewBox="0 0 24 24">
+                                    <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
+                                </svg>
+                            </button>
+                    </div>
+                    <li class="mt-2">
+                        <a href="/index" class="sidebar-tabb-drop sidebar-link px-3 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="iconos" viewBox="0 0 24 24">
+                                <path
+                                    d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 0 0 .707-1.707l-9-9a.999.999 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 13zm7 7v-5h4v5h-4zm2-15.586 6 6V15l.001 5H16v-5c0-1.103-.897-2-2-2h-4c-1.103 0-2 .897-2 2v5H6v-9.586l6-6z">
+                                </path>
+                            </svg>
+                            Inicio
+                        </a>
+                    </li>
+                    @foreach ($controladores as $controlador => $contr)
+                        {{-- {{ dd($contr) }} --}}
+                        <li class="sidebar-item">
+                            <a href="#" id="tab_{{ $contr['nombre_controlador'] }}"
+                                class="sidebar-tabb sidebar-link collapsed px-3 py-2"
+                                data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse"
+                                aria-expanded="false">{!! html_entity_decode($contr['icono']) !!}{{ $contr['display_controlador'] }}
+                            </a>
+                            <ul id="{{ $contr['nombre_controlador'] }}" class="sidebar-dropdown list-unstyled collapse"
+                                data-bs-target="#sidebar">
+                                @foreach ($contr['funciones'] as $funcion => $func)
+                                    @if (!Str::contains($func['display_funcion'], 'Modificar'))
+                                        <li>
+                                            <a href="/index/{{ $contr['nombre_controlador'] }}/{{ $func['nombre_funcion'] }}"
+                                                class="sidebar-tabb-drop sidebar-link text-center p-2">
+                                                {{ $func['display_funcion'] }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endforeach
+                </ul><br>
+            </div>
+        </div>
+        <nav class="navbar navPerz">
+            <button class="btn btnToggler p-2" id="sidebar-toggle" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" class="iconoToggler toggler-sidebar" viewBox="0 0 24 24">
+                    <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
+                </svg>
+            </button>
+            <div class="nabvar-collapse navbar">
+                <ul class="navbar-nav ml-auto">
+                </ul>
+                <li class="nav-item dropdown">
+                    <a href="#" data-bs-target="dropdownPerfil" class="nav-icon pe-md-0" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="iconos" viewBox="0 0 24 24">
+                            <path
+                                d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zM8.715 8c1.151 0 2 .849 2 2s-.849 2-2 2-2-.849-2-2 .848-2 2-2zm3.715 8H5v-.465c0-1.373 1.676-2.785 3.715-2.785s3.715 1.412 3.715 2.785V16zM19 15h-4v-2h4v2zm0-4h-5V9h5v2z">
+                            </path>
+                        </svg>
+                    </a>
+                    <ul class="dropdown-menu menuD dropdown-menu-end" id="dropdownPerfil">
+                        <li class="navbar-item"><span class="dropdown-item text-center">Nombre
+                                Usuario</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown divider division my-1">
+                        </li>
+                        <li class="navbar-item"><a href="#"
+                                class="dropdown-item item-perfil w-100 text-center">Perfil</a>
+                        </li>
+                        <li class="navbar-item"><a href="#"
+                                class="dropdown-item item-perfil w-100 text-center">Cerrrar
+                                Sesión</a>
+                        </li>
+                    </ul>
+                </li>
+            </div>
+        </nav>
+        <div class="main">
+            <div class="bg"></div>
+            <div class="bg bg2"></div>
+            <div class="bg bg3"></div>
+            <div class="cuadradoPlantilla px-3">
+                <div class="cuadradoVistas">
+                    @yield('content')
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url('libraries/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ url('libraries/popper.min.js') }}"></script>
+    <script src="{{ url('js/bootstrap.min.js') }}"></script>
+    <script src="{{ url('js/indexSidebar.js') }}"></script>
+    @yield('scripts')
+
+</body>
+
+</html>

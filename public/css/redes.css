@@ -1,0 +1,57 @@
+:root {
+    --color-Negro: #222222;
+    --color-sombraNegra: #2e2b2b94;
+    --color-fuente-background: rgba(255, 255, 255, 0.3);
+    --color-fondoGris: #777777;
+    --color-fuente: whitesmoke;
+    --color-primario-obscuro: #007430;
+    --color-primario: #007832;
+    --color-verdeAguamarina: #1A936F;
+    --color-primario-hover: #08a835;
+    --color-secundario: #00324D;
+    --color-secundario-hover: #0d5c86;
+    --color-azulNavy: #1C5D99;
+    --color-azulNavy-pastel: #bbcde5;
+    --color-alternativo-azulCielo: #50E5F9;
+    --color-alternativo-amarillo: #FDC300;
+    --color--danger: #ffc107;
+    --fuente-primaria: 'Work sans', 'Calibri';
+    --tamaño-sidebar: 260px;
+    --tamaño-sidebar-negativo: -260px;
+    --transiciones: all 0.35s ease-in-out;
+}
+
+.tablaRed {
+    background-color: transparent;
+}
+
+.table thead th {
+    background-color: var(--color-primario);
+    color: var(--color-fuente);
+    font-style: Bold;
+    font-size: larger;
+}
+
+#nombre {
+    border-top-left-radius: 7px;
+}
+
+#acciones {
+    border-top-right-radius: 7px;
+}
+
+.table tbody td {
+    vertical-align: middle;
+}
+
+.iconoModificar {
+    width: 36px;
+    height: 36px;
+    fill: var(--color--danger);
+}
+
+.iconoRegistrar {
+    width: 36px;
+    height: 36px;
+    fill: var(--color-secundario);
+}

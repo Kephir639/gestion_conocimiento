@@ -1,0 +1,336 @@
+:root {
+    --color-Negro: #222222;
+    --color-sombraNegra: #2e2b2b94;
+    --color-fuente-background: rgba(255, 255, 255, 0.3);
+    --color-fondoGris: #777777;
+    --color-fuente: whitesmoke;
+    --color-primario-obscuro: #007430;
+    --color-primario: #007832;
+    --color-verdeAguamarina: #1A936F;
+    --color-primario-hover: #08a835;
+    --color-secundario: #00324D;
+    --color-secundario-hover: #0d5c86;
+    --color-azulNavy: #1C5D99;
+    --color-azulNavy-pastel: #bbcde5;
+    --color-alternativo-azulCielo: #50E5F9;
+    --color-alternativo-amarillo: #FDC300;
+    --fuente-primaria: 'Work sans', 'Calibri';
+    --tamaño-sidebar: 260px;
+    --tamaño-sidebar-negativo: -260px;
+    --transiciones: all 0.35s ease-in-out;
+}
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: var(--fuente-primaria);
+}
+
+
+/* Card para presentar los forms */
+.cuadradoVistas {
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-fuente);
+    border-radius: 10px;
+}
+
+/* Manejor del card para forms dentro de la plantilla Blade */
+.cuadradoPlantilla {
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+}
+
+.app {
+    display: grid;
+    grid-template-areas:
+        'aside header header'
+        'aside main main';
+    grid-template-rows: 60px 1fr;
+    grid-template-columns: 0px 1fr 1fr;
+    /*min-height: 500px;*/
+    height: 100svh;
+    max-height: fit-content;
+    overflow: hidden;
+}
+
+.main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transiciones);
+    /* overflow-y: scroll; */
+    grid-area: main;
+}
+
+.main::-webkit-scrollbar {
+    width: 10px;
+}
+
+.main::-webkit-scrollbar-thumb {
+    background-color: gray;
+    border-radius: 10px;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--fuente-primaria);
+}
+
+li {
+    list-style: none;
+
+}
+
+/* Estilos para el SideBar */
+.wrapper {
+    align-items: stretch;
+    display: flex;
+    width: 100%;
+}
+
+#sidebar {
+    width: var(--tamaño-sidebar);
+    min-height: 100%;
+    height: fit-content;
+    background: var(--color-primario);
+    transition: var(--transiciones);
+    position: absolute;
+    left: -100%;
+    z-index: 10;
+    grid-area: aside;
+}
+
+.expanded {
+    left: 0 !important;
+}
+
+/* Estilos para los elementos del SideBar */
+.logoSenova {
+    /*Logo de Senova para el sidebar*/
+    width: 90%;
+    margin: 0 5px;
+}
+
+.btnToggler {
+    /*Estilo para el boton de despliegue del sidebar*/
+    --bs-btn-hover-border-color: var(--color-fuente);
+    color: var(--color-fuente);
+}
+
+.sidebar-logo {
+    /* Estilo para el contenedor del logo de senova */
+    background-color: var(--color-fuente);
+}
+
+.sidebar-logo a {
+    /* Estilo para el contenedor del logo de senova */
+    color: var(--color-fuente);
+}
+
+#sidebar-toggle {
+    /* Configuracion adicional para el boton de despliegue del sidebar */
+    margin-left: 10px;
+}
+
+.sidebar-header {
+    /* Estilos para el header del sidebar que contendrá el rol del usuario */
+    color: var(--color-fuente);
+    font-size: 1.25rem;
+}
+
+a.sidebar-link {
+    /* Estilo para los dropdown y sus elementos */
+    color: var(--color-fuente);
+    position: relative;
+    display: block;
+    font-size: 0.975rem;
+}
+
+.iconos {
+    /* Estilo para los iconos de los dropdown */
+    margin-right: 10px;
+    width: 32px;
+    height: 32px;
+    fill: var(--color-fuente);
+}
+
+.iconoToggler {
+    width: 32px;
+    height: 32px;
+    fill: var(--color-fuente);
+}
+
+.sidebar-link[data-bs-toggle="collapse"]::after {
+    /* Estilo para la flecha del dropdown(decoracion) */
+    border: solid;
+    border-width: 0 0.075rem 0.075rem 0;
+    content: "";
+    display: inline-block;
+    padding: 2px;
+    position: absolute;
+    right: 1.5rem;
+    top: 1.4rem;
+    transform: rotate(-135deg);
+    transition: all .2s ease-out;
+}
+
+.sidebar-link[data-bs-toggle="collapse"].collapsed::after {
+    /* Estilo para la flecha del dropdown(decoracion) */
+    transform: rotate(45deg);
+
+}
+
+/* Efectos para los dropdown */
+.sidebar-tabb {
+    color: var(--color-fuente);
+}
+
+.sidebar-tabb:hover {
+    background-color: var(--color-fuente);
+}
+
+a.sidebar-tabb:hover {
+    color: var(--color-primario-obscuro);
+}
+
+.sidebar-tabb:hover .iconos {
+    fill: var(--color-primario-obscuro);
+}
+
+/* Efectos para los elementos del dropdown */
+.sidebar-tabb-drop {
+    color: var(--color-fuente);
+}
+
+.sidebar-tabb-drop:hover {
+    background-color: var(--color-fuente);
+}
+
+a.sidebar-tabb-drop:hover {
+    color: var(--color-primario-obscuro);
+}
+
+.sidebar-tabb-drop:hover .iconos {
+    fill: var(--color-primario-obscuro);
+}
+
+
+/* Estilos para en navbar */
+.navPerz {
+    width: 100%;
+    background: transparent;
+    animation: slideInDown 0.5s ease-out;
+    --bs-navbar-toggler-focus-width: 0;
+    --bs-navbar-toggler-border-color: var(--color-primario);
+    --bs-navbar-toggler-hover-bg: var(--color-primario-obscuro);
+    --bs-navbar-brand-hover-color: var(--color-primario);
+    grid-area: header;
+}
+
+.avatar {
+    /* Estilos para el icono de perfil */
+    height: 32px;
+    width: 32px;
+    margin-right: 22px;
+}
+
+
+.toggler-sidebar {
+    /* Estilos para el boton de despliegue del sidebar */
+    background-color: transparent;
+    color: var(--color-fuente);
+    width: 24px;
+    height: 24px;
+}
+
+.toggler-sidebar::hover {
+    /* Efectos para el boton de despliegue del sidebar */
+    background-color: var(--color-primario);
+    box-shadow: 0 0 10px var(--color-fuente);
+    color: var(--color-fuente);
+    width: 24px;
+    height: 24px;
+}
+
+.item-perfil:hover {
+    /* Efecto para los elementos del dropdown de perfil */
+    background-color: var(--color-secundario);
+    color: var(--color-fuente);
+}
+
+.menuD {
+    /* Estilo para el menu de perfil */
+    background-color: var(--color-fuente);
+}
+
+.division {
+    /* Estilo del divisor del menu de perfil */
+    color: var(--color-Negro);
+}
+
+
+#sidebar.collapsed {
+    /* Animacion de cierre del sidebar */
+    margin-left: var(--tamaño-sidebar-negativo);
+}
+
+/* Configuracion del Background */
+.bg {
+    animation: slide 3s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, var(--color-secundario-hover) 50%, var(--color-secundario) 50%);
+    bottom: 0;
+    left: -50%;
+    opacity: .5;
+    position: fixed;
+    right: -50%;
+    top: 0;
+    z-index: -1;
+}
+
+.bg2 {
+    animation-direction: alternate-reverse;
+    animation-duration: 4s;
+}
+
+.bg3 {
+    animation-duration: 5s;
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(-25%);
+    }
+
+    100% {
+        transform: translateX(25%);
+    }
+}
+
+/* Configuracion para el responsive */
+@media (min-width: 1024px) {
+    .app {
+        grid-template-columns: 260px 1fr 1fr;
+    }
+
+    #sidebar {
+        left: 0;
+    }
+
+    #sidebar-toggle,
+    #sidebar-toggle-close {
+        display: none;
+    }
+
+    .navPerz {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+    }
+}
