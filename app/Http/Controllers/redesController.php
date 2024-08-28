@@ -13,12 +13,9 @@ class RedesController extends Controller
 
     public function showRedes(Request $request)
     {
-        // dd(Hash::make('123456789'));
-        $sql = "SELECT nombre_red, estado_red FROM redes_conocimiento WHERE estado_red <> 0";
-        $listaRedes = Redes::paginate('10')->where('estado_red', '<>', 0);
+        $listaRedes = Redes::paginate('10')->orderBy('id_red', 'desc');
         $controladores = $request->controladores;
-        // $controladores = request()->all();
-        // dd($controladores);
+
         return view('modals.redes.consultarRedes', compact('listaRedes', 'controladores'));
     }
 
@@ -53,9 +50,9 @@ class RedesController extends Controller
             // dd($validacion->errors());
         } else {
             $respuestas['error'] = false;
-            $registrado = Redes::where('nombre_red', $datos['nombre_red'])->get();
-            if (count($registrado)) {
-                return view('alertas.redes.redRepetido')->with(['controladores' => $request->controladores]);
+            $ajax = Redes::where('nombre_red', $datos['nombre_red'])->get();
+            if (count($ajax)) {
+                return view('alertas.repetido');
             } else {
                 $red = new Redes();
 
@@ -64,7 +61,12 @@ class RedesController extends Controller
 
                 Redes::create($red->toArray());
 
-                return view('alertas.redes.registrarExitoso')->with(['controladores' => $request->controladores]);
+                $listaRedes = Redes::paginate('10')->orderBy('id_red', 'desc');
+                $controladores = $request->controladores;
+
+                $tabla = view('');
+
+                return response()->json();
             }
         }
     }
