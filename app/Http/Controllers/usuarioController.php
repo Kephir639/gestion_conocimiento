@@ -100,11 +100,11 @@ class UsuarioController extends Controller
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
             return redirect()->back()->withErrors($respuestas['validacion']);
-            // dd($validacion->errors());
         } else {
             $respuestas['error'] = false;
-            if (User::where('identificacion', $datos['documento'])) {
-                return $mensaje = "El usuario ya está registrado";
+            $ajax = User::where('identificacion', $datos['documento'])->get();
+            if (count($ajax)) {
+                return view('alertas.repetido');
             } else {
                 User::create([
                     'id_rol' => $datos['id_rol'],
@@ -122,7 +122,6 @@ class UsuarioController extends Controller
                     'estado_usu' => $datos['estado'],
                     'contraseña' => $datos['contraseña']
                 ]);
-                return $mensajeExitoso = "El usuario se creo exitosamente";
             }
         }
     }
