@@ -10,58 +10,114 @@ use Illuminate\Support\Facades\Validator;
 
 class lineaController extends Controller
 {
-    public function consultarLineas()
+    public function showLineas()
     {
-        $lineas = LineaInvestigacion::all();
+        $sql = "SELECT nombre_linea, estado FROM lineas_investigacion";
 
-        foreach ($lineas as $linea) {
-            $linea->id_linea = Crypt::encrypt($linea->id_linea);
-        }
-
-        return view('consultarLinea', compact('lineas'));
+        $lista = LineaInvestigacion::select($sql)->paginate('10');
+        return view('lineas')->with($lista);
     }
 
-    public function showregistrarLineas()
+    public function showModalRegistrar()
     {
-        return view('crearLinea');
+        return view('modals.cargo.crearCargo');
     }
 
-    public function registrarLinea()
+    public function registrarLinea(Request $request)
     {
+        $reglas = [
+            'nombre_linea' => 'required',
+            'estado_linea' => 'required'
+        ];
 
-        $datos = request()->all();
+        $mensajes = [
+            'nombre_linea.required' => 'Este campo es obligatorio',
+            'nombre_linea.max' => 'Este campo debe contener maximo 30 caracteres',
+            'estado_linea.required' => 'Este campo es obligatorio'
+        ];
 
-        $registroLineas = LineaInvestigacion::create([
-            'nombre_linea' => $datos['inputNombreLinea'], 'estado' => $datos['inputEstadoLinea']
-        ]);
+        $datos = $request->all();
+        $respuestas = [];
+        $validacion = Validator::make($datos, $reglas, $mensajes);
 
-        if ($registroLineas) {
-            return redirect()->route('linea.consultar')->with('Linea registrada exitosamente');
+        unset($datos['_token']);
+        unset($datos['controladores']);
+
+        if ($validacion->fails()) {
+            $respuestas['mensaje'] = $validacion;
+            $respuestas['error'] = true;
+            //Se regresa a la ruta anterior con los errores cometidos para ser mostrados en la vista
+            return redirect()->back()->withErrors($respuestas['mensaje']);
         } else {
-            return back()->with('error', 'Error al registrar la linea.');
+            $respuestas['error'] = false;
+            if (LineaInvestigacion::where('nombre_linea', $datos['inputNombreLinea'])->exists()) {
+                return response()->json(['estado' => false, 'mensaje' => 'El linea ya existe'], 200);
+            } else {
+                $linea = new LineaInvestigacion();
+
+                $linea->setNombreCargoAttribute($request->nombre_linea);
+                $linea->setEstadoAttribute($request->estado_linea);
+
+                LineaInvestigacion::create($linea);
+
+                $listaLinea = LineaInvestigacion::paginate('10')->orderBy('id_linea', 'desc');
+                $controladores = $request->controladores;
+
+                $tabla = view('modals.lineas.tablaLineas', ['listaLineas' => $listaLinea, 'controladores' => $controladores])->render();
+                $alerta = view('alertas.registrarExitoso')->render();
+
+                return response()->json([
+                    'tabla' => $tabla,
+                    'alerta' => $alerta
+                ]);
+            }
         }
     }
-    public function editarLinea($id)
+
+    public function showModalActualizar()
     {
-        $id = Crypt::decrypt($id);
-        $sql_linea = "SELECT nombre_linea,estado FROM lineas_investigacion WHERE id_linea ='$id'";
-        $linea_data = DB::select($sql_linea);
-        $linea_nombre = $linea_data[0]->nombre_linea;
-        $linea_estado = $linea_data[0]->estado;
-        // dd($linea_data);
-
-        $lineas = LineaInvestigacion::findorFail($id);
-        $lineas = Crypt::encrypt($lineas);
-
-        return view('editarLinea', compact('lineas', 'linea_nombre', 'linea_estado'));
+        return view('modals.cargo.modificarCargo');
     }
 
-    public function actualizarLinea($id)
+    public function actualizarLinea(Request $request)
     {
-        extract($_POST);
-        $id = Crypt::decrypt($id)->id_linea;
-        DB::table('lineas_investigacion')->where('id_linea', $id)->update(["nombre_linea" => $linea_nombre, "estado" => $estado]);
+        $reglas = [
+            'nombre_linea' => 'required|max:30',
+            'estado_linea' => 'required'
+        ];
+        $mensajes = [
+            'nombre_linea.required' => 'Este campo es obligatorio',
+            'nombre_linea.max' => 'Este campo debe contener maximo 30 caracteres',
+            'estado_linea.required' => 'Este campo es obligatorio'
+        ];
 
-        return redirect()->route('linea.consultar');
+        $respuestas = [];
+        $datos = $request->all();
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        unset($datos['_token']);
+        unset($datos['controladores']);
+        if ($validacion->fails()) {
+            $respuestas['mensaje'] = $validacion;
+            $respuestas['error'] = true;
+            return redirect()->back()->withErrors($respuestas['mensaje']);
+            // dd($validacion->errors());
+        } else {
+            $respuestas['error'] = false;
+            $ajax = LineaInvestigacion::where('nombre_linea', $datos['nombre_linea'])->get();
+
+            if (count($ajax)) {
+                return view('alertas.repetido');
+            } else {
+                $linea = new LineaInvestigacion();
+
+                $linea->setNombreLineaAttribute($request->nombre_linea);
+                $linea->setEstadoAttribute($request->estado_linea);
+
+                LineaInvestigacion::where('nombre_linea', $datos['nombre_linea_old'])->update($linea);
+
+                return view('alertas.modifcarExitoso');
+            }
+        }
     }
 }
