@@ -1,34 +1,33 @@
 $(document).ready(function () {
     let button = '';
-    //Metodo para abrir la modal de modificar
-    $('.iconoModificar').on('click', function () {
+    $('.btnEditarCargo').on('click', function () {
         button = $(this);
-        let nombreGrupo = $(this).parents('tr').find('td:eq(0)').text().trim();
-        let estadoGrupo = $(this).parents('tr').find('td:eq(1)').text().trim();
-        let estado = (estadoGrupo == "Activo") ? 1 : (estadoGrupo == "Inactivo") ? 0 : -1;
+        let nombreCargo = $(this).parents('tr').find('td:eq(0)').text().trim();
+        let estadoCargo = $(this).parents('tr').find('td:eq(1)').text().trim();
+        let estado = (estadoCargo == "Activo") ? 1 : (estadoCargo == "Inactivo") ? 0 : -1;
         $.ajax({
-            type: "GET",
-            url: "showModalActualizar",
+            type: 'GET',
+            url: 'showModalActualizar',
             success: function (data) {
                 $('#ModalSection').html(data);
 
-                $(this).find('#inputNombreGrupo').val(nombreGrupo);
-                $(this).find('#inputEstadoGrupo').val(estado);
+                $(this).find('#inputNombreCargo').val(nombreCargo);
+                $(this).find('#inputEstadoCargo').val(estado);
 
-                $('#modalModificarGrupo').modal('show');
+                $('#modalModificarCargo').modal('show');
             }
         });
     });
 
     //Metodo para abrir la modal de registrar
-    $('#BtnRegistrarGrupo').on('click', function () {
+    $('#BtnRegistrarCargo').on('click', function () {
         button = $(this);
         $.ajax({
             type: "GET",
             url: "showModalRegistrar",
             success: function (data) {
                 $('#ModalSection').html(data);
-                $('#modalRegistrarGrupo').modal('show');
+                $('#modalRegistrarCargo').modal('show');
             }
         });
     });
@@ -38,18 +37,18 @@ $(document).ready(function () {
         e.preventDefault();
         let nombre_old = button.parents('tr').find('td:eq(0)').text().trim();
 
-        let nombre = $('#inputNombreGrupo').val();
-        let estado = $('#inputEstadoGrupo').val();
+        let nombre = $('#inputNombreCargo').val();
+        let estado = $('#inputEstadoCargo').val();
         let token = $('#_token').val();
 
         $.ajax({
             type: "POST",
-            url: "actualizarGrupo",
+            url: "actualizarCargo",
             data: {
                 '_token': token,
-                'nombre_grupo': nombre,
-                'nombre_grupo_old': nombre_old,
-                'estado_grupo': estado
+                'nombre_cargo': nombre,
+                'nombre_cargo_old': nombre_old,
+                'estado_cargo': estado
             },
             success: function (data) {
                 $('#alertasModificar').html(data);
@@ -62,25 +61,23 @@ $(document).ready(function () {
     $('#formRegistrar').submit(function (e) {
         //Solicitud de Ajax para realizar el registro del elemento
         e.preventDefault();
-        let nombre = $('#inputNombreGrupo').val();
+        let nombre = $('#inputNombreCargo').val();
         let token = $('#_token').val();
 
         $.ajax({
             type: "POST",
-            url: "registrarGrupo",
+            url: "registrarCargo",
             data: {
                 '_token': token,
-                'nombre_grupo': nombre,
+                'nombre_cargo': nombre,
             },
             success: function (data) {
                 //Mostrar los registros actualizados
-                $('#tablebody_grupos').html(data.tabla);
+                $('#tablebody_cargos').html(data.tabla);
 
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);
             }
         });
     });
-
 });
-
