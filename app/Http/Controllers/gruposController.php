@@ -48,7 +48,7 @@ class GruposController extends Controller
         if ($validacion->fails()) {
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
             $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
@@ -99,8 +99,7 @@ class GruposController extends Controller
         if ($validacion->fails()) {
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
-            // dd($validacion->errors());
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
             $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();

@@ -9,17 +9,22 @@
                 <form id="formModificar">
                     <div class="row mt-3">
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
+                        <div id="div_codigo_centro"
+                            class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputCodigoCentro" class="form-label">Codigo</label>
                             <input type="text" class="form-control" id="inputCodigoCentro" name="codigo_centro"
                                 required>
+                            <span class="errorValidacion"></span>
                         </div>
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
+                        <div id="div_nombre_centro"
+                            class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputNombreCentro" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="inputNombreCentro" name="nombre_centro"
                                 required>
+                            <span class="errorValidacion"></span>
                         </div>
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
+                        <div id="div_estado_centro"
+                            class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputEstadoCentro" class="form-label">Estado</label>
                             <select type="select" class="form-control" id="inputEstadoCentro" name="estado_centro"
                                 required>
@@ -27,6 +32,7 @@
                                 <option value="1">Activo</option>
                                 <option value="0">Inactivo</option>
                             </select>
+                            <span class="errorValidacion"></span>
                         </div>
                         <div class="col-md-12 col-sm-12 mt-3">
                             <input type="submit" value="Enviar" class="btn btn-success w-100" name="Enviar">

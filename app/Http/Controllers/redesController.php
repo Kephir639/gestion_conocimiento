@@ -46,7 +46,7 @@ class RedesController extends Controller
         if ($validacion->fails()) {
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
             // dd($validacion->errors());
         } else {
             $respuestas['error'] = false;
@@ -108,7 +108,7 @@ class RedesController extends Controller
             // dump('falla');
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
             // dd($validacion->errors());
         } else {
             $respuestas['error'] = false;
