@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
             Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
             Route::post('index/redes/actualizarRedes', [redesController::class, 'actualizarRed']);
 
-            //Gurpos de investigacion
+            //Grupos de investigacion
             Route::get('index/grupos/consultar_grupos', [gruposController::class], 'showGrupos');
             Route::get('index/grupos/crear_grupos', [gruposController::class, 'showRegistrarGrupos']);
             Route::post('index/grupos/registarGrupos', [gruposController::class, 'registrarGrupo']);
@@ -50,21 +50,21 @@ Route::middleware('auth')->group(function () {
             Route::post('index/cargos/actualizarCargo', [cargoController::class, 'actualizarCargo']);
 
             //Lineas de investigación
-            Route::get('index/lineas/consultar_lineas', [lineaController::class, 'showLineas']);
+            Route::get('index/lineas/consultar_linea', [lineaController::class, 'showLineas']);
             Route::get('index/lineas/crear_lineas', [lineaController::class, 'showModalRegistrar']);
             Route::post('index/lineas/registrarLineas', [lineaController::class, 'registrarLinea']);
             Route::get('index/lineas/editarLineas', [lineaController::class, 'showModificarLinea']);
             Route::post('index/lineas/actualizarLinea', [lineaController::class, 'actualizarLinea']);
+            // Roles
+            Route::get('index/roles/consultar_rol', [rolController::class, 'consultarRol']);
+            Route::get('index/roles/crearRol', [rolController::class, 'showRegistrarRol']);
+            Route::post('index/roles/registrarRol', [rolController::class, 'registrarRol']);
+            // Route::get('/roles/editarRol/{id}', [rolController::class, 'editarRol']);
+            Route::post('/roles/actualizarRol', [rolController::class, 'actualizarRol']);
         });
     });
 });
 
-// Roles
-Route::get('/roles/consultarRol', [rolController::class, 'consultarRol'])->name("roles.consultar");
-Route::get('/roles/crearRol', [rolController::class, 'showRegistrarRol']);
-Route::post('/roles/registrarRol', [rolController::class, 'registrarRol']);
-Route::get('/roles/editarRol/{id}', [rolController::class, 'editarRol']);
-Route::post('/roles/actualizarRol/{id}', [rolController::class, 'actualizarRol'])->name('roles.actualizarRol');
 
 
 

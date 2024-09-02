@@ -1,5 +1,5 @@
 @extends('layouts.plantillaIndex')
-@section('title', 'Inicio')
+@section('title', 'Lineas de invesitigacion')
 @section('content')
     <div class="cuadradoVistas">
         <div class="indexBackground row">
@@ -30,7 +30,7 @@
                                     aria-label="Close"></button>
                             </div>
                         @endif
-                        @foreach ($lineas as $linea)
+                        @foreach ($listaLinea as $linea)
                             <tr>
                                 <td>{{ $linea->nombre_linea }}</td>
                                 @if ($linea->estado == '1')

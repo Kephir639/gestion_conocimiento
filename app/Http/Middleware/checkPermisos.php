@@ -42,13 +42,14 @@ class checkPermisos
                     'funciones' => []
                 ];
             }
-
             $controladores[$contr]['funciones'][] = [
                 'nombre_funcion' => $permiso->nombre_funcion,
                 'display_funcion' => $permiso->display_funcion
             ];
         }
-        // dd($controladores);
+
+        // dd($permisos);
+
         $request->merge(['controladores' => $controladores]);
 
         return $next($request);

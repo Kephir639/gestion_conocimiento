@@ -13,9 +13,9 @@ class lineaController extends Controller
     public function showLineas()
     {
         $sql = "SELECT nombre_linea, estado FROM lineas_investigacion";
-
-        $lista = LineaInvestigacion::select($sql)->paginate('10');
-        return view('lineas')->with($lista);
+        $controladores = request()->controladores;
+        $listaLinea = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
+        return view('modals.lineas.consultarLinea', compact('listaLinea', 'controladores'));
     }
 
     public function showModalRegistrar()

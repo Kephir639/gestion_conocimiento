@@ -19,7 +19,7 @@ class User extends Authenticatable
      */
 
     protected $fillable = [
-        'id_rol',
+        'idRol',
         'name',
         'email',
         'password',
@@ -57,7 +57,7 @@ class User extends Authenticatable
     // Getters
     public function getIdRolAttribute()
     {
-        return $this->id_rol;
+        return $this->attributes['idRol'];
     }
 
     public function getNameAttribute()
@@ -72,7 +72,7 @@ class User extends Authenticatable
 
     public function getPasswordAttribute()
     {
-        return $this->password;
+        return $this->attributes['password'];
     }
 
     public function getApellidosAttribute()
@@ -128,7 +128,7 @@ class User extends Authenticatable
     // Setters
     public function setIdRolAttribute($idRol)
     {
-        $this->id_rol = $idRol;
+        $this->idRol = $idRol;
     }
 
     public function setNameAttribute($name)
