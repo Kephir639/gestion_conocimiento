@@ -65,7 +65,7 @@ class centroController extends Controller
                 //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
                 return view('alertas.repetido');
             } else {
-                //Creamos un objeto 
+                //Creamos un objeto
                 $centro = new CentrosFormacion();
                 //Le asignamos los valores del formulario
                 $centro->setCodigoCentroAttribute($request->codigo_centro);

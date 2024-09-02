@@ -1,8 +1,10 @@
 @extends('layouts.plantillaPresentacion')
 
 @section('title', 'Gestión de Conocimiento')
-<link rel="stylesheet" href="{{ asset('css/juan.css') }}">
-@stack('styles')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/juan.css') }}">
+@endpush()
 
 @section('content')
     <div class="clase11">
@@ -31,12 +33,12 @@
                                 <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                             </a>
                             <a href="{{ url('/registro') }}" class="btn btn-secondary btn-animate">
-                                <i class="fas fa-user-plus"></i> Registrarse 
+                                <i class="fas fa-user-plus"></i> Registrarse
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
 
             </div>
         </div>
