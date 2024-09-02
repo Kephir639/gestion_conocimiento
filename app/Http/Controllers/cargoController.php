@@ -4,20 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cargo;
-use App\Models\Rol;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 
 class cargoController extends Controller
 {
-    public function showCargos()
+    public function showCargos(Request $request)
     {
         $sql = "SELECT nombre_cargo, estado FROM cargos";
 
-        $lista = Cargo::select($sql)->paginate('10');
-        return view('cargos')->with($lista);
+        $cargos = Cargo::orderBy('id_cargo', 'desc')->paginate(10);
+        $controladores = $request->controladores;
+
+        return view('modals.cargo.consultarCargos', compact('cargos', 'controladores'));
     }
 
     public function showModalRegistrar()
@@ -66,7 +65,7 @@ class cargoController extends Controller
                 $listaCargos = Cargo::paginate('10')->orderBy('id_cargo', 'desc');
                 $controladores = $request->controladores;
 
-                $tabla = view('modals.grupos.tablaGrupo', ['listaCargos' => $listaCargos, 'controladores' => $controladores])->render();
+                $tabla = view('modals.cargo.tablaCargo', ['listaCargos' => $listaCargos, 'controladores' => $controladores])->render();
                 $alerta = view('alertas.registrarExitoso')->render();
 
                 return response()->json([

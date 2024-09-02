@@ -11,10 +11,10 @@ class centroController extends Controller
 {
     public function showCentros()
     {
-        $sql = "SELECT codigo_centro, nombre_centro, estado_centro FROM centro_formacion";
-        $lista = CentrosFormacion::select($sql)->paginate('10');
+        $lista = CentrosFormacion::paginate('10');
+        $controladores = request()->controlador;
 
-        return view('consultarCentroFormacion')->with($lista);
+        return view('consultarCentroFormacion', compact('lista', 'controladores'));
     }
 
     public function showRegistrarCentros()
@@ -58,7 +58,7 @@ class centroController extends Controller
                 //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
                 return response()->json(['estado' => false], 200);
             } else {
-                //Creamos un objeto 
+                //Creamos un objeto
                 $centro = new CentrosFormacion();
                 //Le asignamos los valores del formulario
                 $centro->setNombreCentroAttribute($request->nombre_centro);

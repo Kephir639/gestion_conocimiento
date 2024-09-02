@@ -36,13 +36,13 @@ Route::middleware('auth')->group(function () {
             Route::post('index/grupos/actualizarGrupos', [gruposController::class, 'actualizarGrupo']);
 
             //Centros de investigacion
-            Route::get('index/grupos/consultarCentros', [centroController::class], 'showCentros');
-            Route::get('index/grupos/crearCentros', [centroController::class, 'showRegistrarCentros']);
-            Route::post('index/grupos/registarCentros', [centroController::class, 'registrarCentro']);
-            Route::post('index/grupos/actualizarCentros', [centroController::class, 'actualizarCentro']);
+            Route::get('index/centros/consultar_centro', [centroController::class, 'showCentros']);
+            Route::get('index/centros/crearCentros', [centroController::class, 'showRegistrarCentros']);
+            Route::post('index/centros/registarCentros', [centroController::class, 'registrarCentro']);
+            Route::post('index/centros/actualizarCentros', [centroController::class, 'actualizarCentro']);
 
             //Cargos
-            Route::get('index/cargos/consultar_cargos', [cargoController::class, 'showCargos']);
+            Route::get('index/cargos/consultar_cargo', [cargoController::class, 'showCargos']);
             Route::get('index/cargos/crear_cargos', [cargoController::class, 'showModalRegistrar']);
             Route::post('index/cargos/registrarCargos', [cargoController::class, 'registrarCargo']);
             Route::get('index/lineas/editarLineas', [lineaController::class, 'showModificarCargo']);
