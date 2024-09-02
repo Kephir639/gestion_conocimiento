@@ -11,10 +11,9 @@ class GruposController extends Controller
 {
     public function showGrupos()
     {
-        $sql = "SELECT nombre_grupo, estado_grupo FROM grupos_investigacion";
-        $lista = GrupoInvestigacion::select($sql)->paginate('10');
+        $listaGrupos = GrupoInvestigacion::paginate('10')->orderBy('id_grupo', 'desc');
 
-        return view('gruposInvestigacion')->with($lista);
+        return view('modals.grupos.consultarGrupos', compact('listaGrupos'));
     }
 
     public function showModalRegistrar()
@@ -49,8 +48,7 @@ class GruposController extends Controller
         if ($validacion->fails()) {
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
-            // dd($validacion->errors());
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
             $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
@@ -64,7 +62,6 @@ class GruposController extends Controller
                 $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
                 GrupoInvestigacion::create($grupo);
-
 
                 $listaGrupos = GrupoInvestigacion::paginate('10')->orderBy('id_grupo', 'desc');
                 $controladores = $request->controladores;
@@ -102,8 +99,7 @@ class GruposController extends Controller
         if ($validacion->fails()) {
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
-            // dd($validacion->errors());
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
             $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();

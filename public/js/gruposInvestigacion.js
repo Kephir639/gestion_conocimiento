@@ -55,6 +55,17 @@ $(document).ready(function () {
                 $('#alertasModificar').html(data);
                 button.parents('tr').find('td:eq(0)').val(nombre);
                 button.parents('tr').find('td:eq(1)').val(estado);
+            },
+            error: function(xhr, status, error){
+                if (xhr.status===422) {
+                    let errors = xhr.responseJSON.errors;
+
+                    $.each(errors, function (clave, valor) { 
+                         $("#div_" + clave).find('.errorValidacion').html(valor);
+                    });
+                }else{
+                    console.log(error, status);
+                }
             }
         });
     });
@@ -67,7 +78,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "registrarGrupo",
+            url: "crear_grupo",
             data: {
                 '_token': token,
                 'nombre_grupo': nombre,
@@ -78,6 +89,15 @@ $(document).ready(function () {
 
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);
+            },
+            error: function(xhr, status, error){
+                if (xhr.status===422) {
+                    let errors = xhr.responseJSON.errors;
+
+                    $.each(errors, function (clave, valor) { 
+                         $("#Div_" + clave).find('.errorValidacion').html(valor);
+                    });
+                }
             }
         });
     });

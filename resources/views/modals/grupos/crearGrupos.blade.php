@@ -9,10 +9,12 @@
                 <form id="formRegistrar">
                     <div class="row mt-3">
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="nombre_grupo" class="form-label">Nombre</label>
+                        <div id="div_nombre_grupo"
+                            class="col-md-12 col-sm-12 justify-content-center align-items-center">
+                            <label for="inputNombreGrupo" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="inputNombreGrupo" name="nombre_grupo"
                                 required>
+                            <span class="errorValidacion"></span>
                         </div>
                         <div class="col-md-12 col-sm-12 mt-3">
                             <input type="submit" value="Enviar" class="btn btn-success w-100" name="Enviar">
