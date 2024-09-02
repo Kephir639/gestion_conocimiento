@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuario;
-use Illuminate\Foundation\Auth\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator as Validator;
 
 class UsuarioController extends Controller
@@ -15,12 +15,6 @@ class UsuarioController extends Controller
     {
         $sql = "SELECT * FROM usuarios";
         $lista = DB::select($sql);
-
-        foreach ($lista as $elementos) {
-            unset($elementos['id_usuario']);
-            unset($elementos['updated_at']);
-            unset($elementos['created_at']);
-        }
 
         return view('usuario')->with($lista);
     }
@@ -36,21 +30,21 @@ class UsuarioController extends Controller
             'id_rol' => 'required',
             'nombres' => 'required|max:30',
             'apellidos' => 'required|max:30',
-            'tipoDocumento' => 'required',
+            'tipoDocumento' => 'required|gt:0',
             'identificacion' => 'required|max:11',
-            'id_genero' => 'required|max:15',
-            'id_tipo_poblacion' => 'required|max:15',
+            'id_genero' => 'required|max:15|gt:0',
+            'id_tipo_poblacion' => 'required|max:15|gt:0',
             'correo' => 'required|email|max:25',
             'celular' => 'required|max:15',
-            // 'departamento' => 'required',
-            'id_municipio' => 'required',
+            'departamento' => 'required|gt:0',
+            'id_municipio' => 'required|gt:0',
             'direccion' => 'required',
-            // 'profesion' => 'required',
-            // 'maestria' => 'required',
-            // 'doctorado' => 'required',
+            'profesion' => 'required',
+            'maestria' => 'required',
+            'doctorado' => 'required',
             'id_cargo' => 'required',
             'id_programa' => 'required',
-            // 'semillero' => 'required',
+            'semillero' => 'required',
             'contraseña' => 'required|regex:^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$^',
         ];
 
@@ -83,10 +77,10 @@ class UsuarioController extends Controller
             'semillero.required' => 'Este campo es obligatorio',
             'contraseña.required' => 'Este campo es obligatorio',
             'contraseña.regex' => 'La contraseña debe contener minimo 8 y maximo 15 caracteres:
-                                    1 Minuscula
-                                    1 Mayuscula
-                                    1 Numero Entero
-                                    1 Caracter Especial'
+                                   * 1 Minuscula
+                                   * 1 Mayuscula
+                                   * 1 Numero Entero
+                                   * 1 Caracter Especial'
         ];
 
         $respuestas = [];
@@ -97,30 +91,46 @@ class UsuarioController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['validacion']);
+            return response()->json(['errors' => $validacion->errors()]);
         } else {
             $respuestas['error'] = false;
-            $ajax = User::where('identificacion', $datos['documento'])->get();
-            if (count($ajax)) {
-                return view('alertas.repetido');
+            if (User::where('identificacion', $datos['documento'])) {
+                return view('alertas.repetido')->render();
             } else {
-                User::create([
-                    'id_rol' => $datos['id_rol'],
-                    'nombres' => $datos['nombres'],
-                    'apellidos' => $datos['apellidos'],
-                    'identificacion' => $datos['identificacion'],
-                    'id_genero' => $datos['genero'],
-                    'id_tipo_poblacion' => $datos['tipoPoblacion'],
-                    'correo' => $datos['correo'],
-                    'celular' => $datos['celular'],
-                    'id_municipio' => $datos['municipio'],
-                    'direccion' => $datos['direccion'],
-                    'id_cargo' => $datos['cargo'],
-                    'id_programa' => $datos['programa'],
-                    'estado_usu' => $datos['estado'],
-                    'contraseña' => $datos['contraseña']
+                $usuario = new User();
+
+                $contra = Hash::make($request->contraseña);
+
+                $usuario->setNameAttribute($request->nombres);
+                $usuario->setApellidoAttribute($request->apellidos);
+                $usuario->setIdentificacionAttribute($request->identificacion);
+                $usuario->setIdGeneroAttribute($request->genero);
+                $usuario->setIdTipoPoblacionAttribute($request->tipoPoblacion);
+                $usuario->setEmailAttribute($request->correo);
+                $usuario->setCelularAttribute($request->celular);
+                $usuario->setIdMunicipioAttribute($request->municipio);
+                $usuario->setDireccionAttribute($request->direccion);
+                $usuario->setIdCargoAttribute($request->cargo);
+                $usuario->setIdProgramaAttribute($request->programa);
+                $usuario->setEstadoUsuAttribute(0);
+                $usuario->setPasswordAttribute($contra);
+
+                User::create($usuario->toArray());
+
+                $listaCetros = User::paginate('10')->orderBy('id', 'desc');
+                $controladores = $request->controladores;
+
+                $tabla = view('modals.usuarios.tablaUsuario', [
+                    'listaRedes' => $listaCetros,
+                    'controladores' => $controladores
+                ])->render();
+
+                $alerta = view('alertas.registrarExitoso')->render();
+
+                return response()->json([
+                    'tabla' => $tabla,
+                    'alerta' => $alerta
                 ]);
             }
         }
@@ -138,21 +148,21 @@ class UsuarioController extends Controller
             'id_rol' => 'required',
             'nombres' => 'required|max:30',
             'apellidos' => 'required|max:30',
-            'tipoDocumento' => 'required',
+            'tipoDocumento' => 'required|gt:0',
             'identificacion' => 'required|max:11',
-            'id_genero' => 'required|max:15',
-            'id_tipo_poblacion' => 'required|max:15',
+            'id_genero' => 'required|gt:0',
+            'id_tipo_poblacion' => 'required|gt:0',
             'correo' => 'required|email|max:25',
             'celular' => 'required|max:15',
-            // 'departamento' => 'required',
+            'departamento' => 'required',
             'id_municipio' => 'required',
             'direccion' => 'required',
-            // 'profesion' => 'required',
-            // 'maestria' => 'required',
-            // 'doctorado' => 'required',
+            'profesion' => 'required',
+            'maestria' => 'required',
+            'doctorado' => 'required',
             'id_cargo' => 'required',
             'id_programa' => 'required',
-            // 'semillero' => 'required',
+            'semillero' => 'required',
             'contraseña' => 'required|regex:^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$^',
         ];
 
@@ -210,24 +220,26 @@ class UsuarioController extends Controller
             } else {
                 $respuestas['error'] = false;
 
-                User::where('identificacion', $datos['documento'])->update([
-                    'id_rol' => $datos['id_rol'],
-                    'nombres' => $datos['nombres'],
-                    'apellidos' => $datos['apellidos'],
-                    'identificacion' => $datos['identificacion'],
-                    'id_genero' => $datos['genero'],
-                    'id_tipo_poblacion' => $datos['tipoPoblacion'],
-                    'correo' => $datos['correo'],
-                    'celular' => $datos['celular'],
-                    'id_municipio' => $datos['municipio'],
-                    'direccion' => $datos['direccion'],
-                    'id_cargo' => $datos['cargo'],
-                    'id_programa' => $datos['programa'],
-                    'estado_usu' => $datos['estado'],
-                    'contraseña' => $datos['contraseña']
-                ]);
+                $usuario = new User();
 
-                return $mensajeExitoso = "El usuario se actualizó exitosamente";
+                $contra = Hash::make($request->contraseña);
+
+                $usuario->setNameAttribute($request->nombres);
+                $usuario->setApellidoAttribute($request->apellidos);
+                $usuario->setIdentificacionAttribute($request->identificacion);
+                $usuario->setIdGeneroAttribute($request->genero);
+                $usuario->setIdTipoPoblacionAttribute($request->tipoPoblacion);
+                $usuario->setEmailAttribute($request->correo);
+                $usuario->setCelularAttribute($request->celular);
+                $usuario->setIdMunicipioAttribute($request->municipio);
+                $usuario->setDireccionAttribute($request->direccion);
+                $usuario->setIdCargoAttribute($request->cargo);
+                $usuario->setIdProgramaAttribute($request->programa);
+                $usuario->setPasswordAttribute($contra);
+
+                User::where('identificacion', $request->identificacion_old)->update($usuario->toArray());
+
+                return view('alertas.modifcarExitoso')->render();
             }
         }
     }
@@ -250,6 +262,7 @@ class UsuarioController extends Controller
         $cedulaUsuario = $datos['identificacion'];
         $rolAsignado = $datos['rol'];
 
-        User::where('identificacion', $cedulaUsuario)->update('id_rol', $rolAsignado);
+        User::where('identificacion', $cedulaUsuario)
+            ->update(['id_rol' => $rolAsignado, 'estado_usu' => 1]);
     }
 }

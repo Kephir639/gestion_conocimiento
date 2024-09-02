@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\cargoController;
 use App\Http\Controllers\centroController;
 use App\Http\Controllers\gruposController;
@@ -18,29 +17,31 @@ Route::view('/', 'presentacion')->middleware('filter');
 // Route::view('/presentacion', 'presentacion');
 Auth::routes();
 
-Route::middleware('auth', 'notifications', 'filter', 'active', 'checkPermisos')->group(function () {
+Route::middleware('auth')->group(function () {
+    Route::middleware('filter')->group(function () {
+        Route::middleware('checkPermisos')->group(function () {
+            //Pagina de Bienvenida
+            Route::get('/index', [inicioController::class, 'index']);
 
-    //Pagina de Bienvenida
-    Route::get('/index', [inicioController::class, 'index']);
+            //Redes de Concocimiento
+            Route::get('index/redes/consultar_red', [redesController::class, 'showRedes'])->middleware('checkPermisos');
+            Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar']);
+            Route::post('index/redes/registrarRedes', [redesController::class, 'registrarRed']);
+            Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
+            Route::post('index/redes/actualizarRedes', [redesController::class, 'actualizarRed']);
+            //Gurpos de investigacion
+            Route::get('index/grupos/consultar_grupos', [gruposController::class], 'showGrupos');
+            Route::get('index/grupos/crear_grupos', [gruposController::class, 'showRegistrarGrupos']);
+            Route::post('index/grupos/registarGrupos', [gruposController::class, 'registrarGrupo']);
+            Route::post('index/grupos/actualizarGrupos', [gruposController::class, 'actualizarGrupo']);
 
-    //Redes de Concocimiento
-    Route::get('index/redes/consultar_red', [redesController::class, 'showRedes'])->middleware('checkPermisos');
-    Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar']);
-    Route::post('index/redes/crear_redes', [redesController::class, 'registrarRed']);
-    Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
-    Route::post('index/redes/actualizarRedes', [redesController::class, 'actualizarRed']);
-
-    //Gurpos de investigacion
-    Route::get('index/grupos/consultar_grupos', [gruposController::class], 'showGrupos');
-    Route::get('index/grupos/crear_grupos', [gruposController::class, 'showRegistrarGrupos']);
-    Route::post('index/grupos/registarGrupos', [gruposController::class, 'registrarGrupo']);
-    Route::post('index/grupos/actualizarGrupos', [gruposController::class, 'actualizarGrupo']);
-
-    //Centros de investigacion
-    Route::get('index/grupos/consultar_centros', [centroController::class], 'showCentros');
-    Route::get('index/grupos/crear_centros', [centroController::class, 'showRegistrarCentros']);
-    Route::post('index/grupos/registarCentros', [centroController::class, 'registrarCentro']);
-    Route::post('index/grupos/actualizarCentros', [centroController::class, 'actualizarCentro']);
+            //Centros de investigacion
+            Route::get('index/grupos/consultarCentros', [centroController::class], 'showCentros');
+            Route::get('index/grupos/crearCentros', [centroController::class, 'showRegistrarCentros']);
+            Route::post('index/grupos/registarCentros', [centroController::class, 'registrarCentro']);
+            Route::post('index/grupos/actualizarCentros', [centroController::class, 'actualizarCentro']);
+        });
+    });
 });
 
 // Roles

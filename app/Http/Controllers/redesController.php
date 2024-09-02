@@ -46,7 +46,7 @@ class RedesController extends Controller
         if ($validacion->fails()) {
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
             // dd($validacion->errors());
         } else {
             $respuestas['error'] = false;
@@ -64,9 +64,17 @@ class RedesController extends Controller
                 $listaRedes = Redes::paginate('10')->orderBy('id_red', 'desc');
                 $controladores = $request->controladores;
 
-                $tabla = view('');
+                $tabla = view('modals.redes.tablaRed', [
+                    'listaRedes' => $listaRedes,
+                    'controladores' => $controladores
+                ])->render();
 
-                return response()->json();
+                $alerta = view('alertas.registrarExitoso')->render();
+
+                return response()->json([
+                    'tabla' => $tabla,
+                    'alerta' => $alerta
+                ]);
             }
         }
     }
@@ -80,12 +88,13 @@ class RedesController extends Controller
     {
         $reglas = [
             'nombre_red' => 'required|max:30',
-            'estado_red' => 'required'
+            'estado_red' => 'required|gt:0'
         ];
         $mensajes = [
             'nombre_red.required' => 'Este campo es obligatorio',
             'nombre_red.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_red.required' => 'Este campo es obligatorio'
+            'estado_red.required' => 'Este campo es obligatorio',
+            'estado_red.gt' => 'Elija una de las opciones'
         ];
 
         $respuestas = [];
@@ -99,16 +108,14 @@ class RedesController extends Controller
             // dump('falla');
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
             // dd($validacion->errors());
         } else {
             $respuestas['error'] = false;
             $ajax = Redes::where('nombre_red', $datos['nombre_red'])->get();
             if (count($ajax)) {
-                // dump('repetido');
-                return view('alertas.redes.redRepetido')->with(['controladores' => $request->controladores]);
+                return view('alertas.repetido')->with(['controladores' => $request->controladores]);
             } else {
-                // dump('paso');
                 $red = new Redes();
 
                 $red->setNombreRedAttribute($request->nombre_red);
@@ -116,7 +123,7 @@ class RedesController extends Controller
 
                 Redes::where('nombre_red', $datos['nombre_red_old'])->update($red->toArray());
 
-                return view('alertas.redes.modifcarExitoso')->with(['controladores' => $request->controladores]);
+                return view('alertas.modifcarExitoso');
             }
         }
     }
