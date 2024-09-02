@@ -50,19 +50,7 @@ Route::post('/roles/registrarRol', [rolController::class, 'registrarRol']);
 Route::get('/roles/editarRol/{id}', [rolController::class, 'editarRol']);
 Route::post('/roles/actualizarRol/{id}', [rolController::class, 'actualizarRol'])->name('roles.actualizarRol');
 
-//Cargos
-Route::get('/cargos/consultarCargo', [cargoController::class, 'consultarCargo'])->name("cargos.consultar");
-Route::get('/cargos/crearCargo', [cargoController::class, 'showregistrarCargo']);
-Route::post('/cargos/registrarCargos', [cargoController::class, 'registrarCargo']);
-Route::get('/cargos/editarCargo/{id}', [cargoController::class, 'editarCargo']);
-Route::post('/cargos/actualizarCargo/{id}', [cargoController::class, 'actualizarCargo'])->name('cargo.actualizarCargo');
 
-//Lineas de investigación
-Route::get('/lineas/consultarLineas', [lineaController::class, 'consultarLineas'])->name("linea.consultar");
-Route::get('/lineas/crearLineas', [lineaController::class, 'showregistrarLineas']);
-Route::post('/lineas/registrarLineas', [lineaController::class, 'registrarLinea']);
-Route::get('/lineas/editarLineas/{id}', [lineaController::class, 'editarLinea']);
-Route::post('/lineas/actualizarLinea/{id}', [lineaController::class, 'actualizarLinea'])->name('linea.actualizarLinea');
 
 
 
