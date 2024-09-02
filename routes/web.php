@@ -26,7 +26,7 @@ Route::middleware('auth', 'notifications', 'filter', 'active', 'checkPermisos')-
     //Redes de Concocimiento
     Route::get('index/redes/consultar_red', [redesController::class, 'showRedes'])->middleware('checkPermisos');
     Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar']);
-    Route::post('index/redes/registrarRedes', [redesController::class, 'registrarRed']);
+    Route::post('index/redes/crear_redes', [redesController::class, 'registrarRed']);
     Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
     Route::post('index/redes/actualizarRedes', [redesController::class, 'actualizarRed']);
 
@@ -37,12 +37,10 @@ Route::middleware('auth', 'notifications', 'filter', 'active', 'checkPermisos')-
     Route::post('index/grupos/actualizarGrupos', [gruposController::class, 'actualizarGrupo']);
 
     //Centros de investigacion
-    Route::get('index/grupos/consultarCentros', [centroController::class], 'showCentros');
-    Route::get('index/grupos/crearCentros', [centroController::class, 'showRegistrarCentros']);
+    Route::get('index/grupos/consultar_centros', [centroController::class], 'showCentros');
+    Route::get('index/grupos/crear_centros', [centroController::class, 'showRegistrarCentros']);
     Route::post('index/grupos/registarCentros', [centroController::class, 'registrarCentro']);
     Route::post('index/grupos/actualizarCentros', [centroController::class, 'actualizarCentro']);
-
-    Route::get('/login/check', [AuthLoginController::class, 'notActive']);
 });
 
 // Roles

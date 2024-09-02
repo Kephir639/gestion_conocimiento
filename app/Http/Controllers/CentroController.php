@@ -52,11 +52,9 @@ class centroController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
 
-            //Se regresa a la ruta anterior con los errores cometidos para ser mostrados en la vista
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
             $ajax = CentrosFormacion::where('nombre_centro', $datos['nombre_centro'])->get();
@@ -115,9 +113,8 @@ class centroController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
             $ajax = CentrosFormacion::where('nombre_centro', $datos['nombre_centro'])->get();

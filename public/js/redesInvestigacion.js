@@ -57,6 +57,15 @@ $(document).ready(function () {
                 $('#alertasModificar').html(data);
                 button.parents('tr').find('td:eq(0)').val(nombre);
                 button.parents('tr').find('td:eq(1)').val(estado);
+            },
+            error: function(xhr, status, error){
+                if (xhr.status===422) {
+                    let errors = xhr.responseJSON.errors;
+
+                    $.each(errors, function (clave, valor) { 
+                         $("#div_" + clave).find('.errorValidacion').html(valor);
+                    });
+                }
             }
         });
     });
@@ -70,7 +79,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "actualizarRedes",
+            url: "crear_redes",
             data: {
                 '_token': token,
                 'nombre_red': nombre,
@@ -81,6 +90,17 @@ $(document).ready(function () {
 
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);
+            },
+            error: function(xhr, status, error){
+                if (xhr.status===422) {
+                    let errors = xhr.responseJSON.errors;
+
+                    $.each(errors, function (clave, valor) { 
+                         $("#div_" + clave).find('.errorValidacion').html(valor);
+                    });
+                }else{
+                    console.log(error, status);
+                }
             }
         });
     });
