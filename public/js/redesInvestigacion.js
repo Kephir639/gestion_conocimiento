@@ -16,7 +16,7 @@ $(document).ready(function () {
                 $(this).find('#inputNombreRed').val(nombreGrupo);
                 $(this).find('#inputEstadoRed').val(estado);
 
-                $('#modalModificarRed').modal('show');                
+                $('#modalModificarRed').modal('show');
             }
         });
     });
@@ -29,7 +29,7 @@ $(document).ready(function () {
             url: "showModalRegistrar",
             success: function (data) {
                 $('#ModalSection').html(data);
-                $('#modalRegistrarRed').modal('show');
+                console.log($('#modalRegistrarRedes').modal('show'));
             }
         });
     });
@@ -58,12 +58,12 @@ $(document).ready(function () {
                 button.parents('tr').find('td:eq(0)').val(nombre);
                 button.parents('tr').find('td:eq(1)').val(estado);
             },
-            error: function(xhr, status, error){
-                if (xhr.status===422) {
+            error: function (xhr, status, error) {
+                if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
 
-                    $.each(errors, function (clave, valor) { 
-                         $("#div_" + clave).find('.errorValidacion').html(valor);
+                    $.each(errors, function (clave, valor) {
+                        $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
                 }
             }
@@ -72,8 +72,8 @@ $(document).ready(function () {
 
     $('#formRegistrar').submit(function (e) {
         //Solicitud de Ajax para realizar la actualizacion del elemento
-        e.preventDefault();        
-        
+        e.preventDefault();
+
         let nombre = $('#inputNombreRed').val();
         let token = $('#_token').val();
 
@@ -84,28 +84,28 @@ $(document).ready(function () {
                 '_token': token,
                 'nombre_red': nombre,
             },
-            success: function (data) {                            
+            success: function (data) {
                 //Mostrar los registros actualizados
                 $('#tablebody_grupos').html(data.tabla);
 
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);
             },
-            error: function(xhr, status, error){
-                if (xhr.status===422) {
+            error: function (xhr, status, error) {
+                if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
 
-                    $.each(errors, function (clave, valor) { 
-                         $("#div_" + clave).find('.errorValidacion').html(valor);
+                    $.each(errors, function (clave, valor) {
+                        $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
-                }else{
+                } else {
                     console.log(error, status);
                 }
             }
         });
     });
 
-    
+
 
     // $('#modalModifcarRedes').on('hidden.bs.modal', function () {
     //     $('#ModalSection').empty();

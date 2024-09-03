@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cargo;
+use App\Models\Log;
 use App\Models\Rol;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -63,10 +64,20 @@ class cargoController extends Controller
 
                 Cargo::create($cargo);
 
+                $sql = log_auditoria::createLog(
+                    'cargo',
+                    $cargo->getNombreCargoAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
+
                 $listaCargos = Cargo::paginate('10')->orderBy('id_cargo', 'desc');
                 $controladores = $request->controladores;
 
-                $tabla = view('modals.grupos.tablaGrupo', ['listaCargos' => $listaCargos, 'controladores' => $controladores])->render();
+                $tabla = view('modals.grupos.tablaGrupo', [
+                    'listaCargos' => $listaCargos,
+                    'controladores' => $controladores
+                ])->render();
                 $alerta = view('alertas.registrarExitoso')->render();
 
                 return response()->json([
@@ -118,6 +129,14 @@ class cargoController extends Controller
                 $cargo->setEstadoAttribute($request->estado_cargo);
 
                 Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo);
+
+                $sql = log_auditoria::createLog(
+                    'cargo',
+                    $datos['nombre_cargo_old'],
+                    'actualizo',
+                    $cargo->getNombreCargoAttribute()
+                );
+                Log::insert($sql);
 
                 return view('alertas.modifcarExitoso');
             }

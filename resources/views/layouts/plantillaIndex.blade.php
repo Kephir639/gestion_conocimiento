@@ -43,7 +43,8 @@
                     </li>
                     @foreach ($controladores as $controlador => $contr)
                         <li class="sidebar-item">
-                            <a href="#" id="tab_{{ $contr['nombre_controlador'] }}"
+                            <a href="/index/{{ $contr['nombre_controlador'] }}/consultar_{{ $contr['nombre_controlador'] }}"
+                                id="tab_{{ $contr['nombre_controlador'] }}"
                                 class="sidebar-tabb sidebar-link collapsed px-3 py-2"
                                 data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse"
                                 aria-expanded="false">{!! html_entity_decode($contr['icono']) !!}{{ $contr['display_controlador'] }}
@@ -72,7 +73,6 @@
                     <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
                 </svg>
             </button>
-            {{-- @dd(Auth::user()) --}}
             @if (Auth::user()->idRol == 1)
                 <div class="notifycon mr-5"><svg xmlns="http://www.w3.org/2000/svg" class="mt-2" width="24"
                         height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1)">
@@ -109,7 +109,7 @@
                         <li class="navbar-item"><a href="#"
                                 class="dropdown-item item-perfil w-100 text-center">Perfil</a>
                         </li>
-                        <li class="navbar-item"><a href="#"
+                        <li id="logoutBtn" class="navbar-item"><a href="#"
                                 class="dropdown-item item-perfil w-100 text-center">Cerrrar
                                 Sesión</a>
                         </li>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LineaInvestigacion;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -55,10 +56,17 @@ class lineaController extends Controller
             } else {
                 $linea = new LineaInvestigacion();
 
-                $linea->setNombreCargoAttribute($request->nombre_linea);
+                $linea->setNombreLineaAttribute($request->nombre_linea);
                 $linea->setEstadoAttribute($request->estado_linea);
 
                 LineaInvestigacion::create($linea);
+
+                $sql = log_auditoria::createLog(
+                    'linea',
+                    $linea->getNombreLineaAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
 
                 $listaLinea = LineaInvestigacion::paginate('10')->orderBy('id_linea', 'desc');
                 $controladores = $request->controladores;
@@ -115,6 +123,14 @@ class lineaController extends Controller
                 $linea->setEstadoAttribute($request->estado_linea);
 
                 LineaInvestigacion::where('nombre_linea', $datos['nombre_linea_old'])->update($linea);
+
+                $sql = log_auditoria::createLog(
+                    'linea',
+                    $datos['nombre_linea_old'],
+                    'actualizo',
+                    $linea->getNombreLineaAttribute()
+                );
+                Log::insert($sql);
 
                 return view('alertas.modifcarExitoso');
             }

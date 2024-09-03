@@ -18,15 +18,15 @@ Route::view('/', 'presentacion')->middleware('filter');
 // Route::view('/presentacion', 'presentacion');
 Auth::routes();
 
-Route::middleware('auth', 'notifications', 'filter', 'active', 'checkPermisos')->group(function () {
+Route::middleware('auth', 'filter', 'active', 'notifications', 'checkPermisos')->group(function () {
 
     //Pagina de Bienvenida
     Route::get('/index', [inicioController::class, 'index']);
 
     //Redes de Concocimiento
-    Route::get('index/redes/consultar_red', [redesController::class, 'showRedes'])->middleware('checkPermisos');
+    Route::get('index/redes/consultar_red', [redesController::class, 'showRedes']);
     Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar']);
-    Route::post('index/redes/crear_redes', [redesController::class, 'registrarRed']);
+    Route::post('index/redes/crear_red', [redesController::class, 'registrarRed']);
     Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
     Route::post('index/redes/actualizarRedes', [redesController::class, 'actualizarRed']);
 
@@ -44,7 +44,7 @@ Route::middleware('auth', 'notifications', 'filter', 'active', 'checkPermisos')-
 });
 
 // Roles
-Route::get('/roles/consultarRol', [rolController::class, 'consultarRol'])->name("roles.consultar");
+Route::get('/roles/consultar_roles', [rolController::class, 'consultarRol'])->name("roles.consultar");
 Route::get('/roles/crearRol', [rolController::class, 'showRegistrarRol']);
 Route::post('/roles/registrarRol', [rolController::class, 'registrarRol']);
 Route::get('/roles/editarRol/{id}', [rolController::class, 'editarRol']);

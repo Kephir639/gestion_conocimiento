@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Redes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,10 +14,11 @@ class RedesController extends Controller
 
     public function showRedes(Request $request)
     {
-        $listaRedes = Redes::paginate('10')->orderBy('id_red', 'desc');
+        $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('10');
         $controladores = $request->controladores;
-
-        return view('modals.redes.consultarRedes', compact('listaRedes', 'controladores'));
+        $usuariosPendientes = $request->usuariosPendientes;
+        // dd($request);
+        return view('modals.redes.consultarRedes', compact('listaRedes', 'controladores', 'usuariosPendientes'));
     }
 
     public function showModalRegistrar()
@@ -60,6 +62,13 @@ class RedesController extends Controller
                 $red->setEstadoRedAttribute(1);
 
                 Redes::create($red->toArray());
+
+                $sql = log_auditoria::createLog(
+                    'red',
+                    $red->getNombreRedAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
 
                 $listaRedes = Redes::paginate('10')->orderBy('id_red', 'desc');
                 $controladores = $request->controladores;
@@ -122,6 +131,14 @@ class RedesController extends Controller
                 $red->setEstadoRedAttribute($request->estado_red);
 
                 Redes::where('nombre_red', $datos['nombre_red_old'])->update($red->toArray());
+
+                $sql = log_auditoria::createLog(
+                    'red',
+                    $datos['nombre_red_old'],
+                    'actualizo',
+                    $red->getNombreRedAttribute()
+                );
+                Log::insert($sql);
 
                 return view('alertas.modifcarExitoso');
             }

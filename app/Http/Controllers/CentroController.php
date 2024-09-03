@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CentrosFormacion;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -72,6 +73,13 @@ class centroController extends Controller
                 //Registramos en la base de datos
                 CentrosFormacion::create($centro);
 
+                $sql = log_auditoria::createLog(
+                    'centro',
+                    $centro->getNombreCentroAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
+
                 $listaCetros = CentrosFormacion::paginate('10')->orderBy('id_centro', 'desc');
                 $controladores = $request->controladores;
 
@@ -129,7 +137,15 @@ class centroController extends Controller
                 $centro->setCodigoCentroAttribute($request->codigo_centro);
                 $centro->setEstadoCentroAttribute($request->estado_centro);
 
-                CentrosFormacion::where('id_centro', $datos['id_centro_old'])->update($centro);
+                CentrosFormacion::where('id_centro', $datos['nombre_centro_old'])->update($centro);
+
+                $sql = log_auditoria::createLog(
+                    'centro',
+                    $datos['nombre_centro_old'],
+                    'actualizo',
+                    $centro->getNombreCentroAttribute()
+                );
+                Log::insert($sql);
 
                 return view('alertas.modifcarExitoso');
             }

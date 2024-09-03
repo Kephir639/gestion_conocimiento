@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GrupoInvestigacion;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -63,6 +64,13 @@ class GruposController extends Controller
 
                 GrupoInvestigacion::create($grupo);
 
+                $sql = log_auditoria::createLog(
+                    'grupo',
+                    $grupo->getNombreGrupoAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
+
                 $listaGrupos = GrupoInvestigacion::paginate('10')->orderBy('id_grupo', 'desc');
                 $controladores = $request->controladores;
 
@@ -113,6 +121,14 @@ class GruposController extends Controller
                 $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
                 GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo);
+
+                $sql = log_auditoria::createLog(
+                    'grupo',
+                    $datos['nombre_grupo_old'],
+                    'actualizo',
+                    $grupo->getNombreGrupoAttribute()
+                );
+                Log::insert($sql);
 
                 return view('alertas.modifcarExitoso');
             }

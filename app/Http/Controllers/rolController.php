@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Permiso;
 use App\Models\Rol;
 use Carbon\Carbon;
@@ -59,6 +60,14 @@ class RolController extends Controller
             $rol->setEstadoRolAttribute($request->inputEstadoRol);
 
             $registro = Rol::create($rol);
+
+            $sql = log_auditoria::createLog(
+                'rol',
+                $rol->getRolAttribute(),
+                'registro'
+            );
+            Log::insert($sql);
+
             $idRol = $registro->id_rol;
 
             $funciones = $datos['checkFunciones'];
