@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-..." crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('css/bienvenida.css') }}">
     @stack('styles')
 </head>
@@ -142,7 +140,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="{{ url('js/particles.min.js') }}"></script>
+    {{-- <script src="{{ url('js/particles.min.js') }}"></script> --}}
     <script src="{{ url('js/presentacion.js') }}"></script>
     @stack('scripts')
     <!-- Initialize Slick Carousel -->

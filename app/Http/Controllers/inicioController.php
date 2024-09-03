@@ -9,6 +9,7 @@ class inicioController extends Controller
     public function index(Request $request)
     {
         $controladores = $request->controladores;
-        return view('index', compact('controladores'));
+        $usuariosPendientes = $request->ususariosPendientes;
+        return view('index', compact('controladores', 'usuariosPendientes'));
     }
 }

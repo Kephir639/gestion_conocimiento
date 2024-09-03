@@ -16,12 +16,6 @@ class UsuarioController extends Controller
         $sql = "SELECT * FROM usuarios";
         $lista = DB::select($sql);
 
-        foreach ($lista as $elementos) {
-            unset($elementos['id_usuario']);
-            unset($elementos['updated_at']);
-            unset($elementos['created_at']);
-        }
-
         return view('usuario')->with($lista);
     }
 
@@ -97,14 +91,12 @@ class UsuarioController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['validacion']);
-            // dd($validacion->errors());
+            return response()->json(['errors' => $validacion->errors()]);
         } else {
             $respuestas['error'] = false;
             if (User::where('identificacion', $datos['documento'])) {
-                return $mensaje = "El usuario ya está registrado";
+                return view('alertas.repetido')->render();
             } else {
                 $usuario = new User();
 
@@ -243,7 +235,6 @@ class UsuarioController extends Controller
                 $usuario->setDireccionAttribute($request->direccion);
                 $usuario->setIdCargoAttribute($request->cargo);
                 $usuario->setIdProgramaAttribute($request->programa);
-                $usuario->setEstadoUsuAttribute(0);
                 $usuario->setPasswordAttribute($contra);
 
                 User::where('identificacion', $request->identificacion_old)->update($usuario->toArray());
@@ -271,6 +262,7 @@ class UsuarioController extends Controller
         $cedulaUsuario = $datos['identificacion'];
         $rolAsignado = $datos['rol'];
 
-        User::where('identificacion', $cedulaUsuario)->update('id_rol', $rolAsignado);
+        User::where('identificacion', $cedulaUsuario)
+            ->update(['id_rol' => $rolAsignado, 'estado_usu' => 1]);
     }
 }

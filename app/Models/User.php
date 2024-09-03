@@ -55,144 +55,145 @@ class User extends Authenticatable
     ];
 
     // Getters
-    public function getIdRolAttribute()
-    {
-        return $this->attributes['idRol'];
-    }
+    // public function getIdRolAttribute()
+    // {
+    //     return $this->id_rol;
+    // }
 
-    public function getNameAttribute()
-    {
-        return $this->name;
-    }
+    // public function getNameAttribute()
+    // {
+    //     return $this->name;
+    // }
 
-    public function getEmailAttribute()
-    {
-        return $this->email;
-    }
+    // public function getEmailAttribute()
 
-    public function getPasswordAttribute()
-    {
-        return $this->attributes['password'];
-    }
+    // {
+    //     return $this->email;
+    // }
 
-    public function getApellidosAttribute()
-    {
-        return $this->apellidos;
-    }
+    // public function getPasswordAttribute()
+    // {
+    //     return $this->password;
+    // }
 
-    public function getIdentificacionAttribute()
-    {
-        return $this->identificacion;
-    }
+    // public function getApellidosAttribute()
+    // {
+    //     return $this->apellidos;
+    // }
 
-    public function getIdGeneroAttribute()
-    {
-        return $this->id_genero;
-    }
+    // public function getIdentificacionAttribute()
+    // {
+    //     return $this->identificacion;
+    // }
 
-    public function getIdTipoPoblacionAttribute()
-    {
-        return $this->id_tipo_poblacion;
-    }
+    // public function getIdGeneroAttribute()
+    // {
+    //     return $this->id_genero;
+    // }
 
-    public function getCelularAttribute()
-    {
-        return $this->celular;
-    }
+    // public function getIdTipoPoblacionAttribute()
+    // {
+    //     return $this->id_tipo_poblacion;
+    // }
 
-    public function getIdMunicipioAttribute()
-    {
-        return $this->id_municipio;
-    }
+    // public function getCelularAttribute()
+    // {
+    //     return $this->celular;
+    // }
 
-    public function getDireccionAttribute()
-    {
-        return $this->direccion;
-    }
+    // public function getIdMunicipioAttribute()
+    // {
+    //     return $this->id_municipio;
+    // }
 
-    public function getIdCargoAttribute()
-    {
-        return $this->id_cargo;
-    }
+    // public function getDireccionAttribute()
+    // {
+    //     return $this->direccion;
+    // }
 
-    public function getIdProgramaAttribute()
-    {
-        return $this->id_programa;
-    }
+    // public function getIdCargoAttribute()
+    // {
+    //     return $this->id_cargo;
+    // }
 
-    public function getEstadoUsuAttribute()
-    {
-        return $this->estado_usu;
-    }
+    // public function getIdProgramaAttribute()
+    // {
+    //     return $this->id_programa;
+    // }
 
-    // Setters
-    public function setIdRolAttribute($idRol)
-    {
-        $this->idRol = $idRol;
-    }
+    // public function getEstadoUsuAttribute()
+    // {
+    //     return $this->estado_usu;
+    // }
 
-    public function setNameAttribute($name)
-    {
-        $this->name = $name;
-    }
+    // // Setters
+    // public function setIdRolAttribute($idRol)
+    // {
+    //     $this->id_rol = $idRol;
+    // }
 
-    public function setEmailAttribute($email)
-    {
-        $this->email = $email;
-    }
+    // public function setNameAttribute($name)
+    // {
+    //     $this->name = $name;
+    // }
 
-    public function setPasswordAttribute($password)
-    {
-        $this->password = bcrypt($password); // assuming you want to hash the password
-    }
+    // public function setEmailAttribute($email)
+    // {
+    //     $this->email = $email;
+    // }
 
-    public function setApellidosAttribute($apellidos)
-    {
-        $this->apellidos = $apellidos;
-    }
+    // public function setPasswordAttribute($password)
+    // {
+    //     $this->password = bcrypt($password); // assuming you want to hash the password
+    // }
 
-    public function setIdentificacionAttribute($identificacion)
-    {
-        $this->identificacion = $identificacion;
-    }
+    // public function setApellidosAttribute($apellidos)
+    // {
+    //     $this->apellidos = $apellidos;
+    // }
 
-    public function setIdGeneroAttribute($idGenero)
-    {
-        $this->id_genero = $idGenero;
-    }
+    // public function setIdentificacionAttribute($identificacion)
+    // {
+    //     $this->identificacion = $identificacion;
+    // }
 
-    public function setIdTipoPoblacionAttribute($idTipoPoblacion)
-    {
-        $this->id_tipo_poblacion = $idTipoPoblacion;
-    }
+    // public function setIdGeneroAttribute($idGenero)
+    // {
+    //     $this->id_genero = $idGenero;
+    // }
 
-    public function setCelularAttribute($celular)
-    {
-        $this->celular = $celular;
-    }
+    // public function setIdTipoPoblacionAttribute($idTipoPoblacion)
+    // {
+    //     $this->id_tipo_poblacion = $idTipoPoblacion;
+    // }
 
-    public function setIdMunicipioAttribute($idMunicipio)
-    {
-        $this->id_municipio = $idMunicipio;
-    }
+    // public function setCelularAttribute($celular)
+    // {
+    //     $this->celular = $celular;
+    // }
 
-    public function setDireccionAttribute($direccion)
-    {
-        $this->direccion = $direccion;
-    }
+    // public function setIdMunicipioAttribute($idMunicipio)
+    // {
+    //     $this->id_municipio = $idMunicipio;
+    // }
 
-    public function setIdCargoAttribute($idCargo)
-    {
-        $this->id_cargo = $idCargo;
-    }
+    // public function setDireccionAttribute($direccion)
+    // {
+    //     $this->direccion = $direccion;
+    // }
 
-    public function setIdProgramaAttribute($idPrograma)
-    {
-        $this->id_programa = $idPrograma;
-    }
+    // public function setIdCargoAttribute($idCargo)
+    // {
+    //     $this->id_cargo = $idCargo;
+    // }
 
-    public function setEstadoUsuAttribute($estadoUsu)
-    {
-        $this->estado_usu = $estadoUsu;
-    }
+    // public function setIdProgramaAttribute($idPrograma)
+    // {
+    //     $this->id_programa = $idPrograma;
+    // }
+
+    // public function setEstadoUsuAttribute($estadoUsu)
+    // {
+    //     $this->estado_usu = $estadoUsu;
+    // }
 }

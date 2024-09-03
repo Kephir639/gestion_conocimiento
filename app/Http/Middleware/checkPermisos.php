@@ -47,9 +47,6 @@ class checkPermisos
                 'display_funcion' => $permiso->display_funcion
             ];
         }
-
-        // dd($permisos);
-
         $request->merge(['controladores' => $controladores]);
 
         return $next($request);
