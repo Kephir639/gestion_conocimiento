@@ -18,17 +18,17 @@ Route::view('/', 'presentacion')->middleware('filter');
 // Route::view('/presentacion', 'presentacion');
 Auth::routes();
 
-Route::middleware('auth', 'filter', 'active', 'notifications', 'checkPermisos')->group(function () {
+Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')->group(function () {
 
     //Pagina de Bienvenida
     Route::get('/index', [inicioController::class, 'index']);
 
     //Redes de Concocimiento
-    Route::get('index/redes/consultar_red', [redesController::class, 'showRedes']);
+    Route::get('index/redes/consultar_redes', [redesController::class, 'showRedes']);
     Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar']);
-    Route::post('index/redes/crear_red', [redesController::class, 'registrarRed']);
+    Route::post('index/redes/crear_redes', [redesController::class, 'registrarRed']);
     Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
-    Route::post('index/redes/actualizarRedes', [redesController::class, 'actualizarRed']);
+    Route::post('index/redes/actualizar_redes', [redesController::class, 'actualizarRed']);
 
     //Gurpos de investigacion
     Route::get('index/grupos/consultar_grupos', [gruposController::class], 'showGrupos');

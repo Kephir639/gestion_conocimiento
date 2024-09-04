@@ -10,15 +10,20 @@ class log_auditoria extends Controller
 {
     public static function createLog($modulo, $elemento, $accion, $nuevo = "")
     {
-        $sql = "INSERT INTO log_auditoria
-                ('accion_realizada', 'fecha_realizacion', 'nombre_responsable', 'documento_responsable')
-                VALUES ('Se" . $accion . "el/la " . $modulo . ": " . $elemento . "','" . Carbon::now() . "',
-                '" . Auth::user()->name . "','" . Auth::user()->identificacion . "')";
+        $hora = Carbon::now()->toDateTime();
 
-        $sqlAct = "INSERT INTO log_auditoria
-                ('accion_realizada', 'fecha_realizacion', 'nombre_responsable', 'documento_responsable')
-                VALUES ('Se" . $accion . "el/la " . $modulo . ": " . $elemento . " a " . $nuevo . "','" . Carbon::now() . "',
-                '" . Auth::user()->name . "','" . Auth::user()->identificacion . "')";
+        $sql = [
+            'accion_realizada' => "'Se" . $accion . "el/la " . $modulo . ": " . $elemento . "'",
+            'fecha_realizacion' => Carbon::now(),
+            'documento_responsable' => "'" . Auth::user()->identificacion . "'"
+        ];
+
+
+        $sqlAct = [
+            'accion_realizada' => "'Se " . $accion . " el/la " . $modulo . ": " . $elemento . " a " . $nuevo . "'",
+            'fecha_realizacion' => $hora,
+            'documento_responsable' => "'" . Auth::user()->identificacion . "'"
+        ];
 
         return ($modulo === "actualizo") ? $sqlAct : $sql;
     }

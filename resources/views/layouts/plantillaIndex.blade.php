@@ -45,11 +45,10 @@
                         <li class="sidebar-item">
                             <a href="/index/{{ $contr['nombre_controlador'] }}/consultar_{{ $contr['nombre_controlador'] }}"
                                 id="tab_{{ $contr['nombre_controlador'] }}"
-                                class="sidebar-tabb sidebar-link collapsed px-3 py-2"
-                                data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse"
+                                class="sidebar-tabb sidebar-link collapsed px-3 py-2" {{-- data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse" --}}
                                 aria-expanded="false">{!! html_entity_decode($contr['icono']) !!}{{ $contr['display_controlador'] }}
                             </a>
-                            <ul id="{{ $contr['nombre_controlador'] }}" class="sidebar-dropdown list-unstyled collapse"
+                            {{-- <ul id="{{ $contr['nombre_controlador'] }}" class="sidebar-dropdown list-unstyled collapse"
                                 data-bs-target="#sidebar">
                                 @foreach ($contr['funciones'] as $funcion => $func)
                                     @if (!Str::contains($func['display_funcion'], 'Modificar'))
@@ -61,7 +60,7 @@
                                         </li>
                                     @endif
                                 @endforeach
-                            </ul>
+                            </ul> --}}
                         </li>
                     @endforeach
                 </ul><br>
@@ -73,7 +72,7 @@
                     <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
                 </svg>
             </button>
-            @if (Auth::user()->idRol == 1)
+            {{-- @if (Auth::user()->idRol == 1)
                 <div class="notifycon mr-5"><svg xmlns="http://www.w3.org/2000/svg" class="mt-2" width="24"
                         height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1)">
                         <path
@@ -86,7 +85,7 @@
                 <div class="notify-box mr-3 mt-4 p-1" id="box">
                     <h2>Usuario pendientes para asignacion de rol <span>{{ $usuariosPendientes }}</span></h2>
                 </div>
-            @endif
+            @endif --}}
             <div class="nabvar-collapse navbar">
                 <ul class="navbar-nav ml-auto">
                 </ul>

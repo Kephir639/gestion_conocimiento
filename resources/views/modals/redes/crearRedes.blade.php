@@ -6,16 +6,17 @@
                 <button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="POST" action="{{ url('/index/redes/crear_redes') }}">
+                    @csrf
                     <div class="row mt-3">
-                        <input type="hidden" value="{{ csrf_token() }}" id="_token">
                         <div id="div_nombre_red" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="nombre_red" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="inputNombreRed" name="nombre_red" required>
                             <span class="errorValidacion"></span>
                         </div>
                         <div class="col-md-12 col-sm-12 mt-3">
-                            <input type="submit" value="Enviar" class="btn btn-success w-100" name="Enviar">
+                            <button id="btnRegistrar" type="submit" class="btn btn-success w-100"
+                                name="Enviar"></button>
                         </div>
                     </div>
                 </form>

@@ -2,7 +2,7 @@ $(document).ready(function () {
     //Metodo para abrir la modal de modificar
     let button = '';
     //Metodo para abrir la modal de modificar
-    $('.iconoModificar').on('click', function () {
+    $('.iconoModalModificar').on('click', function () {
         button = $(this);
         let nombreGrupo = $(this).parents('tr').find('td:eq(0)').text().trim();
         let estadoGrupo = $(this).parents('tr').find('td:eq(1)').text().trim();
@@ -13,16 +13,16 @@ $(document).ready(function () {
             success: function (data) {
                 $('#ModalSection').html(data);
 
-                $(this).find('#inputNombreRed').val(nombreGrupo);
-                $(this).find('#inputEstadoRed').val(estado);
+                $('#modalModificarRedes').find('#inputNombreRed').val(nombreGrupo);
+                $('#modalModificarRedes').find('#inputEstadoRed').val(estado);
 
-                $('#modalModificarRed').modal('show');
+                $('#modalModificarRedes').modal('show');
             }
         });
     });
 
     //Metodo para abrir la modal de registrar
-    $('#BtnRegistrarRed').on('click', function () {
+    $('#BtnModalRegistrarRedes').on('click', function () {
         button = $(this);
         $.ajax({
             type: "GET",
@@ -32,6 +32,10 @@ $(document).ready(function () {
                 console.log($('#modalRegistrarRedes').modal('show'));
             }
         });
+    });
+
+    $('#btnModificar').on('click', function () {
+        $('#formModificar').trigger('submit');
     });
 
     $('#formModificar').submit(function (e) {
@@ -46,7 +50,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "actualizarRedes",
+            url: "actualizar_redes",
             data: {
                 '_token': token,
                 'nombre_red': nombre,
