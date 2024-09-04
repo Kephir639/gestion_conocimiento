@@ -19,7 +19,7 @@ class User extends Authenticatable
      */
 
     protected $fillable = [
-        'id_rol',
+        'idRol',
         'name',
         'email',
         'password',
@@ -66,6 +66,7 @@ class User extends Authenticatable
     // }
 
     // public function getEmailAttribute()
+
     // {
     //     return $this->email;
     // }

@@ -13,12 +13,14 @@ use Illuminate\Support\Facades\Validator;
 
 class cargoController extends Controller
 {
-    public function showCargos()
+    public function showCargos(Request $request)
     {
         $sql = "SELECT nombre_cargo, estado FROM cargos";
 
-        $lista = Cargo::select($sql)->paginate('10');
-        return view('cargos')->with($lista);
+        $cargos = Cargo::orderBy('id_cargo', 'desc')->paginate(10);
+        $controladores = $request->controladores;
+
+        return view('modals.cargo.consultarCargos', compact('cargos', 'controladores'));
     }
 
     public function showModalRegistrar()
@@ -74,7 +76,7 @@ class cargoController extends Controller
                 $listaCargos = Cargo::paginate('10')->orderBy('id_cargo', 'desc');
                 $controladores = $request->controladores;
 
-                $tabla = view('modals.grupos.tablaGrupo', [
+                $tabla = view('modals.cargo.tablaGrupo', [
                     'listaCargos' => $listaCargos,
                     'controladores' => $controladores
                 ])->render();

@@ -23,8 +23,8 @@ class RolController extends Controller
 
     public function consultarPermisos()
     {
-        $sql = "select fun.display nombre, fun.id_funcion id, con.id_controlador,
-        con.displayController controlador from funciones fun, controladores con WHERE con.id_controlador = fun.id_controlador
+        $sql = "SELECT fun.display nombre, fun.id_funcion id, con.id_controlador,
+        con.displayController controlador FROM funciones fun, controladores con WHERE con.id_controlador = fun.id_controlador
         ORDER BY fun.id_controlador";
 
         return DB::select($sql);
@@ -46,8 +46,6 @@ class RolController extends Controller
         ];
 
         $validacion = Validator::make($request, $reglas, $mensajes);
-
-        $respuesta = [];
 
         if ($validacion->fails()) {
             $respuestas['mensaje'] = $validacion;
@@ -95,14 +93,16 @@ class RolController extends Controller
     }
 
 
-    public function consultarRol()
+    public function consultarRol(Request $request)
     {
-        $roles = Rol::all();
+        $listaRoles = Rol::all();
 
-        foreach ($roles as $rol) {
+        foreach ($listaRoles as $rol) {
             $rol->id_rol = Crypt::encrypt($rol->id_rol);
         }
-        return view('consultarRoles', compact('roles'));
+
+        $controladores = $request->controladores;
+        return view('modals.rol.consultarRoles', compact('listaRoles', 'controladores'));
     }
 
     public function editarRol($id)

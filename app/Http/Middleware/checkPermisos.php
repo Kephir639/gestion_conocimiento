@@ -42,7 +42,6 @@ class checkPermisos
                     'funciones' => []
                 ];
             }
-
             $controladores[$contr]['funciones'][] = [
                 'nombre_funcion' => $permiso->nombre_funcion,
                 'display_funcion' => $permiso->display_funcion
