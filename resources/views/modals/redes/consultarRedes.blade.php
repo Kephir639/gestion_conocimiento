@@ -32,7 +32,7 @@
                                         @if ($controlador['nombre_controlador'] == 'redes')
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'modificar_red')
-                                                    <button title="Modificar Red" class="btn p-0"><svg width="36"
+                                                    <button title="Modificar Red" class="btn p-0"><svg
                                                             class="iconoModalModificar" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
                                                             <path

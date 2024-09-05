@@ -13,132 +13,203 @@ use Illuminate\Support\Facades\Validator;
 
 class RolController extends Controller
 {
-    public function showRegistrarRol()
+    public function consultarRol(Request $request)
     {
-        // dd($funciones);
-        $funciones = $this->consultarPermisos();
-        $array_existencia = array();
-        return view('crearRol', compact('funciones', 'array_existencia'));
+        $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate('10');
+        $controladores = $request->controladores;
+
+        return view('modals.rol.consultarRoles', compact('listaRoles', 'controladores'));
     }
 
-    public function consultarPermisos()
+    public function showModalRegistrar()
     {
-        $sql = "SELECT fun.display nombre, fun.id_funcion id, con.id_controlador,
-        con.displayController controlador FROM funciones fun, controladores con WHERE con.id_controlador = fun.id_controlador
-        ORDER BY fun.id_controlador";
+        $funciones = $this->consultarFunciones();
+        $array_existencia = array();
 
-        return DB::select($sql);
+        $modal = view('modals.rol.crearRol', [
+            'funciones' => $funciones,
+            'array_existencia' => $array_existencia
+        ])->render();
+
+        return response()->json(['modal' => $modal]);
     }
 
     public function registrarRol(Request $request)
     {
         $datos = request()->all();
-        //dd($datos);
-        // $sql = "INSERT INTO roles VALUES(DEFAULT,request()->all()->inputRol,request()->all()->inputNombreRol,request()->all()->inputEstado)";
+
         $reglas = [
-            'inputNombreRol' => 'required',
-            'inputEstadoRol' => 'required',
+            'nombre_rol' => 'required|max:25',
+            'estado_rol' => 'required',
         ];
 
         $mensajes = [
-            'inputNombreRol.required' => 'Este campo es obligatorio',
-            'inputEstadoRol.required' => 'Este campo es obligatorio'
+            'nombre_rol.required' => 'Este campo es obligatorio',
+            'nombre_rol.max' => 'Este campo debe contener maximo 25 caracteres',
+            'estado_rol.required' => 'Este campo es obligatorio'
         ];
 
-        $validacion = Validator::make($request, $reglas, $mensajes);
+        $validacion = Validator::make($datos, $reglas, $mensajes);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje'])->withInput();
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $rol = new Rol();
+            $ajax = Rol::where('rol', $request->nombre_rol)->get();
 
-            $rol->setRolAttribute($request->inputNombreRol);
-            $rol->setEstadoRolAttribute($request->inputEstadoRol);
-
-            $registro = Rol::create($rol);
-
-            $sql = log_auditoria::createLog(
-                'rol',
-                $rol->getRolAttribute(),
-                'registro'
-            );
-            Log::insert($sql);
-
-            $idRol = $registro->id_rol;
-
-            $funciones = $datos['checkFunciones'];
-
-            foreach ($funciones as $funcion) {
-                // dd($funcion);
-                $sql = "INSERT INTO permisos VALUES(DEFAULT,'" . $idRol . "','" . $funcion . "')";
-                $resultado = Permiso::create(['id_rol' => $idRol, 'id_funcion' => $funcion]);
-            }
-
-            if ($registro == true && $resultado == true) {
-                return redirect()->route('roles.consultar');
+            if (count($ajax)) {
+                return view('alertas.repetido')->render();
             } else {
-                echo 'Se produjo un error al registrar';
+                $rol = new Rol();
+
+                $rol->setRolAttribute($request->nombre_rol);
+                $rol->setEstadoRolAttribute(1);
+
+                $registro = Rol::create($rol);
+
+                $sql = log_auditoria::createLog(
+                    'rol',
+                    $rol->getRolAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
+
+                $idRol = $registro->id_rol;
+
+                $funciones = $request->funciones;
+
+                foreach ($funciones as $funcion) {
+                    $resultado = Permiso::create([
+                        'id_rol' => $idRol,
+                        'id_funcion' => $funcion
+                    ]);
+                }
+
+                if ($registro == true && $resultado == true) {
+                    $controladores = $request->controladores;
+                    $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate('10');
+
+                    $tabla = view('modals.roles.tablaRol', [
+                        'controladores' => $controladores,
+                        'listaRoles' => $listaRoles
+                    ])->render();
+
+                    $alerta = view('alertas.registrarExitoso')->render();
+
+                    return response()->json([
+                        'tabla' => $tabla,
+                        'alerta' => $alerta
+                    ]);
+                } else {
+                    //Alerta de error
+                }
             }
         }
     }
 
-
-
-    public function consultarPermiso($idRol)
+    public function showModalActualizar(Request $request)
     {
-        $sql = "SELECT id_permiso, id_funcion FROM permisos WHERE id_rol = $idRol";
-        return DB::select($sql);
-    }
-
-
-    public function consultarRol(Request $request)
-    {
-        $listaRoles = Rol::all();
-
-        foreach ($listaRoles as $rol) {
-            $rol->id_rol = Crypt::encrypt($rol->id_rol);
-        }
-
-        $controladores = $request->controladores;
-        return view('modals.rol.consultarRoles', compact('listaRoles', 'controladores'));
-    }
-
-    public function editarRol($id)
-    {
-        $id = Crypt::decrypt($id);
-        $permisos = $this->consultarPermiso($id);
+        $permisos = $request->permisos;
+        $idRol = Crypt::decrypt($request->id_rol);
 
         $permisoIds = array();
         foreach ($permisos as $permiso) {
             $permisoIds[] = $permiso->id_funcion;
         }
 
-        $funciones = $this->consultarPermisos();
+        $funciones = $this->consultarFunciones();
         $array_existencia = array();
 
-        $sql_rol = "SELECT rol, estado FROM roles WHERE  id_rol = '$id'";
-        $rol_data = DB::select($sql_rol);
-        $rol_nombre = $rol_data[0]->rol;
-        $rol_estado = $rol_data[0]->estado;
+        $modal = view('modals.rol.editarRol', [
+            'permisos' => $permisos,
+            'funciones' => $funciones,
+            'array_existencia' => $array_existencia,
+            'permisoIds' => $permisoIds
+        ])->render();
 
-        $rol = Rol::findOrFail($id);
-        $rol = Crypt::encrypt($rol);
-
-        return view('editarRol', compact('rol', 'rol_nombre', 'rol_estado', 'permisos', 'funciones', 'array_existencia', 'permisoIds'));
+        return response()->json(['modal' => $modal]);
     }
 
 
-    public function actualizarRol($id)
+    public function actualizarRol(Request $request)
     {
-        extract($_POST);
-        // dd($_POST);
-        $id = Crypt::decrypt($id)->id_rol;
+        $datos = request()->all();
 
-        DB::table('roles')->where('id_rol', $id)->update(["rol" => $rol_nombre, "estado" => $estado]);
+        $reglas = [
+            'nombre_rol' => 'required|max:25',
+            'estado_rol' => 'required',
+        ];
 
+        $mensajes = [
+            'nombre_rol.required' => 'Este campo es obligatorio',
+            'nombre_rol.max' => 'Este campo debe contener maximo 25 caracteres',
+            'estado_rol.required' => 'Este campo es obligatorio'
+        ];
 
-        return redirect()->route("roles.consultar");
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        if ($validacion->fails()) {
+            $respuestas['mensaje'] = $validacion;
+            $respuestas['error'] = true;
+            return response()->json(['errors' => $validacion->errors()], 422);
+        } else {
+            $ajax = Rol::where('rol', $request->nombre_rol)->get();
+
+            if (count($ajax)) {
+                return view('alertas.repetido')->render();
+            } else {
+                $rol = new Rol();
+
+                $rol->setRolAttribute($request->nombre_rol);
+                $rol->setEstadoRolAttribute($request->estado_rol);
+
+                Rol::where('rol', $request->nombre_rol)->update($rol->toArray());
+
+                $sql = log_auditoria::createLog(
+                    'rol',
+                    $rol->getRolAttribute(),
+                    'actualizo',
+                    $request->nombre_rol_old
+                );
+                Log::insert($sql);
+
+                $eliminados = $request->funciones_eliminadas;
+                $agregados = $request->funciones_agregadas;
+
+                foreach ($eliminados as $eliminado) {
+                    Permiso::where('id_permiso', $eliminado)->update('estado_permiso', 0);
+                }
+                foreach ($agregados as $agregado) {
+                    Permiso::where('id_permiso', $agregado)->update('estado_permiso', 1);
+                }
+
+                return view('alertas.modifcarExitoso');
+            }
+        }
+    }
+
+    public function consultarPermiso(Request $request)
+    {
+        $idRol = Rol::select('id')->where('rol', $request->nombre_rol)->get();
+        $sql = "SELECT id_permiso, id_funcion FROM permisos WHERE id_rol = $idRol";
+
+        $idRolCrypt = Crypt::encrypt($idRol);
+        $permisos = DB::select($sql);
+
+        return response()->json([
+            'permisos' => $permisos,
+            'id_rol' => $idRolCrypt
+        ]);
+    }
+
+    public function consultarFunciones()
+    {
+        $sql = "SELECT fun.display_funcion nombre, fun.id_funcion id, con.id_controlador,
+        con.displayController controlador FROM funciones fun, controladores con WHERE con.id_controlador = fun.id_controlador
+        ORDER BY fun.id_controlador";
+
+        $funciones = DB::select($sql);
+
+        return $funciones;
     }
 }

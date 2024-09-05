@@ -10,10 +10,8 @@ class log_auditoria extends Controller
 {
     public static function createLog($modulo, $elemento, $accion, $nuevo = "")
     {
-        $hora = Carbon::now()->toDateTime();
-
         $sql = [
-            'accion_realizada' => "'Se" . $accion . "el/la " . $modulo . ": " . $elemento . "'",
+            'accion_realizada' => "'Se " . $accion . "el/la " . $modulo . ": " . $elemento . "'",
             'fecha_realizacion' => Carbon::now(),
             'documento_responsable' => "'" . Auth::user()->identificacion . "'"
         ];
@@ -21,10 +19,10 @@ class log_auditoria extends Controller
 
         $sqlAct = [
             'accion_realizada' => "'Se " . $accion . " el/la " . $modulo . ": " . $elemento . " a " . $nuevo . "'",
-            'fecha_realizacion' => $hora,
+            'fecha_realizacion' => Carbon::now(),
             'documento_responsable' => "'" . Auth::user()->identificacion . "'"
         ];
 
-        return ($modulo === "actualizo") ? $sqlAct : $sql;
+        return ($accion === "actualizo") ? $sqlAct : $sql;
     }
 }

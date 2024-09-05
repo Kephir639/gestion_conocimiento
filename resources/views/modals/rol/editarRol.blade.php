@@ -1,25 +1,19 @@
-@extends('layouts.plantillaIndex')
-@section('title', 'Inicio')
-@section('content')
-    <div class="cuadradoVistas">
-        <div class="indexBackground row">
-            <div class="backgroundText">
-                <h1>Editar rol</h1>
-
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                <form action="{{ url('/roles/actualizarRol/' . $rol) }}" enctype="multipart/form-data" method="POST">
-                    @csrf
-
-                    <label for="inputRol" class="form-label">Rol</label>
-                    <input type="text" id="inputRol" class="form-control" name="rol_nombre" value="{{ $rol_nombre }}">
-                    <label for="inputEstado" class="form-label">Estado</label>
-                    <select name="estado" id="estado">
-                        <option value="1"{{ $rol_estado == '1' ? 'selected' : '' }}>Activo</option>
-                        <option value="0"{{ $rol_estado == '0' ? 'selected' : '' }}>Inactivo</option>
+<div class="modal" id="modalRegistrarRedes">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Actualizar Rol</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" value="{{ csrf_token() }}" id="_token">
+                    <label for="inputNombreRol" class="form-label">Rol</label>
+                    <input type="text" id="inputNombreRol" class="form-control" name="nombre_rol">
+                    <label for="inputEstadoRol" class="form-label">Estado</label>
+                    <select name="estado_rol" id="inputEstadoRol">
+                        <option value="1">Activo</option>
+                        <option value="0">Inactivo</option>
                     </select><br>
                     <div class="row">
                         @foreach ($funciones as $key => $funcion)
@@ -38,15 +32,14 @@
 
                         </div><br>
                         @endforeach
-
                     </div>
-
-
-                    <button type="submit" class="btn btn-success">Actualizar</button>
+                    <button id="btnActualizar" class="btn btn-success">Actualizar</button>
                 </form>
+                <div id="alertasActualizar"></div>
             </div>
-
-            <div class="backgroundImage"></div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            </div>
         </div>
     </div>
-@endsection
+</div>

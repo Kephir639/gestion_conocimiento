@@ -70,7 +70,7 @@ class RedesController extends Controller
                 );
                 Log::insert($sql);
 
-                $listaRedes = Redes::paginate('10')->orderBy('id_red', 'desc');
+                $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
                 $tabla = view('modals.redes.tablaRed', [
@@ -123,14 +123,14 @@ class RedesController extends Controller
             $respuestas['error'] = false;
             $ajax = Redes::where('nombre_red', $datos['nombre_red'])->get();
             if (count($ajax)) {
-                return view('alertas.repetido')->with(['controladores' => $request->controladores]);
+                return view('alertas.repetido');
             } else {
                 $red = new Redes();
 
                 $red->setNombreRedAttribute($request->nombre_red);
                 $red->setEstadoRedAttribute($request->estado_red);
 
-                Redes::where('nombre_red', $datos['nombre_red_old'])->update($red->toArray());
+                dd(Redes::where('nombre_red', $datos['nombre_red_old'])->update($red->toArray()));
 
                 $sql = log_auditoria::createLog(
                     'red',

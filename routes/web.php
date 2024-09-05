@@ -57,10 +57,12 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     Route::post('index/lineas/actualizarLinea', [lineaController::class, 'actualizarLinea']);
 
     // Roles
-    Route::get('index/roles/consultar_rol', [rolController::class, 'consultarRol']);
-    Route::get('index/roles/crearRol', [rolController::class, 'showRegistrarRol']);
+    Route::get('index/roles/consultar_roles', [rolController::class, 'consultarRol']);
+    Route::get('index/rol/permisoRol', [rolController::class, 'consultarPermiso']);
+    Route::get('index/roles/funciones', [rolController::class, 'consultarFunciones']);
+    Route::get('index/roles/showModalRegistrar', [rolController::class, 'showModalRegistrar']);
     Route::post('index/roles/registrarRol', [rolController::class, 'registrarRol']);
-    // Route::get('/roles/editarRol/{id}', [rolController::class, 'editarRol']);
+    Route::get('index/roles/showModalActualizar', [rolController::class, 'showModalActualizar']);
     Route::post('/roles/actualizarRol', [rolController::class, 'actualizarRol']);
 });
 

@@ -22,27 +22,21 @@ $(document).ready(function () {
     });
 
     //Metodo para abrir la modal de registrar
-    $('#BtnModalRegistrarRedes').on('click', function () {
+    $('#BtnModalRegistrarRed').on('click', function () {
         button = $(this);
         $.ajax({
             type: "GET",
             url: "showModalRegistrar",
             success: function (data) {
                 $('#ModalSection').html(data);
-                console.log($('#modalRegistrarRedes').modal('show'));
+                $('#modalRegistrarRedes').modal('show');
             }
         });
     });
 
-    $('#btnModificar').on('click', function () {
-        $('#formModificar').trigger('submit');
-    });
-
-    $('#formModificar').submit(function (e) {
-        //Solicitud de Ajax para realizar la actualizacion del elemento
+    $(document).on('click', '#btnModificar', function (e) {
         e.preventDefault();
-        let boton = $('#BtnModificarRed');
-        let nombre_old = boton.parents('tr').find('td:eq(0)').text().trim();
+        let nombre_old = $(button).parents('tr').find('td:eq(0)').text().trim();
 
         let nombre = $('#inputNombreRed').val();
         let estado = $('#inputEstadoRed').val();
@@ -59,8 +53,8 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $('#alertasModificar').html(data);
-                button.parents('tr').find('td:eq(0)').val(nombre);
-                button.parents('tr').find('td:eq(1)').val(estado);
+                $(button).parents('tr').find('td:eq(0)').text(nombre);
+                $(button).parents('tr').find('td:eq(1)').val(estado);
             },
             error: function (xhr, status, error) {
                 if (xhr.status === 422) {
@@ -74,8 +68,7 @@ $(document).ready(function () {
         });
     });
 
-    $('#formRegistrar').submit(function (e) {
-        //Solicitud de Ajax para realizar la actualizacion del elemento
+    $(document).on('click', '#btnRegistrar', function (e) {
         e.preventDefault();
 
         let nombre = $('#inputNombreRed').val();
@@ -90,7 +83,7 @@ $(document).ready(function () {
             },
             success: function (data) {
                 //Mostrar los registros actualizados
-                $('#tablebody_grupos').html(data.tabla);
+                $('#tablebody_redes').html(data.tabla);
 
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);
@@ -108,16 +101,6 @@ $(document).ready(function () {
             }
         });
     });
-
-
-
-    // $('#modalModifcarRedes').on('hidden.bs.modal', function () {
-    //     $('#ModalSection').empty();
-    // });
-
-    // $('#modalRegistrarRedes').on('hidden.bs.modal', function () {
-    //     $('#ModalSection').empty();
-    // });
 
 });
 
