@@ -12,7 +12,7 @@ use App\Http\Controllers\redesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'presentacion')->middleware('filter');
+Route::view('/', 'presentacion')->middleware('filter', 'auth');
 // ->middleware('checkPermisos');
 // Route::view('/presentacion', 'presentacion');
 Auth::routes();
@@ -78,12 +78,12 @@ Route::view('/registro', 'registro')->name('registro');
 // Home
 // Route::get('/home', [HomeController::class, 'showHome'])->name('home');
 // Route::middleware(['isLoggedIn'])->group(function () {
-//     Route::get('/home', [HomeController::class, 'showHome'])->name('home');
-//     Route::get('/home', [HomeController::class, 'showHome'])->name('home');
-//     Route::get('/home/usuarios', [HomeController::class, 'showUsuarios']);
-//     Route::post('/home/usuarios/asignarRol', [HomeController::class, 'asignarRol']);
-//     Route::post('/home/usuarios/consultarUsuario', [HomeController::class, 'consultarUsuario']);
-//     Route::get('/home/semilleros/crear', function () {
+    //     Route::get('/home', [HomeController::class, 'showHome'])->name('home');
+    //     Route::get('/home', [HomeController::class, 'showHome'])->name('home');
+    //     Route::get('/home/usuarios', [HomeController::class, 'showUsuarios']);
+    //     Route::post('/home/usuarios/asignarRol', [HomeController::class, 'asignarRol']);
+    //     Route::post('/home/usuarios/consultarUsuario', [HomeController::class, 'consultarUsuario']);
+    //     Route::get('/home/semilleros/crear', function () {
 //         return view('crearSemilleros');
 //     });
 //     Route::post('/home/semilleros/crear', function () {
@@ -96,5 +96,5 @@ Route::get('ejemplo', function () {
 });
 
 Auth::routes();
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
