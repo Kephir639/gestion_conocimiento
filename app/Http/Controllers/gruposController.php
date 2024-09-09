@@ -11,15 +11,19 @@ class GruposController extends Controller
 {
     public function showGrupos()
     {
-        $sql = "SELECT nombre_grupo, estado_grupo FROM grupos_investigacion";
-        $lista = GrupoInvestigacion::select($sql)->paginate('10');
+        $listaGrupos = GrupoInvestigacion::paginate('10')->orderBy('id_grupo', 'desc');
 
-        return view('gruposInvestigacion')->with($lista);
+        return view('modals.grupos.consultarGrupos', compact('listaGrupos'));
     }
 
-    public function showRegistrarGrupos()
+    public function showModalRegistrar()
     {
-        return view('registrarGrupos');
+        return view('modals.grupos.crearGrupos');
+    }
+
+    public function showModalActualizar()
+    {
+        return view('modals.grupos.modificarGrupos');
     }
 
     public function registrarGrupo(Request $request)
@@ -44,12 +48,13 @@ class GruposController extends Controller
         if ($validacion->fails()) {
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
-            // dd($validacion->errors());
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
-            if (GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])) {
-                return response()->json(['estado' => false], 200);
+            $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
+
+            if (count($ajax)) {
+                return view('alertas.repetido');
             } else {
                 $grupo = new GrupoInvestigacion();
 
@@ -57,7 +62,17 @@ class GruposController extends Controller
                 $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
                 GrupoInvestigacion::create($grupo);
-                return response()->json(['estado' => true], 200);
+
+                $listaGrupos = GrupoInvestigacion::paginate('10')->orderBy('id_grupo', 'desc');
+                $controladores = $request->controladores;
+
+                $tabla = view('modals.grupos.tablaGrupo', ['listaGrupos' => $listaGrupos, 'controladores' => $controladores])->render();
+                $alerta = view('alertas.registrarExitoso')->render();
+
+                return response()->json([
+                    'tabla' => $tabla,
+                    'alerta' => $alerta
+                ]);
             }
         }
     }
@@ -84,12 +99,13 @@ class GruposController extends Controller
         if ($validacion->fails()) {
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
-            // dd($validacion->errors());
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
-            if (GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])) {
-                return 'Variable de JSON recibida por el Ajax para mostrar el alerta';
+            $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
+
+            if (count($ajax)) {
+                return view('alertas.repetido');
             } else {
                 $grupo = new GrupoInvestigacion();
 
@@ -98,7 +114,7 @@ class GruposController extends Controller
 
                 GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo);
 
-                return response()->json(['estado' => true], 200);
+                return view('alertas.modifcarExitoso');
             }
         }
     }

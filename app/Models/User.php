@@ -53,4 +53,146 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
+
+    // Getters
+    // public function getIdRolAttribute()
+    // {
+    //     return $this->id_rol;
+    // }
+
+    // public function getNameAttribute()
+    // {
+    //     return $this->name;
+    // }
+
+    // public function getEmailAttribute()
+    // {
+    //     return $this->email;
+    // }
+
+    // public function getPasswordAttribute()
+    // {
+    //     return $this->password;
+    // }
+
+    // public function getApellidosAttribute()
+    // {
+    //     return $this->apellidos;
+    // }
+
+    // public function getIdentificacionAttribute()
+    // {
+    //     return $this->identificacion;
+    // }
+
+    // public function getIdGeneroAttribute()
+    // {
+    //     return $this->id_genero;
+    // }
+
+    // public function getIdTipoPoblacionAttribute()
+    // {
+    //     return $this->id_tipo_poblacion;
+    // }
+
+    // public function getCelularAttribute()
+    // {
+    //     return $this->celular;
+    // }
+
+    // public function getIdMunicipioAttribute()
+    // {
+    //     return $this->id_municipio;
+    // }
+
+    // public function getDireccionAttribute()
+    // {
+    //     return $this->direccion;
+    // }
+
+    // public function getIdCargoAttribute()
+    // {
+    //     return $this->id_cargo;
+    // }
+
+    // public function getIdProgramaAttribute()
+    // {
+    //     return $this->id_programa;
+    // }
+
+    // public function getEstadoUsuAttribute()
+    // {
+    //     return $this->estado_usu;
+    // }
+
+    // // Setters
+    // public function setIdRolAttribute($idRol)
+    // {
+    //     $this->id_rol = $idRol;
+    // }
+
+    // public function setNameAttribute($name)
+    // {
+    //     $this->name = $name;
+    // }
+
+    // public function setEmailAttribute($email)
+    // {
+    //     $this->email = $email;
+    // }
+
+    // public function setPasswordAttribute($password)
+    // {
+    //     $this->password = bcrypt($password); // assuming you want to hash the password
+    // }
+
+    // public function setApellidosAttribute($apellidos)
+    // {
+    //     $this->apellidos = $apellidos;
+    // }
+
+    // public function setIdentificacionAttribute($identificacion)
+    // {
+    //     $this->identificacion = $identificacion;
+    // }
+
+    // public function setIdGeneroAttribute($idGenero)
+    // {
+    //     $this->id_genero = $idGenero;
+    // }
+
+    // public function setIdTipoPoblacionAttribute($idTipoPoblacion)
+    // {
+    //     $this->id_tipo_poblacion = $idTipoPoblacion;
+    // }
+
+    // public function setCelularAttribute($celular)
+    // {
+    //     $this->celular = $celular;
+    // }
+
+    // public function setIdMunicipioAttribute($idMunicipio)
+    // {
+    //     $this->id_municipio = $idMunicipio;
+    // }
+
+    // public function setDireccionAttribute($direccion)
+    // {
+    //     $this->direccion = $direccion;
+    // }
+
+    // public function setIdCargoAttribute($idCargo)
+    // {
+    //     $this->id_cargo = $idCargo;
+    // }
+
+    // public function setIdProgramaAttribute($idPrograma)
+    // {
+    //     $this->id_programa = $idPrograma;
+    // }
+
+    // public function setEstadoUsuAttribute($estadoUsu)
+    // {
+    //     $this->estado_usu = $estadoUsu;
+    // }
 }

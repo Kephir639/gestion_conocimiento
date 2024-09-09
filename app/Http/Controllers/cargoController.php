@@ -7,59 +7,120 @@ use App\Models\Cargo;
 use App\Models\Rol;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
-use function Laravel\Prompts\select;
 
 class cargoController extends Controller
 {
-    public function consultarCargo()
+    public function showCargos()
     {
-        $cargos = Cargo::all()->paginate('10');
-        foreach ($cargos as $cargo) {
-            $cargo->id_cargo = Crypt::encrypt($cargo->id_cargo);
-        }
-        return view('consultarCargos', compact('cargos'));
+        $sql = "SELECT nombre_cargo, estado FROM cargos";
+
+        $lista = Cargo::select($sql)->paginate('10');
+        return view('cargos')->with($lista);
     }
 
-    public function showregistrarCargo()
+    public function showModalRegistrar()
     {
-        return view('crearCargo');
+        return view('modals.cargo.crearCargo');
     }
 
-    public function registrarCargo()
+
+    public function registrarCargo(Request $request)
     {
-        $datos = request()->all();
+        $reglas = [
+            'nombre_cargo' => 'required',
+            'estado_cargo' => 'required'
+        ];
 
-        $registroCargo = Cargo::create(['nombre_cargo' => $datos['inputNombreCargo'], 'estado' => $datos['inputEstadoCargo']]);
+        $mensajes = [
+            'nombre_cargo.required' => 'Este campo es obligatorio',
+            'nombre_cargo.max' => 'Este campo debe contener maximo 30 caracteres',
+            'estado_cargo.required' => 'Este campo es obligatorio'
+        ];
 
-        if ($registroCargo) {
-            return redirect()->route('cargos.consultar')->with('success', 'Cargo registrado exitosamente.');
+        $datos = $request->all();
+        $respuestas = [];
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        unset($datos['_token']);
+        unset($datos['controladores']);
+
+        if ($validacion->fails()) {
+            $respuestas['mensaje'] = $validacion;
+            $respuestas['error'] = true;
+            //Se regresa a la ruta anterior con los errores cometidos para ser mostrados en la vista
+            return redirect()->back()->withErrors($respuestas['mensaje']);
         } else {
-            return back()->with('error', 'Error al registrar el cargo.');
+            $respuestas['error'] = false;
+            if (Cargo::where('nombre_cargo', $datos['inputNombreCargo'])->exists()) {
+                return response()->json(['estado' => false, 'mensaje' => 'El cargo ya existe'], 200);
+            } else {
+                $cargo = new Cargo();
+
+                $cargo->setNombreCargoAttribute($request->nombre_cargo);
+                $cargo->setEstadoAttribute($request->estado_cargo);
+
+                Cargo::create($cargo);
+
+                $listaCargos = Cargo::paginate('10')->orderBy('id_cargo', 'desc');
+                $controladores = $request->controladores;
+
+                $tabla = view('modals.grupos.tablaGrupo', ['listaCargos' => $listaCargos, 'controladores' => $controladores])->render();
+                $alerta = view('alertas.registrarExitoso')->render();
+
+                return response()->json([
+                    'tabla' => $tabla,
+                    'alerta' => $alerta
+                ]);
+            }
         }
     }
-    public function editarCargo($id)
+
+    public function showModalActualizar()
     {
-        $id = Crypt::decrypt($id);
-        $sql_cargo = "SELECT nombre_cargo,estado FROM cargos WHERE id_cargo ='$id'";
-        $cargo_data = DB::select($sql_cargo);
-        $cargo_nombre = $cargo_data[0]->nombre_cargo;
-        $cargo_estado = $cargo_data[0]->estado;
-
-
-        $cargo = Cargo::findorFail($id);
-        $cargo = Crypt::encrypt($cargo);
-        // dd($cargo_data);
-
-        return view('editarCargo', compact('cargo', 'cargo_nombre', 'cargo_estado'));
+        return view('modals.cargo.modificarCargo');
     }
-    public function actualizarCargo($id)
-    {
-        extract($_POST);
-        // dd($_POST);
 
-        $id = Crypt::decrypt($id)->id_cargo;
-        DB::table('cargos')->where('id_cargo', $id)->update(["nombre_cargo" => $cargo_nombre, "estado" => $estado]);
-        return redirect()->route('cargos.consultar');
+    public function actualizarCargo(Request $request)
+    {
+        $reglas = [
+            'nombre_cargo' => 'required|max:30',
+            'estado_cargo' => 'required'
+        ];
+        $mensajes = [
+            'nombre_cargo.required' => 'Este campo es obligatorio',
+            'nombre_cargo.max' => 'Este campo debe contener maximo 30 caracteres',
+            'estado_cargo.required' => 'Este campo es obligatorio'
+        ];
+
+        $respuestas = [];
+        $datos = $request->all();
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        unset($datos['_token']);
+        unset($datos['controladores']);
+        if ($validacion->fails()) {
+            $respuestas['mensaje'] = $validacion;
+            $respuestas['error'] = true;
+            return redirect()->back()->withErrors($respuestas['mensaje']);
+            // dd($validacion->errors());
+        } else {
+            $respuestas['error'] = false;
+            $ajax = Cargo::where('nombre_cargo', $datos['nombre_cargo'])->get();
+
+            if (count($ajax)) {
+                return view('alertas.repetido');
+            } else {
+                $cargo = new Cargo();
+
+                $cargo->setNombreCargoAttribute($request->nombre_cargo);
+                $cargo->setEstadoAttribute($request->estado_cargo);
+
+                Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo);
+
+                return view('alertas.modifcarExitoso');
+            }
+        }
     }
 }

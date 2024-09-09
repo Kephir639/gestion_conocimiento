@@ -9,17 +9,22 @@ use Illuminate\Support\Facades\Validator;
 
 class centroController extends Controller
 {
-    public function showCentros()
+    public function showCentros(Request $request)
     {
-        $sql = "SELECT codigo_centro, nombre_centro, estado_centro FROM centro_formacion";
-        $lista = CentrosFormacion::select($sql)->paginate('10');
+        $listaCentros = CentrosFormacion::paginate('10')->orderBy('id_centro', 'desc');
+        $controladores = $request->controladores;
 
-        return view('consultarCentroFormacion')->with($lista);
+        return view('consultarCentroFormacion', compact('listaCentros'));
     }
 
-    public function showRegistrarCentros()
+    public function showModalRegistrar()
     {
-        return view('registrarCentroFormacion');
+        return view('modals.centros.crearCentros');
+    }
+
+    public function showModalActualizar()
+    {
+        return view('modals.centros.modificarCentros');
     }
 
     public function registrarCentro(Request $request)
@@ -47,27 +52,40 @@ class centroController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
 
-            //Se regresa a la ruta anterior con los errores cometidos para ser mostrados en la vista
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
-            if (CentrosFormacion::where('nombre_centro', $datos['nombre_centro'])) {
+            $ajax = CentrosFormacion::where('nombre_centro', $datos['nombre_centro'])->get();
+
+            if (count($ajax)) {
                 //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
-                return response()->json(['estado' => false], 200);
+                return view('alertas.repetido');
             } else {
-                //Creamos un objeto 
+                //Creamos un objeto
                 $centro = new CentrosFormacion();
                 //Le asignamos los valores del formulario
-                $centro->setNombreCentroAttribute($request->nombre_centro);
                 $centro->setCodigoCentroAttribute($request->codigo_centro);
+                $centro->setNombreCentroAttribute($request->nombre_centro);
                 $centro->setEstadoCentroAttribute($request->estado_centro);
                 //Registramos en la base de datos
                 CentrosFormacion::create($centro);
 
-                return response()->json(['estado' => true], 200);
+                $listaCetros = CentrosFormacion::paginate('10')->orderBy('id_centro', 'desc');
+                $controladores = $request->controladores;
+
+                $tabla = view('modals.centros.tablaCentro', [
+                    'listaRedes' => $listaCetros,
+                    'controladores' => $controladores
+                ])->render();
+
+                $alerta = view('alertas.registrarExitoso')->render();
+
+                return response()->json([
+                    'tabla' => $tabla,
+                    'alerta' => $alerta
+                ]);
             }
         }
     }
@@ -95,13 +113,15 @@ class centroController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
-            if (CentrosFormacion::where('nombre_centro', $datos['nombre_centro'])) {
-                return response()->json(['estado' => false], 200);
+            $ajax = CentrosFormacion::where('nombre_centro', $datos['nombre_centro'])->get();
+
+            if (count($ajax)) {
+                //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
+                return view('alertas.repetido');
             } else {
                 $centro = new CentrosFormacion();
 
@@ -111,7 +131,7 @@ class centroController extends Controller
 
                 CentrosFormacion::where('id_centro', $datos['id_centro_old'])->update($centro);
 
-                return response()->json(['estado' => true], 200);
+                return view('alertas.modifcarExitoso');
             }
         }
     }
