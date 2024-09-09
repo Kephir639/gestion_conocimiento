@@ -1,12 +1,12 @@
 $(document).ready(function () {
     let button = '';
     //Metodo para abrir la modal de modificar
-    $('.iconoModificar').on('click', function () {
+    $(document).on('click', '.iconoModificar', function () {
         button = $(this);
         let codigoCentro = $(this).parents('tr').find('td:eq(0)').text().trim();
         let nombreCentro = $(this).parents('tr').find('td:eq(1)').text().trim();
-        let estadoCentro = $(this).parents('tr').find('td:eq(2)').text().trim();
-        let estado = (estadoCentro == "Activo") ? 1 : (estadoCentro == "Inactivo") ? 0 : -1;
+        let estado = $(this).parents('tr').find('td:eq(2)').text().trim();
+        let estadoCentro = (estado == "Activo") ? 1 : (estado == "Inactivo") ? 0 : -1;
         $.ajax({
             type: "GET",
             url: "showModalActualizar",
@@ -15,7 +15,7 @@ $(document).ready(function () {
 
                 $(this).find('#inputNombreCentro').val(codigoCentro);
                 $(this).find('#inputNombreCentro').val(nombreCentro);
-                $(this).find('#inputEstadoCentro').val(estado);
+                $(this).find('#inputEstadoCentro').val(estadoCentro);
 
                 $('#modalModificarCentro').modal('show');
             }
@@ -23,7 +23,7 @@ $(document).ready(function () {
     });
 
     //Metodo para abrir la modal de registrar
-    $('#BtnRegistrarCentro').on('click', function () {
+    $(document).on('click', '#BtnRegistrarCentro', function () {
         button = $(this);
         $.ajax({
             type: "GET",
@@ -35,7 +35,7 @@ $(document).ready(function () {
         });
     });
 
-    $('#formModificar').submit(function (e) {
+    $(document).on('click', '#btnActualizar', function (e) {
         //Solicitud de Ajax para realizar la actualizacion del elemento
         e.preventDefault();
         let nombre_old = button.parents('tr').find('td:eq(0)').text().trim();
@@ -75,9 +75,10 @@ $(document).ready(function () {
         });
     });
 
-    $('#formRegistrar').submit(function (e) {
+    $(document).on('click', '#btnRegistrar', function (e) {
         //Solicitud de Ajax para realizar el registro del elemento
         e.preventDefault();
+
         let codigo = $('#inputCodigoCentro').val();
         let nombre = $('#inputNombreCentro').val();
         let token = $('#_token').val();

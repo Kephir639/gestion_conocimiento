@@ -3,25 +3,25 @@ $(document).ready(function () {
 
     $(document).on('click', '.iconoModificar', function () {
         button = $(this);
-        let nombreCargo = $(this).parents('tr').find('td:eq(0)').text().trim();
-        let estadoCargo = $(this).parents('tr').find('td:eq(1)').text().trim();
-        let estado = (estadoCargo == "Activo") ? 1 : (estadoCargo == "Inactivo") ? 0 : -1;
+        let nombreLinea = $(this).parents('tr').find('td:eq(0)').text().trim();
+        let estadoLinea = $(this).parents('tr').find('td:eq(1)').text().trim();
+        let estado = (estadoLinea == "Activo") ? 1 : (estadoLinea == "Inactivo") ? 0 : -1;
         $.ajax({
             type: 'GET',
             url: 'showModalActualizar',
             success: function (data) {
                 $('#ModalSection').html(data);
 
-                $(this).find('#inputNombreCargo').val(nombreCargo);
-                $(this).find('#inputEstadoCargo').val(estado);
+                $(this).find('#inputNombreLinea').val(nombreLinea);
+                $(this).find('#inputEstadoLinea').val(estado);
 
-                $('#modalModificarCargo').modal('show');
+                $('#modalModificarLinea').modal('show');
             }
         });
     });
 
     //Metodo para abrir la modal de registrar
-    $(document).on('click', '#BtnRegistrarCargo', function () {
+    $(document).on('click', '#BtnRegistrarLinea', function () {
         button = $(this);
 
         $.ajax({
@@ -29,7 +29,7 @@ $(document).ready(function () {
             url: "showModalRegistrar",
             success: function (data) {
                 $('#ModalSection').html(data);
-                $('#modalRegistrarCargo').modal('show');
+                $('#modalRegistrarLinea').modal('show');
             }
         });
     });
@@ -39,18 +39,18 @@ $(document).ready(function () {
         e.preventDefault();
         let nombre_old = button.parents('tr').find('td:eq(0)').text().trim();
 
-        let nombre = $('#inputNombreCargo').val();
-        let estado = $('#inputEstadoCargo').val();
+        let nombre = $('#inputNombreLinea').val();
+        let estado = $('#inputEstadoLinea').val();
         let token = $('#_token').val();
 
         $.ajax({
             type: "POST",
-            url: "actualizarCargo",
+            url: "actualizarLinea",
             data: {
                 '_token': token,
-                'nombre_cargo': nombre,
-                'nombre_cargo_old': nombre_old,
-                'estado_cargo': estado
+                'nombre_linea': nombre,
+                'nombre_linea_old': nombre_old,
+                'estado_linea': estado
             },
             success: function (data) {
                 $('#alertasModificar').html(data);
@@ -63,19 +63,19 @@ $(document).ready(function () {
     $(document).on('click', '#btnRegistrar', function (e) {
         //Solicitud de Ajax para realizar el registro del elemento
         e.preventDefault();
-        let nombre = $('#inputNombreCargo').val();
+        let nombre = $('#inputNombreLinea').val();
         let token = $('#_token').val();
 
         $.ajax({
             type: "POST",
-            url: "registrarCargo",
+            url: "registrarLinea",
             data: {
                 '_token': token,
-                'nombre_cargo': nombre,
+                'nombre_linea': nombre,
             },
             success: function (data) {
                 //Mostrar los registros actualizados
-                $('#tablebody_cargos').html(data.tabla);
+                $('#tablebody_lineas').html(data.tabla);
 
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);

@@ -11,7 +11,7 @@ class log_auditoria extends Controller
     public static function createLog($modulo, $elemento, $accion, $nuevo = "")
     {
         $sql = [
-            'accion_realizada' => "'Se " . $accion . "el/la " . $modulo . ": " . $elemento . "'",
+            'accion_realizada' => "'Se " . $accion . " el/la " . $modulo . ": " . $elemento . "'",
             'fecha_realizacion' => Carbon::now(),
             'documento_responsable' => "'" . Auth::user()->identificacion . "'"
         ];

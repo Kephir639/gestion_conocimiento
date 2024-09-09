@@ -3,6 +3,7 @@
 @section('title', 'Roles')
 @push('styles')
     <link rel="stylesheet" href="{{ url('css/roles.css') }}">
+    <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">

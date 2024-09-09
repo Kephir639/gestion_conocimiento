@@ -43,13 +43,3 @@
 .table tbody td {
     vertical-align: middle;
 }
-
-.iconoModalModificar {
-    width: 36px;
-    fill: var(--color--danger);
-}
-
-.iconoModalRegistrar {
-    width: 36px;
-    fill: var(--color-secundario);
-}

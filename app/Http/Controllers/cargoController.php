@@ -50,21 +50,19 @@ class cargoController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
-            //Se regresa a la ruta anterior con los errores cometidos para ser mostrados en la vista
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
-            if (Cargo::where('nombre_cargo', $datos['inputNombreCargo'])->exists()) {
-                return response()->json(['estado' => false, 'mensaje' => 'El cargo ya existe'], 200);
+            $ajax = Cargo::where('nombre_cargo', $datos['inputNombreCargo'])->get();
+            if (count($ajax)) {
+                return view('alertas.repetido')->render();
             } else {
                 $cargo = new Cargo();
 
                 $cargo->setNombreCargoAttribute($request->nombre_cargo);
-                $cargo->setEstadoAttribute($request->estado_cargo);
+                $cargo->setEstadoAttribute(1);
 
-                Cargo::create($cargo);
+                Cargo::create($cargo->toArray());
 
                 $sql = log_auditoria::createLog(
                     'cargo',
@@ -73,7 +71,7 @@ class cargoController extends Controller
                 );
                 Log::insert($sql);
 
-                $listaCargos = Cargo::paginate('10')->orderBy('id_cargo', 'desc');
+                $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
                 $tabla = view('modals.cargo.tablaGrupo', [
@@ -114,14 +112,9 @@ class cargoController extends Controller
         unset($datos['_token']);
         unset($datos['controladores']);
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
-            // dd($validacion->errors());
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $respuestas['error'] = false;
             $ajax = Cargo::where('nombre_cargo', $datos['nombre_cargo'])->get();
-
             if (count($ajax)) {
                 return view('alertas.repetido');
             } else {

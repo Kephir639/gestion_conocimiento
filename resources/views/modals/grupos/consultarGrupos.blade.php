@@ -3,6 +3,7 @@
 @section('title', 'Grupos de Investigacion')
 @push('styles')
     <link rel="stylesheet" href="{{ url('css/grupos.css') }}">
+    <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">
@@ -52,7 +53,7 @@
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'grupos')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'modificar_grupo')
+                        @if ($func['nombre_funcion'] == 'crear_grupo')
                             <button title="Registrar Grupo" id="BtnRegistrarGrupo" class="btn iconoRegistrar p-0"><svg
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
@@ -63,8 +64,7 @@
                     @endforeach
                 @endif
             @endforeach
-            <div id="ModalSection">
-            </div>
+            <div id="ModalSection"></div>
         </div>
     </div>
 @endsection

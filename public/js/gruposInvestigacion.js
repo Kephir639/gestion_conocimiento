@@ -1,7 +1,7 @@
 $(document).ready(function () {
     let button = '';
     //Metodo para abrir la modal de modificar
-    $('.iconoModificar').on('click', function () {
+    $(document).on('click', '.iconoModificar', function () {
         button = $(this);
         let nombreGrupo = $(this).parents('tr').find('td:eq(0)').text().trim();
         let estadoGrupo = $(this).parents('tr').find('td:eq(1)').text().trim();
@@ -21,7 +21,7 @@ $(document).ready(function () {
     });
 
     //Metodo para abrir la modal de registrar
-    $('#BtnRegistrarGrupo').on('click', function () {
+    $(document).on('click', '#BtnRegistrarGrupo', function () {
         button = $(this);
         $.ajax({
             type: "GET",
@@ -33,7 +33,7 @@ $(document).ready(function () {
         });
     });
 
-    $('#formModificar').submit(function (e) {
+    $(document).on('click', '#btnActualizar', function (e) {
         //Solicitud de Ajax para realizar la actualizacion del elemento
         e.preventDefault();
         let nombre_old = button.parents('tr').find('td:eq(0)').text().trim();
@@ -56,21 +56,21 @@ $(document).ready(function () {
                 button.parents('tr').find('td:eq(0)').val(nombre);
                 button.parents('tr').find('td:eq(1)').val(estado);
             },
-            error: function(xhr, status, error){
-                if (xhr.status===422) {
+            error: function (xhr, status, error) {
+                if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
 
-                    $.each(errors, function (clave, valor) { 
-                         $("#div_" + clave).find('.errorValidacion').html(valor);
+                    $.each(errors, function (clave, valor) {
+                        $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
-                }else{
+                } else {
                     console.log(error, status);
                 }
             }
         });
     });
 
-    $('#formRegistrar').submit(function (e) {
+    $(document).on('click', '#btnRegistrar', function (e) {
         //Solicitud de Ajax para realizar el registro del elemento
         e.preventDefault();
         let nombre = $('#inputNombreGrupo').val();
@@ -90,12 +90,12 @@ $(document).ready(function () {
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);
             },
-            error: function(xhr, status, error){
-                if (xhr.status===422) {
+            error: function (xhr, status, error) {
+                if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
 
-                    $.each(errors, function (clave, valor) { 
-                         $("#Div_" + clave).find('.errorValidacion').html(valor);
+                    $.each(errors, function (clave, valor) {
+                        $("#Div_" + clave).find('.errorValidacion').html(valor);
                     });
                 }
             }

@@ -12,7 +12,7 @@ class GruposController extends Controller
 {
     public function showGrupos()
     {
-        $listaGrupos = GrupoInvestigacion::paginate('10')->orderBy('id_grupo', 'desc');
+        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
 
         return view('modals.grupos.consultarGrupos', compact('listaGrupos'));
     }
@@ -39,30 +39,26 @@ class GruposController extends Controller
             'estado_grupo.required' => 'Este campo es obligatorio'
         ];
 
-        $validacion = Validator::make($request, $reglas, $mensajes);
-        $respuestas = [];
         $datos = $request->all();
+        $validacion = Validator::make($datos, $reglas, $mensajes);
 
         unset($datos['_token']);
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $respuestas['error'] = false;
             $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
 
             if (count($ajax)) {
-                return view('alertas.repetido');
+                return view('alertas.repetido')->render();
             } else {
                 $grupo = new GrupoInvestigacion();
 
                 $grupo->setNombreGrupoAttribute($request->nombre_grupo);
-                $grupo->setEstadoGrupoAttribute($request->estado_grupo);
+                $grupo->setEstadoGrupoAttribute(1);
 
-                GrupoInvestigacion::create($grupo);
+                GrupoInvestigacion::create($grupo->toArray());
 
                 $sql = log_auditoria::createLog(
                     'grupo',
@@ -71,10 +67,13 @@ class GruposController extends Controller
                 );
                 Log::insert($sql);
 
-                $listaGrupos = GrupoInvestigacion::paginate('10')->orderBy('id_grupo', 'desc');
+                $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
-                $tabla = view('modals.grupos.tablaGrupo', ['listaGrupos' => $listaGrupos, 'controladores' => $controladores])->render();
+                $tabla = view('modals.grupos.tablaGrupo', [
+                    'listaGrupos' => $listaGrupos,
+                    'controladores' => $controladores
+                ])->render();
                 $alerta = view('alertas.registrarExitoso')->render();
 
                 return response()->json([
@@ -97,7 +96,6 @@ class GruposController extends Controller
             'estado_grupo.required' => 'Este campo es obligatorio'
         ];
 
-        $respuestas = [];
         $datos = $request->all();
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
@@ -105,15 +103,12 @@ class GruposController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $respuestas['error'] = false;
             $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
 
             if (count($ajax)) {
-                return view('alertas.repetido');
+                return view('alertas.repetido')->render();
             } else {
                 $grupo = new GrupoInvestigacion();
 
@@ -130,7 +125,7 @@ class GruposController extends Controller
                 );
                 Log::insert($sql);
 
-                return view('alertas.modifcarExitoso');
+                return view('alertas.modifcarExitoso')->render();
             }
         }
     }

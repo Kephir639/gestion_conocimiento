@@ -6,7 +6,7 @@
                 <button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="formModificar">
+                <form>
                     <div class="row mt-3">
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
                         <div id="div_codigo_centro"
@@ -35,13 +35,11 @@
                             <span class="errorValidacion"></span>
                         </div>
                         <div class="col-md-12 col-sm-12 mt-3">
-                            <input type="submit" value="Enviar" class="btn btn-success w-100" name="Enviar">
+                            <button id="btnActualizar" class="btn btn-success w-100">Enviar</button>
                         </div>
                     </div>
                 </form>
-                <div id="alertasModificar">
-
-                </div>
+                <div id="alertasModificar"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

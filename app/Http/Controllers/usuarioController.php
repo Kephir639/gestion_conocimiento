@@ -11,17 +11,25 @@ use Illuminate\Support\Facades\Validator as Validator;
 class UsuarioController extends Controller
 {
 
-    public function showUsuarios()
+    public function showUsuarios(Request $request)
     {
-        $sql = "SELECT * FROM usuarios";
-        $lista = DB::select($sql);
+        $listaUsuarios = User::orderBy('id', 'desc')->paginate('10');
+        $controladores = $request->controladores;
 
-        return view('usuario')->with($lista);
+        return view('modals.usuario.consultarUsuario', [
+            'listaUsuarios' => $listaUsuarios,
+            'controladores' => $controladores
+        ]);
     }
 
-    public function showRegistrarUsuarios()
+    public function showModalRegistrar()
     {
-        return view('registrarUsuario');
+        return view('modals.usuario.crearUsuario');
+    }
+
+    public function showModalActualizar()
+    {
+        return view('modals.usuario.modificarUsuario');
     }
 
     public function registrarUsuario(Request $request)
@@ -83,7 +91,6 @@ class UsuarioController extends Controller
                                    * 1 Caracter Especial'
         ];
 
-        $respuestas = [];
         $datos = $request->all();
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
@@ -91,11 +98,10 @@ class UsuarioController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['error'] = true;
-            return response()->json(['errors' => $validacion->errors()]);
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $respuestas['error'] = false;
-            if (User::where('identificacion', $datos['documento'])) {
+            $ajax = User::where('identificacion', $datos['documento'])->get();
+            if (count($ajax)) {
                 return view('alertas.repetido')->render();
             } else {
                 $usuario = new User();
@@ -103,6 +109,7 @@ class UsuarioController extends Controller
                 $contra = Hash::make($request->contraseña);
 
                 $usuario->setNameAttribute($request->nombres);
+                $usuario->setIdRolAttribute(null);
                 $usuario->setApellidoAttribute($request->apellidos);
                 $usuario->setIdentificacionAttribute($request->identificacion);
                 $usuario->setIdGeneroAttribute($request->genero);
@@ -118,11 +125,11 @@ class UsuarioController extends Controller
 
                 User::create($usuario->toArray());
 
-                $listaCetros = User::paginate('10')->orderBy('id', 'desc');
+                $listausuarios = User::orderBy('id', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
                 $tabla = view('modals.usuarios.tablaUsuario', [
-                    'listaRedes' => $listaCetros,
+                    'listaRedes' => $listausuarios,
                     'controladores' => $controladores
                 ])->render();
 
@@ -134,11 +141,6 @@ class UsuarioController extends Controller
                 ]);
             }
         }
-    }
-
-    public function showActualizarUsuarios()
-    {
-        return view('actualizarUsuario');
     }
 
     public function actualizarUsuario(Request $request)
@@ -201,7 +203,6 @@ class UsuarioController extends Controller
                                     1 Caracter Especial'
         ];
 
-        $respuestas = [];
         $datos = $request->all();
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
@@ -209,17 +210,12 @@ class UsuarioController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['validacion'] = $validacion;
-            $respuestas['error'] = true;
-
-            return redirect()->back()->withErrors($respuestas['validacion']);
-            // dd($validacion->errors());
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            if (User::where('identificacion', $datos['documento'])) {
-                return $mensaje = false;
+            $ajax = User::where('identificacion', $datos['documento'])->get();
+            if (count($ajax)) {
+                return view('alertas.repetido')->render();
             } else {
-                $respuestas['error'] = false;
-
                 $usuario = new User();
 
                 $contra = Hash::make($request->contraseña);
@@ -244,21 +240,20 @@ class UsuarioController extends Controller
         }
     }
 
-    public function showAsignarRol($request)
+    public function showAsignarRol(Request $request)
     {
         $usuariosPendientes = User::where('id_rol', null)->get();
-        foreach ($usuariosPendientes as $usuario) {
-            unset($usuario['id_usuario']);
-            unset($usuario['updated_at']);
-            unset($usuario['created_at']);
-        }
+        $controladores = $request->controladores;
 
-        return view('asignarRol')->with('usuariosPendientes', $usuariosPendientes);
+        return view('asignarRol', [
+            'usuariosPendientes' => $usuariosPendientes,
+            'controladores' => $controladores
+        ]);
     }
 
-    public function asignarRol()
+    public function asignarRol(Request $request)
     {
-        $datos = request()->all();
+        $datos = $request->all();
         $cedulaUsuario = $datos['identificacion'];
         $rolAsignado = $datos['rol'];
 
