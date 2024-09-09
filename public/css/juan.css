@@ -1,23 +1,13 @@
-/* Estilo para el cuerpo y elementos generales */
-:root {
-    --color-primario: #007832;
-    --color-secundario: #00324D;
-    --color-primario-hover: #08a835;
-    --color-secundario-hover: #0d5c86;
-    --fuente-primaria: 'Work sans', sans-serif;
-    --color-fuente: #f2f2f2;
-    --color-texto: #000000;
-    --sombra: 0 4px 8px rgba(0, 0, 0, 0.1);
-    --borde-radius: 10px;
-}
+/* Variables de estilo */
+  
 
 body {
     font-family: var(--fuente-primaria);
     line-height: 1.6;
-    background: linear-gradient(270deg, #00324D, #007832, #00324D);
+    background: linear-gradient(270deg, #00324D, #007832, #00324D);  
     background-size: 600% 600%;
     animation: gradientAnimation 5s ease infinite;
-    color: var(--color-fuente); /* Color de texto principal */
+    color: var(--color-fuente);
     margin: 0;
     padding: 0;
 }
@@ -35,12 +25,11 @@ body {
 }
 
 .container {
-    max-width: 1200px; /* Ancho máximo del contenido */
+    max-width: 1200px;
     margin: auto;
     padding: 20px;
 }
 
-/* Ajuste de los contenedores principales para el carrusel y los botones */
 .content-presentation {
     display: flex;
     flex-wrap: wrap;
@@ -57,40 +46,38 @@ body {
     box-sizing: border-box;
 }
 
-/* Estilo para la sección del Carrusel */
+/* Sección del Carrusel */
 .section-carousel {
-   /* background: linear-gradient(to right, #00324D, #007832); /* Color de fondo del carrusel */
-    color: #ffffff; /* Color del texto del carrusel */
-    padding: 40px 10px; /* Ajuste de los padding */
-    min-height: 300px; /* Altura mínima del carrusel */
-    text-align: center; /* Alineación centrada del contenido */
+    padding: 40px 10px;
+    min-height: 300px;
+    text-align: center;
 }
 
-.section-carousel .slick-carousel {
-    width: 90%; /* Ancho del carrusel */
-    max-width: 600px; /* Máximo ancho del carrusel */
-    margin: 0 auto; /* Centrar el carrusel */
+.section-carousel .carousel {
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-.section-carousel .slick-slide img {
-    border-radius: 10px; /* Borde redondeado de las imágenes */
-    max-width: 100%; /* Hacer que las imágenes ocupen todo el ancho posible */
-    height: auto; /* Altura automática para mantener la proporción */
-    object-fit: cover; /* Ajuste de la imagen */
+.section-carousel .carousel-item img {
+    border-radius: var(--borde-radius);
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
 }
 
 @media (max-width: 768px) {
-    .section-carousel .slick-carousel {
-        max-width: 100%; /* Ajuste del ancho en pantallas más pequeñas */
+    .section-carousel .carousel {
+        max-width: 100%;
     }
 }
 
-/* Estilo para la sección de Botones */
+/* Sección de Botones */
 .section-buttons {
-    position: relative; /* Asegura que el contenido absoluto se ajuste al contenedor */
+    position: relative;
     padding: 60px 20px;
-    min-height: 300px; /* Altura mínima de la sección de botones */
-    overflow: hidden; /* Oculta cualquier desbordamiento */
+    min-height: 300px;
+    overflow: hidden;
 }
 
 .section-buttons::before,
@@ -121,66 +108,75 @@ body {
     }
 }
 
-/* Estilo para la tarjeta dentro de la sección de botones */
+/* Estilo de la tarjeta de la sección de botones */
 .section-buttons .custom-card {
-    background-color: #f8f9fa; /* Color de fondo de la tarjeta */
-    border: 1px solid #ccc; /* Borde de la tarjeta */
-    border-radius: 10px; /* Borde redondeado de la tarjeta */
-    padding: 30px; /* Ajuste del padding para hacer la tarjeta más grande */
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: var(--borde-radius);
+    padding: 30px;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-    height: 100%; /* Altura máxima igual a la del carrusel */
+    box-shadow: var(--sombra);
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Transición para el hover */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .section-buttons .custom-card:hover {
-    transform: translateY(-10px); /* Efecto de elevación al pasar el ratón */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más grande al pasar el ratón */
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .section-buttons .custom-card h2 {
-    color: #333; /* Color del título de la tarjeta */
+    color: #333;
     margin-bottom: 20px;
 }
 
 .section-buttons .btn-container .btn {
-    width: 220px; /* Ancho de los botones */
+    width: 220px;
     margin-bottom: 10px;
-    padding: 10px 20px; /* Ajuste del padding para botones más grandes */
-    font-size: 16px; /* Tamaño de fuente de los botones */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Transición para el hover */
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border-radius: var(--borde-radius);
 }
 
 .section-buttons .btn-primary {
-    background-color: var(--color-primario); /* Color de fondo del botón primario */
-    border-color: var(--color-primario-hover); /* Color del borde del botón primario */
+    background-color: var(--color-primario);
+    border-color: var(--color-primario-hover);
 }
 
 .section-buttons .btn-primary:hover {
-    background-color: var(--color-primario-hover); /* Color de fondo del botón primario al pasar el ratón */
-    transform: translateY(-5px); /* Efecto de elevación al pasar el ratón */
+    background-color: var(--color-primario-hover);
+    transform: translateY(-5px);
 }
 
 .section-buttons .btn-secondary {
-    background-color: var(--color-secundario); /* Color de fondo del botón secundario */
-    border-color: var(--color-secundario-hover); /* Color del borde del botón secundario */
+    background-color: var(--color-secundario);
+    border-color: var(--color-secundario-hover);
 }
 
 .section-buttons .btn-secondary:hover {
-    background-color: var(--color-secundario-hover); /* Color de fondo del botón secundario al pasar el ratón */
-    transform: translateY(-5px); /* Efecto de elevación al pasar el ratón */
+    background-color: var(--color-secundario-hover);
+    transform: translateY(-5px);
 }
 
 .section-buttons .btn i {
-    margin-right: 8px; /* Espacio entre el icono y el texto */
+    margin-right: 8px;
 }
 
 @media (max-width: 768px) {
     .content-presentation {
         flex-direction: column;
+    }
+
+    .section-carousel {
+        order: 2; /* Cambia el orden para móviles */
+    }
+
+    .section-buttons {
+        order: 1; /* Cambia el orden para móviles */
     }
 
     .section-carousel,
@@ -189,5 +185,3 @@ body {
         min-width: 100%;
     }
 }
-
-

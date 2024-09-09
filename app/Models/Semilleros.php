@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Semilleros extends Model
 {
-    protected $table = 'semilleros';
+    protected $table = 'semilleros_investigacion';
 
     protected $primaryKey = 'id_semillero';
 

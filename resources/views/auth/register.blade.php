@@ -1,168 +1,252 @@
-@extends('layouts.plantillaIndex')
+@extends('layouts.plantillaPresentacion')
+
+@section('title', 'Registro Usuario')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ url('css/registro.css') }}">
+@endpush
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Register') }}</div>
-
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}">
-                            @csrf
-
-                            {{-- identificacion --}}
-
-                            {{-- <div class="row mb-3">
-                                <label for="identificacion"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Identificacion') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="identificacion" type="number"
-                                        class="form-control @error('identificacion') is-invalid @enderror"
-                                        name="identificacion" value="{{ old('identificacion') }}" required
-                                        autocomplete="identificacion">
-
-                                    @error('identificacion')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div> --}}
-
-                            {{-- Nombre --}}
-                            <div class="row mb-3">
-                                <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Nombres') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="name" type="text"
-                                        class="form-control @error('name') is-invalid @enderror" name="name"
-                                        value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            {{-- apellido --}}
-                            {{-- <div class="row mb-3">
-                                <label for="apellido"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Apellidos') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="apellido" type="text"
-                                        class="form-control @error('apellido') is-invalid @enderror" name="apellido"
-                                        value="{{ old('apellido') }}" required autocomplete="apellido" autofocus>
-
-                                    @error('apellido')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div> --}}
-
-                            {{-- correo --}}
-                            <div class="row mb-3">
-                                <label for="correo"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Correo') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="correo" type="email"
-                                        class="form-control @error('email') is-invalid @enderror" name="email"
-                                        value="{{ old('email') }}" required autocomplete="email">
-
-                                    @error('correo')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-
-                            {{-- celular --}}
-
-                            {{-- <div class="row mb-3">
-                                <label for="celular"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Celular') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="celular" type="number"
-                                        class="form-control @error('celular') is-invalid @enderror" name="celular"
-                                        value="{{ old('celular') }}" required autocomplete="celular">
-
-                                    @error('celular')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div> --}}
-
-                            {{-- direccion --}}
-
-                            {{-- <div class="row mb-3">
-                                <label for="direccion"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Direccion') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="direccion" type="text"
-                                        class="form-control @error('direccion') is-invalid @enderror" name="direccion"
-                                        value="{{ old('direccion') }}" required autocomplete="direccion">
-
-                                    @error('direccion')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div> --}}
-
-                            {{-- contraseña --}}
-                            <div class="row mb-3">
-                                <label for="contraseña"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Contraseña') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="contraseña" type="password"
-                                        class="form-control @error('password') is-invalid @enderror" name="password"
-                                        required autocomplete="new-password">
-
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            {{-- Confirmacion de contraseña --}}
-                            <div class="row mb-3">
-                                <label for="password-confirm"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Confirmar contraseña') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control"
-                                        name="password_confirmation" required autocomplete="new-password">
-                                </div>
-                            </div>
-
-                            <div class="row mb-0">
-                                <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Registrar') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Registro de Usuario</h2>
+        <hr>
+        <form action="{{ url('/register') }}" method="POST" class="needs-validation" novalidate>
+            @csrf
+            <div class="row mb-3">
+                <div class="col-md-6"> 
+                    <label for="nombres" class="form-label">Nombres</label>
+                    <input type="text" class="form-control" id="nombres" name="nombres" required>
+                    <div class="invalid-feedback">Por favor, ingrese sus nombres.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="apellidos" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                    <div class="invalid-feedback">Por favor, ingrese sus apellidos.</div>
                 </div>
             </div>
-        </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="tipo_documento" class="form-label">Tipo de Documento</label>
+                    <select class="form-select" id="tipo_documento" name="tipo_documento" required>
+                        <option value="" selected>Seleccione...</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PS">Pasaporte</option>
+                        <option value="PEP">Permiso Especial de Permanencia (PEP)</option>
+                        <option value="PPT">Permiso por Protección Temporal (PPT)</option>
+                    </select>
+                    <div class="invalid-feedback">Por favor, seleccione un tipo de documento.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="numero_identificacion" class="form-label">Número de Identificación</label>
+                    <input type="text" class="form-control" id="numero_identificacion" name="numero_identificacion"
+                        required>
+                    <div class="invalid-feedback">Por favor, ingrese su número de identificación.</div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="genero" class="form-label">Género</label>
+                    <select class="form-control" id="genero" name="genero" required>
+                        <option value="" selected>Seleccione...</option>
+                        @foreach ($generos as $genero)
+                            <option value="{{ $genero->id_genero }}">{{ $genero->genero }}</option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback">Por favor, seleccione su género.</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="tipo_poblacion" class="form-label">Tipo de Población</label>
+                    <select class="form-control" id="tipo_poblacion" name="tipo_poblacion" required>
+                        <option value="" selected>Seleccione...</option>
+                        @foreach ($tipo_poblaciones as $tipo_poblacion)
+                            <option value="{{ $tipo_poblacion->id_tipo }}">{{ $tipo_poblacion->tipo_poblacion }}</option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback">Por favor, seleccione su tipo de población.</div>
+                </div>
+
+
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="correo" class="form-label">Correo</label>
+                    <div class="input-group">
+                        <input type="email" class="form-control" id="correo" name="correo" required>
+                        <span class="input-group-text">@sena.com</span>
+                    </div>
+                    <div class="invalid-feedback">Por favor, ingrese un correo válido.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="celular" class="form-label">Celular</label>
+                    <input type="text" class="form-control" id="celular" name="celular" required>
+                    <div class="invalid-feedback">Por favor, ingrese su número de celular.</div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="departamento" class="form-label">Departamento</label>
+                    <select class="form-select" id="departamento" name="departamento" required>
+                        <option value="" selected>Seleccione...</option>
+                        @foreach ($departamentos as $departamento)
+                            <option value="{{ $departamento->id_departamento }}">{{ $departamento->departamento }}</option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback">Por favor, seleccione un departamento.</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="municipio" class="form-label">Municipio</label>
+                    <select class="form-select" id="municipio" name="municipio" required>
+                        <option value="" selected>Seleccione...</option>
+                        <!-- Los municipios se cargarán dinámicamente aquí -->
+                    </select>
+                    <div class="invalid-feedback">Por favor, seleccione un municipio.</div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="direccion" class="form-label">Dirección</label>
+                    <input type="text" class="form-control" id="direccion" name="direccion" required>
+                    <div class="invalid-feedback">Por favor, ingrese su dirección.</div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="cargo" class="form-label">Cargo</label>
+                    <select class="form-select" id="cargo" name="cargo" required>
+                        <option value="" selected>Seleccione...</option>
+                        @foreach ($cargos as $cargo)
+                            <option value="{{ $cargo->id_cargo }}">{{ $cargo->nombre_cargo }}</option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback">Por favor, seleccione un cargo.</div>
+                </div>
+            </div>
+
+            <div class="row mb-3 instructorFields" style="display: none;">
+                <div class="col-md-4">
+                    <label for="profesion" class="form-label">Profesión</label>
+                    <select class="form-select" id="profesion" name="profesion">
+                        <option value="" selected>Seleccione...</option>
+                        @foreach ($profesiones as $profesion)
+                            <option value="{{ $profesion->id_profesiones }}">{{ $profesion->nombre_profesion }}</option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback">Por favor, seleccione una profesión.</div>
+                </div>
+                <div class="col-md-4">
+                    <label for="maestria" class="form-label">Maestría</label>
+                    <select class="form-select" id="maestria" name="maestria">
+                        <option value="" selected>Seleccione...</option>
+                        @foreach ($maestrias as $maestria)
+                            <option value="{{ $maestria->id_maestria }}">{{ $maestria->nombre_maestria }}</option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback">Por favor, seleccione una maestría.</div>
+                </div>
+                <div class="col-md-4">
+                    <label for="doctorado" class="form-label">Doctorado</label>
+                    <select class="form-select" id="doctorado" name="doctorado">
+                        <option value="" selected>Seleccione...</option>
+                        @foreach ($doctorados as $doctorado)
+                            <option value="{{ $doctorado->id_doctorado }}">{{ $doctorado->nombre_doctorado }}</option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback">Por favor, seleccione un doctorado.</div>
+                </div>
+            </div>
+
+
+            <div class="row mb-3" id="aprendizFields" style="display: none;">
+                <div class="col-md-6">
+                    <label for="programa_ficha" class="form-label">Nombre del Programa y Ficha</label>
+                    <input type="text" class="form-control" id="programa_ficha" name="programa_ficha">
+                    <div class="invalid-feedback">Por favor, ingrese el nombre del programa y ficha.</div>
+                </div>
+                <div class="col-md-6">
+                    <label for="semillero" class="form-label">Semillero de Investigación</label>
+                    <select class="form-select" id="semillero" name="semillero">
+                        <option value="" selected>Seleccione...</option>
+                        {{-- @foreach ($semilleros as $semillero)
+                            <option value="{{ $semillero->id }}">{{ $semillero->nombre }}</option>
+                        @endforeach --}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="contraseña" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="contraseña" name="contraseña" required>
+                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback">Por favor, ingrese su contraseña.</div>
+                </div>
+
+                {{-- <div class="col-md-6">
+                    <label for="contraseña_confirmation" class="form-label">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" id="contraseña_confirmation"
+                        name="contraseña_confirmation" required>
+                    <div class="invalid-feedback">Por favor, confirme su contraseña.</div>
+                </div> --}}
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg mt-3">Registrar</button>
+            </div>
+        </form>
     </div>
+
+    <script>
+        // Validación personalizada de Bootstrap
+        (function() {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+
+        // Mostrar campos adicionales según el cargo seleccionado
+        document.getElementById('cargo').addEventListener('change', function() {
+            const cargo = this.value;
+            const aprendizFields = document.getElementById('aprendizFields');
+            if (cargo === 'aprendiz') {
+                aprendizFields.style.display = 'block';
+            } else {
+                aprendizFields.style.display = 'none';
+            }
+        });
+    </script>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function(e) {
+            const passwordInput = document.getElementById('contraseña');
+            const icon = this.querySelector('i');
+
+            // Cambia el tipo de input entre 'password' y 'text'
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
 @endsection

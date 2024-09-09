@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\Validator;
 
 class semillerosController extends Controller
 {
+
+    public function crearSemilleros(Request $request)
+    {
+        // dd($request->controladores);
+        $controladores = $request->controladores;
+        return view('crearSemilleros', compact('controladores'));
+    }
+
     public function showSemilleros()
     {
         $semilleros = Semilleros::pagination('10');
