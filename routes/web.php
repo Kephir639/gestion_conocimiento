@@ -31,75 +31,45 @@ Route::middleware('auth')->group(function () {
             Route::get('/index', [inicioController::class, 'index']);
 
 
-    //Gurpos de investigacion
-    Route::get('index/grupos/consultar_grupo', [gruposController::class, 'showGrupos']);
-    Route::get('index/grupos/crear_grupos', [gruposController::class, 'showRegistrarGrupos']);
-    Route::post('index/grupos/registarGrupos', [gruposController::class, 'registrarGrupo']);
-    Route::post('index/grupos/actualizarGrupos', [gruposController::class, 'actualizarGrupo']);
+            //Gurpos de investigacion
+            Route::get('index/grupos/consultar_grupo', [gruposController::class, 'showGrupos']);
+            Route::get('index/grupos/crear_grupos', [gruposController::class, 'showRegistrarGrupos']);
+            Route::post('index/grupos/registarGrupos', [gruposController::class, 'registrarGrupo']);
+            Route::post('index/grupos/actualizarGrupos', [gruposController::class, 'actualizarGrupo']);
 
-    //Centros de investigacion
-    Route::get('index/centros/consultar_centro', [centroController::class, 'showCentros']);
-    Route::get('index/centros/crear_centros', [centroController::class, 'showRegistrarCentros']);
-    Route::post('index/centros/registarCentros', [centroController::class, 'registrarCentro']);
-    Route::post('index/centros/actualizarCentros', [centroController::class, 'actualizarCentro']);
+            //Centros de investigacion
+            Route::get('index/centros/consultar_centro', [centroController::class, 'showCentros']);
+            Route::get('index/centros/crear_centros', [centroController::class, 'showRegistrarCentros']);
+            Route::post('index/centros/registarCentros', [centroController::class, 'registrarCentro']);
+            Route::post('index/centros/actualizarCentros', [centroController::class, 'actualizarCentro']);
 
-    //Cargos
-    Route::get('index/cargos/consultar_cargo', [cargoController::class, 'showCargos']);
-    Route::get('index/cargos/showModalRegistrar', [cargoController::class, 'showModalRegistrar']);
-    Route::post('index/cargos/crear_cargos', [cargoController::class, 'registrarCargo']);
-    Route::get('index/lineas/showModalActualizar', [lineaController::class, 'showModificarCargo']);
-    Route::post('index/cargos/actualizarCargo', [cargoController::class, 'actualizarCargo']);
+            //Cargos
+            Route::get('index/cargos/consultar_cargo', [cargoController::class, 'showCargos']);
+            Route::get('index/cargos/showModalRegistrar', [cargoController::class, 'showModalRegistrar']);
+            Route::post('index/cargos/crear_cargos', [cargoController::class, 'registrarCargo']);
+            Route::get('index/lineas/showModalActualizar', [lineaController::class, 'showModificarCargo']);
+            Route::post('index/cargos/actualizarCargo', [cargoController::class, 'actualizarCargo']);
 
-    //Lineas de investigación
-    Route::get('index/lineas/consultar_linea', [lineaController::class, 'showLineas']);
-    Route::get('index/lineas/crear_lineas', [lineaController::class, 'showModalRegistrar']);
-    Route::post('index/lineas/registrarLineas', [lineaController::class, 'registrarLinea']);
-    Route::get('index/lineas/editarLineas', [lineaController::class, 'showModificarLinea']);
-    Route::post('index/lineas/actualizarLinea', [lineaController::class, 'actualizarLinea']);
+            //Lineas de investigación
+            Route::get('index/lineas/consultar_linea', [lineaController::class, 'showLineas']);
+            Route::get('index/lineas/crear_lineas', [lineaController::class, 'showModalRegistrar']);
+            Route::post('index/lineas/registrarLineas', [lineaController::class, 'registrarLinea']);
+            Route::get('index/lineas/editarLineas', [lineaController::class, 'showModificarLinea']);
+            Route::post('index/lineas/actualizarLinea', [lineaController::class, 'actualizarLinea']);
 
-    // Roles
-    Route::get('index/roles/consultar_rol', [rolController::class, 'consultarRol']);
-    Route::get('index/roles/crearRol', [rolController::class, 'showRegistrarRol']);
-    Route::post('index/roles/registrarRol', [rolController::class, 'registrarRol']);
-    // Route::get('/roles/editarRol/{id}', [rolController::class, 'editarRol']);
-    Route::post('/roles/actualizarRol', [rolController::class, 'actualizarRol']);
-});
-Route::get('/register', [RegistroController::class, 'showRegistrationForm'])->middleware('filter');
+            // Roles
+            Route::get('index/roles/consultar_rol', [rolController::class, 'consultarRol']);
+            Route::get('index/roles/crearRol', [rolController::class, 'showRegistrarRol']);
+            Route::post('index/roles/registrarRol', [rolController::class, 'registrarRol']);
+            // Route::get('/roles/editarRol/{id}', [rolController::class, 'editarRol']);
+            Route::post('/roles/actualizarRol', [rolController::class, 'actualizarRol']);
+        });
+        Route::get('/register', [RegistroController::class, 'showRegistrationForm'])->middleware('filter');
 
-Route::get('/get-municipios/{departamento_id}', [RegistroController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
+        Route::get('/get-municipios/{departamento_id}', [RegistroController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
 
-//
+        //
 
-// Route::view('/register', 'auth/register')->name('register');
-
-
-
-
-
-//Registro
-Route::view('/registro', 'registro')->name('registro');
-
-
-
-
-
-
-// Home
-// Route::get('/home', [HomeController::class, 'showHome'])->name('home');
-// Route::middleware(['isLoggedIn'])->group(function () {
-//     Route::get('/home', [HomeController::class, 'showHome'])->name('home');
-//     Route::get('/home', [HomeController::class, 'showHome'])->name('home');
-//     Route::get('/home/usuarios', [HomeController::class, 'showUsuarios']);
-//     Route::post('/home/usuarios/asignarRol', [HomeController::class, 'asignarRol']);
-//     Route::post('/home/usuarios/consultarUsuario', [HomeController::class, 'consultarUsuario']);
-//     Route::get('/home/semilleros/crear', function () {
-//         return view('crearSemilleros');
-//     });
-//     Route::post('/home/semilleros/crear', function () {
-//         return view('crearSemilleros');
-//     });
-// });
-
-Route::get('ejemplo', function () {
-    return view('ejemplo');
+        // Route::view('/register', 'auth/register')->name('register');{}
+    });
 });
