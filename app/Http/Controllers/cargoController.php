@@ -28,14 +28,12 @@ class cargoController extends Controller
     public function registrarCargo(Request $request)
     {
         $reglas = [
-            'nombre_cargo' => 'required',
-            'estado_cargo' => 'required'
+            'nombre_cargo' => 'required'
         ];
 
         $mensajes = [
             'nombre_cargo.required' => 'Este campo es obligatorio',
-            'nombre_cargo.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_cargo.required' => 'Este campo es obligatorio'
+            'nombre_cargo.max' => 'Este campo debe contener maximo 30 caracteres'
         ];
 
         $datos = $request->all();
@@ -49,20 +47,23 @@ class cargoController extends Controller
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
             //Se regresa a la ruta anterior con los errores cometidos para ser mostrados en la vista
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            // dd('fail');
+            return response()->json(['errors' => $validacion->errors()]);
         } else {
             $respuestas['error'] = false;
-            if (Cargo::where('nombre_cargo', $datos['inputNombreCargo'])->exists()) {
-                return response()->json(['estado' => false, 'mensaje' => 'El cargo ya existe'], 200);
+            $ajax = Cargo::where('nombre_cargo', $datos['nombre_cargo'])->get();
+            if (count($ajax)) {
+                // dd('repetido');
+                return view('alertas.repetido')->render();
             } else {
                 $cargo = new Cargo();
 
                 $cargo->setNombreCargoAttribute($request->nombre_cargo);
-                $cargo->setEstadoAttribute($request->estado_cargo);
+                $cargo->setEstadoAttribute(1);
 
-                Cargo::create($cargo);
+                Cargo::create($cargo->toArray());
 
-                $listaCargos = Cargo::paginate('10')->orderBy('id_cargo', 'desc');
+                $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
                 $tabla = view('modals.cargo.tablaCargo', ['listaCargos' => $listaCargos, 'controladores' => $controladores])->render();

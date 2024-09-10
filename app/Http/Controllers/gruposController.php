@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class GruposController extends Controller
 {
-    public function showGrupos()
+    public function showGrupos(Request $request)
     {
-        $listaGrupos = GrupoInvestigacion::paginate('10')->orderBy('id_grupo', 'desc');
-
-        return view('modals.grupos.consultarGrupos', compact('listaGrupos'));
+        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
+        $controladores = $request->controladores;
+        return view('modals.grupos.consultarGrupos', compact('listaGrupos', 'controladores'));
     }
 
     public function showModalRegistrar()

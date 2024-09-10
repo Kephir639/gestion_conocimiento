@@ -13,7 +13,7 @@ class RedesController extends Controller
 
     public function showRedes(Request $request)
     {
-        $listaRedes = Redes::paginate('10')->orderBy('id_red', 'desc');
+        $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('10');
         $controladores = $request->controladores;
 
         return view('modals.redes.consultarRedes', compact('listaRedes', 'controladores'));

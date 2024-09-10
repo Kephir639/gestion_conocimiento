@@ -15,7 +15,7 @@
                                 required>
                         </div>
                         <div class="col-md-12 col-sm-12 mt-3">
-                            <input type="submit" value="Enviar" class="btn btn-success w-100" name="Enviar">
+                            <button id="submit" type="submit" class="btn btn-success w-100">Enviar</button>
                         </div>
                     </div>
                 </form>

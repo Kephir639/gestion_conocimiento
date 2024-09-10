@@ -1,6 +1,6 @@
 $(document).ready(function () {
     let button = '';
-    $('.iconoModificar').on('click', function () {
+    $('.btnEditarCargo').on('click', function () {
         button = $(this);
         let nombreCargo = $(this).parents('tr').find('td:eq(0)').text().trim();
         let estadoCargo = $(this).parents('tr').find('td:eq(1)').text().trim();
@@ -61,13 +61,12 @@ $(document).ready(function () {
     $('#formRegistrar').submit(function (e) {
         //Solicitud de Ajax para realizar el registro del elemento
         e.preventDefault();
-        console.log('a');
         let nombre = $('#inputNombreCargo').val();
         let token = $('#_token').val();
 
         $.ajax({
             type: "POST",
-            url: "crear_cargos",
+            url: "registrarCargo",
             data: {
                 '_token': token,
                 'nombre_cargo': nombre,
