@@ -63,13 +63,18 @@ Route::middleware('auth')->group(function () {
             Route::post('index/roles/registrarRol', [rolController::class, 'registrarRol']);
             // Route::get('/roles/editarRol/{id}', [rolController::class, 'editarRol']);
             Route::post('/roles/actualizarRol', [rolController::class, 'actualizarRol']);
+
+            //Semilleros
+            Route::get('/index/semilleros/consultar_semillero', [semillerosController::class, 'consultarSemilleros']);
+            Route::get('/index/semilleros/crear_semillero', [semillerosController::class, 'crearSemilleros']);
+            Route::post('/semilleros/registrarSemilleros', [semillerosController::class, 'registrarSemillero']);
         });
-        Route::get('/register', [RegistroController::class, 'showRegistrationForm'])->middleware('filter');
-
-        Route::get('/get-municipios/{departamento_id}', [RegistroController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
-
-        //
-
-        // Route::view('/register', 'auth/register')->name('register');{}
     });
 });
+Route::get('/register', [RegistroController::class, 'showRegistrationForm'])->middleware('filter');
+
+Route::get('/get-municipios/{departamento_id}', [RegistroController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
+
+//
+
+// Route::view('/register', 'auth/register')->name('register');
