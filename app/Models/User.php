@@ -57,23 +57,22 @@ class User extends Authenticatable
     // Getters
     // public function getIdRolAttribute()
     // {
-    //     return $this->attributes['idRol'];
+    //     return $this->id_rol;
     // }
 
     // public function getNameAttribute()
     // {
-    //     return $this->attributes['name'];
+    //     return $this->name;
     // }
 
     // public function getEmailAttribute()
-
     // {
-    //     return $this->attributes['email'];
+    //     return $this->email;
     // }
 
     // public function getPasswordAttribute()
     // {
-    //     return $this->attributes['password'];
+    //     return $this->password;
     // }
 
     // public function getApellidosAttribute()
@@ -121,10 +120,10 @@ class User extends Authenticatable
     //     return $this->id_programa;
     // }
 
-    public function getEstadoUsuAttribute()
-    {
-        return $this->attributes['estado_usu'];
-    }
+    // public function getEstadoUsuAttribute()
+    // {
+    //     return $this->estado_usu;
+    // }
 
     // // Setters
     // public function setIdRolAttribute($idRol)
@@ -194,6 +193,6 @@ class User extends Authenticatable
 
     // public function setEstadoUsuAttribute($estadoUsu)
     // {
-    //     $this->attributes['estado_usu'] = $estadoUsu;
+    //     $this->estado_usu = $estadoUsu;
     // }
 }

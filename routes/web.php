@@ -1,34 +1,35 @@
+
 <?php
 
-use App\Http\Controllers\Auth\LoginController as AuthLoginController;
+use App\Http\Controllers\Auth\RegistroController;
 use App\Http\Controllers\cargoController;
-use App\Http\Controllers\centroController;
-use App\Http\Controllers\gruposController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\inicioController;
 use App\Http\Controllers\lineaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\rolController;
-use App\Http\Controllers\redesController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Controllers\RegisterController;
+use App\Http\Controllers\semillerosController;
+use App\Http\Controllers\inicioController;
+use App\Http\Controllers\redesController;
+use App\Http\Controllers\gruposController;
+use App\Http\Controllers\centroController;
+use App\Http\Controllers\DepartamentosController;
+use Illuminate\Support\Facades\Auth;
 
 Route::view('/', 'presentacion')->middleware('filter');
-// ->middleware('checkPermisos');
-// Route::view('/presentacion', 'presentacion');
+Route::view('/presentacion', 'presentacion');
+
+
 Auth::routes();
 
-Route::middleware('auth', 'notifications', 'filter', 'active', 'checkPermisos')->group(function () {
+Route::middleware('auth')->group(function () {
+    Route::middleware('filter')->group(function () {
+        Route::middleware('checkPermisos')->group(function () {
+            //Pagina de Bienvenida
 
-    //Pagina de Bienvenida
-    Route::get('/index', [inicioController::class, 'index']);
+            Route::get('/index', [inicioController::class, 'index']);
 
-    //Redes de Concocimiento
-    Route::get('index/redes/consultar_red', [redesController::class, 'showRedes'])->middleware('checkPermisos');
-    Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar']);
-    Route::post('index/redes/crear_redes', [redesController::class, 'registrarRed']);
-    Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
-    Route::post('index/redes/actualizarRedes', [redesController::class, 'actualizarRed']);
 
     //Gurpos de investigacion
     Route::get('index/grupos/consultar_grupo', [gruposController::class, 'showGrupos']);
@@ -63,9 +64,13 @@ Route::middleware('auth', 'notifications', 'filter', 'active', 'checkPermisos')-
     // Route::get('/roles/editarRol/{id}', [rolController::class, 'editarRol']);
     Route::post('/roles/actualizarRol', [rolController::class, 'actualizarRol']);
 });
+Route::get('/register', [RegistroController::class, 'showRegistrationForm'])->middleware('filter');
 
+Route::get('/get-municipios/{departamento_id}', [RegistroController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
 
+//
 
+// Route::view('/register', 'auth/register')->name('register');
 
 
 

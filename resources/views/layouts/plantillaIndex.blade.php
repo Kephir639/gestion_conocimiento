@@ -42,6 +42,7 @@
                         </a>
                     </li>
                     @foreach ($controladores as $controlador => $contr)
+                        {{-- {{ dd($contr) }} --}}
                         <li class="sidebar-item">
                             <a href="#" id="tab_{{ $contr['nombre_controlador'] }}"
                                 class="sidebar-tabb sidebar-link collapsed px-3 py-2"
@@ -72,21 +73,6 @@
                     <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
                 </svg>
             </button>
-            {{-- @dd(Auth::user()) --}}
-            {{-- @if (Auth::user()->idRol == 1)
-                <div class="notifycon mr-5"><svg xmlns="http://www.w3.org/2000/svg" class="mt-2" width="24"
-                        height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1)">
-                        <path
-                            d="M12 10c1.151 0 2-.848 2-2s-.849-2-2-2c-1.15 0-2 .848-2 2s.85 2 2 2zm0 1c-2.209 0-4 1.612-4 3.6v.386h8V14.6c0-1.988-1.791-3.6-4-3.6z">
-                        </path>
-                        <path
-                            d="M19 2H5c-1.103 0-2 .897-2 2v13c0 1.103.897 2 2 2h4l3 3 3-3h4c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zm-5 15-2 2-2-2H5V4h14l.002 13H14z">
-                        </path>
-                        </svg><span>{{ $usuariosPendientes }}</span></div>
-                        <div class="notify-box mr-3 mt-4 p-1" id="box">
-                            <h2>Usuario pendientes para asignacion de rol <span>{{ $usuariosPendientes }}</span></h2>
-                        </div>
-            @endif --}}
             <div class="nabvar-collapse navbar">
                 <ul class="navbar-nav ml-auto">
                 </ul>
@@ -125,6 +111,7 @@
                 <div class="cuadradoVistas">
                     @yield('content')
                 </div>
+
             </div>
         </div>
     </div>
