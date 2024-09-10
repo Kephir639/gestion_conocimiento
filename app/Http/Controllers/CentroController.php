@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CentrosFormacion;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -68,11 +69,18 @@ class centroController extends Controller
                 //Le asignamos los valores del formulario
                 $centro->setCodigoCentroAttribute($request->codigo_centro);
                 $centro->setNombreCentroAttribute($request->nombre_centro);
-                $centro->setEstadoCentroAttribute($request->estado_centro);
+                $centro->setEstadoCentroAttribute(1);
                 //Registramos en la base de datos
-                CentrosFormacion::create($centro);
+                CentrosFormacion::create($centro->toArray());
 
-                $listaCetros = CentrosFormacion::paginate('10')->orderBy('id_centro', 'desc');
+                $sql = log_auditoria::createLog(
+                    'centro',
+                    $centro->getNombreCentroAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
+
+                $listaCetros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
                 $tabla = view('modals.centros.tablaCentro', [
@@ -129,7 +137,15 @@ class centroController extends Controller
                 $centro->setCodigoCentroAttribute($request->codigo_centro);
                 $centro->setEstadoCentroAttribute($request->estado_centro);
 
-                CentrosFormacion::where('id_centro', $datos['id_centro_old'])->update($centro);
+                CentrosFormacion::where('id_centro', $datos['nombre_centro_old'])->update($centro->toArray());
+
+                $sql = log_auditoria::createLog(
+                    'centro',
+                    $datos['nombre_centro_old'],
+                    'actualizo',
+                    $centro->getNombreCentroAttribute()
+                );
+                Log::insert($sql);
 
                 return view('alertas.modifcarExitoso');
             }

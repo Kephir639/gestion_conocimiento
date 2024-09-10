@@ -10,18 +10,16 @@
                     <div class="row mt-3">
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
                         <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="nombre_cargo" class="form-label">Nombre</label>
+                            <label for="inputNombreCargo" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="inputNombreCargo" name="nombre_cargo"
                                 required>
                         </div>
                         <div class="col-md-12 col-sm-12 mt-3">
-                            <button id="submit" type="submit" class="btn btn-success w-100">Enviar</button>
+                            <button id="btnRegistrar" class="btn btn-success w-100">Enviar</button>
                         </div>
                     </div>
                 </form>
-                <div id="alertasRegistrar">
-
-                </div>
+                <div id="alertasRegistrar"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

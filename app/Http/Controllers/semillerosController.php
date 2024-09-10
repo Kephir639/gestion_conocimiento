@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Semilleros;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -86,6 +87,13 @@ class semillerosController extends Controller
                 $semillero->setEstadoSemilleroAttribute($request->estado_semillero);
 
                 Semilleros::create($semillero->toArray());
+
+                $sql = log_auditoria::createLog(
+                    'semillero',
+                    $semillero->getNombreSemilleroAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
 
                 return response()->json(['estado' => true], 200);
             }

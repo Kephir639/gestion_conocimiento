@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\GrupoInvestigacion;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class GruposController extends Controller
+class gruposController extends Controller
 {
     public function showGrupos(Request $request)
     {
@@ -38,35 +39,41 @@ class GruposController extends Controller
             'estado_grupo.required' => 'Este campo es obligatorio'
         ];
 
-        $validacion = Validator::make($request, $reglas, $mensajes);
-        $respuestas = [];
         $datos = $request->all();
+        $validacion = Validator::make($datos, $reglas, $mensajes);
 
         unset($datos['_token']);
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $respuestas['error'] = false;
             $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
 
             if (count($ajax)) {
-                return view('alertas.repetido');
+                return view('alertas.repetido')->render();
             } else {
                 $grupo = new GrupoInvestigacion();
 
                 $grupo->setNombreGrupoAttribute($request->nombre_grupo);
-                $grupo->setEstadoGrupoAttribute($request->estado_grupo);
+                $grupo->setEstadoGrupoAttribute(1);
 
-                GrupoInvestigacion::create($grupo);
+                GrupoInvestigacion::create($grupo->toArray());
 
-                $listaGrupos = GrupoInvestigacion::paginate('10')->orderBy('id_grupo', 'desc');
+                $sql = log_auditoria::createLog(
+                    'grupo',
+                    $grupo->getNombreGrupoAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
+
+                $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
-                $tabla = view('modals.grupos.tablaGrupo', ['listaGrupos' => $listaGrupos, 'controladores' => $controladores])->render();
+                $tabla = view('modals.grupos.tablaGrupo', [
+                    'listaGrupos' => $listaGrupos,
+                    'controladores' => $controladores
+                ])->render();
                 $alerta = view('alertas.registrarExitoso')->render();
 
                 return response()->json([
@@ -89,7 +96,6 @@ class GruposController extends Controller
             'estado_grupo.required' => 'Este campo es obligatorio'
         ];
 
-        $respuestas = [];
         $datos = $request->all();
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
@@ -97,15 +103,12 @@ class GruposController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $respuestas['error'] = false;
             $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
 
             if (count($ajax)) {
-                return view('alertas.repetido');
+                return view('alertas.repetido')->render();
             } else {
                 $grupo = new GrupoInvestigacion();
 
@@ -114,7 +117,15 @@ class GruposController extends Controller
 
                 GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo);
 
-                return view('alertas.modifcarExitoso');
+                $sql = log_auditoria::createLog(
+                    'grupo',
+                    $datos['nombre_grupo_old'],
+                    'actualizo',
+                    $grupo->getNombreGrupoAttribute()
+                );
+                Log::insert($sql);
+
+                return view('alertas.modifcarExitoso')->render();
             }
         }
     }

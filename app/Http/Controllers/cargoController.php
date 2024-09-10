@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cargo;
+use App\Models\Log;
+use App\Models\Rol;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -44,16 +48,11 @@ class cargoController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
-            //Se regresa a la ruta anterior con los errores cometidos para ser mostrados en la vista
-            // dd('fail');
-            return response()->json(['errors' => $validacion->errors()]);
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
-            $ajax = Cargo::where('nombre_cargo', $datos['nombre_cargo'])->get();
+            $ajax = Cargo::where('nombre_cargo', $datos['inputNombreCargo'])->get();
             if (count($ajax)) {
-                // dd('repetido');
                 return view('alertas.repetido')->render();
             } else {
                 $cargo = new Cargo();
@@ -63,10 +62,20 @@ class cargoController extends Controller
 
                 Cargo::create($cargo->toArray());
 
+                $sql = log_auditoria::createLog(
+                    'cargo',
+                    $cargo->getNombreCargoAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
+
                 $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
-                $tabla = view('modals.cargo.tablaCargo', ['listaCargos' => $listaCargos, 'controladores' => $controladores])->render();
+                $tabla = view('modals.cargo.tablaGrupo', [
+                    'listaCargos' => $listaCargos,
+                    'controladores' => $controladores
+                ])->render();
                 $alerta = view('alertas.registrarExitoso')->render();
 
                 return response()->json([
@@ -101,14 +110,9 @@ class cargoController extends Controller
         unset($datos['_token']);
         unset($datos['controladores']);
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
-            // dd($validacion->errors());
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $respuestas['error'] = false;
             $ajax = Cargo::where('nombre_cargo', $datos['nombre_cargo'])->get();
-
             if (count($ajax)) {
                 return view('alertas.repetido');
             } else {
@@ -118,6 +122,14 @@ class cargoController extends Controller
                 $cargo->setEstadoAttribute($request->estado_cargo);
 
                 Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo);
+
+                $sql = log_auditoria::createLog(
+                    'cargo',
+                    $datos['nombre_cargo_old'],
+                    'actualizo',
+                    $cargo->getNombreCargoAttribute()
+                );
+                Log::insert($sql);
 
                 return view('alertas.modifcarExitoso');
             }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Redes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +16,9 @@ class RedesController extends Controller
     {
         $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('10');
         $controladores = $request->controladores;
-
-        return view('modals.redes.consultarRedes', compact('listaRedes', 'controladores'));
+        $usuariosPendientes = $request->usuariosPendientes;
+        // dd($request);
+        return view('modals.redes.consultarRedes', compact('listaRedes', 'controladores', 'usuariosPendientes'));
     }
 
     public function showModalRegistrar()
@@ -61,7 +63,14 @@ class RedesController extends Controller
 
                 Redes::create($red->toArray());
 
-                $listaRedes = Redes::paginate('10')->orderBy('id_red', 'desc');
+                $sql = log_auditoria::createLog(
+                    'red',
+                    $red->getNombreRedAttribute(),
+                    'registro'
+                );
+                Log::insert($sql);
+
+                $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
                 $tabla = view('modals.redes.tablaRed', [
@@ -114,14 +123,22 @@ class RedesController extends Controller
             $respuestas['error'] = false;
             $ajax = Redes::where('nombre_red', $datos['nombre_red'])->get();
             if (count($ajax)) {
-                return view('alertas.repetido')->with(['controladores' => $request->controladores]);
+                return view('alertas.repetido');
             } else {
                 $red = new Redes();
 
                 $red->setNombreRedAttribute($request->nombre_red);
                 $red->setEstadoRedAttribute($request->estado_red);
 
-                Redes::where('nombre_red', $datos['nombre_red_old'])->update($red->toArray());
+                dd(Redes::where('nombre_red', $datos['nombre_red_old'])->update($red->toArray()));
+
+                $sql = log_auditoria::createLog(
+                    'red',
+                    $datos['nombre_red_old'],
+                    'actualizo',
+                    $red->getNombreRedAttribute()
+                );
+                Log::insert($sql);
 
                 return view('alertas.modifcarExitoso');
             }

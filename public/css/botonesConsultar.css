@@ -1,0 +1,9 @@
+.iconoModificar {
+    width: 36px;
+    fill: var(--color--danger);
+}
+
+.iconoRegistrar {
+    width: 36px;
+    fill: var(--color-secundario);
+}

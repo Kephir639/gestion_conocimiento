@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::put('/login', [AuthLoginController::class, 'logout']);
+Route::put('/logout', [AuthLoginController::class, 'logout']);
 Route::get('/register', [RegistroController::class, 'showRegistrationForm'])->middleware('filter');
 
 Route::get('/get-municipios/{departamento_id}', [RegistroController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
