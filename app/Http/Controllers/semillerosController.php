@@ -16,11 +16,12 @@ class semillerosController extends Controller
         return view('crearSemilleros', compact('controladores'));
     }
 
-    public function showSemilleros()
+    public function consultarSemilleros(Request $request)
     {
-        $semilleros = Semilleros::pagination('10');
+        $controladores = $request->controladores;
+        $semilleros = Semilleros::paginate('10');
 
-        return view('consultarSemilleros', compact('semilleros'));
+        return view('consultarSemilleros', compact('semilleros','controladores' ));
     }
 
     public function showRegistrarSemilleros()

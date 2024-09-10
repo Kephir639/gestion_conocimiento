@@ -3,7 +3,6 @@
 <link rel="stylesheet" href="{{ asset('css/semilleros/crearSemilleros.css') }}">
 @stack('styles')
 @section('content')
-    <div class="cuadradoVistas container m-4">
         <div class="container">
             <h2>Crear Semillero</h2>
             <form action="{{ url('/index/semilleros/crear_semillero') }}" method="POST">
