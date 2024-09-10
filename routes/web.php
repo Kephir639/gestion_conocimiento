@@ -1,6 +1,7 @@
 
 <?php
 
+use App\Http\Controllers\Auth\LoginController as AuthLoginController;
 use App\Http\Controllers\Auth\RegistroController;
 use App\Http\Controllers\cargoController;
 use App\Http\Controllers\HomeController;
@@ -71,6 +72,8 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
+
+Route::put('/login', [AuthLoginController::class, 'logout']);
 Route::get('/register', [RegistroController::class, 'showRegistrationForm'])->middleware('filter');
 
 Route::get('/get-municipios/{departamento_id}', [RegistroController::class, 'getMunicipiosByDepartamento'])->middleware('filter');

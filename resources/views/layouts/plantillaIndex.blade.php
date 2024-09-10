@@ -95,9 +95,12 @@
                         <li class="navbar-item"><a href="#"
                                 class="dropdown-item item-perfil w-100 text-center">Perfil</a>
                         </li>
-                        <li class="navbar-item"><a href="#"
-                                class="dropdown-item item-perfil w-100 text-center">Cerrrar
-                                Sesión</a>
+                        <li class="navbar-item">
+                            <form action="login" method="POST">
+                                @method('put')
+                                @csrf
+                                <button class="dropdown-item item-perfil w-100 text-center">Cerrar sesión</button>
+                            </form>
                         </li>
                     </ul>
                 </li>
