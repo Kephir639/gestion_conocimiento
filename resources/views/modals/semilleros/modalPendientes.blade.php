@@ -20,6 +20,7 @@
                     <tbody class="tablebody_pendientes">
                         @foreach ($integrantes as $integrante)
                             <tr>
+                                <td><input type="checkbox" name="aceptados[]"></td>
                                 <td>{{ $integrante->name }}</td>
                                 <td>{{ $integrante->apellidos }}</td>
                                 <td>{{ $integrante->documento }}</td>

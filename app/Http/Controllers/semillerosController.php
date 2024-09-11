@@ -12,11 +12,11 @@ class semillerosController extends Controller
 {
     public function showSemilleros(Request $request)
     {
-        $semilleros = Semilleros::orderBy()->paginate('10');
+        $listaSemilleros = Semilleros::orderBy('id_semillero', 'desc')->paginate('10');
         $controladores = $request->controladores;
 
         return view('modals.semilleros.consultarSemilleros', [
-            'semilleros' => $semilleros,
+            'listaSemilleros' => $listaSemilleros,
             'controladores' => $controladores
         ]);
     }
@@ -74,7 +74,8 @@ class semillerosController extends Controller
             DB::update($sql);
         }
 
-        return view('alertas.validacionExitosa')->render();
+        $alerta = view('alertas.validacionExitosa')->render();
+        return response()->json(['alerta' => $alerta]);
     }
 
     public function registrarSemilleros(Request $request)

@@ -10,6 +10,7 @@ use App\Http\Controllers\lineaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\rolController;
 use App\Http\Controllers\redesController;
+use App\Http\Controllers\semillerosController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +65,9 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     Route::post('index/roles/registrarRol', [rolController::class, 'registrarRol']);
     Route::get('index/roles/showModalActualizar', [rolController::class, 'showModalActualizar']);
     Route::post('/roles/actualizarRol', [rolController::class, 'actualizarRol']);
+
+    //semilleros
+    Route::get('index/semilleros/consultar_semilleros', [semillerosController::class, 'showSemilleros']);
 });
 
 //Registro
