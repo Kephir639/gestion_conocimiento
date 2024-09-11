@@ -97,13 +97,12 @@ class RedesController extends Controller
     {
         $reglas = [
             'nombre_red' => 'required|max:30',
-            'estado_red' => 'required|gt:0'
+            'estado_red' => 'required'
         ];
         $mensajes = [
             'nombre_red.required' => 'Este campo es obligatorio',
             'nombre_red.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_red.required' => 'Este campo es obligatorio',
-            'estado_red.gt' => 'Elija una de las opciones'
+            'estado_red.required' => 'Este campo es obligatorio'
         ];
 
         $respuestas = [];
@@ -117,11 +116,12 @@ class RedesController extends Controller
             // dump('falla');
             $respuestas['mensaje'] = $validacion;
             $respuestas['error'] = true;
+            dd($validacion);
             return response()->json(['errors' => $validacion->errors()], 422);
             // dd($validacion->errors());
         } else {
             $respuestas['error'] = false;
-            $ajax = Redes::where('nombre_red', $datos['nombre_red'])->get();
+            $ajax = Redes::where(['nombre_red' => $datos['nombre_red'], 'estado_red' => $datos['estado_red']])->get();
             if (count($ajax)) {
                 return view('alertas.repetido');
             } else {
@@ -130,7 +130,7 @@ class RedesController extends Controller
                 $red->setNombreRedAttribute($request->nombre_red);
                 $red->setEstadoRedAttribute($request->estado_red);
 
-                dd(Redes::where('nombre_red', $datos['nombre_red_old'])->update($red->toArray()));
+                Redes::where('nombre_red', $datos['nombre_red_old'])->update($red->toArray());
 
                 $sql = log_auditoria::createLog(
                     'red',

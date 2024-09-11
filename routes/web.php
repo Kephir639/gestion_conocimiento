@@ -68,6 +68,13 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
 
     //semilleros
     Route::get('index/semilleros/consultar_semilleros', [semillerosController::class, 'showSemilleros']);
+    Route::get('index/semilleros/showModalRegistrar', [semillerosController::class, 'showModalRegistrar']);
+    Route::post('index/semilleros/registrarSemilleros', [semillerosController::class, 'registrarSemilleros']);
+    Route::get('index/semilleros/showModalActualizar', [semillerosController::class, 'showModalActualizar']);
+    Route::post('index/semilleros/actualizarSemilleros', [semillerosController::class, 'actualizarSemilleros']);
+
+    Route::get('index/semilleros/showModalValidar', [semillerosController::class, 'showModalValidar']);
+    Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
 });
 
 //Registro
