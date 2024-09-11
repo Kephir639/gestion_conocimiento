@@ -69,8 +69,8 @@ Route::middleware('auth')->group(function () {
 
             //Semilleros
             Route::get('/index/semilleros/consultar_semilleros', [semillerosController::class, 'consultarSemilleros']);
-            Route::get('/index/semilleros/crear_semillero', [semillerosController::class, 'crearSemilleros']);
-            Route::post('/semilleros/registrarSemilleros', [semillerosController::class, 'registrarSemillero']);
+            //Route::get('/index/semilleros/crear_semillero', [semillerosController::class, 'crearSemilleros']);
+            //Route::post('/semilleros/registrarSemilleros', [semillerosController::class, 'registrarSemillero']);
         });
     });
 });
