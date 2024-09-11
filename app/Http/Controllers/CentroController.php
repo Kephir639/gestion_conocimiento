@@ -32,20 +32,18 @@ class centroController extends Controller
     {
         $reglas = [
             'codigo_centro' => 'required|max:20',
-            'nombre_centro' => 'required|max:30',
-            'estado_centro' => 'required'
+            'nombre_centro' => 'required|max:30'
         ];
         $mensajes = [
             'codigo_centro.required' => 'Este campo es obligatorio',
             'codigo_centro.max' => 'Este campo debe contener maximo 30 caracteres',
             'nombre_centro.required' => 'Este campo es obligatorio',
-            'nombre_centro.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_centro.required' => 'Este campo es obligatorio'
+            'nombre_centro.max' => 'Este campo debe contener maximo 30 caracteres'
         ];
 
         $respuestas = [];
         $datos = $request->all();
-
+        // dd($datos);
         //Se realiza la validacion de los campos
         $validacion = Validator::make($datos, $reglas, $mensajes);
 

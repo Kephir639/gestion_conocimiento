@@ -32,22 +32,24 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     Route::post('index/redes/actualizar_redes', [redesController::class, 'actualizarRed']);
 
     //Gurpos de investigacion
-    Route::get('index/grupos/consultar_grupos', [gruposController::class], 'showGrupos');
-    Route::get('index/grupos/crear_grupos', [gruposController::class, 'showRegistrarGrupos']);
+    Route::get('index/grupos/consultar_grupos', [gruposController::class, 'showGrupos']);
+    Route::get('index/grupos/showModalRegistrar', [gruposController::class, 'showModalRegistrar']);
     Route::post('index/grupos/registarGrupos', [gruposController::class, 'registrarGrupo']);
+    Route::get('index/grupos/showModalActualizar', [gruposController::class, 'showModalModificar']);
     Route::post('index/grupos/actualizarGrupos', [gruposController::class, 'actualizarGrupo']);
 
     //Centros de investigacion
-    Route::get('index/grupos/consultar_centros', [centroController::class], 'showCentros');
-    Route::get('index/grupos/crear_centros', [centroController::class, 'showRegistrarCentros']);
-    Route::post('index/grupos/registarCentros', [centroController::class, 'registrarCentro']);
-    Route::post('index/grupos/actualizarCentros', [centroController::class, 'actualizarCentro']);
+    Route::get('index/centros/consultar_centros', [centroController::class, 'showCentros']);
+    Route::get('index/centros/showModalRegistrar', [centroController::class, 'showModalRegistrar']);
+    Route::post('index/centros/registrarCentros', [centroController::class, 'registrarCentro']);
+    Route::get('index/centros/showModalActualizar', [centroController::class, 'showModalModificar']);
+    Route::post('index/centros/actualizarCentros', [centroController::class, 'actualizarCentro']);
 
     //Cargos
     Route::get('index/cargos/consultar_cargo', [cargoController::class, 'showCargos']);
     Route::get('index/cargos/crear_cargos', [cargoController::class, 'showModalRegistrar']);
     Route::post('index/cargos/registrarCargos', [cargoController::class, 'registrarCargo']);
-    Route::get('index/lineas/editarLineas', [lineaController::class, 'showModificarCargo']);
+    Route::get('index/cargos/editarLineas', [lineaController::class, 'showModificarCargo']);
     Route::post('index/cargos/actualizarCargo', [cargoController::class, 'actualizarCargo']);
 
     //Lineas de investigación
