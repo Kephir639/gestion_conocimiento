@@ -1,7 +1,6 @@
 $(document).ready(function () {
     let button = '';
-
-    $(document).on('click', '.iconoModificar', function () {
+    $('.btnEditarCargo').on('click', function () {
         button = $(this);
         let nombreCargo = $(this).parents('tr').find('td:eq(0)').text().trim();
         let estadoCargo = $(this).parents('tr').find('td:eq(1)').text().trim();
@@ -21,9 +20,8 @@ $(document).ready(function () {
     });
 
     //Metodo para abrir la modal de registrar
-    $(document).on('click', '#BtnRegistrarCargo', function () {
+    $('#BtnRegistrarCargo').on('click', function () {
         button = $(this);
-
         $.ajax({
             type: "GET",
             url: "showModalRegistrar",
@@ -34,7 +32,7 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '#btnActualizar', function (e) {
+    $('#formModificar').submit(function (e) {
         //Solicitud de Ajax para realizar la actualizacion del elemento
         e.preventDefault();
         let nombre_old = button.parents('tr').find('td:eq(0)').text().trim();
@@ -60,16 +58,15 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '#btnRegistrar', function (e) {
+    $('#formRegistrar').submit(function (e) {
         //Solicitud de Ajax para realizar el registro del elemento
         e.preventDefault();
-        console.log('a');
         let nombre = $('#inputNombreCargo').val();
         let token = $('#_token').val();
 
         $.ajax({
             type: "POST",
-            url: "crear_cargos",
+            url: "registrarCargo",
             data: {
                 '_token': token,
                 'nombre_cargo': nombre,

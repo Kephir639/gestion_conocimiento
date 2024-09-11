@@ -32,14 +32,12 @@ class cargoController extends Controller
     public function registrarCargo(Request $request)
     {
         $reglas = [
-            'nombre_cargo' => 'required',
-            'estado_cargo' => 'required'
+            'nombre_cargo' => 'required'
         ];
 
         $mensajes = [
             'nombre_cargo.required' => 'Este campo es obligatorio',
-            'nombre_cargo.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_cargo.required' => 'Este campo es obligatorio'
+            'nombre_cargo.max' => 'Este campo debe contener maximo 30 caracteres'
         ];
 
         $datos = $request->all();

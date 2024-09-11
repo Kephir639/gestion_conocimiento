@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator as Validator;
 
-class UsuarioController extends Controller
+class usuarioController extends Controller
 {
 
     public function showUsuarios(Request $request)

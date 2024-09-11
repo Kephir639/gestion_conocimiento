@@ -55,7 +55,7 @@
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'cargos')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'modificar_cargo')
+                        @if ($func['nombre_funcion'] == 'crear_cargo')
                             <button title="Registrar Cargo" id="BtnRegistrarCargo" class="btn iconoRegistrar p-0"><svg
                                     xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
                                     <path
@@ -73,5 +73,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ url('js/cargo.js') }}"></script>
+    <script src="{{ url('js/cargos.js') }}"></script>
 @endsection

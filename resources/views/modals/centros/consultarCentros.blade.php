@@ -3,7 +3,7 @@
 @section('title', 'Centros Formativos')
 @push('styles')
     <link rel="stylesheet" href="{{ url('css/centros.css') }}">
-    <link rel="stylesheet" href="{{ uel('css/botonesConsultar.css') }}">
+    <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">

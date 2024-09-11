@@ -42,6 +42,7 @@
                         </a>
                     </li>
                     @foreach ($controladores as $controlador => $contr)
+                        {{-- {{ dd($contr) }} --}}
                         <li class="sidebar-item">
                             <a href="/index/{{ $contr['nombre_controlador'] }}/consultar_{{ $contr['nombre_controlador'] }}"
                                 id="tab_{{ $contr['nombre_controlador'] }}"
@@ -108,7 +109,7 @@
                         <li class="navbar-item"><a href="#"
                                 class="dropdown-item item-perfil w-100 text-center">Perfil</a>
                         </li>
-                        <li id="logoutBtn" class="navbar-item"><a href="#"
+                        <li id="logoutBtn" class="navbar-item"><a href="/logout"
                                 class="dropdown-item item-perfil w-100 text-center">Cerrrar
                                 Sesión</a>
                         </li>
@@ -124,6 +125,7 @@
                 <div class="cuadradoVistas">
                     @yield('content')
                 </div>
+
             </div>
         </div>
     </div>

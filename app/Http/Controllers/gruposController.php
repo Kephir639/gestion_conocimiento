@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class GruposController extends Controller
+class gruposController extends Controller
 {
-    public function showGrupos()
+    public function showGrupos(Request $request)
     {
         $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
-
-        return view('modals.grupos.consultarGrupos', compact('listaGrupos'));
+        $controladores = $request->controladores;
+        return view('modals.grupos.consultarGrupos', compact('listaGrupos', 'controladores'));
     }
 
     public function showModalRegistrar()
