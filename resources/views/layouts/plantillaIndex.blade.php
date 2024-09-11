@@ -110,8 +110,7 @@
                                 class="dropdown-item item-perfil w-100 text-center">Perfil</a>
                         </li>
                         <li id="logoutBtn" class="navbar-item"><a href="/logout"
-                                class="dropdown-item item-perfil w-100 text-center">Cerrrar
-                                Sesión</a>
+                                class="dropdown-item item-perfil w-100 text-center">Cerrar sesión</a>
                         </li>
                     </ul>
                 </li>

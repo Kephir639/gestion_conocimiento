@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+
 Route::get('/logout', [AuthLoginController::class, 'logout']);
 Route::get('/register', [RegistroController::class, 'showRegistrationForm'])->middleware('filter');
 
