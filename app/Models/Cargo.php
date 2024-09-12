@@ -19,7 +19,7 @@ class Cargo extends Model
     protected $fillable = [
         'id_cargo',
         'nombre_cargo',
-        'estado',
+        'estado_cargo',
         'created_at',
         'updated_at'
     ];
@@ -47,11 +47,11 @@ class Cargo extends Model
 
     public function getEstadoAttribute()
     {
-        return $this->attributes['estado'];
+        return $this->attributes['estado_cargo'];
     }
 
     public function setEstadoAttribute($value)
     {
-        $this->attributes['estado'] = $value;
+        $this->attributes['estado_cargo'] = $value;
     }
 }

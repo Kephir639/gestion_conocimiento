@@ -24,7 +24,7 @@
                             </select>
                         </div>
                         <div class="col-md-12 col-sm-12 mt-3">
-                            <button class="btn btn-success w-100">Enviar</button>
+                            <button id="btnActualizar" class="btn btn-success w-100">Enviar</button>
                         </div>
                     </div>
                 </form>

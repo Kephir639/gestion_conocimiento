@@ -2,7 +2,6 @@
 
 @section('title', 'Centros Formativos')
 @push('styles')
-    <link rel="stylesheet" href="{{ url('css/centros.css') }}">
     <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
 @endpush
 @section('content')
@@ -35,7 +34,7 @@
                                         @if ($controlador['nombre_controlador'] == 'centros')
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'modificar_centro')
-                                                    <button title="Modificar Centro" class="btn iconoModificar"><svg
+                                                    <button title="Modificar Centro" class="btn p-0 iconoModificar"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
                                                             <path

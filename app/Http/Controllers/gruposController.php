@@ -14,6 +14,7 @@ class gruposController extends Controller
     {
         $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
         $controladores = $request->controladores;
+
         return view('modals.grupos.consultarGrupos', compact('listaGrupos', 'controladores'));
     }
 
@@ -30,13 +31,11 @@ class gruposController extends Controller
     public function registrarGrupo(Request $request)
     {
         $reglas = [
-            'nombre_grupo' => 'required|max:30',
-            'estado_grupo' => 'required'
+            'nombre_grupo' => 'required|max:30'
         ];
         $mensajes = [
             'nombre_grupo.required' => 'Este campo es obligatorio',
-            'nombre_grupo.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_grupo.required' => 'Este campo es obligatorio'
+            'nombre_grupo.max' => 'Este campo debe contener maximo 30 caracteres'
         ];
 
         $datos = $request->all();
@@ -88,12 +87,13 @@ class gruposController extends Controller
     {
         $reglas = [
             'nombre_grupo' => 'required|max:30',
-            'estado_grupo' => 'required'
+            'estado_grupo' => 'required|gte:0'
         ];
         $mensajes = [
             'nombre_grupo.required' => 'Este campo es obligatorio',
             'nombre_grupo.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_grupo.required' => 'Este campo es obligatorio'
+            'estado_grupo.required' => 'Este campo es obligatorio',
+            'estado_grupo.gte' => '!!Seleccione una de las opciones¡¡'
         ];
 
         $datos = $request->all();
@@ -105,7 +105,10 @@ class gruposController extends Controller
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
+            $ajax = GrupoInvestigacion::where([
+                'nombre_grupo' => $datos['nombre_grupo'],
+                'estado_grupo' => $datos['estado_grupo']
+            ])->get();
 
             if (count($ajax)) {
                 return view('alertas.repetido')->render();
@@ -115,7 +118,7 @@ class gruposController extends Controller
                 $grupo->setNombreGrupoAttribute($request->nombre_grupo);
                 $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
-                GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo);
+                GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo->toArray());
 
                 $sql = log_auditoria::createLog(
                     'grupo',

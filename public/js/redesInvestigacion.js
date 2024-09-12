@@ -39,6 +39,8 @@ $(document).ready(function () {
 
         let nombre = $('#inputNombreRed').val();
         let estado = $('#inputEstadoRed').val();
+        let estado_text = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : null;
+
         let token = $('#_token').val();
 
         $.ajax({
@@ -53,7 +55,7 @@ $(document).ready(function () {
             success: function (data) {
                 $('#alertasModificar').html(data);
                 $(button).parents('tr').find('td:eq(0)').text(nombre);
-                $(button).parents('tr').find('td:eq(1)').val(estado);
+                $(button).parents('tr').find('td:eq(1)').text(estado_text);
             },
             error: function (xhr, status, error) {
                 if (xhr.status === 422) {

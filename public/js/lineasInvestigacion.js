@@ -3,8 +3,8 @@ $(document).ready(function () {
 
     $(document).on('click', '.iconoModificar', function () {
         button = $(this);
-        let nombreLinea = $(this).parents('tr').find('td:eq(0)').text().trim();
-        let estadoLinea = $(this).parents('tr').find('td:eq(1)').text().trim();
+        let nombreLinea = $(button).parents('tr').find('td:eq(0)').text().trim();
+        let estadoLinea = $(button).parents('tr').find('td:eq(1)').text().trim();
         let estado = (estadoLinea == "Activo") ? 1 : (estadoLinea == "Inactivo") ? 0 : -1;
         $.ajax({
             type: 'GET',
@@ -12,8 +12,8 @@ $(document).ready(function () {
             success: function (data) {
                 $('#ModalSection').html(data);
 
-                $(this).find('#inputNombreLinea').val(nombreLinea);
-                $(this).find('#inputEstadoLinea').val(estado);
+                $('#modalModificarLinea').find('#inputNombreLinea').val(nombreLinea);
+                $('#modalModificarLinea').find('#inputEstadoLinea').val(estado);
 
                 $('#modalModificarLinea').modal('show');
             }
@@ -37,10 +37,11 @@ $(document).ready(function () {
     $(document).on('click', '#btnActualizar', function (e) {
         //Solicitud de Ajax para realizar la actualizacion del elemento
         e.preventDefault();
-        let nombre_old = button.parents('tr').find('td:eq(0)').text().trim();
+        let nombre_old = $(button).parents('tr').find('td:eq(0)').text().trim();
 
         let nombre = $('#inputNombreLinea').val();
         let estado = $('#inputEstadoLinea').val();
+        let estado_text = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : null;
         let token = $('#_token').val();
 
         $.ajax({
@@ -54,8 +55,8 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $('#alertasModificar').html(data);
-                button.parents('tr').find('td:eq(0)').val(nombre);
-                button.parents('tr').find('td:eq(1)').val(estado);
+                $(button).parents('tr').find('td:eq(0)').text(nombre);
+                $(button).parents('tr').find('td:eq(1)').text(estado_text);
             }
         });
     });

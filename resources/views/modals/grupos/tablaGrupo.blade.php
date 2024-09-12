@@ -2,7 +2,7 @@
     <tr>
         <td>{{ $grupos->nombre_grupo }}</td>
         <td>
-            @if ($grupos->estado_gurpo == 1)
+            @if ($grupos->estado_grupo == 1)
                 Activo
             @elseif ($grupos->estado_grupo == 0)
                 Inactivo

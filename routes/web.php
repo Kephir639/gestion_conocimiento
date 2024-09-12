@@ -28,35 +28,35 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     Route::get('index/redes/consultar_redes', [redesController::class, 'showRedes']);
     Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar']);
     Route::post('index/redes/crear_redes', [redesController::class, 'registrarRed']);
-    Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
+    Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalActualizar']);
     Route::post('index/redes/actualizar_redes', [redesController::class, 'actualizarRed']);
 
     //Gurpos de investigacion
     Route::get('index/grupos/consultar_grupos', [gruposController::class, 'showGrupos']);
     Route::get('index/grupos/showModalRegistrar', [gruposController::class, 'showModalRegistrar']);
-    Route::post('index/grupos/registarGrupos', [gruposController::class, 'registrarGrupo']);
-    Route::get('index/grupos/showModalActualizar', [gruposController::class, 'showModalModificar']);
+    Route::post('index/grupos/registrarGrupos', [gruposController::class, 'registrarGrupo']);
+    Route::get('index/grupos/showModalActualizar', [gruposController::class, 'showModalActualizar']);
     Route::post('index/grupos/actualizarGrupos', [gruposController::class, 'actualizarGrupo']);
 
     //Centros de investigacion
     Route::get('index/centros/consultar_centros', [centroController::class, 'showCentros']);
     Route::get('index/centros/showModalRegistrar', [centroController::class, 'showModalRegistrar']);
     Route::post('index/centros/registrarCentros', [centroController::class, 'registrarCentro']);
-    Route::get('index/centros/showModalActualizar', [centroController::class, 'showModalModificar']);
-    Route::post('index/centros/actualizarCentros', [centroController::class, 'actualizarCentro']);
+    Route::get('index/centros/showModalActualizar', [centroController::class, 'showModalActualizar']);
+    Route::post('index/centros/actualizarCentro', [centroController::class, 'actualizarCentro']);
 
     //Cargos
-    Route::get('index/cargos/consultar_cargo', [cargoController::class, 'showCargos']);
-    Route::get('index/cargos/crear_cargos', [cargoController::class, 'showModalRegistrar']);
+    Route::get('index/cargos/consultar_cargos', [cargoController::class, 'showCargos']);
+    Route::get('index/cargos/showModalRegistrar', [cargoController::class, 'showModalRegistrar']);
     Route::post('index/cargos/registrarCargos', [cargoController::class, 'registrarCargo']);
-    Route::get('index/cargos/editarLineas', [lineaController::class, 'showModificarCargo']);
+    Route::get('index/cargos/showModalActualizar', [cargoController::class, 'showModalActualizar']);
     Route::post('index/cargos/actualizarCargo', [cargoController::class, 'actualizarCargo']);
 
-    //Lineas de investigación
+    //Lineas de investigacións
     Route::get('index/lineas/consultar_lineas', [lineaController::class, 'showLineas']);
-    Route::get('index/lineas/crear_lineas', [lineaController::class, 'showModalRegistrar']);
+    Route::get('index/lineas/showModalRegistrar', [lineaController::class, 'showModalRegistrar']);
     Route::post('index/lineas/registrarLineas', [lineaController::class, 'registrarLinea']);
-    Route::get('index/lineas/editarLineas', [lineaController::class, 'showModificarLinea']);
+    Route::get('index/lineas/showModalActualizar', [lineaController::class, 'showModalActualizar']);
     Route::post('index/lineas/actualizarLinea', [lineaController::class, 'actualizarLinea']);
 
     // Roles
@@ -78,6 +78,8 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     Route::get('index/semilleros/showModalValidar', [semillerosController::class, 'showModalValidar']);
     Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
 });
+
+Route::put('/logout', [AuthLoginController::class, 'logout']);
 
 //Registro
 Route::view('/registro', 'registro')->name('registro');
