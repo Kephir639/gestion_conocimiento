@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.plantillaPresentacion')
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/confirm.css') }}">
 @endpush
