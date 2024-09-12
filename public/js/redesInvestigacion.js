@@ -2,7 +2,7 @@ $(document).ready(function () {
     //Metodo para abrir la modal de modificar
     let button = '';
     //Metodo para abrir la modal de modificar
-    $('.iconoModalModificar').on('click', function () {
+    $(document).on('click', '.iconoModalModificar', function () {
         button = $(this);
         let nombreGrupo = $(this).parents('tr').find('td:eq(0)').text().trim();
         let estadoGrupo = $(this).parents('tr').find('td:eq(1)').text().trim();
@@ -12,7 +12,6 @@ $(document).ready(function () {
             url: "showModalActualizar",
             success: function (data) {
                 $('#ModalSection').html(data);
-
                 $('#modalModificarRedes').find('#inputNombreRed').val(nombreGrupo);
                 $('#modalModificarRedes').find('#inputEstadoRed').val(estado);
 

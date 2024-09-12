@@ -1,4 +1,4 @@
-<div class="modal" id="modalRegistrarCentros">
+<div class="modal" id="modalRegistrarCentro">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -19,7 +19,7 @@
                         <div id="div_nombre_centro"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputNombrecentro" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="inputNombrecentro" name="nombre_centro"
+                            <input type="text" class="form-control" id="inputNombreCentro" name="nombre_centro"
                                 required>
                             <span class="errorValidacion"></span>
                         </div>

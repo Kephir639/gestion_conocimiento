@@ -107,8 +107,10 @@ class usuarioController extends Controller
                 $usuario = new User();
 
                 $contra = Hash::make($request->contraseña);
+                $cargo = $request->cargo;
 
                 $usuario->setNameAttribute($request->nombres);
+                ($cargo == 'Aprendiz') ? ($usuario->setIdRolAttribute(2)) : (($cargo == 'Dinamizador SENNOVA') ? ($usuario->setIdRolAttribute(7)) : (($cargo == 'Auditor') ? ($usuario->setIdRolAttribute(9)) : null));
                 $usuario->setIdRolAttribute(null);
                 $usuario->setApellidoAttribute($request->apellidos);
                 $usuario->setIdentificacionAttribute($request->identificacion);
@@ -120,10 +122,15 @@ class usuarioController extends Controller
                 $usuario->setDireccionAttribute($request->direccion);
                 $usuario->setIdCargoAttribute($request->cargo);
                 $usuario->setIdProgramaAttribute($request->programa);
-                $usuario->setEstadoUsuAttribute(0);
+                ($cargo == 'Aprendiz' || $cargo == 'Dinamizador SENNOVA' || $cargo == 'Auditor') ? ($usuario->setEstadoUsuAttribute(1)) : ($usuario->setEstadoUsuAttribute(0));
                 $usuario->setPasswordAttribute($contra);
 
-                User::create($usuario->toArray());
+                $registro = User::create($usuario->toArray());
+
+                foreach ($request->semilleros as $semillero) {
+                    $sql = "INSERT INTO semilleros_has_user (id, id_semillero) VALUES ('" . $registro->id . "','" . $semillero . "')";
+                    DB::insert($sql);
+                }
 
                 $listausuarios = User::orderBy('id', 'desc')->paginate('10');
                 $controladores = $request->controladores;

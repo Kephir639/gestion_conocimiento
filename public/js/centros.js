@@ -85,7 +85,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "crear_centro",
+            url: "registrarCentros",
             data: {
                 '_token': token,
                 'codigo_centro': codigo,
