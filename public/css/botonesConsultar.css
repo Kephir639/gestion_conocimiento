@@ -26,7 +26,17 @@
     fill: var(--color-primario);
 }
 
-.iconoM {
+.iconoConsultar {
+    width: 36px;
+    fill: var(--color-secundario-hover);
+}
+
+.iconoModificar {
     width: 36px;
     fill: var(--color--danger);
+}
+
+.iconoVerificar {
+    width: 36px;
+    fill: var(--color-fondoGris);
 }

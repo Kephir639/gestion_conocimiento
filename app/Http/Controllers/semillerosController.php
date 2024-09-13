@@ -84,12 +84,20 @@ class semillerosController extends Controller
             'nombre_semillero' => 'required',
             'iniciales_semillero' => 'required',
             'fecha_creacion' => 'required|date',
+            'integrantes' => 'required',
             'mision' => 'required',
             'vision' => 'required',
             'objetivo_general' => 'required',
             'objetivos_especificos' => 'required',
-            'id_grupo' => 'required',
-            'id_plan' => 'required',
+            'grupos' => 'required',
+            'lineas' => 'required',
+            'programas' => 'required',
+            'redes' => 'required',
+            'integrantes' => 'required',
+            'actividades' => 'required',
+            'tareas' => 'required',
+            'responsables' => 'required',
+            'frecuencia' => 'required',
             'estado' => 'required'
         ];
 
