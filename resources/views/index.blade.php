@@ -5,7 +5,7 @@
 @section('content')
 
     <div>
-        <span>Bienvenid@ Nombre de Usuario</span>
+        <span>Bienvenid@ {{ Auth::user()->name }}</span>
     </div>
 
 

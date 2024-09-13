@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,5 +25,15 @@ class log_auditoria extends Controller
         ];
 
         return ($accion === "actualizo") ? $sqlAct : $sql;
+    }
+
+    public function consultarAuditoria(Request $request)
+    {
+        $listaLog = Log::orderBy('id_log', 'desc')->paginate('10');
+        $controladores = $request->controladores;
+        $notificaciones = $request->notificaciones;
+
+
+        return view('modals.auditoria.consultarAuditoria', compact('listaLog', 'controladores', 'notificaciones'));
     }
 }

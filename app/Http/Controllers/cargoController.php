@@ -19,8 +19,8 @@ class cargoController extends Controller
 
         $cargos = Cargo::orderBy('id_cargo', 'desc')->paginate(10);
         $controladores = $request->controladores;
-
-        return view('modals.cargo.consultarCargos', compact('cargos', 'controladores'));
+        $notificaciones = $request->notificaciones;
+        return view('modals.cargo.consultarCargos', compact('cargos', 'controladores', 'notificaciones'));
     }
 
     public function showModalRegistrar()

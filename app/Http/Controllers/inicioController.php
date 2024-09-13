@@ -10,6 +10,7 @@ class inicioController extends Controller
     {
         $controladores = $request->controladores;
         $usuariosPendientes = $request->ususariosPendientes;
-        return view('index', compact('controladores', 'usuariosPendientes'));
+        $notificaciones = $request->notificaciones;
+        return view('layouts.plantillaIndex', compact('controladores', 'usuariosPendientes', 'notificaciones'));
     }
 }

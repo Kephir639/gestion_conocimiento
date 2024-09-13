@@ -8,10 +8,12 @@ use App\Http\Controllers\gruposController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\inicioController;
 use App\Http\Controllers\lineaController;
+use App\Http\Controllers\log_auditoria;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\rolController;
 use App\Http\Controllers\redesController;
 use App\Http\Controllers\semillerosController;
+use App\Http\Controllers\usuarioController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -47,7 +49,7 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     Route::post('index/centros/actualizarCentros', [centroController::class, 'actualizarCentro']);
 
     //Cargos
-    Route::get('index/cargos/consultar_cargo', [cargoController::class, 'showCargos']);
+    Route::get('index/cargos/consultar_cargos', [cargoController::class, 'showCargos']);
     Route::get('index/cargos/crear_cargos', [cargoController::class, 'showModalRegistrar']);
     Route::post('index/cargos/registrarCargos', [cargoController::class, 'registrarCargo']);
     Route::get('index/cargos/editarLineas', [lineaController::class, 'showModificarCargo']);
@@ -78,6 +80,13 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
 
     Route::get('index/semilleros/showModalValidar', [semillerosController::class, 'showModalValidar']);
     Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
+    //Auditoría
+
+    Route::get('index/auditorias/consultar_auditorias', [log_auditoria::class, 'consultarAuditoria']);
+
+    //Asignar rol
+
+    Route::get('index/usuarios/asignar_rol', [usuarioController::class, 'showAsignarRol']);
 });
 
 

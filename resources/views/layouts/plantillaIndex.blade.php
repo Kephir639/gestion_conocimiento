@@ -73,7 +73,7 @@
                     <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
                 </svg>
             </button>
-            {{-- @if (Auth::user()->idRol == 1)
+            @if (Auth::user()->idRol == 1)
                 <div class="notifycon mr-5"><svg xmlns="http://www.w3.org/2000/svg" class="mt-2" width="24"
                         height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1)">
                         <path
@@ -82,11 +82,11 @@
                         <path
                             d="M19 2H5c-1.103 0-2 .897-2 2v13c0 1.103.897 2 2 2h4l3 3 3-3h4c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zm-5 15-2 2-2-2H5V4h14l.002 13H14z">
                         </path>
-                    </svg><span>{{ $usuariosPendientes }}</span></div>
+                    </svg><span>{{ $notificaciones }}</span></div>
                 <div class="notify-box mr-3 mt-4 p-1" id="box">
-                    <h2>Usuario pendientes para asignacion de rol <span>{{ $usuariosPendientes }}</span></h2>
+                    <h2>Usuario pendientes para asignacion de rol <span>{{ $notificaciones }}</span></h2>
                 </div>
-            @endif --}}
+            @endif
             <div class="nabvar-collapse navbar">
                 <ul class="navbar-nav ml-auto">
                 </ul>
@@ -100,8 +100,7 @@
                         </svg>
                     </a>
                     <ul class="dropdown-menu menuD dropdown-menu-end" id="dropdownPerfil">
-                        <li class="navbar-item"><span class="dropdown-item text-center">Nombre
-                                Usuario</span>
+                        <li class="navbar-item"><span class="dropdown-item text-center">{{ Auth::user()->name }}</span>
                         </li>
                         <li>
                             <hr class="dropdown divider division my-1">
