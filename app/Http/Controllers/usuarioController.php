@@ -42,7 +42,7 @@ class usuarioController extends Controller
     public function registrarUsuario(Request $request)
     {
         $reglas = [
-            //'idRol' => 'required|integer',
+            'idRol' => 'nullable|integer',
             'name' => 'required|max:30',
             'apellidos' => 'required|max:30',
             'tipo_documento' => 'required|in:CC,TI,CE,Pasaporte,PEP,PPT',
@@ -58,8 +58,8 @@ class usuarioController extends Controller
             'id_profesion' => 'nullable|integer',
             'id_maestria' => 'nullable|integer',
             'id_doctorado' => 'nullable|integer',
-            'Nombre_programa' => 'required',
-            'ficha' => 'required|integer',
+            'Nombre_programa' => 'nullable|integer',
+            'ficha' => 'nullable|integer',
             'semillero_id' => 'nullable|integer',
             'password' => 'required|max:20'
         ];
@@ -80,7 +80,7 @@ class usuarioController extends Controller
             'id_tipo.integer' => 'El campo debe ser un número entero',
             'email.required' => 'Este campo es obligatorio',
             'email.email' => 'Esta no es una dirección de correo electrónico válida',
-            'email.max' => 'Este campo debe contener máximo 255 caracteres',
+            'email.max' => 'Este campo debe contener máximo 255 caracteres', 
             'email.unique' => 'Este correo electrónico ya está registrado',
             'celular.required' => 'Este campo es obligatorio',
             'celular.max' => 'El campo debe contener máximo 15 caracteres',
@@ -111,7 +111,7 @@ class usuarioController extends Controller
                 return view('alertas.repetido')->render();
             } else {
                 $usuario = new User();
-                //$usuario->idRol = $request->idRol;
+                $usuario->idRol = 0;
                 $usuario->name = $request->name;
                 $usuario->apellidos = $request->apellidos;
                 $usuario->tipo_documento = $request->tipo_documento;

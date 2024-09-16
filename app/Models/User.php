@@ -139,7 +139,7 @@ class User extends Authenticatable
     // Setters
     public function setIdRolAttribute($idRol)
     {
-        $this->attributes['id_rol'] = $idRol;
+        $this->attributes['idRol'] = $idRol;
     }
 
     public function setNameAttribute($name)
