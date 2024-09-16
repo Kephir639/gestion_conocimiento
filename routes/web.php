@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController as AuthLoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\cargoController;
 use App\Http\Controllers\centroController;
 use App\Http\Controllers\gruposController;
@@ -29,8 +30,15 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     Route::get('index/redes/consultar_redes', [redesController::class, 'showRedes']);
     Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar']);
     Route::post('index/redes/crear_redes', [redesController::class, 'registrarRed']);
-    Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalActualizar']);
+    Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
     Route::post('index/redes/actualizar_redes', [redesController::class, 'actualizarRed']);
+
+    //Lineas
+    Route::get('index/lineas/consultar_lineas', [lineaController::class, 'showineas']);
+    Route::get('index/lineas/showModalRegistrar', [lineaController::class, 'showModalRegistrar']);
+    Route::post('index/lineas/crear_lineas', [lineaController::class, 'registrarLinea']);
+    Route::get('index/lineas/showModalActualizar', [lineaController::class, 'showModalActualizar']);
+    Route::post('index/lineas/actualizar_lineas', [lineaController::class, 'actualizarLinea']);
 
     //Gurpos de investigacion
     Route::get('index/grupos/consultar_grupos', [gruposController::class, 'showGrupos']);
@@ -78,11 +86,13 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
 
     Route::get('index/semilleros/showModalValidar', [semillerosController::class, 'showModalValidar']);
     Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
-
-    Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil']);
 });
 
-Route::put('/logout', [AuthLoginController::class, 'logout']);
+Route::get('logout', [AuthLoginController::class, 'logout']);
 
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->middleware('filter');
+Route::post('/registrarUsuario', [usuarioController::class, 'registrarUsuario'])->middleware('filter');
+
+Route::get('/get-municipios/{departamento_id}', [RegisterController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
 //Registro
 Route::view('/registro', 'registro')->name('registro');

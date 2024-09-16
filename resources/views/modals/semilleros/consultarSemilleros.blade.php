@@ -35,6 +35,7 @@
                                 <td>
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
+                                     
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'consultar_semillero')
                                                     <button title="Ver semillero" class="btn p-0"><svg
