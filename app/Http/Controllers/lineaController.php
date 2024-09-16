@@ -14,14 +14,14 @@ class lineaController extends Controller
     public function showLineas()
     {
         $controladores = request()->controladores;
-        $listaLineas = LineaInvestigacion::paginate('10')->orderBy('id_linea', 'desc');
+        $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
 
         return view('modals.lineas.consultarLinea', compact('listaLineas', 'controladores'));
     }
 
     public function showModalRegistrar()
     {
-        return view('modals.cargo.crearCargo');
+        return view('modals.lineas.crearLinea');
     }
 
     public function registrarLinea(Request $request)
@@ -86,7 +86,7 @@ class lineaController extends Controller
 
     public function showModalActualizar()
     {
-        return view('modals.cargo.modificarCargo');
+        return view('modals.lineas.modificarLinea');
     }
 
     public function actualizarLinea(Request $request)

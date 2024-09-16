@@ -18,11 +18,11 @@
                     <tbody id="tablebody_lineas">
                         @foreach ($listaLineas as $lineas)
                             <tr>
-                                <td>{{ $lineas->nombre_grupo }}</td>
+                                <td>{{ $lineas->nombre_linea }}</td>
                                 <td>
-                                    @if ($lineas->estado_gurpo == 1)
+                                    @if ($lineas->estado_linea == 1)
                                         Activo
-                                    @elseif ($lineas->estado_grupo == 0)
+                                    @elseif ($lineas->estado_linea == 0)
                                         Inactivo
                                     @endif
                                 </td>
@@ -30,7 +30,8 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'lineas')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_lineas')
+                                                @if ($func['nombre_funcion'] == 'modificar_linea')
+                                                
                                                     <button title="Modificar Linea" class="btn iconoModificar p-0"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
@@ -51,7 +52,7 @@
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'lineas')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_lineas')
+                        @if ($func['nombre_funcion'] == 'crear_linea')
                             <button title="Registrar Lineas" id="BtnRegistrarLinea" class="btn iconoRegistrar p-0"><svg
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path

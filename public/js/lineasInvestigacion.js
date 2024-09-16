@@ -3,8 +3,10 @@ $(document).ready(function () {
 
     $(document).on('click', '.iconoModificar', function () {
         button = $(this);
-        let nombreLinea = $(this).parents('tr').find('td:eq(0)').text().trim();
-        let estadoLinea = $(this).parents('tr').find('td:eq(1)').text().trim();
+        let nombreLinea = $(button).parents('tr').find('td:eq(0)').text().trim();
+        let estadoLinea = $(button).parents('tr').find('td:eq(1)').text().trim();
+
+        console.log(nombreLinea)
         let estado = (estadoLinea == "Activo") ? 1 : (estadoLinea == "Inactivo") ? 0 : -1;
         $.ajax({
             type: 'GET',
@@ -12,8 +14,8 @@ $(document).ready(function () {
             success: function (data) {
                 $('#ModalSection').html(data);
 
-                $(this).find('#inputNombreLinea').val(nombreLinea);
-                $(this).find('#inputEstadoLinea').val(estado);
+                $('#modalModificarLinea').find('#inputNombreLinea').val(nombreLinea);
+                $('#modalModificarLinea'   ).find('#inputEstadoLinea').val(estado);
 
                 $('#modalModificarLinea').modal('show');
             }

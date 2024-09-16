@@ -35,6 +35,7 @@
                                 <td>
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
+                                     
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'consultar_semillero')
                                                     <button title="Ver semillero" class="btn iconoModificar p-0"><svg
@@ -103,5 +104,5 @@
     </div>
 @endsection
 @section('scripts')
-    <script src="{{ url('js/lineasInvestigacion.js') }}"></script>
+    <script src="{{ url('js/semilleros.js') }}"></script>
 @endsection
