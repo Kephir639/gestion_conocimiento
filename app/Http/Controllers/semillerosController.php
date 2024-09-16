@@ -5,29 +5,77 @@ namespace App\Http\Controllers;
 use App\Models\Log;
 use App\Models\Semilleros;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class semillerosController extends Controller
 {
-
-    public function crearSemilleros(Request $request)
+    public function showSemilleros(Request $request)
     {
-        // dd($request->controladores);
+        $listaSemilleros = Semilleros::orderBy('id_semillero', 'desc')->paginate('10');
         $controladores = $request->controladores;
-        return view('crearSemilleros', compact('controladores'));
+
+        return view('modals.semilleros.consultarSemilleros', [
+            'listaSemilleros' => $listaSemilleros,
+            'controladores' => $controladores
+        ]);
     }
 
-    public function consultarSemilleros(Request $request)
+    public function showModalRegistrar()
     {
-        $controladores = $request->controladores;
-        $semilleros = Semilleros::paginate('10');
-
-        return view('consultarSemilleros', compact('semilleros','controladores' ));
+        return view('modals.semilleros.crearSemilleros');
     }
 
-    public function showRegistrarSemilleros()
+    public function showModalActualizar()
     {
-        return view('registrarSemilleros')->with(false, 'existe');
+        return view('modals.semilleros.modificarSemilleros');
+    }
+
+    public function showModalValidar()
+    {
+        $sql =
+            "SELECT u.id, u.name, u.apellidos, u.identificacion, u.ficha,
+            u.programa,shu.id_semillero shu.id, s.id_semillero
+            FROM users s, semilleros_investigacion s, semilleros_has_user shu
+            WHERE u.id = shu.id AND shu.id_semillero = s.id_semillero
+            ORDER BY id_SemHasUser DESC";
+        $info_integrantes = DB::select($sql);
+
+        $integrantes = [];
+
+        foreach ($info_integrantes as $integrante) {
+            $id_usuario = $integrante->id;
+
+            if (!isset($integrantes[$id_usuario])) {
+                $integrantes[$id_usuario] = [
+                    'nombre' => $integrante->name,
+                    'apellido' => $integrante->apellidos,
+                    'documento' => $integrante->identificacion,
+                    'ficha' => $integrante->ficha,
+                    'programa_formacion' => $integrante->programa
+                ];
+            }
+        }
+
+        return view('modals.semilleros.modalPendientes', ['integrantes' => $integrantes]);
+    }
+
+    public function validarUsuario(Request $request)
+    {
+        $aceptados = $request->aceptados;
+        $idUsuarios = [];
+        foreach ($aceptados as $aceptado) {
+            $sql = "SELECT id FROM users WHERE identificacion = '" . $aceptados . "' ";
+            $idUsuarios[] = DB::select($sql);
+        }
+
+        foreach ($idUsuarios as $id) {
+            $sql = "UPDATE semilleros_has_user SET estado_shu = 1 WHERE id = '" . $id . "'";
+            DB::update($sql);
+        }
+
+        $alerta = view('alertas.validacionExitosa')->render();
+        return response()->json(['alerta' => $alerta]);
     }
 
     public function registrarSemilleros(Request $request)

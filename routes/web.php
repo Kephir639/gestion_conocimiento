@@ -13,9 +13,7 @@ use Illuminate\Controllers\RegisterController;
 use App\Http\Controllers\semillerosController;
 use App\Http\Controllers\inicioController;
 use App\Http\Controllers\redesController;
-use App\Http\Controllers\gruposController;
-use App\Http\Controllers\centroController;
-use App\Http\Controllers\DepartamentosController;
+use App\Http\Controllers\semillerosController;
 use Illuminate\Support\Facades\Auth;
 
 Route::view('/', 'presentacion')->middleware('filter');
@@ -60,26 +58,18 @@ Route::middleware('auth')->group(function () {
             Route::get('index/lineas/editarLineas', [lineaController::class, 'showModificarLinea']);
             Route::post('index/lineas/actualizarLinea', [lineaController::class, 'actualizarLinea']);
 
-            // Roles
-            Route::get('index/roles/consultar_roles', [rolController::class, 'consultarRol']);
-            Route::get('index/roles/crear_rol', [rolController::class, 'showRegistrarRol']);
-            Route::post('index/roles/registrarRol', [rolController::class, 'registrarRol']);
-            // Route::get('/roles/editarRol/{id}', [rolController::class, 'editarRol']);
-            Route::post('/roles/actualizarRol', [rolController::class, 'actualizarRol']);
+    // Roles
+    Route::get('index/roles/consultar_roles', [rolController::class, 'consultarRol']);
+    Route::get('index/rol/permisoRol', [rolController::class, 'consultarPermiso']);
+    Route::get('index/roles/funciones', [rolController::class, 'consultarFunciones']);
+    Route::get('index/roles/showModalRegistrar', [rolController::class, 'showModalRegistrar']);
+    Route::post('index/roles/registrarRol', [rolController::class, 'registrarRol']);
+    Route::get('index/roles/showModalActualizar', [rolController::class, 'showModalActualizar']);
+    Route::post('/roles/actualizarRol', [rolController::class, 'actualizarRol']);
 
-            //Semilleros
-            Route::get('/index/semilleros/consultar_semilleros', [semillerosController::class, 'consultarSemilleros']);
-            //Route::get('/index/semilleros/crear_semillero', [semillerosController::class, 'crearSemilleros']);
-            //Route::post('/semilleros/registrarSemilleros', [semillerosController::class, 'registrarSemillero']);
-        });
-    });
+    //semilleros
+    Route::get('index/semilleros/consultar_semilleros', [semillerosController::class, 'showSemilleros']);
 });
 
-Route::get('/logout', [AuthLoginController::class, 'logout']);
-Route::get('/register', [RegistroController::class, 'showRegistrationForm'])->middleware('filter');
-
-Route::get('/get-municipios/{departamento_id}', [RegistroController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
-
-//
-
-// Route::view('/register', 'auth/register')->name('register');
+//Registro
+Route::view('/registro', 'registro')->name('registro');
