@@ -31,12 +31,12 @@
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_integrantes" class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="inputIntegrantesSemillero" class="form-label">Integrantes</label>
-                            <select class="form-control" id="inputIntegrantesSemillero" name="integrantes" required>
-                                {{-- @foreach ($usuarios as $usuario)
+                            <label class="form-label">Integrantes</label>
+                            <select id="inputIntegrantesSemillero" name="integrantes[]" required>
+                                @foreach ($usuarios as $usuario)
                                     <option value="{{ $usuario->identificacion }}">{{ $usuario->name }}
                                         {{ $usuario->apellidos }} - {{ $usuario->rol }}</option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                             <span class="errorValidacion"></span>
                         </div>
@@ -61,7 +61,7 @@
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             {{-- A la hora de agregar un campo y que lo dejen vacio
                                 identificar su posicion e ignorar el null que contiene --}}
-                            <label for="inputObjetivosEspecificos" class="form-label">Actividades</label>
+                            <label for="inputObjetivosEspecificos" class="form-label">Objetivos Especificos</label>
                             <div class="campoMultiple">
                                 {{-- En caso de error de validacion, recorrer el array de los divs
                                     de campo multiple y poner el mensaje en el div correspondiente --}}
@@ -72,37 +72,37 @@
                         </div>
                         <div id="div_grupos" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputGrupos" class="form-label">Grupos de Investigacion</label>
-                            <select class="form-control" id="inputGrupos" name="grupos" required>
-                                {{-- @foreach ($grupos as $grupo)
+                            <select id="inputGrupos" name="grupos[]" required>
+                                @foreach ($grupos as $grupo)
                                     <option value="{{ $grupo->id }}">{{ $grupo->nombre_grupo }}</option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_lineas" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputLineas" class="form-label">Lineas de Investigacion</label>
-                            <select class="form-control" id="inputLineas" name="lineas" required>
-                                {{-- @foreach ($lineas as $linea)
+                            <select id="inputLineas" name="lineas[]" required>
+                                @foreach ($lineas as $linea)
                                     <option value="{{ $linea->id }}">{{ $linea->nombre_linea }}</option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_programas" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputProgramas" class="form-label">Programas de Formacion</label>
-                            <select class="form-control" id="inputProgramas" name="progamas" required>
-                                {{-- @foreach ($programas as $programa)
+                            <select id="inputProgramas" name="progamas[]" required>
+                                @foreach ($programas as $programa)
                                     <option value="{{ $programa->id }}">{{ $programa->nombre_programa }}</option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_redes" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputRedes" class="form-label">Redes de Investigacion</label>
-                            <select class="form-control" id="inputRedes" name="redes" required>
-                                {{-- @foreach ($redes as $red)
+                            <select id="inputRedes" name="redes[]" required>
+                                @foreach ($redes as $red)
                                     <option value="{{ $red->id }}">{{ $red->nombre_red }}</option>
-                                @endforeach --}}
+                                @endforeach
                             </select>
                             <span class="errorValidacion"></span>
                         </div>
@@ -122,7 +122,7 @@
                         <div id="div_tareas" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             {{-- A la hora de agregar un campo y que lo dejen vacio
                                 identificar su posicion e ignorar el null que contiene --}}
-                            <label for="inputTareas" class="form-label">Actividades</label>
+                            <label for="inputTareas" class="form-label">Tareas</label>
                             <div class="campoMultiple">
                                 {{-- En caso de error de validacion, recorrer el array de los divs
                                     de campo multiple y poner el mensaje en el div correspondiente --}}
@@ -145,16 +145,14 @@
                         </div>
                         <div id="div_responsables"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            {{-- A la hora de agregar un campo y que lo dejen vacio
-                                identificar su posicion e ignorar el null que contiene --}}
-                            <label for="inputResponsables" class="form-label">Responsables</label>
-                            <div class="campoMultiple">
-                                {{-- En caso de error de validacion, recorrer el array de los divs
-                                    de campo multiple y poner el mensaje en el div correspondiente --}}
-                                <input type="text" class="form-control" id="inputResponsables"
-                                    name="responsables[]" required>
-                                <span class="errorValidacion"></span>
-                            </div>
+                            <label class="form-label">Responsables</label>
+                            <select id="inputResponsables" name="responsables[]" required>
+                                @foreach ($usuarios as $usuario)
+                                    <option value="{{ $usuario->identificacion }}">{{ $usuario->name }}
+                                        {{ $usuario->apellidos }} - {{ $usuario->rol }}</option>
+                                @endforeach
+                            </select>
+                            <span class="errorValidacion"></span>
                         </div>
                         {{-- Input de Frecuencia (fecha inicio y fecha fin) --}}
                         <div id="div_frecuencia"
