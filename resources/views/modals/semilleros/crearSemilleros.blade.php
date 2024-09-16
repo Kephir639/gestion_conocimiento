@@ -106,17 +106,6 @@
                             </select>
                             <span class="errorValidacion"></span>
                         </div>
-                        <div id="div_integrantes"
-                            class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="inputIntegrantes" class="form-label">Integrantes</label>
-                            <select class="form-control" id="inputIntegrantes" name="integrantes" required>
-                                {{-- @foreach ($integrantes as $integrante)
-                                    <option value="{{ $integrante->id }}">{{ $integrante->nombre_integrante }}
-                                    </option>
-                                @endforeach --}}
-                            </select>
-                            <span class="errorValidacion"></span>
-                        </div>
                         <div id="div_actividades"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             {{-- A la hora de agregar un campo y que lo dejen vacio

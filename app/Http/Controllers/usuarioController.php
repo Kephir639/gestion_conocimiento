@@ -267,4 +267,9 @@ class usuarioController extends Controller
         User::where('identificacion', $cedulaUsuario)
             ->update(['id_rol' => $rolAsignado, 'estado_usu' => 1]);
     }
+
+    public function showPerfil()
+    {
+        return view('modals.usuarios.perfilUsuario');
+    }
 }

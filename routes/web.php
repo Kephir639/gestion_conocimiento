@@ -11,6 +11,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\rolController;
 use App\Http\Controllers\redesController;
 use App\Http\Controllers\semillerosController;
+use App\Http\Controllers\usuarioController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -77,6 +78,8 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
 
     Route::get('index/semilleros/showModalValidar', [semillerosController::class, 'showModalValidar']);
     Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
+
+    Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil']);
 });
 
 Route::put('/logout', [AuthLoginController::class, 'logout']);
