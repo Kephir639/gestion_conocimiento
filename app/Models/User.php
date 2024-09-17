@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
 
     protected $fillable = [
+        'id',
         'idRol',
         'name',
         'email',
@@ -54,6 +55,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function getId()
+    {
+        return $this->attributes['id'];
+    }
     // Getters
     public function getIdRolAttribute()
     {
@@ -126,10 +131,15 @@ class User extends Authenticatable
         return $this->attributes['estado_usu'];
     }
 
+    public function setId($id)
+    {
+        $this->attributes['id'] = $id;
+    }
+
     // Setters
     public function setIdRolAttribute($idRol)
     {
-        $this->attributes['id_rol'] = $idRol;
+        $this->attributes['idRol'] = $idRol;
     }
 
     public function setNameAttribute($name)

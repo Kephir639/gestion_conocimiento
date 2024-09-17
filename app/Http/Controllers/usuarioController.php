@@ -6,14 +6,21 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator as Validator;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Departamentos;
+use App\Models\Municipio;
+use App\Models\Tipo_poblacion;
+use App\Models\Genero;
+use App\Models\Cargos;
+use App\Models\Doctorados;
+use App\Models\Maestrias;
+use App\Models\Profesiones;
 
 class usuarioController extends Controller
 {
-
     public function showUsuarios(Request $request)
     {
-        $listaUsuarios = User::orderBy('id', 'desc')->paginate('10');
+        $listaUsuarios = User::orderBy('id', 'desc')->paginate(10);
         $controladores = $request->controladores;
 
         return view('modals.usuario.consultarUsuario', [
@@ -35,108 +42,113 @@ class usuarioController extends Controller
     public function registrarUsuario(Request $request)
     {
         $reglas = [
-            'id_rol' => 'required',
-            'nombres' => 'required|max:30',
+            'idRol' => 'nullable|integer',
+            'name' => 'required|max:30',
             'apellidos' => 'required|max:30',
-            'tipoDocumento' => 'required|gt:0',
-            'identificacion' => 'required|max:11',
-            'id_genero' => 'required|max:15|gt:0',
-            'id_tipo_poblacion' => 'required|max:15|gt:0',
-            'correo' => 'required|email|max:25',
+            'tipo_documento' => 'required|in:CC,TI,CE,Pasaporte,PEP,PPT',
+            'numero_identificacion' => 'required|max:20|unique:users,numero_identificacion',
+            'id_genero' => 'required|integer',
+            'id_tipo' => 'required|integer',
+            'email' => 'required|email|max:255',
             'celular' => 'required|max:15',
-            'departamento' => 'required|gt:0',
-            'id_municipio' => 'required|gt:0',
+            'id_departamento' => 'required|integer',
+            'id_municipio' => 'required|integer',
             'direccion' => 'required',
-            'profesion' => 'required',
-            'maestria' => 'required',
-            'doctorado' => 'required',
-            'id_cargo' => 'required',
-            'id_programa' => 'required',
-            'semillero' => 'required',
-            'contraseña' => 'required|regex:^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$^',
+            'id_cargo' => 'required|integer',
+            'id_profesion' => 'nullable|integer',
+            'id_maestria' => 'nullable|integer',
+            'id_doctorado' => 'nullable|integer',
+            'Nombre_programa' => 'nullable|integer',
+            'ficha' => 'nullable|integer',
+            'semillero_id' => 'nullable|integer',
+            'password' => 'required|max:20'
         ];
 
         $mensajes = [
-            'nombres.required' => 'Este campo es obligatorio',
-            'nombres.max' => 'El campo debe contener maximo 30 caracteres',
+            'name.required' => 'Este campo es obligatorio',
+            'name.max' => 'El campo debe contener máximo 30 caracteres',
             'apellidos.required' => 'Este campo es obligatorio',
-            'apellidos.max' => 'El campo debe contener maximo 30 caracteres',
-            'tipoDocumento.required' => 'Este campo es obligatorio',
-            'tipoDocumento.max' => 'El campo debe de contener maximo 15 caracteres',
-            'identificacion.required' => 'Este campo es obligatorio',
-            'identificacion.max' => 'El campo debe contener maximo 11 caracteres',
+            'apellidos.max' => 'El campo debe contener máximo 30 caracteres',
+            'tipo_documento.required' => 'Este campo es obligatorio',
+            'tipo_documento.in' => 'El tipo de documento no es válido',
+            'numero_identificacion.required' => 'Este campo es obligatorio',
+            'numero_identificacion.max' => 'El campo debe contener máximo 20 caracteres',
+            'numero_identificacion.unique' => 'Este número de identificación ya está registrado',
             'id_genero.required' => 'Este campo es obligatorio',
-            'id_genero.max' => 'El campo debe de contener maximo 15 caracteres',
-            'id_tipo_poblacion.required' => 'Este campo es obligatorio',
-            'id_tipo_poblacion.max' => 'El campo debe de contener maximo 15 caracteres',
-            'correo.required' => 'Este campo es obligatorio',
-            'correo.email' => 'Esta no es una direccion de correo electronico valida',
-            'correo.max' => 'Este campo debe contener maximo 25 caracteres',
+            'id_genero.integer' => 'El campo debe ser un número entero',
+            'id_tipo.required' => 'Este campo es obligatorio',
+            'id_tipo.integer' => 'El campo debe ser un número entero',
+            'email.required' => 'Este campo es obligatorio',
+            'email.email' => 'Esta no es una dirección de correo electrónico válida',
+            'email.max' => 'Este campo debe contener máximo 255 caracteres',
+            'email.unique' => 'Este correo electrónico ya está registrado',
             'celular.required' => 'Este campo es obligatorio',
-            'celular.max' => 'El campo debe de contener maximo 15 caracteres',
-            'departamento.required' => 'Este campo es obligatorio',
+            'celular.max' => 'El campo debe contener máximo 15 caracteres',
+            'id_departamento.required' => 'Este campo es obligatorio',
+            'id_departamento.integer' => 'El campo debe ser un número entero',
             'id_municipio.required' => 'Este campo es obligatorio',
+            'id_municipio.integer' => 'El campo debe ser un número entero',
             'direccion.required' => 'Este campo es obligatorio',
-            'profesion.required' => 'Este campo es obligatorio',
-            'maestria.required' => 'Este campo es obligatorio',
-            'doctorado.required' => 'Este campo es obligatorio',
             'id_cargo.required' => 'Este campo es obligatorio',
-            'id_programa.required' => 'Este campo es obligatorio',
-            'semillero.required' => 'Este campo es obligatorio',
-            'contraseña.required' => 'Este campo es obligatorio',
-            'contraseña.regex' => 'La contraseña debe contener minimo 8 y maximo 15 caracteres:
-                                   * 1 Minuscula
-                                   * 1 Mayuscula
-                                   * 1 Numero Entero
-                                   * 1 Caracter Especial'
+            'id_cargo.integer' => 'El campo debe ser un número entero',
+            'id_profesion.integer' => 'El campo debe ser un número entero',
+            'id_maestria.integer' => 'El campo debe ser un número entero',
+            'id_doctorado.integer' => 'El campo debe ser un número entero',
+            'Nombre_programa.required' => 'Este campo es obligatorio',
+            'ficha.required' => 'Este campo es obligatorio',
+            'ficha.integer' => 'El campo debe ser un número entero',
+            'password.required' => 'Este campo es obligatorio',
+            //'password.regex' => 'La contraseña debe contener mínimo 8 y máximo 15 caracteres: 1 Minúscula, 1 Mayúscula, 1 Número Entero, 1 Carácter Especial'
         ];
 
         $datos = $request->all();
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
-        unset($datos['_token']);
-        unset($datos['controladores']);
-
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $ajax = User::where('identificacion', $datos['documento'])->get();
-            if (count($ajax)) {
+            if (User::where('numero_identificacion', $datos['numero_identificacion'])->exists()) {
                 return view('alertas.repetido')->render();
             } else {
                 $usuario = new User();
+                $usuario->idRol = 0;
+                $usuario->name = $request->name;
+                $usuario->apellidos = $request->apellidos;
+                $usuario->tipo_documento = $request->tipo_documento;
+                $usuario->numero_identificacion = $request->numero_identificacion;
+                $usuario->id_genero = $request->id_genero;
+                $usuario->id_tipo = $request->id_tipo;
+                $usuario->email = $request->email;
+                $usuario->celular = $request->celular;
+                $usuario->id_departamento = $request->id_departamento;
+                $usuario->id_municipio = $request->id_municipio;
+                $usuario->direccion = $request->direccion;
+                $usuario->id_cargo = $request->id_cargo;
+                $usuario->id_profesion = $request->id_profesion;
+                $usuario->id_maestria = $request->id_maestria;
+                $usuario->id_doctorado = $request->id_doctorado;
+                $usuario->Nombre_programa = $request->Nombre_programa;
+                $usuario->ficha = $request->ficha;
+                $usuario->semillero_id = $request->semillero_id;
+                $usuario->password = Hash::make($request->password);
+                $usuario->estado_usu = in_array($request->id_cargo, ['Aprendiz', 'Dinamizador SENNOVA', 'Auditor']) ? 1 : 0;
 
-                $contra = Hash::make($request->contraseña);
-                $cargo = $request->cargo;
+                $usuario->save();
 
-                $usuario->setNameAttribute($request->nombres);
-                ($cargo == 'Aprendiz') ? ($usuario->setIdRolAttribute(2)) : (($cargo == 'Dinamizador SENNOVA') ? ($usuario->setIdRolAttribute(7)) : (($cargo == 'Auditor') ? ($usuario->setIdRolAttribute(9)) : null));
-                $usuario->setIdRolAttribute(null);
-                $usuario->setApellidoAttribute($request->apellidos);
-                $usuario->setIdentificacionAttribute($request->identificacion);
-                $usuario->setIdGeneroAttribute($request->genero);
-                $usuario->setIdTipoPoblacionAttribute($request->tipoPoblacion);
-                $usuario->setEmailAttribute($request->correo);
-                $usuario->setCelularAttribute($request->celular);
-                $usuario->setIdMunicipioAttribute($request->municipio);
-                $usuario->setDireccionAttribute($request->direccion);
-                $usuario->setIdCargoAttribute($request->cargo);
-                $usuario->setIdProgramaAttribute($request->programa);
-                ($cargo == 'Aprendiz' || $cargo == 'Dinamizador SENNOVA' || $cargo == 'Auditor') ? ($usuario->setEstadoUsuAttribute(1)) : ($usuario->setEstadoUsuAttribute(0));
-                $usuario->setPasswordAttribute($contra);
-
-                $registro = User::create($usuario->toArray());
-
-                foreach ($request->semilleros as $semillero) {
-                    $sql = "INSERT INTO semilleros_has_user (id, id_semillero) VALUES ('" . $registro->id . "','" . $semillero . "')";
-                    DB::insert($sql);
+                if ($request->has('semilleros')) {
+                    foreach ($request->semilleros as $semillero) {
+                        DB::table('semilleros_has_user')->insert([
+                            'id_user' => $usuario->id,
+                            'id_semillero' => $semillero
+                        ]);
+                    }
                 }
 
-                $listausuarios = User::orderBy('id', 'desc')->paginate('10');
+                $listausuarios = User::orderBy('id', 'desc')->paginate(10);
                 $controladores = $request->controladores;
 
                 $tabla = view('modals.usuarios.tablaUsuario', [
-                    'listaRedes' => $listausuarios,
+                    'listaUsuarios' => $listausuarios,
                     'controladores' => $controladores
                 ])->render();
 
@@ -149,105 +161,21 @@ class usuarioController extends Controller
             }
         }
     }
-
-    public function actualizarUsuario(Request $request)
+    public function showRegistrationForm()
     {
+        $departamentos = Departamentos::all();
+        $municipios = Municipio::all();
+        $tipo_poblaciones = Tipo_poblacion::all();
+        $generos = Genero::all();
+        $cargos = Cargos::all();
+        $profesiones = Profesiones::all();
+        $maestrias = Maestrias::all();
+        $doctorados = Doctorados::all();
 
-        $reglas = [
-            'id_rol' => 'required',
-            'nombres' => 'required|max:30',
-            'apellidos' => 'required|max:30',
-            'tipoDocumento' => 'required|gt:0',
-            'identificacion' => 'required|max:11',
-            'id_genero' => 'required|gt:0',
-            'id_tipo_poblacion' => 'required|gt:0',
-            'correo' => 'required|email|max:25',
-            'celular' => 'required|max:15',
-            'departamento' => 'required',
-            'id_municipio' => 'required',
-            'direccion' => 'required',
-            'profesion' => 'required',
-            'maestria' => 'required',
-            'doctorado' => 'required',
-            'id_cargo' => 'required',
-            'id_programa' => 'required',
-            'semillero' => 'required',
-            'contraseña' => 'required|regex:^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$^',
-        ];
-
-        $mensajes = [
-            'nombres.required' => 'Este campo es obligatorio',
-            'nombres.max' => 'El campo debe contener maximo 30 caracteres',
-            'apellidos.required' => 'Este campo es obligatorio',
-            'apellidos.max' => 'El campo debe contener maximo 30 caracteres',
-            'tipoDocumento.required' => 'Este campo es obligatorio',
-            'tipoDocumento.max' => 'El campo debe de contener maximo 15 caracteres',
-            'identificacion.required' => 'Este campo es obligatorio',
-            'identificacion.max' => 'El campo debe contener maximo 11 caracteres',
-            'id_genero.required' => 'Este campo es obligatorio',
-            'id_genero.max' => 'El campo debe de contener maximo 15 caracteres',
-            'id_tipo_poblacion.required' => 'Este campo es obligatorio',
-            'id_tipo_poblacion.max' => 'El campo debe de contener maximo 15 caracteres',
-            'correo.required' => 'Este campo es obligatorio',
-            'correo.email' => 'Esta no es una direccion de correo electronico valida',
-            'correo.max' => 'Este campo debe contener maximo 25 caracteres',
-            'celular.required' => 'Este campo es obligatorio',
-            'celular.max' => 'El campo debe de contener maximo 15 caracteres',
-            'departamento.required' => 'Este campo es obligatorio',
-            'id_municipio.required' => 'Este campo es obligatorio',
-            'direccion.required' => 'Este campo es obligatorio',
-            'profesion.required' => 'Este campo es obligatorio',
-            'maestria.required' => 'Este campo es obligatorio',
-            'doctorado.required' => 'Este campo es obligatorio',
-            'id_cargo.required' => 'Este campo es obligatorio',
-            'id_programa.required' => 'Este campo es obligatorio',
-            'semillero.required' => 'Este campo es obligatorio',
-            'contraseña.required' => 'Este campo es obligatorio',
-            'contraseña.regex' => 'La contraseña debe contener minimo 8 y maximo 15 caracteres:
-                                    1 Minuscula
-                                    1 Mayuscula
-                                    1 Numero Entero
-                                    1 Caracter Especial'
-        ];
-
-        $datos = $request->all();
-        $validacion = Validator::make($datos, $reglas, $mensajes);
-
-        unset($datos['_token']);
-        unset($datos['controladores']);
-
-        if ($validacion->fails()) {
-            return response()->json(['errors' => $validacion->errors()], 422);
-        } else {
-            $ajax = User::where('identificacion', $datos['documento'])->get();
-            if (count($ajax)) {
-                return view('alertas.repetido')->render();
-            } else {
-                $usuario = new User();
-
-                $contra = Hash::make($request->contraseña);
-
-                $usuario->setNameAttribute($request->nombres);
-                $usuario->setApellidoAttribute($request->apellidos);
-                $usuario->setIdentificacionAttribute($request->identificacion);
-                $usuario->setIdGeneroAttribute($request->genero);
-                $usuario->setIdTipoPoblacionAttribute($request->tipoPoblacion);
-                $usuario->setEmailAttribute($request->correo);
-                $usuario->setCelularAttribute($request->celular);
-                $usuario->setIdMunicipioAttribute($request->municipio);
-                $usuario->setDireccionAttribute($request->direccion);
-                $usuario->setIdCargoAttribute($request->cargo);
-                $usuario->setIdProgramaAttribute($request->programa);
-                $usuario->setPasswordAttribute($contra);
-
-                User::where('identificacion', $request->identificacion_old)->update($usuario->toArray());
-
-                return view('alertas.modifcarExitoso')->render();
-            }
-        }
+        return view('Auth.register', compact('departamentos', 'municipios', 'tipo_poblaciones', 'generos', 'cargos', 'profesiones', 'maestrias', 'doctorados'));
     }
 
-    public function showAsignarRol(Request $request)
+    public function getMunicipiosByDepartamento(Request $request)
     {
         $usuariosPendientes = User::orderBy('id', 'desc')->where('idRol', null)->paginate('10');
         $notificaciones = $request->notificaciones;

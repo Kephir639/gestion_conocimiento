@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController as AuthLoginController;
-use App\Http\Controllers\Auth\RegistroController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\cargoController;
 use App\Http\Controllers\centroController;
 use App\Http\Controllers\gruposController;
@@ -91,10 +91,11 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
 
 
 Route::get('/logout', [AuthLoginController::class, 'logout']);
-Route::get('/register', [RegistroController::class, 'showRegistrationForm'])->middleware('filter');
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->middleware('filter');
 
-Route::get('/get-municipios/{departamento_id}', [RegistroController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->middleware('filter');
+Route::post('/registrarUsuario', [usuarioController::class, 'registrarUsuario'])->middleware('filter');
 
-//
-
-// Route::view('/register', 'auth/register')->name('register');
+Route::get('/get-municipios/{departamento_id}', [RegisterController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
+//Registro
+Route::view('/registro', 'registro')->name('registro');
