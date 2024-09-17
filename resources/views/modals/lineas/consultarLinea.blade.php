@@ -2,6 +2,7 @@
 @section('title', 'Lineas de invesitigacion')
 @push('styles')
     <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
+    <link rel="stylesheet" href="{{ url('css/lineas.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">
@@ -18,11 +19,11 @@
                     <tbody id="tablebody_lineas">
                         @foreach ($listaLineas as $lineas)
                             <tr>
-                                <td>{{ $lineas->nombre_grupo }}</td>
+                                <td>{{ $lineas->nombre_linea }}</td>
                                 <td>
-                                    @if ($lineas->estado_gurpo == 1)
+                                    @if ($lineas->estado_linea == 1)
                                         Activo
-                                    @elseif ($lineas->estado_grupo == 0)
+                                    @elseif ($lineas->estado_linea == 0)
                                         Inactivo
                                     @endif
                                 </td>
@@ -63,6 +64,13 @@
                 @endif
             @endforeach
             <div id="ModalSection"></div>
+        </div>
+        <div class="col-12">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {{ $listaLineas->links('pagination::bootstrap-5') }}
+                </ul>
+            </nav>
         </div>
     </div>
 @endsection

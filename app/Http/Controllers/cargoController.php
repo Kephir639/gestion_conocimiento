@@ -17,7 +17,7 @@ class cargoController extends Controller
     {
         $sql = "SELECT nombre_cargo, estado FROM cargos";
 
-        $cargos = Cargo::orderBy('id_cargo', 'desc')->paginate(10);
+        $cargos = Cargo::orderBy('id_cargo', 'desc')->paginate(2);
         $controladores = $request->controladores;
         $notificaciones = $request->notificaciones;
         return view('modals.cargo.consultarCargos', compact('cargos', 'controladores', 'notificaciones'));

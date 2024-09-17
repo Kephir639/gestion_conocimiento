@@ -14,11 +14,12 @@ class RedesController extends Controller
 
     public function showRedes(Request $request)
     {
-        $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('10');
+        $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('5');
         $controladores = $request->controladores;
         $usuariosPendientes = $request->usuariosPendientes;
+        $notificaciones = $request->notificaciones;
         // dd($request);
-        return view('modals.redes.consultarRedes', compact('listaRedes', 'controladores', 'usuariosPendientes'));
+        return view('modals.redes.consultarRedes', compact('listaRedes', 'controladores', 'usuariosPendientes', 'notificaciones'));
     }
 
     public function showModalRegistrar()

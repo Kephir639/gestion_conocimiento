@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Validator;
 
 class lineaController extends Controller
 {
-    public function showLineas()
+    public function showLineas(Request $request)
     {
-        $controladores = request()->controladores;
-        $listaLineas = LineaInvestigacion::paginate('10')->orderBy('id_linea', 'desc');
-
-        return view('modals.lineas.consultarLinea', compact('listaLineas', 'controladores'));
+        $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('5');
+        $controladores = $request->controladores;
+        $notificaciones = $request->notificaciones;
+        return view('modals.lineas.consultarLinea', compact('listaLineas', 'controladores', 'notificaciones'));
     }
 
     public function showModalRegistrar()

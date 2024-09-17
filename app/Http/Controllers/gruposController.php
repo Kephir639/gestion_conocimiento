@@ -14,7 +14,8 @@ class gruposController extends Controller
     {
         $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
         $controladores = $request->controladores;
-        return view('modals.grupos.consultarGrupos', compact('listaGrupos', 'controladores'));
+        $notificaciones = $request->notificaciones;
+        return view('modals.grupos.consultarGrupos', compact('listaGrupos', 'controladores', 'notificaciones'));
     }
 
     public function showModalRegistrar()

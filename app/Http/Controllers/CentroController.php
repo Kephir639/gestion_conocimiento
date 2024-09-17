@@ -12,10 +12,10 @@ class centroController extends Controller
 {
     public function showCentros(Request $request)
     {
-        $listaCentros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('10');
+        $listaCentros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('5');
         $controladores = $request->controladores;
-
-        return view('modals.centros.consultarCentros', compact('listaCentros', 'controladores'));
+        $notificaciones = $request->notificaciones;
+        return view('modals.centros.consultarCentros', compact('notificaciones', 'listaCentros', 'controladores'));
     }
 
     public function showModalRegistrar()
