@@ -28,8 +28,7 @@
                 <ul class="list-unstyled mb-0 ml-0 pl-0 flex-grow-1">
                     <div class="d-flex align-items-center justify-content-end p-3 pe-1">
                         <li class="sidebar-header">
-                            {{-- Administrador --}}
-                            {{-- {{ $rol_usuario }} --}}
+
                             <button class="btn btnToggler p-2 mr-1" id="sidebar-toggle-close" type="button">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="iconoToggler toggler-sidebar"
                                     viewBox="0 0 24 24">
@@ -47,28 +46,18 @@
                             Inicio
                         </a>
                     </li>
-                    @foreach ($controladores as $controlador => $contr)
-                        {{-- {{ dd($contr) }} --}}
-                        <li class="sidebar-item">
-                            <a href="/index/{{ $contr['nombre_controlador'] }}/consultar_{{ $contr['nombre_controlador'] }}"
-                                id="tab_{{ $contr['nombre_controlador'] }}"
-                                class="sidebar-tabb sidebar-link collapsed px-3 py-2" {{-- data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse" --}}
-                                aria-expanded="false">{!! html_entity_decode($contr['icono']) !!}{{ $contr['display_controlador'] }}
-                            </a>
-                            {{-- <ul id="{{ $contr['nombre_controlador'] }}" class="sidebar-dropdown list-unstyled collapse"
-                                data-bs-target="#sidebar">
-                                @foreach ($contr['funciones'] as $funcion => $func)
-                                    @if (!Str::contains($func['display_funcion'], 'Modificar'))
-                                        <li>
-                                            <a href="/index/{{ $contr['nombre_controlador'] }}/{{ $func['nombre_funcion'] }}"
-                                                class="sidebar-tabb-drop sidebar-link text-center p-2">
-                                                {{ $func['display_funcion'] }}
-                                            </a>
-                                        </li>
-                                    @endif
-                                @endforeach
-                            </ul> --}}
-                        </li>
+                    @foreach ($controladores as $controlador)
+                        @foreach ($controlador['funciones'] as $func)
+                            @if (Str::contains($func['nombre_funcion'], 'consultar'))
+                                <li class="sidebar-item">
+                                    <a href="/index/{{ $controlador['nombre_controlador'] }}/{{ $func['nombre_funcion'] }}"
+                                        id="tab_{{ $controlador['nombre_controlador'] }}"
+                                        class="sidebar-tabb sidebar-link collapsed px-3 py-2" {{-- data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse" --}}
+                                        aria-expanded="false">{!! html_entity_decode($controlador['icono']) !!}{{ $controlador['display_controlador'] }}
+                                    </a>
+                                </li>
+                            @endif
+                        @endforeach
                     @endforeach
                 </ul><br>
             </div>
@@ -112,8 +101,8 @@
                         <li>
                             <hr class="dropdown divider division my-1">
                         </li>
-                        <li class="navbar-item"><a href="#"
-                                class="dropdown-item item-perfil w-100 text-center">Perfil</a>
+                        <li class="navbar-item"><a href="/index/user/view_profile"
+                                class="dropdown-item item-perfil w-100 text-center">Ver perfil</a>
                         </li>
                         <li id="logoutBtn" class="navbar-item"><a href="/logout"
                                 class="dropdown-item item-perfil w-100 text-center">Cerrrar
@@ -131,7 +120,6 @@
                 <div class="cuadradoVistas">
                     @yield('content')
                 </div>
-
             </div>
         </div>
     </div>

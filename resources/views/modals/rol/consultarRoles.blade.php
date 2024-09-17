@@ -76,6 +76,7 @@
 @endsection
 
 {{-- @extends('layouts.plantillaIndex')
+
 @section('title', 'Inicio')
 @section('content')
     <div class="cuadradoVistas">

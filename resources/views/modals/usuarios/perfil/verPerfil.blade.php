@@ -1,26 +1,27 @@
-@extends('layouts.plantillaPresentacion')
+@extends('layouts.plantillaIndex')
 
-@section('title', 'Registro Usuario')
+@section('title', 'Perfil Usuario')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ url('css/registro.css') }}">
 @endpush
 
 @section('content')
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Registro de Usuario</h2>
+    <div class="container mt-2">
+        <h2 class="text-center mb-4">Perfil de Usuario</h2>
         <hr>
-        <form action="{{ url('/registrarUsuario') }}" method="POST" class="needs-validation" novalidate>
+        <form action="{{ url('index/user/change_profile') }}" method="POST">
             @csrf
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for=name" class="form-label">Nombres</label>
-                    <input type="text" class="form-control" id=name" name="name" required>
+                    <input type="text" class="form-control" id=name" name="name" value="{{ Auth::user()->name }}"
+                        required>
                     <div class="invalid-feedback">Por favor, ingrese sus nombres.</div>
                 </div>
                 <div class="col-md-6">
                     <label for="apellidos" class="form-label">Apellidos</label>
-                    <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos"
+                        value="{{ Auth::user()->apellidos }}" required>
                     <div class="invalid-feedback">Por favor, ingrese sus apellidos.</div>
                 </div>
             </div>
@@ -28,20 +29,26 @@
                 <div class="col-md-6">
                     <label for="tipo_documento" class="form-label">Tipo de Documento</label>
                     <select class="form-select" id="tipo_documento" name="tipo_documento" required>
-                        <option value="" selected>Seleccione...</option>
-                        <option value="CC">Cédula de Ciudadanía</option>
-                        <option value="TI">Tarjeta de Identidad</option>
-                        <option value="CE">Cédula de Extranjería</option>
-                        <option value="PS">Pasaporte</option>
-                        <option value="PEP">Permiso Especial de Permanencia (PEP)</option>
-                        <option value="PPT">Permiso por Protección Temporal (PPT)</option>
+                        <option value="-1" selected>Seleccione...</option>
+                        <option value="CC" {{ Auth::user()->tipo_documento == 'CC' ? 'selected' : null }}>Cédula de
+                            Ciudadanía</option>
+                        <option value="TI" {{ Auth::user()->tipo_documento == 'TI' ? 'selected' : null }}>Tarjeta de
+                            Identidad</option>
+                        <option value="CE" {{ Auth::user()->tipo_documento == 'CE' ? 'selected' : null }}>Cédula de
+                            Extranjería</option>
+                        <option value="PS" {{ Auth::user()->tipo_documento == 'PS' ? 'selected' : null }}>Pasaporte
+                        </option>
+                        <option value="PEP" {{ Auth::user()->tipo_documento == 'PEP' ? 'selected' : null }}>Permiso
+                            Especial de Permanencia (PEP)</option>
+                        <option value="PPT" {{ Auth::user()->tipo_documento == 'PPT' ? 'selected' : null }}>Permiso por
+                            Protección Temporal (PPT)</option>
                     </select>
                     <div class="invalid-feedback">Por favor, seleccione un tipo de documento.</div>
                 </div>
                 <div class="col-md-6">
                     <label for="numero_identificacion" class="form-label">Número de Identificación</label>
                     <input type="text" class="form-control" id="numero_identificacion" name="numero_identificacion"
-                        required>
+                        value="{{ Auth::user()->identificacion }}" required>
                     <div class="invalid-feedback">Por favor, ingrese su número de identificación.</div>
                 </div>
             </div>
@@ -51,7 +58,9 @@
                     <select class="form-control" id="genero" name="id_genero" required>
                         <option value="" selected>Seleccione...</option>
                         @foreach ($generos as $genero)
-                            <option value="{{ $genero->id_genero }}">{{ $genero->genero }}</option>
+                            <option value="{{ $genero->id_genero }}"
+                                {{ Auth::user()->id_genero == $genero->id_genero ? 'selected' : null }}>
+                                {{ $genero->genero }}</option>
                         @endforeach
                     </select>
                     <div class="invalid-feedback">Por favor, seleccione su género.</div>
@@ -62,7 +71,9 @@
                     <select class="form-control" id="tipo_poblacion" name="id_tipo" required>
                         <option value="" selected>Seleccione...</option>
                         @foreach ($tipo_poblaciones as $tipo_poblacion)
-                            <option value="{{ $tipo_poblacion->id_tipo }}">{{ $tipo_poblacion->tipo_poblacion }}</option>
+                            <option value="{{ $tipo_poblacion->id_tipo_poblacion }}"
+                                {{ Auth::user()->id_tipo_poblacion == $tipo_poblacion->id_tipo_poblacion ? 'selected' : null }}>
+                                {{ $tipo_poblacion->tipo_poblacion }}</option>
                         @endforeach
                     </select>
                     <div class="invalid-feedback">Por favor, seleccione su tipo de población.</div>
@@ -74,14 +85,16 @@
                 <div class="col-md-6">
                     <label for="email" class="form-label">Correo</label>
                     <div class="input-group">
-                        <input type="email" class="form-control" id="email" name="email" required>
+                        <input type="email" class="form-control" id="email" name="email"
+                            value="{{ Auth::user()->email }}" required>
                         {{-- <span class="input-group-text">@sena.com</span> --}}
                     </div>
                     <div class="invalid-feedback">Por favor, ingrese un correo válido.</div>
                 </div>
                 <div class="col-md-6">
                     <label for="celular" class="form-label">Celular</label>
-                    <input type="text" class="form-control" id="celular" name="celular" required>
+                    <input type="text" class="form-control" id="celular" name="celular"
+                        value="{{ Auth::user()->celular }}" required>
                     <div class="invalid-feedback">Por favor, ingrese su número de celular.</div>
                 </div>
             </div>
@@ -91,7 +104,10 @@
                     <select class="form-select" id="departamento" name="id_departamento" required>
                         <option value="" selected>Seleccione...</option>
                         @foreach ($departamentos as $departamento)
-                            <option value="{{ $departamento->id_departamento }}">{{ $departamento->departamento }}</option>
+                            <option value="{{ $departamento->id_departamento }}"
+                                {{ Auth::user()->id_departamento == $departamento->id_departamento ? 'selected' : null }}>
+                                {{ $departamento->departamento }}
+                            </option>
                         @endforeach
                     </select>
                     <div class="invalid-feedback">Por favor, seleccione un departamento.</div>
@@ -111,7 +127,8 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <label for="direccion" class="form-label">Dirección</label>
-                    <input type="text" class="form-control" id="direccion" name="direccion" required>
+                    <input type="text" class="form-control" id="direccion" name="direccion"
+                        value="{{ Auth::user()->direccion }}" required>
                     <div class="invalid-feedback">Por favor, ingrese su dirección.</div>
                 </div>
             </div>
@@ -121,7 +138,9 @@
                     <select class="form-select" id="cargo" name="id_cargo" required>
                         <option value="" selected>Seleccione...</option>
                         @foreach ($cargos as $cargo)
-                            <option value="{{ $cargo->id_cargo }}">{{ $cargo->nombre_cargo }}</option>
+                            <option value="{{ $cargo->id_cargo }}"
+                                {{ Auth::user()->id_cargo == $cargo->id_cargo ? 'selected' : null }}>
+                                {{ $cargo->nombre_cargo }}</option>
                         @endforeach
                     </select>
                     <div class="invalid-feedback">Por favor, seleccione un cargo.</div>
@@ -134,7 +153,9 @@
                     <select class="form-select" id="profesion" name="id_profesion">
                         <option value="" selected>Seleccione...</option>
                         @foreach ($profesiones as $profesion)
-                            <option value="{{ $profesion->id_profesiones }}">{{ $profesion->nombre_profesion }}</option>
+                            <option value="{{ $profesion->id_profesiones }}"
+                                {{ Auth::user()->id_profesion == $profesion->id_profesiones ? 'selected' : null }}>
+                                {{ $profesion->nombre_profesion }}</option>
                         @endforeach
                     </select>
                     <div class="invalid-feedback">Por favor, seleccione una profesión.</div>
@@ -144,7 +165,9 @@
                     <select class="form-select" id="maestria" name="id_maestria">
                         <option value="" selected>Seleccione...</option>
                         @foreach ($maestrias as $maestria)
-                            <option value="{{ $maestria->id_maestria }}">{{ $maestria->nombre_maestria }}</option>
+                            <option value="{{ $maestria->id_maestria }}"
+                                {{ Auth::user()->id_maestria == $maestria->id_maestria ? 'selected' : null }}>
+                                {{ $maestria->nombre_maestria }}</option>
                         @endforeach
                     </select>
                     <div class="invalid-feedback">Por favor, seleccione una maestría.</div>
@@ -154,7 +177,9 @@
                     <select class="form-select" id="doctorado" name="id_doctorado">
                         <option value="" selected>Seleccione...</option>
                         @foreach ($doctorados as $doctorado)
-                            <option value="{{ $doctorado->id_doctorado }}">{{ $doctorado->nombre_doctorado }}</option>
+                            <option value="{{ $doctorado->id_doctorado }}"
+                                {{ Auth::user()->id_doctorado == $doctorado->id_doctorado ? 'selected' : null }}>
+                                {{ $doctorado->nombre_doctorado }}</option>
                         @endforeach
                     </select>
                     <div class="invalid-feedback">Por favor, seleccione un doctorado.</div>
@@ -165,12 +190,14 @@
             <div class="row mb-3" id="aprendizFields" style="display: none;">
                 <div class="col-md-6">
                     <label for="Nombre_programa" class="form-label">Nombre del Programa</label>
-                    <input type="text" class="form-control" id="Nombre_programa" name="Nombre_programa">
+                    <input type="text" class="form-control" id="Nombre_programa" name="Nombre_programa"
+                        value="{{ Auth::user()->nombre_programa }}">
                     <div class="invalid-feedback">Por favor, ingrese el nombre del programa</div>
                 </div>
                 <div class="col-md-6">
                     <label for="ficha" class="form-label">Número de ficha</label>
-                    <input type="text" class="form-control" id="ficha" name="ficha">
+                    <input type="text" class="form-control" id="ficha" name="ficha"
+                        value="{{ Auth::user()->ficha }}">
                     <div class="invalid-feedback">Por favor, ingrese el número de la ficha</div>
                 </div>
                 <div class="col-md-6">
@@ -188,7 +215,8 @@
                 <div class="col-md-6">
                     <label for="password" class="form-label">password</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="password" name="password" required>
+                        <input type="password" class="form-control" id="password" name="password"
+                            value="{{ Auth::user()->password }}" required>
                         <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                             <i class="fa fa-eye"></i>
                         </button>
@@ -208,41 +236,4 @@
             </div>
         </form>
     </div>
-
-    <script>
-        // Validación personalizada de Bootstrap
-        (function() {
-            'use strict'
-            var forms = document.querySelectorAll('.needs-validation')
-            Array.prototype.slice.call(forms)
-                .forEach(function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
-                        }
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-        })()
-    </script>
-
-
-    <script>
-        document.getElementById('togglePassword').addEventListener('click', function(e) {
-            const passwordInput = document.getElementById('password');
-            const icon = this.querySelector('i');
-
-            // Cambia el tipo de input entre 'password' y 'text'
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
-    </script>
 @endsection
