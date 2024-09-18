@@ -81,6 +81,7 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
     //Usuarios
     Route::get('index/user/view_profile', [usuarioController::class, 'showPerfil']);
+    Route::post('index/user/change_profile', [usuarioController::class, 'actualizarPerfil']);
 });
 
 Route::get('logout', [AuthLoginController::class, 'logout']);

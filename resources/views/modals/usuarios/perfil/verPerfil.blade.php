@@ -29,7 +29,7 @@
                 <div class="col-md-6">
                     <label for="tipo_documento" class="form-label">Tipo de Documento</label>
                     <select class="form-select" id="tipo_documento" name="tipo_documento" required>
-                        <option value="-1" selected>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         <option value="CC" {{ Auth::user()->tipo_documento == 'CC' ? 'selected' : null }}>Cédula de
                             Ciudadanía</option>
                         <option value="TI" {{ Auth::user()->tipo_documento == 'TI' ? 'selected' : null }}>Tarjeta de
@@ -56,7 +56,7 @@
                 <div class="col-md-6">
                     <label for="genero" class="form-label">Género</label>
                     <select class="form-control" id="genero" name="id_genero" required>
-                        <option value="" selected>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         @foreach ($generos as $genero)
                             <option value="{{ $genero->id_genero }}"
                                 {{ Auth::user()->id_genero == $genero->id_genero ? 'selected' : null }}>
@@ -69,7 +69,7 @@
                 <div class="col-md-6">
                     <label for="tipo_poblacion" class="form-label">Tipo de Población</label>
                     <select class="form-control" id="tipo_poblacion" name="id_tipo" required>
-                        <option value="" selected>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         @foreach ($tipo_poblaciones as $tipo_poblacion)
                             <option value="{{ $tipo_poblacion->id_tipo_poblacion }}"
                                 {{ Auth::user()->id_tipo_poblacion == $tipo_poblacion->id_tipo_poblacion ? 'selected' : null }}>
@@ -102,7 +102,7 @@
                 <div class="col-md-6">
                     <label for="departamento" class="form-label">Departamento</label>
                     <select class="form-select" id="departamento" name="id_departamento" required>
-                        <option value="" selected>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         @foreach ($departamentos as $departamento)
                             <option value="{{ $departamento->id_departamento }}"
                                 {{ Auth::user()->id_departamento == $departamento->id_departamento ? 'selected' : null }}>
@@ -117,7 +117,7 @@
                     <label for="municipio" class="form-label">Municipio</label>
                     <select class="form-select" id="municipio" name="id_municipio" required>
 
-                        <option value="" selected>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         <!-- Los municipios se cargarán dinámicamente aquí -->
                     </select>
                     <div class="invalid-feedback">Por favor, seleccione un municipio.</div>
@@ -136,7 +136,7 @@
                 <div class="col-md-12">
                     <label for="cargo" class="form-label">Cargo</label>
                     <select class="form-select" id="cargo" name="id_cargo" required>
-                        <option value="" selected>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         @foreach ($cargos as $cargo)
                             <option value="{{ $cargo->id_cargo }}"
                                 {{ Auth::user()->id_cargo == $cargo->id_cargo ? 'selected' : null }}>
@@ -151,7 +151,7 @@
                 <div class="col-md-4">
                     <label for="profesion" class="form-label">Profesión</label>
                     <select class="form-select" id="profesion" name="id_profesion">
-                        <option value="" selected>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         @foreach ($profesiones as $profesion)
                             <option value="{{ $profesion->id_profesiones }}"
                                 {{ Auth::user()->id_profesion == $profesion->id_profesiones ? 'selected' : null }}>
@@ -163,7 +163,7 @@
                 <div class="col-md-4">
                     <label for="maestria" class="form-label">Maestría</label>
                     <select class="form-select" id="maestria" name="id_maestria">
-                        <option value="" selected>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         @foreach ($maestrias as $maestria)
                             <option value="{{ $maestria->id_maestria }}"
                                 {{ Auth::user()->id_maestria == $maestria->id_maestria ? 'selected' : null }}>
@@ -175,7 +175,7 @@
                 <div class="col-md-4">
                     <label for="doctorado" class="form-label">Doctorado</label>
                     <select class="form-select" id="doctorado" name="id_doctorado">
-                        <option value="" selected>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         @foreach ($doctorados as $doctorado)
                             <option value="{{ $doctorado->id_doctorado }}"
                                 {{ Auth::user()->id_doctorado == $doctorado->id_doctorado ? 'selected' : null }}>
@@ -203,7 +203,7 @@
                 <div class="col-md-6">
                     <label for="semillero" class="form-label">Semillero de Investigación</label>
                     <select class="form-select" id="semillero" name="semillero">
-                        <option value="" selected>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         {{-- @foreach ($semilleros as $semillero)
                             <option value="{{ $semillero->id }}">{{ $semillero->nombre }}</option>
                         @endforeach --}}
@@ -223,17 +223,16 @@
                     </div>
                     <div class="invalid-feedback">Por favor, ingrese su password.</div>
                 </div>
-
-                {{-- <div class="col-md-6">
-                    <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
-                    <input type="password" class="form-control" id="contraseña_confirmation"
-                        name="contraseña_confirmation" required>
-                    <div class="invalid-feedback">Por favor, confirme su contraseña.</div>
-                </div> --}}
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-lg mt-3">Registrar</button>
+                <button id="btnHabilitar">Habilitar Campos</button>
+                <button type="submit" class="btn btn-primary btn-lg mt-3">Guardar Cambios</button>
             </div>
         </form>
     </div>
+
 @endsection
+
+@push()
+    <script src="{{ url('js/perfil.js') }}"></script>
+@endpush
