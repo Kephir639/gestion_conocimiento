@@ -1,59 +1,93 @@
 $(document).ready(function () {
     let button = '';
-
-    // Open modal for modifying Semillero
-    $(document).on('click', '.iconoModificarSemillero', function () {
+    
+    // Método para abrir el modal de editar semillero
+    $('.btnEditarSemillero').on('click', function () {
         button = $(this);
+        let nombreSemillero = $(this).parents('tr').find('td:eq(0)').text().trim();
+        let descripcionSemillero = $(this).parents('tr').find('td:eq(1)').text().trim();
+        let coordinadorSemillero = $(this).parents('tr').find('td:eq(2)').text().trim();
         
-        // Get the values from the selected row in the table
-        let nombreSemillero = $(button).parents('tr').find('td:eq(0)').text().trim();
-        let iniciales = $(button).parents('tr').find('td:eq(1)').text().trim();
-        let liderSemillero = $(button).parents('tr').find('td:eq(2)').text().trim();
+        $.ajax({
+            type: 'GET',
+            url: 'showModalActualizarSemillero',
+            success: function (data) {
+                $('#ModalSection').html(data);
 
-        // Set the values into the modal inputs
-        $('#ModalModificarSemilleros').find('#inputNombreSemillero').val(nombreSemillero);
-        $('#ModalModificarSemilleros').find('#inputIniciales').val(iniciales);
-        $('#ModalModificarSemilleros').find('#inputLider').val(liderSemillero);
+                $('#inputNombreSemillero').val(nombreSemillero);
+                $('#inputDescripcionSemillero').val(descripcionSemillero);
+                $('#inputCoordinadorSemillero').val(coordinadorSemillero);
 
-        // Show the modal
-        $('#ModalModificarSemilleros').modal('show');
+                $('#modalModificarSemillero').modal('show');
+            }
+        });
     });
 
-    // Handle the form submission for updating Semillero
-    $(document).on('click', '#btnActualizarSemillero', function (e) {
-        e.preventDefault();
-        
-        // Get values from the modal inputs
-        let nombre = $('#inputNombreSemillero').val();
-        let iniciales = $('#inputIniciales').val();
-        let lider = $('#inputLider').val();
-        let token = $('#_token').val();
-        
-        // Ajax request to update the Semillero
+    // Método para abrir el modal de registrar semillero
+    $('#BtnRegistrarSemillero').on('click', function () {
+        button = $(this);
         $.ajax({
-            type: 'POST',
-            url: 'actualizarSemillero', // Change this URL to match your backend route
+            type: "GET",
+            url: "showModalRegistrar",
+            success: function (data) {
+                $('#ModalSection').html(data);
+                $('#modalRegistrarSemillero').modal('show');
+            }
+        });
+    });
+
+    // Método para actualizar un semillero
+    $('#formModificarSemillero').submit(function (e) {
+        e.preventDefault();
+        let nombre_old = button.parents('tr').find('td:eq(0)').text().trim();
+
+        let nombre = $('#inputNombreSemillero').val();
+        let descripcion = $('#inputDescripcionSemillero').val();
+        let coordinador = $('#inputCoordinadorSemillero').val();
+        let token = $('#_token').val();
+
+        $.ajax({
+            type: "POST",
+            url: "actualizarSemillero",
             data: {
                 '_token': token,
                 'nombre_semillero': nombre,
-                'iniciales': iniciales,
-                'lider_semillero': lider,
+                'nombre_semillero_old': nombre_old,
+                'descripcion_semillero': descripcion,
+                'coordinador_semillero': coordinador
             },
-            success: function (response) {
-                // Update the table with new values
-                $(button).parents('tr').find('td:eq(0)').text(nombre);
-                $(button).parents('tr').find('td:eq(1)').text(iniciales);
-                $(button).parents('tr').find('td:eq(2)').text(lider);
+            success: function (data) {
+                $('#alertasModificarSemillero').html(data);
+                button.parents('tr').find('td:eq(0)').text(nombre);
+                button.parents('tr').find('td:eq(1)').text(descripcion);
+                button.parents('tr').find('td:eq(2)').text(coordinador);
+            }
+        });
+    });
 
-                // Show success message (can be updated based on the response)
-                $('#alertasModificar').html('<div class="alert alert-success">Semillero actualizado correctamente</div>');
-                
-                // Hide the modal after updating
-                $('#ModalModificarSemilleros').modal('hide');
+    // Método para registrar un nuevo semillero
+    $(document).on ('click','#btnRegistrar',function (e) {
+        e.preventDefault();
+        let nombre = $('#inputNombreSemillero').val();
+        let descripcion = $('#inputDescripcionSemillero').val();
+        let coordinador = $('#inputCoordinadorSemillero').val();
+        let token = $('#_token').val();
+
+        $.ajax({
+            type: "POST",
+            url: "registrarSemillero",
+            data: {
+                '_token': token,
+                'nombre_semillero': nombre,
+                'descripcion_semillero': descripcion,
+                'coordinador_semillero': coordinador
             },
-            error: function (xhr, status, error) {
-                // Handle error response
-                $('#alertasModificar').html('<div class="alert alert-danger">Hubo un error al actualizar el semillero</div>');
+            success: function (data) {
+                // Actualizar la tabla de semilleros
+                $('#tablebody_semilleros').html(data.tabla);
+
+                // Mostrar alerta
+                $('#alertasRegistrarSemillero').html(data.alerta);
             }
         });
     });

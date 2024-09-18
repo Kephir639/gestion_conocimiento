@@ -23,7 +23,7 @@ class semillerosController extends Controller
 
     public function showModalRegistrar()
     {
-        return view('modals.semilleros.crearSemilleros');
+        return view('modals.semilleros.creaSemilleros');
     }
 
     public function showModalActualizar()
@@ -89,8 +89,8 @@ class semillerosController extends Controller
             'objetivo_general' => 'required',
             'objetivos_especificos' => 'required',
             'id_grupo' => 'required',
-            'id_plan' => 'required',
-            'estado' => 'required'
+            // 'id_plan' => 'required',
+            // 'estado' => 'required'
         ];
 
         $mensajes = [
@@ -103,8 +103,8 @@ class semillerosController extends Controller
             'objetivo_general.required' => 'Este campo es obligatorio',
             'objetivos_especificos.required' => 'Este campo es obligatorio',
             'id_grupo.required' => 'Este campo es obligatorio',
-            'id_plan.required' => 'Este campo es obligatorio',
-            'estado.required' => 'Este campo es obligatorio'
+            // 'id_plan.required' => 'Este campo es obligatorio',
+            // 'estado.required' => 'Este campo es obligatorio'
         ];
         $validacion = Validator::make($request, $reglas, $mensajes);
         $datos = $request->all();
@@ -131,8 +131,8 @@ class semillerosController extends Controller
                 $semillero->setObjetivoGeneralAttribute($request->objetivo_general);
                 $semillero->setObjetivosEspecificosAttribute($request->objetivos_especificos);
                 $semillero->setIdGrupoAttribute($request->id_grupo);
-                $semillero->setIdPlanAttribute($request->id_plan);
-                $semillero->setEstadoSemilleroAttribute($request->estado_semillero);
+                // $semillero->setIdPlanAttribute($request->id_plan);
+                // $semillero->setEstadoSemilleroAttribute($request->estado_semillero);
 
                 Semilleros::create($semillero->toArray());
 
