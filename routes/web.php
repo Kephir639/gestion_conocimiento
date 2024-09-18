@@ -87,6 +87,7 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     //Asignar rol
 
     Route::get('index/usuarios/asignar_rol', [usuarioController::class, 'showAsignarRol']);
+    Route::get('index/usuarios/showModalAsignarRol', [usuarioController::class, 'showModalAsignarRol']);
 });
 
 

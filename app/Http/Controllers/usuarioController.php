@@ -195,13 +195,17 @@ class usuarioController extends Controller
 
     public function showAsignarRol(Request $request)
     {
-        $usuariosPendientes = $request->usuariosPendientes;
+        $usuariosPendientes = User::orderBy('id', 'desc')->where('idRol', null)->paginate('10');
         $controladores = $request->controladores;
-        return view('modals.usuarios.asignarRol', compact('usuariosPendientes', 'controladores'));
+        $notificaciones = $request->notificaciones;
+        return view('modals.usuarios.asignarRol', compact('usuariosPendientes', 'controladores', 'notificaciones'));
     }
-
+    public function showModalAsignarRol()
+    {
+        return view('modals.usuarios.modalAsignarRol');
+    }
     public function showPerfil()
     {
-        return view('modals.usuarios.perfilUsuario');
+        return view('modals.usuarios.perfil.verPerfil');
     }
 }
