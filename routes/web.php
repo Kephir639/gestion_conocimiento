@@ -28,11 +28,11 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     Route::get('/index', [inicioController::class, 'index']);
 
     //Redes de Concocimiento
-    Route::get('index/redes/consultar_redes', [redesController::class, 'showRedes']);
+    Route::get('index/redes/consultar_red', [redesController::class, 'showRedes']);
     Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar']);
-    Route::post('index/redes/crear_redes', [redesController::class, 'registrarRed']);
+    Route::post('index/redes/crear_red', [redesController::class, 'registrarRed']);
     Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar']);
-    Route::post('index/redes/actualizar_redes', [redesController::class, 'actualizarRed']);
+    Route::post('index/redes/actualizar_red', [redesController::class, 'actualizarRed']);
 
     //Gurpos de investigacion
     Route::get('index/grupos/consultar_grupos', [gruposController::class, 'showGrupos']);
@@ -63,21 +63,21 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
     Route::post('index/lineas/actualizarLinea', [lineaController::class, 'actualizarLinea']);
 
     // Roles
-    Route::get('index/roles/consultar_roles', [rolController::class, 'consultarRol']);
+    Route::get('index/roles/consultar_rol', [rolController::class, 'consultarRol']);
     Route::get('index/rol/permisoRol', [rolController::class, 'consultarPermiso']);
     Route::get('index/roles/funciones', [rolController::class, 'consultarFunciones']);
     Route::get('index/roles/showModalRegistrar', [rolController::class, 'showModalRegistrar']);
-    Route::post('index/roles/registrarRol', [rolController::class, 'registrarRol']);
+    Route::post('index/roles/crear_rol', [rolController::class, 'registrarRol']);
     Route::get('index/roles/showModalActualizar', [rolController::class, 'showModalActualizar']);
-    Route::post('/roles/actualizarRol', [rolController::class, 'actualizarRol']);
+    Route::post('/roles/actualizar_rol', [rolController::class, 'actualizarRol']);
 
     //semilleros
-    Route::get('index/semilleros/consultar_semilleros', [semillerosController::class, 'showSemilleros']);
+    Route::get('index/semilleros/consultar_semillero', [semillerosController::class, 'showSemilleros']);
     Route::get('index/semilleros/showModalRegistrar', [semillerosController::class, 'showModalRegistrar']);
-    Route::post('index/semilleros/registrarSemilleros', [semillerosController::class, 'registrarSemilleros']);
+    Route::post('index/semilleros/crear_semillero', [semillerosController::class, 'registrarSemilleros']);
     Route::get('index/semilleros/showModalActualizar', [semillerosController::class, 'showModalActualizar']);
-    Route::post('index/semilleros/actualizarSemilleros', [semillerosController::class, 'actualizarSemilleros']);
-
+    Route::post('index/semilleros/actualizar_semillero', [semillerosController::class, 'actualizarSemilleros']);
+    //Semilleros - Validacion
     Route::get('index/semilleros/showModalValidar', [semillerosController::class, 'showModalValidar']);
     Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
     //Auditoría
@@ -92,6 +92,11 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
 
 Route::get('/logout', [AuthLoginController::class, 'logout']);
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->middleware('filter');
+//Usuarios
+Route::get('index/user/view_profile', [usuarioController::class, 'showPerfil']);
+
+
+Route::get('logout', [AuthLoginController::class, 'logout']);
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->middleware('filter');
 Route::post('/registrarUsuario', [usuarioController::class, 'registrarUsuario'])->middleware('filter');

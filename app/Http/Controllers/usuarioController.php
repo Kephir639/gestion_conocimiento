@@ -199,4 +199,9 @@ class usuarioController extends Controller
         $controladores = $request->controladores;
         return view('modals.usuarios.asignarRol', compact('usuariosPendientes', 'controladores'));
     }
+
+    public function showPerfil()
+    {
+        return view('modals.usuarios.perfilUsuario');
+    }
 }

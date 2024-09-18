@@ -89,7 +89,7 @@ class RedesController extends Controller
         }
     }
 
-    public function showModalModificar()
+    public function showModalActualizar()
     {
         return view('modals.redes.modificarRedes');
     }

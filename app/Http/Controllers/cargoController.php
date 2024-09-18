@@ -51,7 +51,7 @@ class cargoController extends Controller
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
-            $ajax = Cargo::where('nombre_cargo', $datos['inputNombreCargo'])->get();
+            $ajax = Cargo::where('nombre_cargo', $datos['nombre_cargo'])->get();
             if (count($ajax)) {
                 return view('alertas.repetido')->render();
             } else {
@@ -72,7 +72,7 @@ class cargoController extends Controller
                 $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
-                $tabla = view('modals.cargo.tablaGrupo', [
+                $tabla = view('modals.cargo.tablaCargo', [
                     'listaCargos' => $listaCargos,
                     'controladores' => $controladores
                 ])->render();
@@ -95,12 +95,13 @@ class cargoController extends Controller
     {
         $reglas = [
             'nombre_cargo' => 'required|max:30',
-            'estado_cargo' => 'required'
+            'estado_cargo' => 'required|gte:0'
         ];
         $mensajes = [
             'nombre_cargo.required' => 'Este campo es obligatorio',
             'nombre_cargo.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_cargo.required' => 'Este campo es obligatorio'
+            'estado_cargo.required' => 'Este campo es obligatorio',
+            'estado_cargo.gte' => 'Seleccione una de las opciones'
         ];
 
         $respuestas = [];
@@ -112,7 +113,10 @@ class cargoController extends Controller
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $ajax = Cargo::where('nombre_cargo', $datos['nombre_cargo'])->get();
+            $ajax = Cargo::where([
+                'nombre_cargo' => $datos['nombre_cargo'],
+                'estado_cargo' => $datos['estado_cargo']
+            ])->get();
             if (count($ajax)) {
                 return view('alertas.repetido');
             } else {
@@ -121,7 +125,7 @@ class cargoController extends Controller
                 $cargo->setNombreCargoAttribute($request->nombre_cargo);
                 $cargo->setEstadoAttribute($request->estado_cargo);
 
-                Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo);
+                Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo->toArray());
 
                 $sql = log_auditoria::createLog(
                     'cargo',

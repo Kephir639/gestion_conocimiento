@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GrupoInvestigacion;
+use App\Models\Integrantes;
+use App\Models\LineaInvestigacion;
 use App\Models\Log;
+use App\Models\Programas;
+use App\Models\Redes;
 use App\Models\Semilleros;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +28,19 @@ class semillerosController extends Controller
 
     public function showModalRegistrar()
     {
-        return view('modals.semilleros.crearSemilleros');
+        $usuarios = Integrantes::where('estado_integrantes', 0)->orderBy('id_integrante', 'desc')->paginate('10');
+        $grupos = GrupoInvestigacion::all();
+        $lineas = LineaInvestigacion::all();
+        $programas = Programas::all();
+        $redes = Redes::all();
+
+        return view('modals.semilleros.crearSemilleros', [
+            'usuarios' => $usuarios,
+            'grupos' => $grupos,
+            'lineas' => $lineas,
+            'programas' => $programas,
+            'redes' => $redes
+        ]);
     }
 
     public function showModalActualizar()
@@ -84,12 +101,20 @@ class semillerosController extends Controller
             'nombre_semillero' => 'required',
             'iniciales_semillero' => 'required',
             'fecha_creacion' => 'required|date',
+            'integrantes' => 'required',
             'mision' => 'required',
             'vision' => 'required',
             'objetivo_general' => 'required',
             'objetivos_especificos' => 'required',
-            'id_grupo' => 'required',
-            'id_plan' => 'required',
+            'grupos' => 'required',
+            'lineas' => 'required',
+            'programas' => 'required',
+            'redes' => 'required',
+            'integrantes' => 'required',
+            'actividades' => 'required',
+            'tareas' => 'required',
+            'responsables' => 'required',
+            'frecuencia' => 'required',
             'estado' => 'required'
         ];
 

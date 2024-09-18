@@ -18,7 +18,7 @@
                             <label for="inputEstadoCargo" class="form-label">Estado</label>
                             <select type="select" class="form-control" id="inputEstadoCargo" name="estado_cargo"
                                 required>
-                                <option value="-1">Seleccione una opcion</option>
+                                <option value="-1">Seleccione una opcion...</option>
                                 <option value="1">Activo</option>
                                 <option value="0">Inactivo</option>
                             </select>

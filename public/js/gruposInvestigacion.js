@@ -3,8 +3,8 @@ $(document).ready(function () {
     //Metodo para abrir la modal de modificar
     $(document).on('click', '.iconoModificar', function () {
         button = $(this);
-        let nombreGrupo = $(this).parents('tr').find('td:eq(0)').text().trim();
-        let estadoGrupo = $(this).parents('tr').find('td:eq(1)').text().trim();
+        let nombreGrupo = $(button).parents('tr').find('td:eq(0)').text().trim();
+        let estadoGrupo = $(button).parents('tr').find('td:eq(1)').text().trim();
         let estado = (estadoGrupo == "Activo") ? 1 : (estadoGrupo == "Inactivo") ? 0 : -1;
         $.ajax({
             type: "GET",
@@ -12,10 +12,10 @@ $(document).ready(function () {
             success: function (data) {
                 $('#ModalSection').html(data);
 
-                $(this).find('#inputNombreGrupo').val(nombreGrupo);
-                $(this).find('#inputEstadoGrupo').val(estado);
+                $('#modalModificarGrupos').find('#inputNombreGrupo').val(nombreGrupo);
+                $('#modalModificarGrupos').find('#inputEstadoGrupo').val(estado);
 
-                $('#modalModificarGrupo').modal('show');
+                $('#modalModificarGrupos').modal('show');
             }
         });
     });
@@ -28,7 +28,7 @@ $(document).ready(function () {
             url: "showModalRegistrar",
             success: function (data) {
                 $('#ModalSection').html(data);
-                $('#modalRegistrarGrupo').modal('show');
+                $('#modalRegistrarGrupos').modal('show');
             }
         });
     });
@@ -36,15 +36,16 @@ $(document).ready(function () {
     $(document).on('click', '#btnActualizar', function (e) {
         //Solicitud de Ajax para realizar la actualizacion del elemento
         e.preventDefault();
-        let nombre_old = button.parents('tr').find('td:eq(0)').text().trim();
+        let nombre_old = $(button).parents('tr').find('td:eq(0)').text().trim();
 
         let nombre = $('#inputNombreGrupo').val();
         let estado = $('#inputEstadoGrupo').val();
+        let estado_text = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : null;
         let token = $('#_token').val();
 
         $.ajax({
             type: "POST",
-            url: "actualizarGrupo",
+            url: "actualizarGrupos",
             data: {
                 '_token': token,
                 'nombre_grupo': nombre,
@@ -53,8 +54,8 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $('#alertasModificar').html(data);
-                button.parents('tr').find('td:eq(0)').val(nombre);
-                button.parents('tr').find('td:eq(1)').val(estado);
+                $(button).parents('tr').find('td:eq(0)').text(nombre);
+                $(button).parents('tr').find('td:eq(1)').text(estado_text);
             },
             error: function (xhr, status, error) {
                 if (xhr.status === 422) {
@@ -78,7 +79,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "crear_grupo",
+            url: "registrarGrupos",
             data: {
                 '_token': token,
                 'nombre_grupo': nombre,

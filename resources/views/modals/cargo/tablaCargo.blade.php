@@ -1,10 +1,10 @@
 @foreach ($listaCargos as $cargos)
     <tr>
-        <td>{{ $cargos->nombre_cargos }}</td>
+        <td>{{ $cargos->nombre_cargo }}</td>
         <td>
-            @if ($cargos->estado_cargos == 1)
+            @if ($cargos->estado_cargo == 1)
                 Activo
-            @elseif ($cargos->estado_cargos == 0)
+            @elseif ($cargos->estado_cargo == 0)
                 Inactivo
             @endif
         </td>
