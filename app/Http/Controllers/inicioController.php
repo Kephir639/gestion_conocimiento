@@ -9,7 +9,7 @@ class inicioController extends Controller
     public function index(Request $request)
     {
         $controladores = $request->controladores;
-        $usuariosPendientes = $request->ususariosPendientes;
+        $usuariosPendientes = $request->usuariosPendientes;
         $notificaciones = $request->notificaciones;
         return view('layouts.plantillaIndex', compact('controladores', 'usuariosPendientes', 'notificaciones'));
     }

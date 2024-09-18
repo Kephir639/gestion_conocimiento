@@ -58,7 +58,7 @@ class usuarioController extends Controller
             'id_profesion' => 'nullable|integer',
             'id_maestria' => 'nullable|integer',
             'id_doctorado' => 'nullable|integer',
-            'Nombre_programa' => 'nullable|integer',
+            'Nombre_programa' => 'nullable',
             'ficha' => 'nullable|integer',
             'semillero_id' => 'nullable|integer',
             'password' => 'required|max:20'
@@ -191,5 +191,12 @@ class usuarioController extends Controller
 
         User::where('identificacion', $cedulaUsuario)
             ->update(['id_rol' => $rolAsignado, 'estado_usu' => 1]);
+    }
+
+    public function showAsignarRol(Request $request)
+    {
+        $usuariosPendientes = $request->usuariosPendientes;
+        $controladores = $request->controladores;
+        return view('modals.usuarios.asignarRol', compact('usuariosPendientes', 'controladores'));
     }
 }
