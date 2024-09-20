@@ -2,7 +2,7 @@ $(document).ready(function () {
     //Metodo para abrir la modal de modificar
     let button = '';
     //Metodo para abrir la modal de modificar
-    $('.iconoModalModificar').on('click', function () {
+    $(document).on('click', '.iconoModalModificar', function () {
         button = $(this);
         let nombreGrupo = $(this).parents('tr').find('td:eq(0)').text().trim();
         let estadoGrupo = $(this).parents('tr').find('td:eq(1)').text().trim();
@@ -12,7 +12,6 @@ $(document).ready(function () {
             url: "showModalActualizar",
             success: function (data) {
                 $('#ModalSection').html(data);
-
                 $('#modalModificarRedes').find('#inputNombreRed').val(nombreGrupo);
                 $('#modalModificarRedes').find('#inputEstadoRed').val(estado);
 
@@ -40,6 +39,8 @@ $(document).ready(function () {
 
         let nombre = $('#inputNombreRed').val();
         let estado = $('#inputEstadoRed').val();
+        let estado_text = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : null;
+
         let token = $('#_token').val();
 
         $.ajax({
@@ -54,7 +55,7 @@ $(document).ready(function () {
             success: function (data) {
                 $('#alertasModificar').html(data);
                 $(button).parents('tr').find('td:eq(0)').text(nombre);
-                $(button).parents('tr').find('td:eq(1)').val(estado);
+                $(button).parents('tr').find('td:eq(1)').text(estado_text);
             },
             error: function (xhr, status, error) {
                 if (xhr.status === 422) {

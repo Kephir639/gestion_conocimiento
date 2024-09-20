@@ -13,7 +13,7 @@
         <form action="{{ url('/registrarUsuario') }}" method="POST" class="needs-validation" novalidate>
             @csrf
             <div class="row mb-3">
-                <div class="col-md-6"> 
+                <div class="col-md-6">
                     <label for=name" class="form-label">Nombres</label>
                     <input type="text" class="form-control" id=name" name="name" required>
                     <div class="invalid-feedback">Por favor, ingrese sus nombres.</div>
@@ -225,7 +225,7 @@
                     }, false)
                 })
         })()
-        </script>
+    </script>
 
 
     <script>

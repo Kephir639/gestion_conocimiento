@@ -180,6 +180,11 @@ class usuarioController extends Controller
         $municipios = Municipio::where('departamento_id', $departamento_id)->get();
         return response()->json($municipios);
     }
+
+    public function showPerfil()
+    {
+        return view('modals.usuarios.perfilUsuario');
+    }
 }
 
 

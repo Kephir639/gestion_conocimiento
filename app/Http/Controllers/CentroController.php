@@ -32,33 +32,30 @@ class centroController extends Controller
     {
         $reglas = [
             'codigo_centro' => 'required|max:20',
-            'nombre_centro' => 'required|max:30',
-            'estado_centro' => 'required'
+            'nombre_centro' => 'required|max:30'
         ];
         $mensajes = [
             'codigo_centro.required' => 'Este campo es obligatorio',
             'codigo_centro.max' => 'Este campo debe contener maximo 30 caracteres',
             'nombre_centro.required' => 'Este campo es obligatorio',
-            'nombre_centro.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_centro.required' => 'Este campo es obligatorio'
+            'nombre_centro.max' => 'Este campo debe contener maximo 30 caracteres'
         ];
 
         $respuestas = [];
         $datos = $request->all();
 
-        //Se realiza la validacion de los campos
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
         unset($datos['_token']);
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['error'] = true;
-
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $respuestas['error'] = false;
-            $ajax = CentrosFormacion::where('nombre_centro', $datos['nombre_centro'])->get();
+            $ajax = CentrosFormacion::where([
+                'nombre_centro' => $datos['nombre_centro'],
+                'codigo_centro' => $datos['codigo_centro']
+            ])->get();
 
             if (count($ajax)) {
                 //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
@@ -80,11 +77,11 @@ class centroController extends Controller
                 );
                 Log::insert($sql);
 
-                $listaCetros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('10');
+                $listaCentros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
                 $tabla = view('modals.centros.tablaCentro', [
-                    'listaRedes' => $listaCetros,
+                    'listaCentros' => $listaCentros,
                     'controladores' => $controladores
                 ])->render();
 
@@ -103,14 +100,15 @@ class centroController extends Controller
         $reglas = [
             'codigo_centro' => 'required|max:20',
             'nombre_centro' => 'required|max:30',
-            'estado_centro' => 'required'
+            'estado_centro' => 'required|gte:0'
         ];
         $mensajes = [
             'codigo_centro.required' => 'Este campo es obligatorio',
             'codigo_centro.max' => 'Este campo debe contener maximo 30 caracteres',
             'nombre_centro.required' => 'Este campo es obligatorio',
             'nombre_centro.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_centro.required' => 'Este campo es obligatorio'
+            'estado_centro.required' => 'Este campo es obligatorio',
+            'estado_cargo.gte' => 'Seleccione una de las opciones'
         ];
 
         $respuestas = [];
@@ -125,7 +123,10 @@ class centroController extends Controller
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
-            $ajax = CentrosFormacion::where('nombre_centro', $datos['nombre_centro'])->get();
+            $ajax = CentrosFormacion::where([
+                'nombre_centro' => $datos['nombre_centro'],
+                'codigo_centro' => $datos['codigo_centro']
+            ])->get();
 
             if (count($ajax)) {
                 //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
@@ -137,7 +138,8 @@ class centroController extends Controller
                 $centro->setCodigoCentroAttribute($request->codigo_centro);
                 $centro->setEstadoCentroAttribute($request->estado_centro);
 
-                CentrosFormacion::where('id_centro', $datos['nombre_centro_old'])->update($centro->toArray());
+
+                CentrosFormacion::where('nombre_centro', $datos['nombre_centro_old'])->update($centro->toArray());
 
                 $sql = log_auditoria::createLog(
                     'centro',

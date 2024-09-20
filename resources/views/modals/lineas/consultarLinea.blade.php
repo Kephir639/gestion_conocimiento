@@ -31,7 +31,6 @@
                                         @if ($controlador['nombre_controlador'] == 'lineas')
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'modificar_linea')
-                                                
                                                     <button title="Modificar Linea" class="btn iconoModificar p-0"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">

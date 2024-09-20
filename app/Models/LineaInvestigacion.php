@@ -19,7 +19,7 @@ class LineaInvestigacion extends Model
     protected $fillable = [
         'id_linea',
         'nombre_linea',
-        'estado',
+        'estado_linea',
         'created_at',
         'updated_at'
     ];
@@ -47,11 +47,11 @@ class LineaInvestigacion extends Model
 
     public function getEstadoAttribute()
     {
-        return $this->attributes['estado'];
+        return $this->attributes['estado_linea'];
     }
 
     public function setEstadoAttribute($value)
     {
-        $this->attributes['estado'] = $value;
+        $this->attributes['estado_linea'] = $value;
     }
 }

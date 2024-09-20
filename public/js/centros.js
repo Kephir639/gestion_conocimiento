@@ -13,11 +13,11 @@ $(document).ready(function () {
             success: function (data) {
                 $('#ModalSection').html(data);
 
-                $(this).find('#inputNombreCentro').val(codigoCentro);
-                $(this).find('#inputNombreCentro').val(nombreCentro);
-                $(this).find('#inputEstadoCentro').val(estadoCentro);
+                $('#modalModificarCentros').find('#inputCodigoCentro').val(codigoCentro);
+                $('#modalModificarCentros').find('#inputNombreCentro').val(nombreCentro);
+                $('#modalModificarCentros').find('#inputEstadoCentro').val(estadoCentro);
 
-                $('#modalModificarCentro').modal('show');
+                $('#modalModificarCentros').modal('show');
             }
         });
     });
@@ -38,12 +38,14 @@ $(document).ready(function () {
     $(document).on('click', '#btnActualizar', function (e) {
         //Solicitud de Ajax para realizar la actualizacion del elemento
         e.preventDefault();
-        let nombre_old = button.parents('tr').find('td:eq(0)').text().trim();
+        let nombre_old = $(button).parents('tr').find('td:eq(1)').text().trim();
 
         let codigo = $('#inputCodigoCentro').val();
         let nombre = $('#inputNombreCentro').val();
         let estado = $('#inputEstadoCentro').val();
         let token = $('#_token').val();
+
+        let estado_text = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : null;
 
         $.ajax({
             type: "POST",
@@ -57,9 +59,9 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $('#alertasModificar').html(data);
-                button.parents('tr').find('td:eq(0)').val(codigo);
-                button.parents('tr').find('td:eq(1)').val(nombre);
-                button.parents('tr').find('td:eq(2)').val(estado);
+                $(button).parents('tr').find('td:eq(0)').text(codigo);
+                $(button).parents('tr').find('td:eq(1)').text(nombre);
+                $(button).parents('tr').find('td:eq(2)').text(estado_text);
             },
             error: function (xhr, status, error) {
                 if (xhr.status === 422) {
@@ -85,7 +87,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "crear_centro",
+            url: "registrarCentros",
             data: {
                 '_token': token,
                 'codigo_centro': codigo,

@@ -16,7 +16,10 @@ class lineaController extends Controller
         $controladores = request()->controladores;
         $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
 
-        return view('modals.lineas.consultarLinea', compact('listaLineas', 'controladores'));
+        return view('modals.lineas.consultarLinea', [
+            'listaLineas' => $listaLineas,
+            'controladores' => $controladores
+        ]);
     }
 
     public function showModalRegistrar()
@@ -27,14 +30,11 @@ class lineaController extends Controller
     public function registrarLinea(Request $request)
     {
         $reglas = [
-            'nombre_linea' => 'required',
-            'estado_linea' => 'required'
+            'nombre_linea' => 'required'
         ];
 
         $mensajes = [
             'nombre_linea.required' => 'Este campo es obligatorio',
-            'nombre_linea.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_linea.required' => 'Este campo es obligatorio'
         ];
 
         $datos = $request->all();
@@ -58,7 +58,7 @@ class lineaController extends Controller
                 $linea->setNombreLineaAttribute($request->nombre_linea);
                 $linea->setEstadoAttribute(1);
 
-                LineaInvestigacion::create($linea->toArray);
+                LineaInvestigacion::create($linea->toArray());
 
                 $sql = log_auditoria::createLog(
                     'linea',
@@ -92,13 +92,13 @@ class lineaController extends Controller
     public function actualizarLinea(Request $request)
     {
         $reglas = [
-            'nombre_linea' => 'required|max:30',
-            'estado_linea' => 'required'
+            'nombre_linea' => 'required',
+            'estado_linea' => 'required|gte:0'
         ];
         $mensajes = [
             'nombre_linea.required' => 'Este campo es obligatorio',
-            'nombre_linea.max' => 'Este campo debe contener maximo 30 caracteres',
-            'estado_linea.required' => 'Este campo es obligatorio'
+            'estado_linea.required' => 'Este campo es obligatorio',
+            'estado_linea.gte' => 'Seleccione una de las opciones'
         ];
 
         $datos = $request->all();
@@ -110,7 +110,10 @@ class lineaController extends Controller
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $ajax = LineaInvestigacion::where('nombre_linea', $datos['nombre_linea'])->get();
+            $ajax = LineaInvestigacion::where([
+                'nombre_linea' => $datos['nombre_linea'],
+                'estado_linea' => $datos['estado_linea']
+            ])->get();
 
             if (count($ajax)) {
                 return view('alertas.repetido')->render();
