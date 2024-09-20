@@ -15,6 +15,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
+        \App\Http\Middleware\checkRoutes::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -53,6 +54,7 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
+        'checkRoutes' => \App\Http\Middleware\checkRoutes::class,
         'notifications' => \App\Http\Middleware\checkNotifications::class,
         'active' => \App\Http\Middleware\usuarioActivo::class,
         'filter' => \App\Http\Middleware\SqlInjectionFilter::class,

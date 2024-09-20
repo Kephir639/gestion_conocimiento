@@ -21,7 +21,7 @@ Route::view('/', 'presentacion')->middleware('filter');
 // Route::view('/presentacion', 'presentacion');
 Auth::routes();
 
-Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')->group(function () {
+Route::middleware('auth', 'active', 'filter', 'notifications', 'checkRoutes', 'checkPermisos')->group(function () {
 
     //Pagina de Bienvenida
     Route::get('/index', [inicioController::class, 'index']);
