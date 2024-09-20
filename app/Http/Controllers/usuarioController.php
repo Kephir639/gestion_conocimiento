@@ -13,6 +13,7 @@ use App\Models\Tipo_poblacion;
 use App\Models\Genero;
 use App\Models\Cargos;
 use App\Models\Doctorados;
+use App\Models\Log;
 use App\Models\Maestrias;
 use App\Models\Profesiones;
 
@@ -185,13 +186,63 @@ class usuarioController extends Controller
 
     public function asignarRol(Request $request)
     {
+
+        $reglas = [
+            'idRol' => 'required',
+        ];
+        $mensajes = [
+            'idRol.required' => 'Este campo es requerido',
+        ];
+
+
         $datos = $request->all();
         $cedulaUsuario = $datos['identificacion'];
-        $rolAsignado = $datos['rol'];
+        $rolAsignado = $datos['idRol'];
+        $respuestas = [];
+        $validacion = Validator::make($datos, $reglas, $mensajes);
 
-        User::where('identificacion', $cedulaUsuario)
-            ->update(['id_rol' => $rolAsignado, 'estado_usu' => 1]);
+        unset($datos['_token']);
+        unset($datos['controladores']);
+
+        if ($validacion->fails()) {
+            $respuestas['error'] = true;
+            return response()->json(['errors' => $validacion->errors()], 422);
+        } else {
+            $respuestas['error'] = false;
+            $ajax = User::where([
+                'idRol' => $datos['idRol']
+            ])->get();
+
+
+            if (count($ajax)) {
+                //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
+                return view('alertas.repetido');
+            } else {
+                $rolAsignado = new User();
+
+                $rolAsignado->setNombreCentroAttribute($request->nombre_centro);
+
+
+                User::where('identificacion', $datos['nombre_rol_old'])->update($rolAsignado->toArray());
+
+                $sql = log_auditoria::createLog(
+                    'rol$rolAsignado',
+                    $datos['nombre_centro_old'],
+                    'actualizo',
+                    $rolAsignado->getIdRolAttributeAttribute()
+                );
+                Log::insert($sql);
+
+                return view('alertas.modifcarExitoso');
+            }
+        }
+        // User::where('identificacion', $cedulaUsuario)
+        //     ->update(['id_rol' => $rolAsignado, 'estado_usu' => 1]);
     }
+
+
+
+
 
     public function showAsignarRol(Request $request)
     {

@@ -17,7 +17,8 @@
                             <th id="apellido">APELLIDO</th>
                             <th id="Documento">DOCUMENTO</th>
                             <th id="Email">EMAIL</th>
-                            <th id="Telefono">Teléfono</th>
+                            <th id="Telefono">TELEFONO</th>
+                            <th id="">ESTADO</th>
                             <th id="acciones">ACCIONES</th>
                         </tr>
                     </thead>
@@ -29,13 +30,13 @@
                                 <td>{{ $usu->identificacion }}</td>
                                 <td>{{ $usu->email }}</td>
                                 <td>{{ $usu->celular }}</td>
+                                <td>{{ $usu->estado_usu == 1 ? 'ACTIVO' : 'INACTIVO' }}</td>
                                 <td>
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'usuarios')
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'asignar_rol')
-                                                    <button title="Asignar rol" class="btn btnAsignar p-0"
-                                                        data-nombre="{{ $usu->name }}">
+                                                    <button title="Asignar rol" class="btn btnAsignar p-0">
                                                         <svg class="iconoM" width="34" height="34"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                                             <path

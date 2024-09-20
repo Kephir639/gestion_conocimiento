@@ -128,6 +128,7 @@ class centroController extends Controller
                 'codigo_centro' => $datos['codigo_centro']
             ])->get();
 
+
             if (count($ajax)) {
                 //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
                 return view('alertas.repetido');

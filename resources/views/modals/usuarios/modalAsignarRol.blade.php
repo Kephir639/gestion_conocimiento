@@ -11,30 +11,42 @@
                         <!-- Token CSRF -->
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" id="_token">
 
-                        <!-- Nombre de usuario -->
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="inputNombreUsuario" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="inputNombreUsuario" name="nombre_usuario"
-                                required>
-                        </div>
-
-                        <!-- Selección de rol -->
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center mt-3">
-                            <label for="inputRol" class="form-label">Rol</label>
-                            <select class="form-control" id="inputRol" name="rol" required>
-                                <option value="-1">Seleccione una opción...</option>
-                                <option value="Administrador">Administrador</option>
-                                <option value="Auditor">Auditor</option>
-                                <option value="Aprendiz">Aprendiz</option>
-                                <option value="Dinamizador SENNOVA">Dinamizador SENNOVA</option>
-                                <option value="Líder de proyecto">Líder de proyecto</option>
-                                <option value="Líder de semillero">Líder de semillero</option>
-                            </select>
+                        <!-- Tabla de información adicional -->
+                        <div class="col-md-12 col-sm-12 mt-3">
+                            <table class="table table-bordered" id="tablaDetalles">
+                                <thead>
+                                    <tr>
+                                        <th>NOMBRE COMPLETO</th>
+                                        <th>ROL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <!-- Nombre completo -->
+                                        <td>
+                                            <input type="text" class="form-control" id="inputNombreUsuario"
+                                                name="nombre_usuario" readonly required>
+                                        </td>
+                                        <!-- Selección de rol -->
+                                        <td>
+                                            <select class="form-control" id="inputRol" name="rol" required>
+                                                <option value="-1">Seleccione una opción...</option>
+                                                <option value="Administrador">Administrador</option>
+                                                <option value="Auditor">Auditor</option>
+                                                <option value="Aprendiz">Aprendiz</option>
+                                                <option value="Dinamizador SENNOVA">Dinamizador SENNOVA</option>
+                                                <option value="Líder de proyecto">Líder de proyecto</option>
+                                                <option value="Líder de semillero">Líder de semillero</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                         <!-- Botón enviar -->
                         <div class="col-md-12 col-sm-12 mt-3">
-                            <button id="btnEnviarRol" type="submit" class="btn btn-success w-100">Enviar</button>
+                            <button id="btnAsignarRol" type="submit" class="btn btn-success w-100">Asignar</button>
                         </div>
                     </div>
                 </form>
