@@ -187,7 +187,7 @@ class usuarioController extends Controller
 
     public function showPerfil()
     {
-        return view('modals.usuarios.perfilUsuario');
+        return view('modals.usuarios.perfil.verPerfil');
     }
 
     public function actualizarPerfil(Request $request)

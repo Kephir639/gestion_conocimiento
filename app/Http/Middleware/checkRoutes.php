@@ -18,16 +18,18 @@ class checkRoutes
     public function handle(Request $request, Closure $next): Response
     {
         // Obtener la ruta actual
-        $route = $request->route();
+        $route = request()->route();
 
         // Obtener el controlador y la función correspondientes a la ruta
-        $controller = $route->getAction('controller');
-        $function = $route->getAction('function');
+        $ruta = explode('/', $route->uri);
 
-        $id_function = DB::table('funciones')->where('nombre_funcion', $function)->get();
+        $funcion = $ruta[2];
+
+        $funcion = DB::table('funciones')->select('id_funcion')->where('nombre_funcion', $funcion)->get();
+        $id_funcion = $funcion->pluck('id_funcion');
 
         // Verificar si el usuario tiene permiso para acceder a la función
-        if (! $this->hasPermission($controller, $id_function)) {
+        if (! $this->hasPermission($id_funcion[0])) {
             // Redirigir al usuario a la página anterior si no tiene permiso
             return redirect()->back();
         }
@@ -36,16 +38,16 @@ class checkRoutes
         return $next($request);
     }
 
-    private function hasPermission($controller, $id_function)
+    private function hasPermission($id_funcion)
     {
         // Obtener el rol del usuario actual
         $rol = Auth::user()->idRol;
-
+        // dd($rol);
+        // dd($id_funcion);
         // Verificar si el usuario tiene permiso para acceder a la función
         $permission = DB::table('permisos')
-            ->where('id_funcion', $id_function)
-            ->where('id_rol', $rol)
-            ->first();
+            ->where(['id_funcion' => $id_funcion, 'id_rol' => $rol])
+            ->get();
 
         return ! is_null($permission);
     }
