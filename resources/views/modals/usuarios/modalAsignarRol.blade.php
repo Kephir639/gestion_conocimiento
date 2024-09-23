@@ -25,18 +25,14 @@
                                         <!-- Nombre completo -->
                                         <td>
                                             <input type="text" class="form-control" id="inputNombreUsuario"
-                                                name="nombre_usuario" readonly required>
+                                                name="nombre_usuario" readonly>
                                         </td>
                                         <!-- Selección de rol -->
                                         <td>
-                                            <select class="form-control" id="inputRol" name="rol" required>
-                                                <option value="-1">Seleccione una opción...</option>
-                                                <option value="Administrador">Administrador</option>
-                                                <option value="Auditor">Auditor</option>
-                                                <option value="Aprendiz">Aprendiz</option>
-                                                <option value="Dinamizador SENNOVA">Dinamizador SENNOVA</option>
-                                                <option value="Líder de proyecto">Líder de proyecto</option>
-                                                <option value="Líder de semillero">Líder de semillero</option>
+                                            <select class="form-control" id="inputRol" name="idRol" required>
+                                                @foreach ($roles as $rol)
+                                                    <option value="{{ $rol->id_rol }}">{{ $rol->rol }}</option>
+                                                @endforeach
                                             </select>
                                         </td>
                                     </tr>
@@ -50,11 +46,12 @@
                         </div>
                     </div>
                 </form>
-                <div id="alertasModificar"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-            </div>
+            <div id="alertasModificar"></div>
         </div>
     </div>
+</div>
 </div>

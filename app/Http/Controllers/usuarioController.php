@@ -16,6 +16,7 @@ use App\Models\Doctorados;
 use App\Models\Log;
 use App\Models\Maestrias;
 use App\Models\Profesiones;
+use App\Models\Rol;
 
 class usuarioController extends Controller
 {
@@ -186,17 +187,14 @@ class usuarioController extends Controller
 
     public function asignarRol(Request $request)
     {
-
         $reglas = [
             'idRol' => 'required',
         ];
         $mensajes = [
             'idRol.required' => 'Este campo es requerido',
         ];
-
-
         $datos = $request->all();
-        $cedulaUsuario = $datos['identificacion'];
+        // dd($datos);
         $rolAsignado = $datos['idRol'];
         $respuestas = [];
         $validacion = Validator::make($datos, $reglas, $mensajes);
@@ -212,48 +210,46 @@ class usuarioController extends Controller
             $ajax = User::where([
                 'idRol' => $datos['idRol']
             ])->get();
-
-
             if (count($ajax)) {
                 //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
                 return view('alertas.repetido');
             } else {
                 $rolAsignado = new User();
 
-                $rolAsignado->setNombreCentroAttribute($request->nombre_centro);
+                $rolAsignado->setIdRolAttribute($request->idRol);
 
+                User::where('identificacion', $datos['documento'])->update($rolAsignado->toArray());
 
-                User::where('identificacion', $datos['nombre_rol_old'])->update($rolAsignado->toArray());
+                $rol = Rol::select('rol')->where('id_rol', $datos['idRol'])->get();
 
                 $sql = log_auditoria::createLog(
-                    'rol$rolAsignado',
-                    $datos['nombre_centro_old'],
+                    'rol',
+                    $rol,
                     'actualizo',
-                    $rolAsignado->getIdRolAttributeAttribute()
+                    $rolAsignado->getIdRolAttribute()
                 );
                 Log::insert($sql);
 
                 return view('alertas.modifcarExitoso');
             }
         }
-        // User::where('identificacion', $cedulaUsuario)
-        //     ->update(['id_rol' => $rolAsignado, 'estado_usu' => 1]);
     }
-
-
 
 
 
     public function showAsignarRol(Request $request)
     {
         $usuariosPendientes = User::orderBy('id', 'desc')->where('idRol', null)->paginate('10');
+
         $controladores = $request->controladores;
         $notificaciones = $request->notificaciones;
         return view('modals.usuarios.asignarRol', compact('usuariosPendientes', 'controladores', 'notificaciones'));
     }
     public function showModalAsignarRol()
     {
-        return view('modals.usuarios.modalAsignarRol');
+        $rolExistente = "SELECT * FROM roles";
+        $roles = DB::select($rolExistente);
+        return view('modals.usuarios.modalAsignarRol', compact('roles'));
     }
     public function showPerfil()
     {
