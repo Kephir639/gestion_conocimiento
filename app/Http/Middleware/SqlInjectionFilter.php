@@ -23,6 +23,7 @@ class SqlInjectionFilter
         $caracteres = [
             "'",
             "\"",
+            "--",
             ";",
             ":",
             ",",
