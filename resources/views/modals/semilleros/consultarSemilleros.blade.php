@@ -68,7 +68,7 @@
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'consultar_semillero')
-                                                    <button title="Ver semillero" class="btn p-0"><svg
+                                                    <button title="Ver semillero" id="BtnVerSemilleros" class="btn p-0"><svg
                                                             xmlns="http://www.w3.org/2000/svg" class="iconoConsultar"
                                                             viewBox="0 0 24 24">
                                                             <path
@@ -83,8 +83,8 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_semillero')
-                                                    <button title="Modificar semillero" class="btn p-0"><svg
+                                                @if ($func['nombre_funcion'] == 'actualizar_semillero')
+                                                    <button title="Modificar semillero" id="BtnModificarSemillero" class="btn p-0"><svg
                                                             class="iconoModificar" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
                                                             <path
@@ -99,7 +99,7 @@
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'validar_integrante')
-                                                    <button title="Validar integrantes" class="btn p-0"><svg
+                                                    <button title="Validar integrantes" id="BtnValidar" class="btn p-0"><svg
                                                             xmlns="http://www.w3.org/2000/svg" class="iconoVerificar"
                                                             viewBox="0 0 24 24">
                                                             <path
@@ -117,7 +117,7 @@
                     </tbody>
                 </table>
             </div>
-            @foreach ($controladores as $controlador)
+            {{-- @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'semilleros')
                     @foreach ($controlador['funciones'] as $func)
                         @if ($func['nombre_funcion'] == 'crear_semillero')
@@ -130,7 +130,7 @@
                         @endif
                     @endforeach
                 @endif
-            @endforeach
+            @endforeach --}}
             <div id="ModalSection"></div>
         </div>
     </div>

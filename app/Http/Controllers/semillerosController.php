@@ -28,23 +28,19 @@ class semillerosController extends Controller
 
     public function showModalRegistrar()
     {
-<<<<<<< HEAD
-        return view('modals.semilleros.creaSemilleros');
-=======
         $usuarios = Integrantes::where('estado_integrantes', 0)->orderBy('id_integrante', 'desc')->paginate('10');
         $grupos = GrupoInvestigacion::all();
         $lineas = LineaInvestigacion::all();
         $programas = Programas::all();
         $redes = Redes::all();
 
-        return view('modals.semilleros.crearSemilleros', [
+        return view('modals.semilleros.creaSemilleros', [
             'usuarios' => $usuarios,
             'grupos' => $grupos,
             'lineas' => $lineas,
             'programas' => $programas,
             'redes' => $redes
         ]);
->>>>>>> b6fdeb3cd6958ba37d5b3ee086c40ad5302da0ff
     }
 
     public function showModalActualizar()
@@ -52,33 +48,46 @@ class semillerosController extends Controller
         return view('modals.semilleros.modificarSemilleros');
     }
 
+    public function verSemilleros(Request $request)
+    {
+        // $semilleros = DB::table('semilleros_investigacion')->get();
+
+        // // Si es una solicitud AJAX, devuelve JSON
+        // if ($request->ajax()) {
+        //     return response()->json(['semilleros_investigacion' => $semilleros]);
+        // }
+
+        // De lo contrario, devuelve la vista
+        return view('modals.semilleros.verSemilleros');
+    }
+
     public function showModalValidar()
     {
-        $sql =
-            "SELECT u.id, u.name, u.apellidos, u.identificacion, u.ficha,
-            u.programa,shu.id_semillero shu.id, s.id_semillero
-            FROM users s, semilleros_investigacion s, semilleros_has_user shu
-            WHERE u.id = shu.id AND shu.id_semillero = s.id_semillero
-            ORDER BY id_SemHasUser DESC";
-        $info_integrantes = DB::select($sql);
+        // $sql =
+        //     "SELECT u.id, u.name, u.apellidos, u.identificacion, u.ficha,
+        //     u.programa,shu.id_semillero shu.id, s.id_semillero
+        //     FROM users s, semilleros_investigacion s, semilleros_has_user shu
+        //     WHERE u.id = shu.id AND shu.id_semillero = s.id_semillero
+        //     ORDER BY id_SemHasUser DESC";
+        // $info_integrantes = DB::select($sql);
 
-        $integrantes = [];
+        // $integrantes = [];
 
-        foreach ($info_integrantes as $integrante) {
-            $id_usuario = $integrante->id;
+        // foreach ($info_integrantes as $integrante) {
+        //     $id_usuario = $integrante->id;
 
-            if (!isset($integrantes[$id_usuario])) {
-                $integrantes[$id_usuario] = [
-                    'nombre' => $integrante->name,
-                    'apellido' => $integrante->apellidos,
-                    'documento' => $integrante->identificacion,
-                    'ficha' => $integrante->ficha,
-                    'programa_formacion' => $integrante->programa
-                ];
-            }
-        }
+        //     if (!isset($integrantes[$id_usuario])) {
+        //         $integrantes[$id_usuario] = [
+        //             'nombre' => $integrante->name,
+        //             'apellido' => $integrante->apellidos,
+        //             'documento' => $integrante->identificacion,
+        //             'ficha' => $integrante->ficha,
+        //             'programa_formacion' => $integrante->programa
+        //         ];
+        //     }
+        // }
 
-        return view('modals.semilleros.modalPendientes', ['integrantes' => $integrantes]);
+        return view('modals.semilleros.modalPendientes');
     }
 
     public function validarUsuario(Request $request)
@@ -110,11 +119,9 @@ class semillerosController extends Controller
             'vision' => 'required',
             'objetivo_general' => 'required',
             'objetivos_especificos' => 'required',
-<<<<<<< HEAD
             'id_grupo' => 'required',
             // 'id_plan' => 'required',
             // 'estado' => 'required'
-=======
             'grupos' => 'required',
             'lineas' => 'required',
             'programas' => 'required',
@@ -125,7 +132,6 @@ class semillerosController extends Controller
             'responsables' => 'required',
             'frecuencia' => 'required',
             'estado' => 'required'
->>>>>>> b6fdeb3cd6958ba37d5b3ee086c40ad5302da0ff
         ];
 
         $mensajes = [
@@ -141,8 +147,8 @@ class semillerosController extends Controller
             // 'id_plan.required' => 'Este campo es obligatorio',
             // 'estado.required' => 'Este campo es obligatorio'
         ];
-        $validacion = Validator::make($request, $reglas, $mensajes);
         $datos = $request->all();
+        $validacion = Validator::make($request, $reglas, $mensajes);
         unset($request['_token']);
         unset($request['controladores']);
 

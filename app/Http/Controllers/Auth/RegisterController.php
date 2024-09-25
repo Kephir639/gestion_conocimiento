@@ -16,6 +16,7 @@ use App\Models\Cargos;
 use App\Models\Doctorados;
 use App\Models\Maestrias;
 use App\Models\Profesiones;
+use App\Models\Semilleros;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller
@@ -89,8 +90,9 @@ class RegisterController extends Controller
         $profesiones = Profesiones::all();
         $maestrias = Maestrias::all();
         $doctorados = Doctorados::all();
+        $semilleros = Semilleros::all();
 
-        return view('Auth.register', compact('departamentos', 'municipios', 'tipo_poblaciones', 'generos', 'cargos', 'profesiones', 'maestrias', 'doctorados'));
+        return view('Auth.register', compact('departamentos', 'municipios', 'tipo_poblaciones', 'generos', 'cargos', 'profesiones', 'maestrias', 'doctorados','semilleros'));
     }
 
     public function getMunicipiosByDepartamento($departamento_id)
