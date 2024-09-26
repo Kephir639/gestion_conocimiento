@@ -51,6 +51,7 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    <button class="btn btn-primary">Asignar todo</button>
                 </table>
                 <div id="ModalSection"></div>
             </div>

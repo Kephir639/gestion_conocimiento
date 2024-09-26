@@ -30,6 +30,8 @@
                                         <!-- Selección de rol -->
                                         <td>
                                             <select class="form-control" id="inputRol" name="idRol" required>
+                                                <option value="">Seleccione...</option>
+                                                <!-- Opción por defecto -->
                                                 @foreach ($roles as $rol)
                                                     <option value="{{ $rol->id_rol }}">{{ $rol->rol }}</option>
                                                 @endforeach
