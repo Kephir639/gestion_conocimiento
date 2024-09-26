@@ -8,6 +8,7 @@ use App\Models\LineaInvestigacion;
 use App\Models\Log;
 use App\Models\Programas;
 use App\Models\proyectosInvestigacion;
+use App\Models\Redes;
 use App\Models\Semilleros;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,6 +34,7 @@ class proyectosInvestigacionController extends Controller
         $centros = CentrosFormacion::all();
         $grupos = GrupoInvestigacion::all();
         $lineas = LineaInvestigacion::all();
+        $redes = Redes::all();
         $programas = Programas::all();
         $semilleros = Semilleros::all();
         $participantes = User::all();
@@ -44,7 +46,8 @@ class proyectosInvestigacionController extends Controller
             'lineas' => $lineas,
             'programas' => $programas,
             'semilleros' => $semilleros,
-            'participantes' => $participantes
+            'participantes' => $participantes,
+            'redes' => $redes
         ]);
     }
 
@@ -57,6 +60,8 @@ class proyectosInvestigacionController extends Controller
 
     public function registrarProyectoInvestigacion(Request $request)
     {
+        // dd($request->all());
+
         $reglas = [
             'ano_ejecucion' => 'required',
             'codigo_sigp' => 'required',
@@ -73,17 +78,8 @@ class proyectosInvestigacionController extends Controller
             'objetivos_especificos' => 'required',
             'propuesta' => 'required',
             'impacto_esperado' => 'required',
-            'descripcion' => 'required',
             'actividades' => 'required',
-            'entregables' => 'required',
-            'enlace_evidencia' => 'required',
-            'cumplido' => 'required',
-            'observaciones' => 'required',
-            'concepto' => 'required',
-            'rubro' => 'required',
-            'uso_presupuestal' => 'required',
-            'valor_planteado' => 'required'
-
+            'presupuestos' => 'required'
         ];
         $mensajes = [
             'ano_ejecucion.required' => 'Este campo es obligatorio',
@@ -101,16 +97,8 @@ class proyectosInvestigacionController extends Controller
             'objetivos_especificos.required' => 'Este campo es obligatorio',
             'propuesta.required' => 'Este campo es obligatorio',
             'impacto_esperado.required' => 'Este campo es obligatorio',
-            'descripcion.required' => 'Este campo es obligatorio',
             'actividades.required' => 'Este campo es obligatorio',
-            'entregables.required' => 'Este campo es obligatorio',
-            'enlace_evidencia.required' => 'Este campo es obligatorio',
-            'cumplido.required' => 'Este campo es obligatorio',
-            'observaciones.required' => 'Este campo es obligatorio',
-            'rubro.required' => 'Este campo es obligatorio',
-            'uso_presupuestal.required' => 'Este campo es obligatorio',
-            'valor_planteado.required' => 'Este campo es obligatorio'
-
+            'presupuestos.required' => 'Este campo es obligatorio'
         ];
 
         $datos = $request->all();
@@ -135,6 +123,14 @@ class proyectosInvestigacionController extends Controller
                 $proyecto_investigacion->impacto = $request->impacto;
 
                 $proyecto = proyectosInvestigacion::create($proyecto_investigacion->toArray());
+
+                $descripciones = $proyecto_investigacion->crearArray($datos, 'descripciones');
+                $actividades = $proyecto_investigacion->crearArray($datos, 'actividades');
+                $entregables = $proyecto_investigacion->crearArray($datos, 'entregables');
+                $enlaces = $proyecto_investigacion->crearArray($datos, 'descripciones');
+                $cumplidos = $proyecto_investigacion->crearArray($datos, 'cumplidos');
+
+                $actividad =  [[]];
 
                 //Centros
                 foreach ($request->centros as $centro) {
@@ -201,55 +197,6 @@ class proyectosInvestigacionController extends Controller
                     ]);
                 }
 
-                //ACtividades Conjunto - Descripcion, Enlace, Cumplido
-                $actividad = DB::table('investigacion_actividades_unificada')->create([
-                    'id_p_investigacion' => $proyecto->id_p_investigacion,
-                    'descripcion' => $request->descripcion,
-                    'enlace_evidencia' => $request->enlace_evidencia,
-                    'cumplido' => $request->cumplido,
-                    'estado_actividad_u_i' => 1
-                ]);
-                //Actividades
-                foreach ($request->actividades as $actividad) {
-                    DB::table('investigacion_actividades')->insert([
-                        'id_actividad_i' => $actividad->id_actividad_i,
-                        'actividad' => $actividad,
-                        'estado_actividad_i' => 1
-                    ]);
-                }
-                //Entregables
-                foreach ($request->entregables as $entregable) {
-                    DB::table('investigacion_entregables')->insert([
-                        'id_actividad_i' => $actividad->id_actividad_i,
-                        'entregable' => $entregable,
-                        'estado_entregable_i' => 1
-                    ]);
-                }
-                //Observaciones
-                foreach ($request->observaciones as $observacion) {
-                    DB::table('investigacion_observaciones')->insert([
-                        'id_actividad_i' => $actividad->id_actividad_i,
-                        'observacion' => $observacion,
-                        'estado_observacion_i' => 1
-                    ]);
-                }
-
-                //Presupuesto - Concepto Interno, Rubro, Uso presupuestal, Valores planteados*
-                $presupuesto = DB::table('investigacion_presupuestos')->create([
-                    'id_p_investigacion' => $proyecto->id_p_investigacion,
-                    'concepto' => $request->concepto,
-                    'rubro' => $request->rubro,
-                    'uso_presupuestal' => $request->uso_presupuestal,
-                    'estado_presupuesto_i' => 1
-                ]);
-                //Valores Planteados
-                foreach ($request->valores_planteados as $valor) {
-                    DB::table('investigacion_presupuestos_valores')->insert([
-                        'id_presupuesto_i' => $presupuesto->id_presupuesto_i,
-                        'valor' => $valor,
-                        'estado_valor_i' => 1
-                    ]);
-                }
 
 
                 $sql = log_auditoria::createLog(
@@ -276,6 +223,7 @@ class proyectosInvestigacionController extends Controller
             }
         }
     }
+
 
     public function actualizarProyectoInvestigacion(Request $request)
     {
@@ -334,8 +282,6 @@ class proyectosInvestigacionController extends Controller
             'valor_planteado.required' => 'Este campo es obligatorio'
         ];
         $datos = $request->all();
-
-        dd($datos);
 
         $validacion = Validator::make($datos, $reglas, $mensajes);
 

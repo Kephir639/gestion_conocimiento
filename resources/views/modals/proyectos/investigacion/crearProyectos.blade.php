@@ -68,6 +68,7 @@
                             <label for="inputProgramas" class="form-label">Programas de formacion</label>
                             <select type="text" class="form-control" name="programas[]" id="inputProgramas" required>
                                 <option value="">Seleccione una opcion...</option>
+                                <option value="prueba">Opcion de prueba</option>
                                 @foreach ($programas as $programas)
                                     <option value="{{ $programas->id_programas }}">{{ $programas->nombre_programas }}
                                     </option>
@@ -79,6 +80,7 @@
                             <select type="text" class="form-control" name="semilleros[]" id="inputSemilleros"
                                 required>
                                 <option value="">Seleccione una opcion...</option>
+                                <option value="prueba">Opcion de prueba</option>
                                 @foreach ($semilleros as $semillero)
                                     <option value="{{ $semillero->id_semillero }}">{{ $semillero->nombre_semillero }}
                                     </option>
@@ -223,7 +225,7 @@
                         <hr>
                         <br>
                         <div class="col-md-12 col-sm-12 mt-3">
-                            <button class="btn btn-success w-100">Enviar</button>
+                            <button id="btnRegistrar" class="btn btn-success w-100">Enviar</button>
                         </div>
                     </div>
                 </form>

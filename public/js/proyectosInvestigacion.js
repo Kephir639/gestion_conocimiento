@@ -1,39 +1,28 @@
 $(document).ready(function () {
-    function reset(n1, n2, b) {
-        n1 = 1;
-        n2 = 2;
-        b = true;
+    function campoUnico(nombreCampo) {
+        let array = [];
+        let n1 = 1;
+        while ($('input[name="' + nombreCampo + '[' + n1 + '][]"]').length > 0) {
+            array.push($('input[name="' + nombreCampo + '[' + n1 + '][]"]').val());
+            n1++;
+        }
+        return array;
     }
 
-    function campoUnico(nombreCampo) {
-        let array = []
-        let n1 = 1;
-        let b = true;
-        while (b) {
-            while ($('input[name="' + nombreCampo + '[' + n1 + '][]"]')) {
-                array[n1] = $('input[name="' + nombreCampo + '[' + n1 + '][]"]').val();
-                n1++;
-            }
-            b = false;
-        }
-        return array
-    }
     function campoAgregable(nombreCampo) {
-        let array = []
+        let array = [];
         let n1 = 1;
-        let n2 = 2;
-        let b = true;
-        while (b) {
-            while ($('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]')) {
-                array[n1][n2] = $('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]').val();
+        while ($('input[name="' + nombreCampo + '[' + n1 + '][1][]"]').length > 0) {
+            let fila = [];
+            let n2 = 1;
+            while ($('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]').length > 0) {
+                fila.push($('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]').val());
                 n2++;
-                if (!$('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]')) {
-                    n1++;
-                    n2 = 1;
-                }
             }
-            b = false;
+            array.push(fila);
+            n1++;
         }
+        return array;
     }
     //Metodo para abrir la modal de modificar
     let button = '';
@@ -81,7 +70,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "actualizar_redes",
+            url: "actualizar_proyecto_investigacion",
             data: {
                 '_token': token,
                 'nombre_red': nombre,
@@ -107,6 +96,7 @@ $(document).ready(function () {
 
     $(document).on('click', '#btnRegistrar', function (e) {
         e.preventDefault();
+        console.log('Funciona')
         let n1 = 1;
         let n2 = 1;
         let b1 = true;
@@ -157,12 +147,12 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "crear_redes",
+            url: "crear_proyecto_investigacion",
             data: {
                 '_token': token,
                 'ano_ejecucion': ano_proyecto,
                 'codigo': codigo,
-                'nombre': nombre,
+                'nombre_proyecto': nombre,
                 'centros': centros,
                 'grupos': grupos,
                 'lieas': lineas,
@@ -174,7 +164,7 @@ $(document).ready(function () {
                 'objetivo_general': objetivo,
                 'objetivos_especificos': objetivos_especificos,
                 'propuesta': propuesta,
-                'impacto': impacto,
+                'impacto_esperado': impacto,
                 'actividades': actividades_conjunto,
                 'prespuestos': presupuestos
             },
