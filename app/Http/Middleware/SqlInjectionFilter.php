@@ -23,6 +23,7 @@ class SqlInjectionFilter
         $caracteres = [
             "'",
             "\"",
+            "--",
             ";",
             ":",
             ",",
@@ -75,8 +76,27 @@ class SqlInjectionFilter
             "\x1F"
         ];
         $datosLimpios = [];
+
+
         foreach ($datos as $input => $valor) {
-            $datosLimpios[$input] = str_replace($caracteres, "", $valor);
+            if (is_array($valor)) {
+                foreach ($valor as $key => $arraySimple) {
+                    if (is_array($arraySimple)) {
+                        foreach ($arraySimple as $keyM => $campoUnico) {
+                            if (is_array($campoUnico)) {
+                                foreach ($campoUnico as $camp => $campoMultiple)
+                                    $datosLimpios[$input][$key][$keyM][$camp] = str_replace($caracteres, "", $campoMultiple);
+                            } else {
+                                $datosLimpios[$input][$key][$keyM] = str_replace($caracteres, "", $campoUnico);
+                            }
+                        }
+                    } else {
+                        $datosLimpios[$input][$key] = str_replace($caracteres, "", $arraySimple);
+                    }
+                }
+            } else {
+                $datosLimpios[$input] = str_replace($caracteres, "", $valor);
+            }
         }
         $request->replace($datosLimpios);
 

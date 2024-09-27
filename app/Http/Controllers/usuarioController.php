@@ -16,7 +16,7 @@ use App\Models\Doctorados;
 use App\Models\Log;
 use App\Models\Maestrias;
 use App\Models\Profesiones;
-use App\Models\Rol;
+
 
 class usuarioController extends Controller
 {
@@ -140,8 +140,9 @@ class usuarioController extends Controller
                 if ($request->has('semilleros')) {
                     foreach ($request->semilleros as $semillero) {
                         DB::table('semilleros_has_user')->insert([
-                            'id_user' => $usuario->id,
-                            'id_semillero' => $semillero
+                            'id' => $usuario->id,
+                            'id_semillero' => $semillero,
+                            'estado_shu' => 0
                         ]);
                     }
                 }
@@ -163,6 +164,8 @@ class usuarioController extends Controller
             }
         }
     }
+
+
     public function showRegistrationForm()
     {
         $departamentos = Departamentos::all();
@@ -253,6 +256,8 @@ class usuarioController extends Controller
     }
     public function showPerfil()
     {
-        return view('modals.usuarios.perfil.verPerfil');
+        return view('modals.usuarios.perfilUsuario');
     }
 }
+
+
