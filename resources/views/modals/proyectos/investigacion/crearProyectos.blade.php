@@ -1,5 +1,5 @@
 <div class="modal" id="modalRegistrarProyectoInvestigacion">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-fixed">
         <div class="modal-content">
             <div class="modal-header">
                 <h5>Registrar Proyecto</h5>
@@ -103,9 +103,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <br>
-                        <hr>
-                        <br>
+
                         <div id="div_resumen_proyecto"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputResumenProyecto" class="form-label">Resumen proyecto</label>
@@ -129,13 +127,13 @@
                             <input type="text" class="form-control" id="inputPropuesta" name="propuesta"
                                 required>
                         </div>
-                        <br>
-                        <hr>
-                        <br>
                         <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputImpacto" class="form-label">Impacto esperado</label>
                             <input type="text" class="form-control" id="inputImpacto" name="impacto" required>
                         </div>
+                        <br>
+                        <hr>
+                        <br>
                         <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="" class="form-label">Actividades</label>
                             <table id="campoActividades">
@@ -143,7 +141,7 @@
                                     <td>Descripcion</td>
                                     <td>Actividad</td>
                                     <td>Entregable</td>
-                                    <td>Enlace evidencia</td>
+                                    <td>Enlace</td>
                                     <td>Se cumple</td>
                                     <td>Observaciones</td>
                                 </thead>
@@ -154,35 +152,37 @@
                                                 name="descripcion[1][]" required>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="actividades[1][1][]"
-                                                required>
-                                            <button class="btnAgregar">+</button>
+                                            <div class="input-agregar">
+                                                <input type="text" class="form-control agregable" name="actividades[1][1][]"
+                                                    required><button class="btnAgregar p-2 btn btn-success">+</button>
+                                            </div>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="entregables[1][1][]"
-                                                required>
-                                            <button class="btnAgregar">+</button>
+                                            <div class="input-agregar">
+                                                <input type="text" class="form-control agregable" name="entregables[1][1][]"
+                                                    required><button class="btnAgregar p-2 btn btn-success">+</button>
+                                            </div>
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" id="inputEnlace"
                                                 name="enlace_evidencia[1][]" required>
                                         </td>
                                         <td>
-                                            <select name="cumplido[1][]" id="inputCumplido">
+                                            <select class="form-control" name="cumplido[1][]" id="inputCumplido">
                                                 <option value="-1">Seleccione una opcion...</option>
                                                 <option value="si">Si</option>
                                                 <option value="no">No</option>
-
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="observaciones[1][1][]"
-                                                required>
-                                            <button id="btnAgregar">+</button>
+                                            <div class="input-agregar">
+                                                <input type="text" class="form-control agregable" name="observaciones[1][1][]"
+                                                    required><button class="btnAgregar p-2 btn btn-success">+</button>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
-                                <button id="agregarActividad">+</button>
+                                <button id="btnAgregarActividad" class="btn btn-success">+</button>
                             </table>
                         </div>
                         <br>
@@ -190,7 +190,7 @@
                         <br>
                         <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="" class="form-label">Presupuesto del proyecto</label>
-                            <table id="campoPresupuesto">
+                            <table id="campoActividades">
                                 <thead>
                                     <td>Concepto interno SENA</td>
                                     <td>Rubro</td>
@@ -212,13 +212,14 @@
                                                 name="uso_presupuestal[1][]" required>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="valor_planteado[1][1][]"
-                                                required>
-                                            <button id="btnAgregar">+</button>
+                                            <div class="input-agregar">
+                                                <input type="text" class="form-control agregable" name="valor_planteado[1][1][]"
+                                                    required><button class="btnAgregar p-2 btn btn-success">+</button>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
-                                <button id="agregarPresupuesto">+</button>
+                                <button id="btnAgregarPresupuesto" class=" btn btn-success">+</button>
                             </table>
                         </div>
                         <br>

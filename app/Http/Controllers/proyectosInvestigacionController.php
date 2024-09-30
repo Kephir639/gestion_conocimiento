@@ -102,6 +102,7 @@ class proyectosInvestigacionController extends Controller
         ];
 
         $datos = $request->all();
+        dd($datos);
 
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
@@ -130,7 +131,20 @@ class proyectosInvestigacionController extends Controller
                 $enlaces = $proyecto_investigacion->crearArray($datos, 'descripciones');
                 $cumplidos = $proyecto_investigacion->crearArray($datos, 'cumplidos');
 
+                dd($actividades);
+
                 $actividad =  [[]];
+                $n = 0;
+                while (is_null($descripciones[$n])) {
+                    $actividad[] = DB::table('investigacion_actividades_unificada')->create([
+                        'id_p_investigacion' => $proyecto->id_p_investigacion,
+                        'descripcion' => $descripciones[$n],
+                        'enlace_evidencia' => $enlaces[$n],
+                        'cumplido' => $cumplidos[$n]
+                    ]);
+                }
+
+
 
                 //Centros
                 foreach ($request->centros as $centro) {

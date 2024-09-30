@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     function campoUnico(nombreCampo) {
         let array = [];
         let n1 = 1;
@@ -24,9 +25,21 @@ $(document).ready(function () {
         }
         return array;
     }
-    //Metodo para abrir la modal de modificar
     let button = '';
-    //Metodo para abrir la modal de modificar
+
+    $(document).on('click', 'btnAgregar', function (e) {
+        let name = $(this).attr('name');
+        let partes = name.split("[");
+        let posiciones = [];
+        for (var i = 1; i < partes.length - 1; i++) {
+            posiciones.push(parseInt(partes[i].replace("]", "")));
+        }
+        let posLlave = name.indexOf("[");
+        let nombreCampo = name.substr(0, posLlave);
+
+
+    });
+
     $(document).on('click', '.iconoModalModificar', function () {
         button = $(this);
         let nombreGrupo = $(this).parents('tr').find('td:eq(0)').text().trim();
@@ -94,6 +107,10 @@ $(document).ready(function () {
         });
     });
 
+    // $(document).on('click', '.btnAgregar', function (e) {
+
+    // });
+
     $(document).on('click', '#btnRegistrar', function (e) {
         e.preventDefault();
         console.log('Funciona')
@@ -135,7 +152,6 @@ $(document).ready(function () {
             'enlaces': enlaces,
             'cumplidos': cumplidos
         }
-
         let presupuestos = {
             'conceptos': conceptos,
             'rubros': rubros,
@@ -151,7 +167,7 @@ $(document).ready(function () {
             data: {
                 '_token': token,
                 'ano_ejecucion': ano_proyecto,
-                'codigo': codigo,
+                'codigo_sigp': codigo,
                 'nombre_proyecto': nombre,
                 'centros': centros,
                 'grupos': grupos,
