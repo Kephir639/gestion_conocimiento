@@ -30,7 +30,7 @@
                         <br>
                         <div id="div_centros" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputCentros" class="form-label">Centros de formacion</label>
-                            <select class="form-control" id="inputCentros" name="centros[]" required>
+                            <select class="form-control" name="centros[]" id="inputCentros" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($centros as $centro)
                                     <option value="{{ $centro->id_centro }}">{{ $centro->nombre_centro }}</option>
@@ -39,7 +39,7 @@
                         </div>
                         <div id="div_grupos" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputGrupos" class="form-label">Grupos de investigacion</label>
-                            <select class="form-control" id="inputGrupos" name="grupos[]" required>
+                            <select class="form-control" name="grupos[]" id="inputGrupos" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($grupos as $grupo)
                                     <option value="{{ $grupo->id_grupo }}">{{ $grupo->nombre_grupo }}</option>
@@ -48,7 +48,7 @@
                         </div>
                         <div id="div_lineas" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputLineas" class="form-label">Lineas de investigacion</label>
-                            <select class="form-control" id="inputLineas" name="lineas[]" required>
+                            <select class="form-control" name="lineas[]" id="inputLineas" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($lineas as $linea)
                                     <option value="{{ $linea->id_linea }}">{{ $linea->nombre_linea }}</option>
@@ -57,17 +57,18 @@
                         </div>
                         <div id="div_redes" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputRedes" class="form-label">Redes de conocimiento</label>
-                            <select class="form-control" id="inputRedes" name="redes[]" required>
+                            <select class="form-control" name="redes[]" id="inputRedes" required>
                                 <option value="">Seleccione una opcion...</option>
-                                @foreach ($centros as $centro)
-                                    <option value="{{ $centro->id_centro }}">{{ $centro->nombre_centro }}</option>
+                                @foreach ($redes as $red)
+                                    <option value="{{ $red->id_red }}">{{ $red->nombre_red }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div id="div_programas" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputProgramas" class="form-label">Programas de formacion</label>
-                            <select type="text" class="form-control" id="inputProgramas" name="programas[]" required>
+                            <select type="text" class="form-control" name="programas[]" id="inputProgramas" required>
                                 <option value="">Seleccione una opcion...</option>
+                                <option value="prueba">Opcion de prueba</option>
                                 @foreach ($programas as $programas)
                                     <option value="{{ $programas->id_programas }}">{{ $programas->nombre_programas }}
                                     </option>
@@ -76,9 +77,10 @@
                         </div>
                         <div id="idv_semilleros" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputSemilleros" class="form-label">Semilleros de investigacion</label>
-                            <select type="text" class="form-control" id="inputSemilleros" name="semilleros[]"
+                            <select type="text" class="form-control" name="semilleros[]" id="inputSemilleros"
                                 required>
                                 <option value="">Seleccione una opcion...</option>
+                                <option value="prueba">Opcion de prueba</option>
                                 @foreach ($semilleros as $semillero)
                                     <option value="{{ $semillero->id_semillero }}">{{ $semillero->nombre_semillero }}
                                     </option>
@@ -91,7 +93,7 @@
                         <div id="div_participantes"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputParticipantes" class="form-label">Participantes</label>
-                            <select type="text" class="form-control" id="inputParticipantes" name="participantes[]"
+                            <select type="text" class="form-control" name="participantes[]" id="inputParticipantes"
                                 required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($participantes as $participante)
@@ -149,24 +151,24 @@
                                     <tr>
                                         <td>
                                             <input type="text" class="form-control" id="inputDescripcion"
-                                                name="descripcion[1]['descripcion'][]" required>
+                                                name="descripcion[1][]" required>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control"
-                                                name="actividades[1]['actividades'][]" required>
+                                            <input type="text" class="form-control" name="actividades[1][1][]"
+                                                required>
                                             <button class="btnAgregar">+</button>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control"
-                                                name="entregables[1]['entregables'][]" required>
+                                            <input type="text" class="form-control" name="entregables[1][1][]"
+                                                required>
                                             <button class="btnAgregar">+</button>
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" id="inputEnlace"
-                                                name="enlace_evidencia[1]['enlace_evidencia'][]" required>
+                                                name="enlace_evidencia[1][]" required>
                                         </td>
                                         <td>
-                                            <select name="cumplido[1]['cumplido'][]" id="inputCumplido">
+                                            <select name="cumplido[1][]" id="inputCumplido">
                                                 <option value="-1">Seleccione una opcion...</option>
                                                 <option value="si">Si</option>
                                                 <option value="no">No</option>
@@ -174,8 +176,8 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control"
-                                                name="observaciones[1]['observaciones'][]" required>
+                                            <input type="text" class="form-control" name="observaciones[1][1][]"
+                                                required>
                                             <button id="btnAgregar">+</button>
                                         </td>
                                     </tr>
@@ -199,19 +201,19 @@
                                     <tr>
                                         <td>
                                             <input type="text" class="form-control" id="inputConcepto"
-                                                name="concepto[1]['concepto'][]" required>
+                                                name="concepto[1][]" required>
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" id="inputRubro"
-                                                name="rubro[1]['rubro'][]" required>
+                                                name="rubro[1][]" required>
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" id="inputUso"
-                                                name="uso_presupuestal[1]['uso_presupuestal'][]" required>
+                                                name="uso_presupuestal[1][]" required>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control"
-                                                name="valores_planteados[1]['valores_planteados'][]" required>
+                                            <input type="text" class="form-control" name="valor_planteado[1][1][]"
+                                                required>
                                             <button id="btnAgregar">+</button>
                                         </td>
                                     </tr>
@@ -223,7 +225,7 @@
                         <hr>
                         <br>
                         <div class="col-md-12 col-sm-12 mt-3">
-                            <button class="btn btn-success w-100">Enviar</button>
+                            <button id="btnRegistrar" class="btn btn-success w-100">Enviar</button>
                         </div>
                     </div>
                 </form>

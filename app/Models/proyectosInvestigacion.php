@@ -64,4 +64,27 @@ class proyectosInvestigacion extends Model
                 ]);
         }
     }
+
+    public function crearArray($datos, $clave)
+    {
+        $arrayUnico = [[]];
+        foreach ($datos as $key => $valor) {
+            if ($key === 'actividades') {
+                foreach ($valor as $llave => $array) {
+                    if ($llave == $clave) {
+                        foreach ($array as $arr => $multiple) {
+                            if (is_array($multiple)) {
+                                foreach ($multiple as $ky) {
+                                    array_push($arrayUnico[$llave], $ky);
+                                }
+                            } else {
+                                array_push($arrayUnico[$llave], $arr);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $arrayUnico;
+    }
 }
