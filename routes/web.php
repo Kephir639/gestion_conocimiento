@@ -7,6 +7,7 @@ use App\Http\Controllers\centroController;
 use App\Http\Controllers\gruposController;
 use App\Http\Controllers\inicioController;
 use App\Http\Controllers\lineaController;
+use App\Http\Controllers\log_auditoria;
 use App\Http\Controllers\proyectosInvestigacionController;
 use App\Http\Controllers\rolController;
 use App\Http\Controllers\redesController;
@@ -85,8 +86,8 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     //Asignar rol
 
     Route::get('index/usuarios/asignar_rol', [usuarioController::class, 'showAsignarRol']);
-    Route::get('index/usuarios/showModalAsignarRol', [usuarioController::class, 'showModalAsignarRol']);
-    Route::post('index/usuarios/asignarRol', [usuarioController::class, 'asignarRol']);
+    Route::get('index/usuarios/showModalAsignarRol', [usuarioController::class, 'showModalAsignarRol'])->withoutMiddleware('checkRoutes');
+    Route::post('index/usuarios/asignarRol', [usuarioController::class, 'asignarRol'])->withoutMiddleware('checkRoutes');
 });
 
 

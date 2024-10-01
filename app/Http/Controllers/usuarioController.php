@@ -16,7 +16,7 @@ use App\Models\Doctorados;
 use App\Models\Log;
 use App\Models\Maestrias;
 use App\Models\Profesiones;
-
+use App\Models\Rol;
 
 class usuarioController extends Controller
 {
@@ -218,13 +218,9 @@ class usuarioController extends Controller
                 return view('alertas.repetido');
             } else {
                 $rolAsignado = new User();
-
                 $rolAsignado->setIdRolAttribute($request->idRol);
-
                 User::where('identificacion', $datos['documento'])->update($rolAsignado->toArray());
-
-                $rol = Rol::select('rol')->where('id_rol', $datos['idRol'])->get();
-
+                $rol = Rol::select('rol')->where('idRol', $datos['idRol'])->get();
                 $sql = log_auditoria::createLog(
                     'rol',
                     $rol,
@@ -248,16 +244,18 @@ class usuarioController extends Controller
         $notificaciones = $request->notificaciones;
         return view('modals.usuarios.asignarRol', compact('usuariosPendientes', 'controladores', 'notificaciones'));
     }
-    public function showModalAsignarRol()
+
+    public function showModalAsignarRol(Request $request)
     {
         $rolExistente = "SELECT * FROM roles";
+        $idRol = $request->idRol;
+        $usuarios = $request->documentos;
         $roles = DB::select($rolExistente);
-        return view('modals.usuarios.modalAsignarRol', compact('roles'));
+        return view('modals.usuarios.modalAsignarRol', compact('roles', 'idRol', 'usuarios'));
     }
+
     public function showPerfil()
     {
         return view('modals.usuarios.perfilUsuario');
     }
 }
-
-
