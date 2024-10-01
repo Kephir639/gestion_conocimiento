@@ -86,6 +86,11 @@ Route::middleware('auth', 'active', 'filter', 'notifications', 'checkPermisos')-
 
     Route::get('index/semilleros/showModalValidar', [semillerosController::class, 'showModalValidar']);
     Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
+
+    //usuarios
+    Route::get('index/usuarios/consultar_usuarios', [usuarioController::class, 'showUsuarios']);
+    //Route::post('index/usuarios/usuario', [usuarioController::class, 'showUsuarios']);
+
 });
 
 Route::get('logout', [AuthLoginController::class, 'logout']);

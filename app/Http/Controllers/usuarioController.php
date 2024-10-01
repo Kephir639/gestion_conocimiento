@@ -15,15 +15,21 @@ use App\Models\Cargos;
 use App\Models\Doctorados;
 use App\Models\Maestrias;
 use App\Models\Profesiones;
+use App\Models\Rol;
 
 class usuarioController extends Controller
 {
     public function showUsuarios(Request $request)
     {
-        $listaUsuarios = User::orderBy('id', 'desc')->paginate(10);
+        $usuario= User::table;
+        $rol= Rol::table;
+        $listaUsuarios = DB::table($usuario)
+            ->join($rol,"$usuario.idRol","=","$rol.id_rol")
+            ->select('id','name','apellidos','tipo_documento','identificacion','email','estado_usu','rol')
+            ->paginate(10);
         $controladores = $request->controladores;
-
-        return view('modals.usuario.consultarUsuario', [
+        //dd($listaUsuarios);
+        return view('modals.usuarios.consultarUsuarios', [
             'listaUsuarios' => $listaUsuarios,
             'controladores' => $controladores
         ]);

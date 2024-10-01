@@ -42,26 +42,17 @@
                         </a>
                     </li>
                     @foreach ($controladores as $controlador => $contr)
-                        {{-- {{ dd($contr) }} --}}
+                        {{-- Nota: El side-bar se debería separar, al igual que el footer y header, no todo debe estar en un mismo archivo --}}
                         <li class="sidebar-item">
-                            <a href="/index/{{ $contr['nombre_controlador'] }}/consultar_{{ $contr['nombre_controlador'] }}"
+                            @php
+                                $url = "index/".$contr['nombre_controlador']."/consultar_".$contr['nombre_controlador'];
+                            @endphp
+                            <!--Cambio usando la función url de laravel para evitar errores 404-->
+                            <a href="{{url($url)}}"
                                 id="tab_{{ $contr['nombre_controlador'] }}"
                                 class="sidebar-tabb sidebar-link collapsed px-3 py-2" {{-- data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse" --}}
                                 aria-expanded="false">{!! html_entity_decode($contr['icono']) !!}{{ $contr['display_controlador'] }}
                             </a>
-                            {{-- <ul id="{{ $contr['nombre_controlador'] }}" class="sidebar-dropdown list-unstyled collapse"
-                                data-bs-target="#sidebar">
-                                @foreach ($contr['funciones'] as $funcion => $func)
-                                    @if (!Str::contains($func['display_funcion'], 'Modificar'))
-                                        <li>
-                                            <a href="/index/{{ $contr['nombre_controlador'] }}/{{ $func['nombre_funcion'] }}"
-                                                class="sidebar-tabb-drop sidebar-link text-center p-2">
-                                                {{ $func['display_funcion'] }}
-                                            </a>
-                                        </li>
-                                    @endif
-                                @endforeach
-                            </ul> --}}
                         </li>
                     @endforeach
                 </ul><br>

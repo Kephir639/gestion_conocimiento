@@ -61,6 +61,7 @@ $(document).ready(function () {
             url: "funciones",
             success: function (dataGET) {
                 let nombre = $('#inputNombreRol').val();
+                let nombre_old = $(this).parents('tr').find('td:eq(0)').text().trim();
                 let estado = $('#inputEstadoRol').val();
                 let token = $('#_token').val();
                 let funciones = dataGET; //Antes de actualizar
@@ -85,6 +86,7 @@ $(document).ready(function () {
                         'estado_rol': estado,
                         'funciones_agregadas': funcionesAgregadas,
                         'funciones_eliminadas': funcionesEliminadas,
+                        'nombre_rol_old' : nombre_old,
                         '_token': token
                     },
                     success: function (dataPost) {
