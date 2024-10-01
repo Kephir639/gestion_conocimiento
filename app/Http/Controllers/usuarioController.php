@@ -17,6 +17,8 @@ use App\Models\Maestrias;
 use App\Models\Profesiones;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Rol;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport;
 
 class usuarioController extends Controller
 {
@@ -308,5 +310,9 @@ class usuarioController extends Controller
                 ]);
             }
         }
+    }
+
+    public function usersExport (){
+        return Excel::download(new UsersExport, 'usuarios.xlsx');
     }
 }
