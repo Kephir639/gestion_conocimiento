@@ -6,6 +6,20 @@
 @section('content')
     <div class="container mt-2">
         <div class="row p-3">
+            <div id="div_responsables" class="col-md-12 col-sm-12 justify-content-center align-items-center">
+                <label class="form-label">Responsables</label>
+                <select id="inputResponsables" name="responsables[]" required>
+                    {{-- @foreach ($usuarios as $usuario)
+                        <option value="{{ $usuario->identificacion }}">{{ $usuario->name }}
+                            {{ $usuario->apellidos }} - {{ $usuario->rol }}</option>
+                    @endforeach --}}
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                </select>
+                <span class="errorValidacion"></span>
+            </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <table class="table">
                     <thead class="tableHeadre">
@@ -35,7 +49,6 @@
                                 <td>
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
-                                     
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'consultar_semillero')
                                                     <button title="Ver semillero" class="btn p-0"><svg
@@ -105,6 +118,6 @@
         </div>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/semilleros.js') }}"></script>
-@endsection
+@endpush

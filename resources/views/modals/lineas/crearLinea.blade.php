@@ -9,7 +9,8 @@
                 <form>
                     <div class="row mt-3">
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
+                        <div id="div_nombre_linea"
+                            class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputNombreLinea" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="inputNombreLinea" name="nombre_linea"
                                 required>
