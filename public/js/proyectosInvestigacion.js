@@ -27,8 +27,10 @@ $(document).ready(function () {
     }
     let button = '';
 
-    $(document).on('click', 'btnAgregar', function (e) {
-        let name = $(this).attr('name');
+    $(document).on('click', '.btnAgregar', function (e) {
+        e.preventDefault();
+        let inputs = $(this).closest('.input-agregar').find('.agregable');
+        let name = $(inputs[inputs.length-1]).attr('name');
         let partes = name.split("[");
         let posiciones = [];
         for (var i = 1; i < partes.length - 1; i++) {
@@ -37,7 +39,41 @@ $(document).ready(function () {
         let posLlave = name.indexOf("[");
         let nombreCampo = name.substr(0, posLlave);
 
+        let divObjetivo = $(this).closest('.input-agregar');
 
+        let item = `
+        <div class="divAgregado">
+            <input type="text" class="form-control agregable" name="`+nombreCampo+`[`+posiciones[0]+`][`+(posiciones[1]+1)+`][]"
+                                                    required><a href="#" class="btn btn-danger p-2 btnEliminar">-</a>
+        </div>
+        `;
+
+        $(divObjetivo).append(item);
+    });
+
+    $(document).on('click', '.btnEliminar', function (e) {
+        e.preventDefault();
+        let agregados = $(this).closest('.input-agregar').find('.agregable');
+        // Asegurarse de que no se elimine el último objetivo
+        if (agregados.length > 1) {
+            let name = $(this).closest('.divAgregado').find('.agregable').attr('name');
+            let partes = name.split("[");
+            let posiciones = [];
+            for (var i = 1; i < partes.length - 1; i++) {
+                posiciones.push(parseInt(partes[i].replace("]", "")));
+            }
+            let posLlave = name.indexOf("[");
+            let nombreCampo = name.substr(0, posLlave);
+
+            $(this).closest('.divAgregado').remove();
+
+            let agregados = $(this).closest('.input-agregar').find('.agregable');
+            let reinicio = 1;
+            $.each(agregados, function (llave, valor) {
+                $(agregados).attr('name').replace(nombreCampo+'['+posiciones[0]+']['+reinicio+']');
+                reinicio++;
+            });
+        }
     });
 
     $(document).on('click', '.iconoModalModificar', function () {
