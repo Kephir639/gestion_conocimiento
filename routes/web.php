@@ -88,6 +88,9 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::post('index/proyectos_investigacion/crear_proyecto_investigacion', [proyectosInvestigacionController::class, 'registrarProyectoInvestigacion']);
     Route::get('index/proyectos_investigacion/showModalActualizar', [proyectosInvestigacionController::class, 'showModalActualizar'])->withoutMiddleware('checkRoutes');
     Route::post('index/proyectos_investigacion/actualizar_proyecto_investigacion', [proyectosInvestigacionController::class, 'actualizarProyectoInvestigacion']);
+
+    Route::get('index/proyectos_investigacion/agregar_actividad', [proyectosInvestigacionController::class, 'agregarActividad'])->withoutMiddleware('checkRoutes');
+    Route::get('index/proyectos_investigacion/agregar_presupuesto', [proyectosInvestigacionController::class, 'agregarPresupuesto'])->withoutMiddleware('checkRoutes');
 });
 
 Route::get('logout', [AuthLoginController::class, 'logout']);

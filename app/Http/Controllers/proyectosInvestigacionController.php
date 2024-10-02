@@ -51,6 +51,24 @@ class proyectosInvestigacionController extends Controller
         ]);
     }
 
+    public function agregarActividad(Request $request)
+    {
+        $contador_actividad = $request->contador_actividad;
+
+        return view('modals.proyectos.investigacion.div.divActividad', [
+            'contador_actividad' => $contador_actividad
+        ])->render();
+    }
+
+    public function agregarPresupuesto(Request $request)
+    {
+        $contador_presupuesto = $request->contador_presupuesto;
+
+        return view('modals.proyectos.investigacion.div.divPresupuesto', [
+            'contador_presupuesto' => $contador_presupuesto
+        ])->render();
+    }
+
     public function showModalActualizar(Request $request)
     {
 
@@ -102,7 +120,9 @@ class proyectosInvestigacionController extends Controller
         ];
 
         $datos = $request->all();
-        dd($datos);
+
+        unset($datos['controladores']);
+        // dd($datos);
 
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
@@ -122,29 +142,21 @@ class proyectosInvestigacionController extends Controller
                 $proyecto_investigacion->objetivo_general = $request->objetivo_general;
                 $proyecto_investigacion->propuesta = $request->propuesta;
                 $proyecto_investigacion->impacto = $request->impacto;
+                $proyecto_investigacion->estado_p_investigacion = 1;
 
                 $proyecto = proyectosInvestigacion::create($proyecto_investigacion->toArray());
 
-                $descripciones = $proyecto_investigacion->crearArray($datos, 'descripciones');
                 $actividades = $proyecto_investigacion->crearArray($datos, 'actividades');
                 $entregables = $proyecto_investigacion->crearArray($datos, 'entregables');
+                $observaciones = $proyecto_investigacion->crearArray($datos, 'observaciones');
+                $descripciones = $proyecto_investigacion->crearArray($datos, 'descripciones');
                 $enlaces = $proyecto_investigacion->crearArray($datos, 'descripciones');
                 $cumplidos = $proyecto_investigacion->crearArray($datos, 'cumplidos');
 
-                dd($actividades);
-
-                $actividad =  [[]];
-                $n = 0;
-                while (is_null($descripciones[$n])) {
-                    $actividad[] = DB::table('investigacion_actividades_unificada')->create([
-                        'id_p_investigacion' => $proyecto->id_p_investigacion,
-                        'descripcion' => $descripciones[$n],
-                        'enlace_evidencia' => $enlaces[$n],
-                        'cumplido' => $cumplidos[$n]
-                    ]);
-                }
-
-
+                $conceptos = $proyecto_investigacion->crearArray($datos, 'conceptos');
+                $rubros = $proyecto_investigacion->crearArray($datos, 'rubros');
+                $uso_presupuestal = $proyecto_investigacion->crearArray($datos, 'uso_presupuestal');
+                $valores = $proyecto_investigacion->crearArray($datos, 'valores');
 
                 //Centros
                 foreach ($request->centros as $centro) {
@@ -210,7 +222,44 @@ class proyectosInvestigacionController extends Controller
                         'estado_objetivo_i' => 1
                     ]);
                 }
-
+                //Actividades
+                for ($i = 0; $i < count($descripciones); $i++) {
+                    $actividad = DB::table('investigacion_actividades_unificada')->create([
+                        'id_p_investigacion' => $proyecto->id_p_investigacion,
+                        'descripcion' => $descripciones[$i],
+                        'enlace_evidencia' => $enlaces[$i],
+                        'cumplido' => $cumplidos[$i],
+                        'estado_actividad_u_i' => 1
+                    ]);
+                    foreach ($actividades as $key => $arrayActividad) {
+                        foreach ($arrayActividad as $actividad) {
+                            DB::table('investigacion_actividades')->insert([
+                                'id_actividad_i' => $actividad->id_actividad_i,
+                                'actividad' => $actividad,
+                                'estado_actividad_i' => 1
+                            ]);
+                        }
+                    }
+                    foreach ($entregables as $key => $arrayEntregables) {
+                        foreach ($arrayEntregables as $entregable) {
+                            DB::table('investigacion_entregablees')->insert([
+                                'id_actividad_i' => $actividad->id_actividad_i,
+                                'entregable' => $entregable,
+                                'estado_entregable_i' => 1
+                            ]);
+                        }
+                    }
+                    foreach ($observaciones as $key => $arrayobservaciones) {
+                        foreach ($arrayobservaciones as $observacion) {
+                            DB::table('investigacion_entregablees')->insert([
+                                'id_actividad_i' => $actividad->id_actividad_i,
+                                'observacion' => $observacion,
+                                'estado_observacion_i' => 1
+                            ]);
+                        }
+                    }
+                }
+                //Presupuestos
 
 
                 $sql = log_auditoria::createLog(

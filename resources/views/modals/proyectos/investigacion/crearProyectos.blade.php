@@ -30,7 +30,7 @@
                         <br>
                         <div id="div_centros" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputCentros" class="form-label">Centros de formacion</label>
-                            <select class="form-control" name="centros[]" id="inputCentros" required>
+                            <select class="form-control" name="centros" id="inputCentros" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($centros as $centro)
                                     <option value="{{ $centro->id_centro }}">{{ $centro->nombre_centro }}</option>
@@ -39,7 +39,7 @@
                         </div>
                         <div id="div_grupos" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputGrupos" class="form-label">Grupos de investigacion</label>
-                            <select class="form-control" name="grupos[]" id="inputGrupos" required>
+                            <select class="form-control" name="grupos" id="inputGrupos" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($grupos as $grupo)
                                     <option value="{{ $grupo->id_grupo }}">{{ $grupo->nombre_grupo }}</option>
@@ -48,7 +48,7 @@
                         </div>
                         <div id="div_lineas" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputLineas" class="form-label">Lineas de investigacion</label>
-                            <select class="form-control" name="lineas[]" id="inputLineas" required>
+                            <select class="form-control" name="lineas" id="inputLineas" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($lineas as $linea)
                                     <option value="{{ $linea->id_linea }}">{{ $linea->nombre_linea }}</option>
@@ -57,7 +57,7 @@
                         </div>
                         <div id="div_redes" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputRedes" class="form-label">Redes de conocimiento</label>
-                            <select class="form-control" name="redes[]" id="inputRedes" required>
+                            <select class="form-control" name="redes" id="inputRedes" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($redes as $red)
                                     <option value="{{ $red->id_red }}">{{ $red->nombre_red }}</option>
@@ -66,7 +66,7 @@
                         </div>
                         <div id="div_programas" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputProgramas" class="form-label">Programas de formacion</label>
-                            <select type="text" class="form-control" name="programas[]" id="inputProgramas" required>
+                            <select type="text" class="form-control" name="programas" id="inputProgramas" required>
                                 <option value="">Seleccione una opcion...</option>
                                 <option value="prueba">Opcion de prueba</option>
                                 @foreach ($programas as $programas)
@@ -77,8 +77,7 @@
                         </div>
                         <div id="idv_semilleros" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputSemilleros" class="form-label">Semilleros de investigacion</label>
-                            <select type="text" class="form-control" name="semilleros[]" id="inputSemilleros"
-                                required>
+                            <select type="text" class="form-control" name="semilleros" id="inputSemilleros" required>
                                 <option value="">Seleccione una opcion...</option>
                                 <option value="prueba">Opcion de prueba</option>
                                 @foreach ($semilleros as $semillero)
@@ -93,7 +92,7 @@
                         <div id="div_participantes"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputParticipantes" class="form-label">Participantes</label>
-                            <select type="text" class="form-control" name="participantes[]" id="inputParticipantes"
+                            <select type="text" class="form-control" name="participantes" id="inputParticipantes"
                                 required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($participantes as $participante)
@@ -134,102 +133,110 @@
                         <br>
                         <hr>
                         <br>
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="" class="form-label">Actividades</label>
-                            <table id="campoActividades">
-                                <thead>
-                                    <td>Descripcion</td>
-                                    <td>Actividad</td>
-                                    <td>Entregable</td>
-                                    <td>Enlace</td>
-                                    <td>Se cumple</td>
-                                    <td>Observaciones</td>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <input type="text" class="form-control" id="inputDescripcion"
-                                                name="descripcion[1][]" required>
-                                        </td>
-                                        <td>
-                                            <div class="input-agregar">
-                                                <div class="campo_principal">
-                                                    <input type="text" class="form-control agregable" name="actividades[1][1][]"
-                                                        required><a href="#" class="btnAgregar p-2 btn btn-success">+</a href="#">
+                        <div id="actividades">
+                            <div class="col-md-12 col-sm-12 justify-content-center align-items-center grupoInput">
+                                <label for="" class="form-label">Actividades</label>
+                                <table id="campoActividades">
+                                    <thead>
+                                        <td>Descripcion</td>
+                                        <td>Actividad</td>
+                                        <td>Entregable</td>
+                                        <td>Enlace</td>
+                                        <td>Se cumple</td>
+                                        <td>Observaciones</td>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="text" class="form-control simple"
+                                                    id="inputDescripcion" name="descripcion[1][]" required>
+                                            </td>
+                                            <td>
+                                                <div class="input-agregar">
+                                                    <div class="campo_principal input-group">
+                                                        <input type="text" class="form-control agregable"
+                                                            name="actividades[1][1][]" required><a href="#"
+                                                            class="btnAgregar btn btn-success">+</a href="#">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="input-agregar">
-                                                <div class="campo_principal">
-                                                    <input type="text" class="form-control agregable" name="entregables[1][1][]"
-                                                        required><a href="#" class="btnAgregar p-2 btn btn-success">+</a href="#">
+                                            </td>
+                                            <td>
+                                                <div class="input-agregar">
+                                                    <div class="campo_principal input-group">
+                                                        <input type="text" class="form-control agregable"
+                                                            name="entregables[1][1][]" required><a href="#"
+                                                            class="btnAgregar btn btn-success">+</a href="#">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" id="inputEnlace"
-                                                name="enlace_evidencia[1][]" required>
-                                        </td>
-                                        <td>
-                                            <select class="form-control" name="cumplido[1][]" id="inputCumplido">
-                                                <option value="-1">Seleccione una opcion...</option>
-                                                <option value="si">Si</option>
-                                                <option value="no">No</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <div class="input-agregar">
-                                                <div class="campo_principal">
-                                                    <input type="text" class="form-control agregable" name="observaciones[1][1][]"
-                                                        required><a href="#" class="btnAgregar p-2 btn btn-success">+</a href="#">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control simple" id="inputEnlace"
+                                                    name="enlace_evidencia[1][]" required>
+                                            </td>
+                                            <td>
+                                                <select class="form-control simple" name="cumplido[1][]"
+                                                    id="inputCumplido">
+                                                    <option value="-1">Seleccione una opcion...</option>
+                                                    <option value="si">Si</option>
+                                                    <option value="no">No</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <div class="input-agregar">
+                                                    <div class="campo_principal input-group">
+                                                        <input type="text" class="form-control agregable"
+                                                            name="observaciones[1][1][]" required><a href="#"
+                                                            class="btnAgregar btn btn-success">+</a href="#">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <button id="btnAgregarActividad" class="btn btn-success">+</button>
-                            </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <button id="btnAgregarActividad" class="btn btn-success">+</button>
+                                </table>
+                            </div>
                         </div>
                         <br>
                         <hr>
                         <br>
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="" class="form-label">Presupuesto del proyecto</label>
-                            <table id="campoActividades">
-                                <thead>
-                                    <td>Concepto interno SENA</td>
-                                    <td>Rubro</td>
-                                    <td>uso presupuestal</td>
-                                    <td>Valor planeado</td>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <input type="text" class="form-control" id="inputConcepto"
-                                                name="concepto[1][]" required>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" id="inputRubro"
-                                                name="rubro[1][]" required>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" id="inputUso"
-                                                name="uso_presupuestal[1][]" required>
-                                        </td>
-                                        <td>
-                                            <div class="input-agregar">
-                                                <div class="campo_principal">
-                                                    <input type="text" class="form-control agregable" name="valor_planteado[1][1][]"
-                                                        required><button class="btnAgregar p-2 btn btn-success">+</button>
-
+                        <div id="presupuestos">
+                            <div class="col-md-12 col-sm-12 justify-content-center align-items-center grupoInput">
+                                <label for="" class="form-label">Presupuesto del proyecto</label>
+                                <table id="campoActividades">
+                                    <thead>
+                                        <td>Concepto interno SENA</td>
+                                        <td>Rubro</td>
+                                        <td>uso presupuestal</td>
+                                        <td>Valor planeado</td>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="text" class="form-control simple" id="inputConcepto"
+                                                    name="concepto[1][]" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control simple" id="inputRubro"
+                                                    name="rubro[1][]" required>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control simple" id="inputUso"
+                                                    name="uso_presupuestal[1][]" required>
+                                            </td>
+                                            <td>
+                                                <div class="input-agregar">
+                                                    <div class="campo_principal input-group">
+                                                        <input type="text" class="form-control agregable"
+                                                            name="valor_planteado[1][1][]" required><button
+                                                            class="btnAgregar btn btn-success">+</button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <button id="btnAgregarPresupuesto" class=" btn btn-success">+</button>
-                            </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <button id="btnAgregarPresupuesto" class=" btn btn-success">+</button>
+                                </table>
+                            </div>
                         </div>
                         <br>
                         <hr>

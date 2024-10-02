@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    let button = '';
+    let contadorDivActividad = 2;
+    let contadorDivPresupuesto = 2;
 
     function campoUnico(nombreCampo) {
         let array = [];
@@ -25,12 +28,11 @@ $(document).ready(function () {
         }
         return array;
     }
-    let button = '';
 
     $(document).on('click', '.btnAgregar', function (e) {
         e.preventDefault();
         let inputs = $(this).closest('.input-agregar').find('.agregable');
-        let name = $(inputs[inputs.length-1]).attr('name');
+        let name = $(inputs[inputs.length - 1]).attr('name');
         let partes = name.split("[");
         let posiciones = [];
         for (var i = 1; i < partes.length - 1; i++) {
@@ -42,8 +44,8 @@ $(document).ready(function () {
         let divObjetivo = $(this).closest('.input-agregar');
 
         let item = `
-        <div class="divAgregado">
-            <input type="text" class="form-control agregable" name="`+nombreCampo+`[`+posiciones[0]+`][`+(posiciones[1]+1)+`][]"
+        <div class="divAgregado input-group">
+            <input type="text" class="form-control agregable" name="`+ nombreCampo + `[` + posiciones[0] + `][` + (posiciones[1] + 1) + `][]"
                                                     required><a href="#" class="btn btn-danger p-2 btnEliminar">-</a>
         </div>
         `;
@@ -54,7 +56,6 @@ $(document).ready(function () {
     $(document).on('click', '.btnEliminar', function (e) {
         e.preventDefault();
         let agregados = $(this).closest('.input-agregar').find('.agregable');
-        // Asegurarse de que no se elimine el último objetivo
         if (agregados.length > 1) {
             let name = $(this).closest('.divAgregado').find('.agregable').attr('name');
             let partes = name.split("[");
@@ -65,15 +66,122 @@ $(document).ready(function () {
             let posLlave = name.indexOf("[");
             let nombreCampo = name.substr(0, posLlave);
 
+            let divAbuelo = $(this).closest('.input-agregar');
             $(this).closest('.divAgregado').remove();
+            let restante = $(divAbuelo).find('.agregable')
 
-            let agregados = $(this).closest('.input-agregar').find('.agregable');
             let reinicio = 1;
-            $.each(agregados, function (llave, valor) {
-                $(agregados).attr('name').replace(nombreCampo+'['+posiciones[0]+']['+reinicio+']');
+            $.each(restante, function (llave, valor) {
+                $(valor).attr('name', nombreCampo + '[' + posiciones[0] + '][' + reinicio + '][]');
                 reinicio++;
             });
         }
+    });
+
+    $(document).on('click', '#btnAgregarActividad', function (e) {
+        e.preventDefault();
+        let div = $(this).closest('#actividades');
+
+        $.ajax({
+            type: "GET",
+            url: "agregar_actividad",
+            data: {
+                'contador_actividad': contadorDivActividad
+            },
+            success: function (data) {
+                $(div).append(data);
+                contadorDivActividad++;
+            }
+        });
+    })
+
+    $(document).on('click', '#btnEliminarActividad', function (e) {
+        e.preventDefault();
+
+        let contador = 1;
+        $(this).closest('.actividadAgregada').remove();
+        let grupoInputs = $('#actividades').find('.grupoInput');
+
+        grupoInputs.each(function () {
+            // console.log($(this));
+            let divContenedor = $(this).find('.input-agregar');
+            let inputSimples = $(this).find('.simple');
+            let nombreCampo = '';
+            divContenedor.each(function () {
+                let inputAgregables = $(this).find('.agregable');
+                let contadorCantidad = 1;
+                inputAgregables.each(function () {
+                    let nombre = $(this).attr('name');
+                    let partes = nombre.split('[');
+                    nombreCampo = partes[0];
+                    $(this).attr('name', nombreCampo + '[' + contador + '][' + contadorCantidad + '][]');
+                    contadorCantidad++;
+                });
+            });
+            inputSimples.each(function () {
+                let nombre = $(this).attr('name');
+                let partes = nombre.split('[');
+                nombreCampo = partes[0];
+
+                $(this).attr('name', nombreCampo + '[' + contador + '][]');
+            });
+
+            contador++;
+        });
+        contadorDivActividad--;
+    });
+
+    $(document).on('click', '#btnAgregarPresupuesto', function (e) {
+        e.preventDefault();
+        let div = $(this).closest('#presupuestos');
+
+        $.ajax({
+            type: "GET",
+            url: "agregar_presupuesto",
+            data: {
+                'contador_presupuesto': contadorDivPresupuesto
+            },
+            success: function (data) {
+                $(div).append(data);
+                contadorDivPresupuesto++;
+            }
+        });
+    });
+
+    $(document).on('click', '#btnEliminarPresupuesto', function (e) {
+        e.preventDefault();
+
+        let contador = 1;
+        $(this).closest('.presupuestoAgregado').remove();
+
+        let grupoInputs = $('#presupuestos').find('.grupoInput');
+        grupoInputs.each(function () {
+            let divContenedor = $(this).find('.input-agregar');
+            let inputSimples = $(this).find('.simple');
+            console.log(inputSimples);
+            let nombreCampo = '';
+            divContenedor.each(function () {
+                let inputAgregables = $(this).find('.agregable');
+                let contadorCantidad = 1;
+                inputAgregables.each(function () {
+                    let nombre = $(this).attr('name');
+                    let partes = nombre.split('[');
+                    nombreCampo = partes[0];
+                    $(this).attr('name', nombreCampo + '[' + contador + '][' + contadorCantidad + '][]');
+                    contadorCantidad++;
+                });
+            });
+            inputSimples.each(function () {
+                let nombre = $(this).attr('name');
+                let partes = nombre.split('[');
+                nombreCampo = partes[0];
+
+                $(this).attr('name', nombreCampo + '[' + contador + '][]');
+            });
+
+            contador++;
+        });
+        contadorDivPresupuesto--;
     });
 
     $(document).on('click', '.iconoModalModificar', function () {
@@ -157,13 +265,13 @@ $(document).ready(function () {
         let ano_proyecto = $('#inputAnoProyecto').val();
         let codigo = $('#inputCodigoSIGP').val();
         let nombre = $('#inputNombreProyecto').val();
-        let centros = $('input[name="centros[]"]').map(function () { return $(this).val(); }).get();
-        let grupos = $('input[name="grupos[]"]').map(function () { return $(this).val(); }).get();
-        let lineas = $('input[name="lineas[]"]').map(function () { return $(this).val(); }).get();
-        let redes = $('input[name="redes[]"]').map(function () { return $(this).val(); }).get();
-        let programas = $('input[name="programas[]"]').map(function () { return $(this).val(); }).get();
-        let semilleros = $('input[name="semilleros[]"]').map(function () { return $(this).val(); }).get();
-        let participantes = $('input[name="participantes[]"]').map(function () { return $(this).val(); }).get();
+        let centros = $('input[name="centros"]').val();
+        let grupos = $('input[name="grupos"]').val();
+        let lineas = $('input[name="lineas"]').val();
+        let redes = $('input[name="redes"]').val();
+        let programas = $('input[name="programas"]').val();
+        let semilleros = $('input[name="semilleros"]').val();
+        let participantes = $('input[name="participantes"]').val();
         let resumen = $('#inputResumenProyecto').val();
         let objetivo = $('#inputObjetivoProyecto').val();
         let objetivos_especificos = $('input[name="objetivos_especificos[]"]').map(function () { return $(this).val(); }).get();
@@ -175,7 +283,7 @@ $(document).ready(function () {
         let entregables = campoAgregable('entregables');
         let enlaces = campoUnico('enlace_evidencia');
         let cumplidos = campoAgregable('cumplido');
-        //Presupuestos
+        let observaciones = campoAgregable('observaciones');        //Presupuestos
         let conceptos = campoUnico('concepto');
         let rubros = campoUnico('rubro');
         let usos_presupuestales = campoUnico('uso_presupuestal');
@@ -186,7 +294,8 @@ $(document).ready(function () {
             'actividades': actividades,
             'entregables': entregables,
             'enlaces': enlaces,
-            'cumplidos': cumplidos
+            'cumplidos': cumplidos,
+            'observaciones': observaciones
         }
         let presupuestos = {
             'conceptos': conceptos,
@@ -207,7 +316,7 @@ $(document).ready(function () {
                 'nombre_proyecto': nombre,
                 'centros': centros,
                 'grupos': grupos,
-                'lieas': lineas,
+                'lineas': lineas,
                 'redes': redes,
                 'programas': programas,
                 'semilleros': semilleros,
@@ -218,7 +327,7 @@ $(document).ready(function () {
                 'propuesta': propuesta,
                 'impacto_esperado': impacto,
                 'actividades': actividades_conjunto,
-                'prespuestos': presupuestos
+                'presupuestos': presupuestos
             },
             success: function (data) {
                 //Mostrar los registros actualizados

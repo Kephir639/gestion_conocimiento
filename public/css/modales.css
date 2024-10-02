@@ -22,18 +22,18 @@
 }
 
 
-.modal-fixed{
-    --bs-modal-width:70%;
+.modal-fixed {
+    --bs-modal-width: 70%;
 }
+
 #campoActividades {
     border-collapse: collapse;
     width: 100%;
 }
 
-#campoActividades th, #campoActividades td {
-    /* border: 1px solid #ddd; */
+#campoActividades th,
+#campoActividades td {
     padding: 5px;
-    text-align: left;
 }
 
 #campoActividades th {
@@ -68,24 +68,9 @@
 
 #campoActividades td {
     position: relative;
-    /* padding-right: 40px; */
 }
 
-.input-agregar {
-    display: flex;
-    align-items: center;
-}
-
-.input-agregar input[type="text"] {
-    flex: 1;
-}
-
-.input-agregar button {
-    margin-left: 0;
-}
-
-.agregable{
+.agregable {
     border-top-right-radius: 0%;
     border-bottom-right-radius: 0%;
 }
-
