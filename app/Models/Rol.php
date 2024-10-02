@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rol extends Model
 {
+    const table = 'roles';
     protected $table = 'roles';
 
     // Define the primary key for the model

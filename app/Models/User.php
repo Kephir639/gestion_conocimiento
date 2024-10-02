@@ -17,7 +17,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-
+    const table = 'users';
+    protected $table = 'users';
     protected $fillable = [
         'id',
         'idRol',
