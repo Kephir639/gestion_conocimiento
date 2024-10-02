@@ -25,22 +25,7 @@ $(document).ready(function () {
     $(document).on('click', '.btnAsignarTodo', function (e) {
         button = $(this);
         e.preventDefault();
-        let usuarioSeleccionado = [];
 
-        // Iterar sobre cada checkbox seleccionado y obtener los nombres de las filas
-        $('.userCheckbox:checked').each(function () {
-            let row = $(this).closest('tr');  // Obtener la fila donde está el checkbox
-            let nombre = row.find('td:eq(1)').text().trim();
-            let apellido = row.find('td:eq(2)').text().trim();
-            let nombreCompleto = nombre + " " + apellido;
-            usuarioSeleccionado.push(nombreCompleto);
-        });
-
-        // Verificar si hay usuarios seleccionados
-        if (usuarioSeleccionado.length === 0) {
-            alert("Selecciona al menos un usuario.");
-            return;
-        }
 
         // Solicitud AJAX para cargar la modal con los datos de los usuarios seleccionados
         $.ajax({
@@ -52,8 +37,6 @@ $(document).ready(function () {
 
                 $('#modalAsignarRol').modal('show');
 
-                let nombresUsuarios = usuarioSeleccionado.join(', ');
-                $('#inputNombreUsuario').val(nombresUsuarios);
             }
         });
     });
@@ -69,15 +52,15 @@ $(document).on('click', '#btnAsignarRol', function (e) {
     e.preventDefault();
     let idRol = $('#inputRol').val();
     let token = $('#_token').val();
-    let documentosSeleccionados = [];
-
-
+    let documentosSeleccionados = $('input[name="userCheckbox[]"]:checked').map(function () { return $(this).val(); }).get(); //se busca la data y luego se asigna en la variable
+    let estado = $('#inputEstado').val();
     $.ajax({
         type: "POST",
         url: "asignarRol",
         data: {
             'idRol': idRol,
-            'documento': documentosSeleccionados,
+            'documentos': documentosSeleccionados,
+            'estado_usu': estado,
             '_token': token
         },
         success: function (data) {

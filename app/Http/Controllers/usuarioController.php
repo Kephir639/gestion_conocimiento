@@ -192,9 +192,13 @@ class usuarioController extends Controller
     {
         $reglas = [
             'idRol' => 'required',
+            'documentos' => 'required',
+            'estado_usu' => 'required'
         ];
         $mensajes = [
             'idRol.required' => 'Este campo es requerido',
+            'documentos.required' => 'Seleccione al menos un usuario',
+            'estado_usu.required' => 'El estado es requerido',
         ];
         $datos = $request->all();
         // dd($datos);
@@ -209,28 +213,14 @@ class usuarioController extends Controller
             $respuestas['error'] = true;
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $respuestas['error'] = false;
-            $ajax = User::where([
-                'idRol' => $datos['idRol']
-            ])->get();
-            if (count($ajax)) {
-                //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
-                return view('alertas.repetido');
-            } else {
+            foreach ($request->documentos as $documento) {
                 $rolAsignado = new User();
                 $rolAsignado->setIdRolAttribute($request->idRol);
-                User::where('identificacion', $datos['documento'])->update($rolAsignado->toArray());
-                $rol = Rol::select('rol')->where('idRol', $datos['idRol'])->get();
-                $sql = log_auditoria::createLog(
-                    'rol',
-                    $rol,
-                    'actualizo',
-                    $rolAsignado->getIdRolAttribute()
-                );
-                Log::insert($sql);
-
-                return view('alertas.modifcarExitoso');
+                User::where('identificacion', $documento)->update($rolAsignado->toArray());
+                // $rol = Rol::select('rol')->where('idRol', $datos['idRol'])->get();
             }
+
+            return view('alertas.modifcarExitoso');
         }
     }
 
@@ -244,6 +234,7 @@ class usuarioController extends Controller
         $notificaciones = $request->notificaciones;
         return view('modals.usuarios.asignarRol', compact('usuariosPendientes', 'controladores', 'notificaciones'));
     }
+
 
     public function showModalAsignarRol(Request $request)
     {

@@ -16,25 +16,26 @@
                             <table class="table table-bordered" id="tablaDetalles">
                                 <thead>
                                     <tr>
-                                        <th>NOMBRE COMPLETO</th>
                                         <th>ROL</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <!-- Nombre completo -->
-                                        <td>
-                                            <input type="text" class="form-control" id="inputNombreUsuario"
-                                                name="nombre_usuario" readonly>
-                                        </td>
                                         <!-- Selección de rol -->
                                         <td>
+                                            <label for="">Rol:</label>
                                             <select class="form-control" id="inputRol" name="idRol" required>
                                                 <option value="">Seleccione...</option>
                                                 <!-- Opción por defecto -->
                                                 @foreach ($roles as $rol)
                                                     <option value="{{ $rol->id_rol }}">{{ $rol->rol }}</option>
                                                 @endforeach
+                                            </select>
+                                            <label for="">Estado:</label>
+                                            <select name="estado_usu" id="inputEstado" class="form-control">
+                                                <option value="">Seleccione...</option>
+                                                <option value="1">ACTIVO</option>
+                                                <option value="2">INACTIVO</option>
                                             </select>
                                         </td>
                                     </tr>
