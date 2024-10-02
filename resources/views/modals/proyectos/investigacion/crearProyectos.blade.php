@@ -153,14 +153,18 @@
                                         </td>
                                         <td>
                                             <div class="input-agregar">
-                                                <input type="text" class="form-control agregable" name="actividades[1][1][]"
-                                                    required><button class="btnAgregar p-2 btn btn-success">+</button>
+                                                <div class="campo_principal">
+                                                    <input type="text" class="form-control agregable" name="actividades[1][1][]"
+                                                        required><a href="#" class="btnAgregar p-2 btn btn-success">+</a href="#">
+                                                </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="input-agregar">
-                                                <input type="text" class="form-control agregable" name="entregables[1][1][]"
-                                                    required><button class="btnAgregar p-2 btn btn-success">+</button>
+                                                <div class="campo_principal">
+                                                    <input type="text" class="form-control agregable" name="entregables[1][1][]"
+                                                        required><a href="#" class="btnAgregar p-2 btn btn-success">+</a href="#">
+                                                </div>
                                             </div>
                                         </td>
                                         <td>
@@ -176,8 +180,10 @@
                                         </td>
                                         <td>
                                             <div class="input-agregar">
-                                                <input type="text" class="form-control agregable" name="observaciones[1][1][]"
-                                                    required><button class="btnAgregar p-2 btn btn-success">+</button>
+                                                <div class="campo_principal">
+                                                    <input type="text" class="form-control agregable" name="observaciones[1][1][]"
+                                                        required><a href="#" class="btnAgregar p-2 btn btn-success">+</a href="#">
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -213,8 +219,11 @@
                                         </td>
                                         <td>
                                             <div class="input-agregar">
-                                                <input type="text" class="form-control agregable" name="valor_planteado[1][1][]"
-                                                    required><button class="btnAgregar p-2 btn btn-success">+</button>
+                                                <div class="campo_principal">
+                                                    <input type="text" class="form-control agregable" name="valor_planteado[1][1][]"
+                                                        required><button class="btnAgregar p-2 btn btn-success">+</button>
+
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
