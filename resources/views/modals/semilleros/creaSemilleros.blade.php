@@ -93,6 +93,13 @@
                         </div>
 
                         <div class="col-md-12 mt-3">
+                            <label for="inputLiderSemillero" class="form-label">Lider del Semillero</label>
+                            <input type="text" class="form-control" id="inputLiderSemillero" name="lider_semillero"
+                                required>
+                        </div>
+
+
+                        <div class="col-md-12 mt-3">
                             <label for="inputMisionSemillero" class="form-label">Misión</label>
                             <textarea class="form-control" id="inputMisionSemillero" name="mision" rows="3" required></textarea>
                         </div>
@@ -109,7 +116,13 @@
 
                         <div class="col-md-12 mt-3">
                             <label for="inputObjetivosEspecificos" class="form-label">Objetivos Específicos</label>
-                            <textarea class="form-control" id="inputObjetivosEspecificos" name="objetivos_especificos" rows="4" required></textarea>
+                            <div id="objetivosEspecificosContainer">
+                                <div class="input-group mb-3 objetivo-item">
+                                    <input type="text" class="form-control" name="objetivos_especificos[]"
+                                        placeholder="Objetivo específico" required>
+                                    <button class="btn btn-success btnAddObjetivo" type="button">+</button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-md-12 mt-3">

@@ -81,7 +81,7 @@ class usuarioController extends Controller
             'id_tipo.integer' => 'El campo debe ser un número entero',
             'email.required' => 'Este campo es obligatorio',
             'email.email' => 'Esta no es una dirección de correo electrónico válida',
-            'email.max' => 'Este campo debe contener máximo 255 caracteres', 
+            'email.max' => 'Este campo debe contener máximo 255 caracteres',
             'email.unique' => 'Este correo electrónico ya está registrado',
             'celular.required' => 'Este campo es obligatorio',
             'celular.max' => 'El campo debe contener máximo 15 caracteres',

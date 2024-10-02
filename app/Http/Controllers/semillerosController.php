@@ -114,6 +114,7 @@ class semillerosController extends Controller
             'nombre_semillero' => 'required',
             'iniciales_semillero' => 'required',
             'fecha_creacion' => 'required|date',
+            'lider_semillero' => 'required',
             'integrantes' => 'required',
             'mision' => 'required',
             'vision' => 'required',
@@ -122,16 +123,16 @@ class semillerosController extends Controller
             'id_grupo' => 'required',
             // 'id_plan' => 'required',
             // 'estado' => 'required'
-            'grupos' => 'required',
-            'lineas' => 'required',
-            'programas' => 'required',
-            'redes' => 'required',
-            'integrantes' => 'required',
-            'actividades' => 'required',
-            'tareas' => 'required',
-            'responsables' => 'required',
-            'frecuencia' => 'required',
-            'estado' => 'required'
+            // 'grupos' => 'required',
+            // 'lineas' => 'required',
+            // 'programas' => 'required',
+            // 'redes' => 'required',
+            // 'integrantes' => 'required',
+            // 'actividades' => 'required',
+            // 'tareas' => 'required',
+            // 'responsables' => 'required',
+            // 'frecuencia' => 'required',
+            // 'estado' => 'required'
         ];
 
         $mensajes = [
@@ -139,6 +140,7 @@ class semillerosController extends Controller
             'iniciales_semillero.required' => 'Este campo es obligatorio',
             'fecha_creacion.required' => 'Este campo es obligatorio',
             'fecha_creacion.date' => 'Este campo debe ser una fecha valida',
+            'lider_semillero.required' => 'Este campo es obligatorio',
             'mision.required' => 'Este campo es obligatorio',
             'vision.required' => 'Este campo es obligatorio',
             'objetivo_general.required' => 'Este campo es obligatorio',
@@ -167,6 +169,7 @@ class semillerosController extends Controller
                 $semillero->setNombreSemilleroAttribute($request->nombre_semillero);
                 $semillero->setInicialesSemilleroAttribute($request->inciales_semillero);
                 $semillero->setFechaCreacionAttribute($request->fecha_creacion);
+                $semillero->setLiderSemilleroAttribute($request->lider_semillero);
                 $semillero->setMisionAttribute($request->mision);
                 $semillero->setVisionAttribute($request->vision);
                 $semillero->setObjetivoGeneralAttribute($request->objetivo_general);
@@ -195,12 +198,12 @@ class semillerosController extends Controller
             'nombre_semillero' => 'required',
             'iniciales_semillero' => 'required',
             'fecha_creacion' => 'required|date',
+            'lider_semillero' => 'required',
             'mision' => 'required',
             'vision' => 'required',
             'objetivo_general' => 'required',
             'objetivos_especificos' => 'required',
             'id_grupo' => 'required',
-            'id_plan' => 'required',
             'estado' => 'required'
         ];
 
@@ -209,6 +212,7 @@ class semillerosController extends Controller
             'iniciales_semillero.required' => 'Este campo es obligatorio',
             'fecha_creacion.required' => 'Este campo es obligatorio',
             'fecha_creacion.date' => 'Este campo debe ser una fecha valida',
+            'lider_semillero.required' => 'Este campo es obligatorio',
             'mision.required' => 'Este campo es obligatorio',
             'vision.required' => 'Este campo es obligatorio',
             'objetivo_general.required' => 'Este campo es obligatorio',
@@ -237,12 +241,12 @@ class semillerosController extends Controller
                 $semillero->setNombreSemilleroAttribute($request->nombre_semillero);
                 $semillero->setInicialesSemilleroAttribute($request->inciales_semillero);
                 $semillero->setFechaCreacionAttribute($request->fecha_creacion);
+                $semillero->setLiderSemilleroAttribute($request->lider_semillero);
                 $semillero->setMisionAttribute($request->mision);
                 $semillero->setVisionAttribute($request->vision);
                 $semillero->setObjetivoGeneralAttribute($request->objetivo_general);
                 $semillero->setObjetivosEspecificosAttribute($request->objetivos_especificos);
                 $semillero->setIdGrupoAttribute($request->id_grupo);
-                $semillero->setIdPlanAttribute($request->id_plan);
                 $semillero->setEstadoSemilleroAttribute($request->estado_semillero);
 
                 Semilleros::where('nombre_semillero', $datos['nombre_semillero_old'])->update($semillero->toArray());
