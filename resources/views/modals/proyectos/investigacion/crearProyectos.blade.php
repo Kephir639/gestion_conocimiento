@@ -30,7 +30,7 @@
                         <br>
                         <div id="div_centros" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputCentros" class="form-label">Centros de formacion</label>
-                            <select class="form-control" name="centros" id="inputCentros" required>
+                            <select class="form-control" name="centros[]" id="inputCentros" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($centros as $centro)
                                     <option value="{{ $centro->id_centro }}">{{ $centro->nombre_centro }}</option>
@@ -39,7 +39,7 @@
                         </div>
                         <div id="div_grupos" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputGrupos" class="form-label">Grupos de investigacion</label>
-                            <select class="form-control" name="grupos" id="inputGrupos" required>
+                            <select class="form-control" name="grupos[]" id="inputGrupos" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($grupos as $grupo)
                                     <option value="{{ $grupo->id_grupo }}">{{ $grupo->nombre_grupo }}</option>
@@ -48,7 +48,7 @@
                         </div>
                         <div id="div_lineas" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputLineas" class="form-label">Lineas de investigacion</label>
-                            <select class="form-control" name="lineas" id="inputLineas" required>
+                            <select class="form-control" name="lineas[]" id="inputLineas" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($lineas as $linea)
                                     <option value="{{ $linea->id_linea }}">{{ $linea->nombre_linea }}</option>
@@ -57,7 +57,7 @@
                         </div>
                         <div id="div_redes" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputRedes" class="form-label">Redes de conocimiento</label>
-                            <select class="form-control" name="redes" id="inputRedes" required>
+                            <select class="form-control" name="redes[]" id="inputRedes" required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($redes as $red)
                                     <option value="{{ $red->id_red }}">{{ $red->nombre_red }}</option>
@@ -66,9 +66,9 @@
                         </div>
                         <div id="div_programas" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputProgramas" class="form-label">Programas de formacion</label>
-                            <select type="text" class="form-control" name="programas" id="inputProgramas" required>
+                            <select type="text" class="form-control" name="programas[]" id="inputProgramas" required>
                                 <option value="">Seleccione una opcion...</option>
-                                <option value="prueba">Opcion de prueba</option>
+                                <option value="1">Opcion de prueba</option>
                                 @foreach ($programas as $programas)
                                     <option value="{{ $programas->id_programas }}">{{ $programas->nombre_programas }}
                                     </option>
@@ -77,9 +77,10 @@
                         </div>
                         <div id="idv_semilleros" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputSemilleros" class="form-label">Semilleros de investigacion</label>
-                            <select type="text" class="form-control" name="semilleros" id="inputSemilleros" required>
+                            <select type="text" class="form-control" name="semilleros[]" id="inputSemilleros"
+                                required>
                                 <option value="">Seleccione una opcion...</option>
-                                <option value="prueba">Opcion de prueba</option>
+                                <option value="1">Opcion de prueba</option>
                                 @foreach ($semilleros as $semillero)
                                     <option value="{{ $semillero->id_semillero }}">{{ $semillero->nombre_semillero }}
                                     </option>
@@ -92,7 +93,7 @@
                         <div id="div_participantes"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputParticipantes" class="form-label">Participantes</label>
-                            <select type="text" class="form-control" name="participantes" id="inputParticipantes"
+                            <select type="text" class="form-control" name="participantes[]" id="inputParticipantes"
                                 required>
                                 <option value="">Seleccione una opcion...</option>
                                 @foreach ($participantes as $participante)

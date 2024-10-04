@@ -1,19 +1,25 @@
 $(document).ready(function () {
     let button = '';
-    let contadorDivActividad = 2;
-    let contadorDivPresupuesto = 2;
 
-    function campoUnico(nombreCampo) {
+    function getName(input) { //Obtiene el atributo Name del input seleccionado
+        let nombre = $(input).attr('name');
+        let partes = nombre.split('[');
+        nombreCampo = partes[0];
+
+        return nombreCampo;
+    }
+
+    function campoUnico(nombreCampo, tipo) { //Crea un array con los valores de los inputs que no son agregables
         let array = [];
         let n1 = 1;
-        while ($('input[name="' + nombreCampo + '[' + n1 + '][]"]').length > 0) {
-            array.push($('input[name="' + nombreCampo + '[' + n1 + '][]"]').val());
+        while ($(tipo + '[name="' + nombreCampo + '[' + n1 + '][]"]').length > 0) {
+            array.push($(tipo + '[name="' + nombreCampo + '[' + n1 + '][]"]').val());
             n1++;
         }
         return array;
     }
 
-    function campoAgregable(nombreCampo) {
+    function campoAgregable(nombreCampo) { //Crea una serie de arrays con los valores de los inputs agregables
         let array = [];
         let n1 = 1;
         while ($('input[name="' + nombreCampo + '[' + n1 + '][1][]"]').length > 0) {
@@ -29,160 +35,20 @@ $(document).ready(function () {
         return array;
     }
 
-    $(document).on('click', '.btnAgregar', function (e) {
-        e.preventDefault();
-        let inputs = $(this).closest('.input-agregar').find('.agregable');
-        let name = $(inputs[inputs.length - 1]).attr('name');
-        let partes = name.split("[");
-        let posiciones = [];
-        for (var i = 1; i < partes.length - 1; i++) {
-            posiciones.push(parseInt(partes[i].replace("]", "")));
+    function validarCamposMultiples(nombre) {
+        let primario = $(document).find('#' + nombre);
+        let inputs = $(primario).find('input');
+        let errors = [];
+
+        for (i = 0; i < inputs.length; i++) {
+            if (!$(inputs[i]).val()) {
+                if (!(errors[inputs[i]])) {
+                    errors[inputs[i]] = "El campo" + getName(inputs[i]) + "es obligatorio"
+                }
+            }
         }
-        let posLlave = name.indexOf("[");
-        let nombreCampo = name.substr(0, posLlave);
-
-        let divObjetivo = $(this).closest('.input-agregar');
-
-        let item = `
-        <div class="divAgregado input-group">
-            <input type="text" class="form-control agregable" name="`+ nombreCampo + `[` + posiciones[0] + `][` + (posiciones[1] + 1) + `][]"
-                                                    required><a href="#" class="btn btn-danger p-2 btnEliminar">-</a>
-        </div>
-        `;
-
-        $(divObjetivo).append(item);
-    });
-
-    $(document).on('click', '.btnEliminar', function (e) {
-        e.preventDefault();
-        let agregados = $(this).closest('.input-agregar').find('.agregable');
-        if (agregados.length > 1) {
-            let name = $(this).closest('.divAgregado').find('.agregable').attr('name');
-            let partes = name.split("[");
-            let posiciones = [];
-            for (var i = 1; i < partes.length - 1; i++) {
-                posiciones.push(parseInt(partes[i].replace("]", "")));
-            }
-            let posLlave = name.indexOf("[");
-            let nombreCampo = name.substr(0, posLlave);
-
-            let divAbuelo = $(this).closest('.input-agregar');
-            $(this).closest('.divAgregado').remove();
-            let restante = $(divAbuelo).find('.agregable')
-
-            let reinicio = 1;
-            $.each(restante, function (llave, valor) {
-                $(valor).attr('name', nombreCampo + '[' + posiciones[0] + '][' + reinicio + '][]');
-                reinicio++;
-            });
-        }
-    });
-
-    $(document).on('click', '#btnAgregarActividad', function (e) {
-        e.preventDefault();
-        let div = $(this).closest('#actividades');
-
-        $.ajax({
-            type: "GET",
-            url: "agregar_actividad",
-            data: {
-                'contador_actividad': contadorDivActividad
-            },
-            success: function (data) {
-                $(div).append(data);
-                contadorDivActividad++;
-            }
-        });
-    })
-
-    $(document).on('click', '#btnEliminarActividad', function (e) {
-        e.preventDefault();
-
-        let contador = 1;
-        $(this).closest('.actividadAgregada').remove();
-        let grupoInputs = $('#actividades').find('.grupoInput');
-
-        grupoInputs.each(function () {
-            // console.log($(this));
-            let divContenedor = $(this).find('.input-agregar');
-            let inputSimples = $(this).find('.simple');
-            let nombreCampo = '';
-            divContenedor.each(function () {
-                let inputAgregables = $(this).find('.agregable');
-                let contadorCantidad = 1;
-                inputAgregables.each(function () {
-                    let nombre = $(this).attr('name');
-                    let partes = nombre.split('[');
-                    nombreCampo = partes[0];
-                    $(this).attr('name', nombreCampo + '[' + contador + '][' + contadorCantidad + '][]');
-                    contadorCantidad++;
-                });
-            });
-            inputSimples.each(function () {
-                let nombre = $(this).attr('name');
-                let partes = nombre.split('[');
-                nombreCampo = partes[0];
-
-                $(this).attr('name', nombreCampo + '[' + contador + '][]');
-            });
-
-            contador++;
-        });
-        contadorDivActividad--;
-    });
-
-    $(document).on('click', '#btnAgregarPresupuesto', function (e) {
-        e.preventDefault();
-        let div = $(this).closest('#presupuestos');
-
-        $.ajax({
-            type: "GET",
-            url: "agregar_presupuesto",
-            data: {
-                'contador_presupuesto': contadorDivPresupuesto
-            },
-            success: function (data) {
-                $(div).append(data);
-                contadorDivPresupuesto++;
-            }
-        });
-    });
-
-    $(document).on('click', '#btnEliminarPresupuesto', function (e) {
-        e.preventDefault();
-
-        let contador = 1;
-        $(this).closest('.presupuestoAgregado').remove();
-
-        let grupoInputs = $('#presupuestos').find('.grupoInput');
-        grupoInputs.each(function () {
-            let divContenedor = $(this).find('.input-agregar');
-            let inputSimples = $(this).find('.simple');
-            console.log(inputSimples);
-            let nombreCampo = '';
-            divContenedor.each(function () {
-                let inputAgregables = $(this).find('.agregable');
-                let contadorCantidad = 1;
-                inputAgregables.each(function () {
-                    let nombre = $(this).attr('name');
-                    let partes = nombre.split('[');
-                    nombreCampo = partes[0];
-                    $(this).attr('name', nombreCampo + '[' + contador + '][' + contadorCantidad + '][]');
-                    contadorCantidad++;
-                });
-            });
-            inputSimples.each(function () {
-                let nombre = $(this).attr('name');
-                let partes = nombre.split('[');
-                nombreCampo = partes[0];
-
-                $(this).attr('name', nombreCampo + '[' + contador + '][]');
-            });
-
-            contador++;
-        });
-        contadorDivPresupuesto--;
-    });
+        return errors;
+    }
 
     $(document).on('click', '.iconoModalModificar', function () {
         button = $(this);
@@ -198,19 +64,6 @@ $(document).ready(function () {
                 $('#modalModificarRedes').find('#inputEstadoRed').val(estado);
 
                 $('#modalModificarRedes').modal('show');
-            }
-        });
-    });
-
-    //Metodo para abrir la modal de registrar
-    $(document).on('click', '#BtnRegistrarProyecto', function () {
-        button = $(this);
-        $.ajax({
-            type: "GET",
-            url: "showModalRegistrar",
-            success: function (data) {
-                $('#ModalSection').html(data);
-                $('#modalRegistrarProyectoInvestigacion').modal('show');
             }
         });
     });
@@ -251,10 +104,20 @@ $(document).ready(function () {
         });
     });
 
-    // $(document).on('click', '.btnAgregar', function (e) {
+    //Metodo para abrir la modal de registrar
+    $(document).on('click', '#BtnRegistrarProyecto', function () {
+        button = $(this);
+        $.ajax({
+            type: "GET",
+            url: "showModalRegistrar",
+            success: function (data) {
+                $('#ModalSection').html(data);
+                $('#modalRegistrarProyectoInvestigacion').modal('show');
+            }
+        });
+    });
 
-    // });
-
+    //Funcion para registrar un proyecto
     $(document).on('click', '#btnRegistrar', function (e) {
         e.preventDefault();
         console.log('Funciona')
@@ -265,25 +128,26 @@ $(document).ready(function () {
         let ano_proyecto = $('#inputAnoProyecto').val();
         let codigo = $('#inputCodigoSIGP').val();
         let nombre = $('#inputNombreProyecto').val();
-        let centros = $('input[name="centros"]').val();
-        let grupos = $('input[name="grupos"]').val();
-        let lineas = $('input[name="lineas"]').val();
-        let redes = $('input[name="redes"]').val();
-        let programas = $('input[name="programas"]').val();
-        let semilleros = $('input[name="semilleros"]').val();
-        let participantes = $('input[name="participantes"]').val();
+        let centros = $('select[name="centros[]"]').map(function () { return $(this).val(); }).get(); //Recorre el array de elementos seleccionados y los guarda en otro array
+        let grupos = $('select[name="grupos[]"]').map(function () { return $(this).val(); }).get();
+        let lineas = $('select[name="lineas[]"]').map(function () { return $(this).val(); }).get();
+        let redes = $('select[name="redes[]"]').map(function () { return $(this).val(); }).get();
+        let programas = $('select[name="programas[]"]').map(function () { return $(this).val(); }).get();
+        let semilleros = $('select[name="semilleros[]"]').map(function () { return $(this).val(); }).get();
+        let participantes = $('select[name="participantes[]"]').map(function () { return $(this).val(); }).get();
         let resumen = $('#inputResumenProyecto').val();
         let objetivo = $('#inputObjetivoProyecto').val();
         let objetivos_especificos = $('input[name="objetivos_especificos[]"]').map(function () { return $(this).val(); }).get();
         let propuesta = $('#inputPropuesta').val();
         let impacto = $('#inputImpacto').val();
         //Actividades
-        let descripciones = campoUnico('descripcion');
-        let actividades = campoAgregable('actividades');
-        let entregables = campoAgregable('entregables');
-        let enlaces = campoUnico('enlace_evidencia');
-        let cumplidos = campoAgregable('cumplido');
-        let observaciones = campoAgregable('observaciones');        //Presupuestos
+        let descripciones = campoUnico('descripcion', 'input');
+        let actividades = campoAgregable('actividades', 'input');
+        let entregables = campoAgregable('entregables', 'input');
+        let enlaces = campoUnico('enlace_evidencia', 'input');
+        let cumplidos = campoUnico('cumplido', 'select');
+        let observaciones = campoAgregable('observaciones');
+        //Presupuestos
         let conceptos = campoUnico('concepto');
         let rubros = campoUnico('rubro');
         let usos_presupuestales = campoUnico('uso_presupuestal');
@@ -303,7 +167,6 @@ $(document).ready(function () {
             'uso_presupuestal': usos_presupuestales,
             'valores': valores
         }
-
         let token = $('#_token').val();
 
         $.ajax({
@@ -329,10 +192,14 @@ $(document).ready(function () {
                 'actividades': actividades_conjunto,
                 'presupuestos': presupuestos
             },
+            beforeSend: function () {
+                if (validarCamposMultiples().length > 0) {
+                    throw new Error('Errores de validacion');
+                }
+            },
             success: function (data) {
                 //Mostrar los registros actualizados
                 $('#tablebody_redes').html(data.tabla);
-
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);
             },
@@ -343,12 +210,19 @@ $(document).ready(function () {
                     $.each(errors, function (clave, valor) {
                         $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
+                } else if (xhr.responseText == "Errores de validacion") {
+                    let errors = validarCamposMultiples();
+
+                    $.each(errors, function (clave, valor) {
+                        $("#div_" + clave).find('.errorValidacion').html(valor);
+                    });
                 } else {
-                    console.log(error, status);
+                    console.log(error);
                 }
             }
         });
     });
+
 
 });
 
