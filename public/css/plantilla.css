@@ -306,18 +306,30 @@ a.sidebar-tabb-drop:hover {
 
 .notifycon {
     cursor: pointer;
-    line-height: 50px;
+    line-height: 10px;
+}
+
+
+.notifycon {
+    display: flex;
+    align-items: center; /* Alinea verticalmente la campana y el contador */
+    position: relative;
+}
+
+.notifycon svg {
+    margin-right: 5px; /* Espacio entre la campana y el contador */
 }
 
 .notifycon span {
     background: #f00;
-    border-radius: 60%;
+    border-radius: 50%; /* Hace que el contador sea completamente redondo */
     color: #fff;
-    vertical-align: top;
-
+    padding: 2px 3px; /* Ajusta el tamaño del contador */
+    font-size: 12px;
+    position: absolute;
+    top: 0; /* Ajusta la posición del contador en relación a la campana */
+    right: 2px;
 }
-
-
 
 .notifycon:hover {
     opacity: .7;

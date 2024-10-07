@@ -16,7 +16,7 @@
                             <table class="table table-bordered" id="tablaDetalles">
                                 <thead>
                                     <tr>
-                                        <th>ROL</th>
+                                        <th>Asignar rol</th>
                                     </tr>
                                 </thead>
                                 <tbody>

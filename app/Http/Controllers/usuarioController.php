@@ -228,7 +228,7 @@ class usuarioController extends Controller
 
     public function showAsignarRol(Request $request)
     {
-        $usuariosPendientes = User::orderBy('id', 'desc')->where('idRol', null)->paginate('10');
+        $usuariosPendientes = User::orderBy('id', 'desc')->where('idRol', null)->paginate('3');
 
         $controladores = $request->controladores;
         $notificaciones = $request->notificaciones;

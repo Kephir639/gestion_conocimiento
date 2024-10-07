@@ -32,14 +32,64 @@
     font-size: larger;
 }
 
-#nombre {
-    border-top-left-radius: 7px;
-}
-
-#acciones {
-    border-top-right-radius: 7px;
-}
 
 .table tbody td {
     vertical-align: middle;
 }
+
+
+
+.tablaUsuariosPendientes {
+    border-radius: 10px; /* Ajusta el valor según tus preferencias */
+    overflow: hidden; /* Esto es importante para que el contenido no sobresalga del borde redondeado */
+}
+
+
+.btnAsignarTodo {
+    background-color: var(--color-primario-obscuro);
+    border: 1px solid var(--color-primario-hover);
+    border-radius: 10px;
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Transición suave */
+}
+
+.btnAsignarTodo svg {
+    fill: var(--color-fuente); 
+}
+
+/* Efecto hover */
+.btnAsignarTodo:hover {
+    background-color: var(--color-primario-hover); /* Cambia al color hover */
+    border-color: var(--color-primario-obscuro); /* Puedes intercambiar los colores o definir nuevos */
+}
+
+.btnAsignarTodo:hover svg {
+    fill: var(--color-fuente); /* Cambia el color del ícono cuando pasas el cursor */
+}
+
+.pagination .page-link {
+    color: var(--color-Negro);
+    /* Color del texto */
+    background-color: var(--color-fuente);
+    /* Color de fondo del botón */
+
+    /* Color del borde */
+}
+
+.pagination .page-link:hover {
+    background-color: var(--color-primario-hover);
+    /* Color de fondo al pasar el mouse */
+    border-color: var(--color-primario-hover);
+    color: var(--color-fuente);
+    /* Color del texto al pasar el mouse */
+}
+
+/* Cambia el estilo del enlace activo */
+.pagination .page-item.active .page-link {
+    color: var(--color-fuente);
+    /* Color del texto */
+    background-color: var(--color-primario-hover);
+    /* Color de fondo del enlace activo */
+    border-color: var(--color-primario-hover);
+    /* Color del borde del enlace activo */
+}
+
