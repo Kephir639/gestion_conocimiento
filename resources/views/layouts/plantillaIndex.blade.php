@@ -47,18 +47,19 @@
                             Inicio
                         </a>
                     </li>
-                    @foreach ($controladores as $controlador)
-                        @foreach ($controlador['funciones'] as $func)
-                            @if (Str::contains($func['nombre_funcion'], 'consultar'))
-                                <li class="sidebar-item">
-                                    <a href="/index/{{ $controlador['nombre_controlador'] }}/{{ $func['nombre_funcion'] }}"
-                                        id="tab_{{ $controlador['nombre_controlador'] }}"
-                                        class="sidebar-tabb sidebar-link collapsed px-3 py-2" {{-- data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse" --}}
-                                        aria-expanded="false">{!! html_entity_decode($controlador['icono']) !!}{{ $controlador['display_controlador'] }}
-                                    </a>
-                                </li>
-                            @endif
-                        @endforeach
+                    @foreach ($controladores as $controlador => $contr)
+                        {{-- Nota: El side-bar se debería separar, al igual que el footer y header, no todo debe estar en un mismo archivo --}}
+                        <li class="sidebar-item">
+                            @php
+                                $url = "index/".$contr['nombre_controlador']."/consultar_".$contr['nombre_controlador'];
+                            @endphp
+                            <!--Cambio usando la función url de laravel para evitar errores 404-->
+                            <a href="{{url($url)}}"
+                                id="tab_{{ $contr['nombre_controlador'] }}"
+                                class="sidebar-tabb sidebar-link collapsed px-3 py-2" {{-- data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse" --}}
+                                aria-expanded="false">{!! html_entity_decode($contr['icono']) !!}{{ $contr['display_controlador'] }}
+                            </a>
+                        </li>
                     @endforeach
                 </ul><br>
             </div>

@@ -163,7 +163,7 @@ class RolController extends Controller
                 $rol->setRolAttribute($request->nombre_rol);
                 $rol->setEstadoRolAttribute($request->estado_rol);
 
-                Rol::where('rol', $request->nombre_rol)->update($rol->toArray());
+                Rol::where('rol', $request->nombre_rol_old)->update($rol->toArray());
 
                 $sql = log_auditoria::createLog(
                     'rol',
