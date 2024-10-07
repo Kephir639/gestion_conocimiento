@@ -74,7 +74,6 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::get('index/semilleros/consultar_semillero', [semillerosController::class, 'showSemilleros']);
     Route::get('index/semilleros/showModalRegistrar', [semillerosController::class, 'showModalRegistrar'])->withoutMiddleware('checkRoutes');
     Route::post('index/semilleros/crear_semillero', [semillerosController::class, 'registrarSemilleros']);
-    Route::get('index/semilleros/showModalVer', [semillerosController::class, 'verSemilleros']);
     Route::get('index/semilleros/showModalActualizar', [semillerosController::class, 'showModalActualizar'])->withoutMiddleware('checkRoutes');
     Route::post('index/semilleros/actualizar_semillero', [semillerosController::class, 'actualizarSemilleros']);
     //Semilleros - Validacion
@@ -106,12 +105,6 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->mi
 //Usuarios
 Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil']);
 Route::post('index/usuarios/change_profile', [usuarioController::class, 'actualizarPerfil']);
-
-//usuarios
-Route::get('index/usuarios/consultar_usuarios', [usuarioController::class, 'showUsuarios']);
-Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil']);
-Route::post('index/usuarios/change_profile', [usuarioController::class, 'actualizarPerfil']);
-Route::get('index/usuarios/exportar_usuarios', [usuarioController::class, 'usersExport'])->withoutMiddleware('checkRoutes');
 
 //Proyectos de Investigacion
 Route::get('index/proyectos_investigacion/consultar_proyecto_investigacion', [proyectosInvestigacionController::class, 'showProyectosInvestigativos']);
