@@ -20,7 +20,7 @@ class proyectosInvestigacionController extends Controller
 
     public function showProyectosInvestigativos(Request $request)
     {
-        $listaProyectos = proyectosInvestigacion::orderBy('id_proyecto_investigacion', 'desc')->paginate('10');
+        $listaProyectos = proyectosInvestigacion::orderBy('id_p_investigacion', 'desc')->paginate('10');
         $controladores = $request->controladores;
 
         return view('modals.proyectos.investigacion.consultarProyectos', [
@@ -49,6 +49,24 @@ class proyectosInvestigacionController extends Controller
             'participantes' => $participantes,
             'redes' => $redes
         ]);
+    }
+
+    public function agregarActividad(Request $request)
+    {
+        $contador_actividad = $request->contador_actividad;
+
+        return view('modals.proyectos.investigacion.div.divActividad', [
+            'contador_actividad' => $contador_actividad
+        ])->render();
+    }
+
+    public function agregarPresupuesto(Request $request)
+    {
+        $contador_presupuesto = $request->contador_presupuesto;
+
+        return view('modals.proyectos.investigacion.div.divPresupuesto', [
+            'contador_presupuesto' => $contador_presupuesto
+        ])->render();
     }
 
     public function showModalActualizar(Request $request)
@@ -103,6 +121,9 @@ class proyectosInvestigacionController extends Controller
 
         $datos = $request->all();
 
+        unset($datos['controladores']);
+        // dd($datos);
+
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
         if ($validacion->fails()) {
@@ -114,89 +135,159 @@ class proyectosInvestigacionController extends Controller
             } else {
                 $proyecto_investigacion = new proyectosInvestigacion();
 
-                $proyecto_investigacion->ano_ejecucion = $request->ano_ejecucion;
-                $proyecto_investigacion->codigo_sigp = $request->codigo_sigp;
-                $proyecto_investigacion->nombre_proyecto = $request->nombre_proyecto;
-                $proyecto_investigacion->resumen_proyecto = $request->resumen_proyecto;
-                $proyecto_investigacion->objetivo_general = $request->objetivo_general;
-                $proyecto_investigacion->propuesta = $request->propuesta;
-                $proyecto_investigacion->impacto = $request->impacto;
+                try {
+                    DB::beginTransaction();
 
-                $proyecto = proyectosInvestigacion::create($proyecto_investigacion->toArray());
+                    $proyecto_investigacion->ano_ejecucion = $request->ano_ejecucion;
+                    $proyecto_investigacion->codigo_sigp = $request->codigo_sigp;
+                    $proyecto_investigacion->nombre_proyecto = $request->nombre_proyecto;
+                    $proyecto_investigacion->resumen_proyecto = $request->resumen;
+                    $proyecto_investigacion->objetivo_general = $request->objetivo_general;
+                    $proyecto_investigacion->propuesta = $request->propuesta;
+                    $proyecto_investigacion->impacto = $request->impacto_esperado;
+                    $proyecto_investigacion->estado_p_investigacion = 1;
 
-                $descripciones = $proyecto_investigacion->crearArray($datos, 'descripciones');
-                $actividades = $proyecto_investigacion->crearArray($datos, 'actividades');
-                $entregables = $proyecto_investigacion->crearArray($datos, 'entregables');
-                $enlaces = $proyecto_investigacion->crearArray($datos, 'descripciones');
-                $cumplidos = $proyecto_investigacion->crearArray($datos, 'cumplidos');
+                    $proyecto = proyectosInvestigacion::create($proyecto_investigacion->toArray());
 
-                $actividad =  [[]];
+                    // dd($proyecto);
+                    $actividades = $proyecto_investigacion->crearArray($datos, 'actividades');
+                    $entregables = $proyecto_investigacion->crearArray($datos, 'entregables');
+                    $observaciones = $proyecto_investigacion->crearArray($datos, 'observaciones');
+                    $descripciones = $proyecto_investigacion->crearArray($datos, 'descripciones');
+                    $enlaces = $proyecto_investigacion->crearArray($datos, 'enlaces');
+                    $cumplidos = $proyecto_investigacion->crearArray($datos, 'cumplidos');
+                    $conceptos = $proyecto_investigacion->crearArray($datos, 'conceptos');
+                    $rubros = $proyecto_investigacion->crearArray($datos, 'rubros');
+                    $uso_presupuestal = $proyecto_investigacion->crearArray($datos, 'uso_presupuestal');
+                    $valores = $proyecto_investigacion->crearArray($datos, 'valores');
 
-                //Centros
-                foreach ($request->centros as $centro) {
-                    DB::table('investigacion_has_centros')->insert([
-                        'id_p_investigacion' => $proyecto->id_p_investigacion,
-                        'id_centro' => $centro,
-                        'estado_ihc' => 1
-                    ]);
-                }
-                //Grupos
-                foreach ($request->grupos as $grupo) {
-                    DB::table('investigacion_has_grupos')->insert([
-                        'id_p_investigacion' => $proyecto->id_p_investigacion,
-                        'id_grupo' => $grupo,
-                        'estado_ihg' => 1
-                    ]);
-                }
-                //Lineas
-                foreach ($request->lineas as $linea) {
-                    DB::table('investigacion_has_lineas')->insert([
-                        'id_p_investigacion' => $proyecto->id_p_investigacion,
-                        'id_linea' => $linea,
-                        'estado_ihl' => 1
-                    ]);
-                }
-                //Redes
-                foreach ($request->redes as $red) {
-                    DB::table('investigacion_has_redes')->insert([
-                        'id_p_investigacion' => $proyecto->id_p_investigacion,
-                        'id_red' => $red,
-                        'estado_ihr' => 1
-                    ]);
-                }
-                //Programas
-                foreach ($request->programas as $programa) {
-                    DB::table('investigacion_has_programas')->insert([
-                        'id_p_investigacion' => $proyecto->id_p_investigacion,
-                        'id_programa' => $programa,
-                        'estado_ihp' => 1
-                    ]);
-                }
-                //Semilleros
-                foreach ($request->semilleros as $semillero) {
-                    DB::table('investigacion_has_semilleros')->insert([
-                        'id_p_investigacion' => $proyecto->id_p_investigacion,
-                        'id_semillero' => $semillero,
-                        'estado_ihs' => 1
-                    ]);
-                }
-                //Participantes
-                foreach ($request->participantes as $participantes) {
-                    DB::table('investigacion_has_participantes')->insert([
-                        'id_p_investigacion' => $proyecto->id_p_investigacion,
-                        'id' => $participantes,
-                        'estado_ihu' => 1
-                    ]);
-                }
-                //Objetivos Especificos
-                foreach ($request->objetivos_especificos as $objetivo_especifico) {
-                    DB::table('investigacion_has_objetivos')->insert([
-                        'id_p_investigacion' => $proyecto->id_p_investigacion,
-                        'objetivo_especifico' => $objetivo_especifico,
-                        'estado_objetivo_i' => 1
-                    ]);
-                }
+                    //Registrar centros asociados al proyecto de investigacion
+                    foreach ($request->centros as $centro) {
+                        DB::table('investigacion_has_centros')->insert([
+                            'id_p_investigacion' => $proyecto->id,
+                            'id_centro' => $centro,
+                            'estado_ihc' => 1
+                        ]);
+                    }
+                    //Registrar grupos asociados al proyecto de investigacion
+                    foreach ($request->grupos as $grupo) {
+                        DB::table('investigacion_has_grupos')->insert([
+                            'id_p_investigacion' => $proyecto->id,
+                            'id_grupo' => $grupo,
+                            'estado_ihg' => 1
+                        ]);
+                    }
+                    //Registrar lineas asociadas al proyecto de investigacion
+                    foreach ($request->lineas as $linea) {
+                        DB::table('investigacion_has_lineas')->insert([
+                            'id_p_investigacion' => $proyecto->id,
+                            'id_linea' => $linea,
+                            'estado_ihl' => 1
+                        ]);
+                    }
+                    //Registrar redes asociados al proyecto de investigacion
+                    foreach ($request->redes as $red) {
+                        DB::table('investigacion_has_redes')->insert([
+                            'id_p_investigacion' => $proyecto->id,
+                            'id_red' => $red,
+                            'estado_ihr' => 1
+                        ]);
+                    }
+                    //Registrar programas asociados al proyecto de investigacion
+                    foreach ($request->programas as $programa) {
+                        DB::table('investigacion_has_programas')->insert([
+                            'id_p_investigacion' => $proyecto->id,
+                            'id_programa' => $programa,
+                            'estado_ihp' => 1
+                        ]);
+                    }
+                    //Registrar semilleros asociados al proyecto de investigacion
+                    foreach ($request->semilleros as $semillero) {
+                        DB::table('investigacion_has_semilleros')->insert([
+                            'id_p_investigacion' => $proyecto->id,
+                            'id_semillero' => $semillero,
+                            'estado_ihs' => 1
+                        ]);
+                    }
+                    //Registrar participantes asociados al proyecto de investigacion
+                    foreach ($request->participantes as $participantes) {
+                        DB::table('investigacion_has_users')->insert([
+                            'id_p_investigacion' => $proyecto->id,
+                            'id' => $participantes,
+                            'estado_ihu' => 1
+                        ]);
+                    }
+                    //Registrar objetivos especificos asociados al proyecto de investigacion
+                    foreach ($request->objetivos_especificos as $objetivo_especifico) {
+                        DB::table('investigacion_objetivos')->insert([
+                            'id_p_investigacion' => $proyecto->id,
+                            'objetivo_especifico' => $objetivo_especifico,
+                            'estado_objetivo_i' => 1
+                        ]);
+                    }
 
+                    //Registrar actividades asociadas al proyecto de investigacion
+                    for ($i = 0; $i < count($descripciones); $i++) {
+                        $actividad = DB::table('investigacion_actividades_unificada')->insert([
+                            'id_p_investigacion' => $proyecto->id,
+                            'descripcion' => $descripciones['descripciones'][$i],
+                            'enlace_evidencia' => $enlaces['enlaces'][$i],
+                            'cumplido' => $cumplidos['cumplidos'][$i],
+                            'estado_actividad_u_i' => 1
+                        ]);
+                        $id_actividad_i = DB::getPdo()->lastInsertId();
+                        foreach ($actividades as $key => $arrayActividad) {
+                            foreach ($arrayActividad as $actividad => $act) {
+                                DB::table('investigacion_actividades')->insert([
+                                    'id_actividad_i' => $id_actividad_i,
+                                    'actividad' => $act[$i],
+                                    'estado_actividad_i' => 1
+                                ]);
+                            }
+                        }
+                        foreach ($entregables as $key => $arrayEntregables) {
+                            foreach ($arrayEntregables as $entregable => $entrg) {
+                                DB::table('investigacion_entregables')->insert([
+                                    'id_actividad_i' => $id_actividad_i,
+                                    'entregable' => $entrg[$i],
+                                    'estado_entregable_i' => 1
+                                ]);
+                            }
+                        }
+                        foreach ($observaciones as $key => $arrayobservaciones) {
+                            foreach ($arrayobservaciones as $observacion => $obs) {
+                                DB::table('investigacion_observaciones')->insert([
+                                    'id_actividad_i' => $id_actividad_i,
+                                    'observacion' => $obs[$i],
+                                    'estado_observacion_i' => 1
+                                ]);
+                            }
+                        }
+                    }
+                    //Presupuestos
+                    for ($i = 0; $i < count($conceptos); $i++) {
+                        $presupuesto = DB::table('investigacion_presupuestos')->create([
+                            'id_p_investigacion' => $proyecto->id_p_investigacion,
+                            'concepto' => $conceptos[$i],
+                            'rubro' => $rubros[$i],
+                            'uso_presupuestal' => $uso_presupuestal[$i],
+                            'estado_presupuesto_i' => 1
+                        ]);
+                        $id_presupuesto_i = DB::getPdo()->lastInsertId();
+                        foreach ($valores as $valor) {
+                            DB::table('investigacion_presupuestos_valores')->insert([
+                                'id_presupuesto_i' => $id_presupuesto_i,
+                                'valor' => $valor,
+                                'estado_valor_i' => 1
+                            ]);
+                        }
+                    }
+                    DB::commit();
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+
+                    dd($th);
+                }
 
 
                 $sql = log_auditoria::createLog(
@@ -205,11 +296,10 @@ class proyectosInvestigacionController extends Controller
                     'registro'
                 );
                 Log::insert($sql);
-
                 $listaProyectos = proyectosInvestigacion::orderBy('id_p_investigacion', 'desc')->paginate('10');
                 $controladores = $request->controladores;
 
-                $tabla = view('modals.redes.tablaRed', [
+                $tabla = view('modals.redes.tablaProyectos', [
                     'listaProyectos' => $listaProyectos,
                     'controladores' => $controladores
                 ])->render();

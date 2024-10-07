@@ -71,6 +71,8 @@
         <div id="ModalSection"></div>
     </div>
 @endsection
-@push('scripts')
+@section('scripts')
     <script src="{{ url('js/proyectosInvestigacion.js') }}"></script>
-@endpush
+    <script src="{{ url('js/agregablesInvestigacion.js') }}"></script>
+    <script src="{{ url('js/botonesCamposInvestigacion.js') }}"></script>
+@endsection

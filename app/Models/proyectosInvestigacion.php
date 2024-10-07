@@ -67,18 +67,25 @@ class proyectosInvestigacion extends Model
 
     public function crearArray($datos, $clave)
     {
-        $arrayUnico = [[]];
+        $arrayUnico = [];
         foreach ($datos as $key => $valor) {
             if ($key === 'actividades') {
                 foreach ($valor as $llave => $array) {
                     if ($llave == $clave) {
+                        if (!isset($arrayUnico[$llave])) {
+                            $arrayUnico[$llave] = [];
+                        }
                         foreach ($array as $arr => $multiple) {
                             if (is_array($multiple)) {
+                                // dd($arr);
+                                if (!isset($arrayUnico[$llave][$arr])) {
+                                    $arrayUnico[$llave][$arr] = [];
+                                }
                                 foreach ($multiple as $ky) {
-                                    array_push($arrayUnico[$llave], $ky);
+                                    array_push($arrayUnico[$llave][$arr], $ky);
                                 }
                             } else {
-                                array_push($arrayUnico[$llave], $arr);
+                                array_push($arrayUnico[$llave], $multiple);
                             }
                         }
                     }
