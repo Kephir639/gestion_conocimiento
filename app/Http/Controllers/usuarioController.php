@@ -108,7 +108,7 @@ class usuarioController extends Controller
             'ficha.required' => 'Este campo es obligatorio',
             'ficha.integer' => 'El campo debe ser un número entero',
             'password.required' => 'Este campo es obligatorio',
-            //'password.regex' => 'La contraseña debe contener mínimo 8 y máximo 15 caracteres: 1 Minúscula, 1 Mayúscula, 1 Número Entero, 1 Carácter Especial'
+            'password.regex' => 'La contraseña debe contener mínimo 8 y máximo 15 caracteres: 1 Minúscula, 1 Mayúscula, 1 Número Entero, 1 Carácter Especial'
         ];
 
         $datos = $request->all();
