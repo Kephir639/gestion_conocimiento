@@ -35,62 +35,135 @@ $(document).ready(function () {
         return array;
     }
 
-    function validarCamposMultiples(nombre) {
-        let primario = $(document).find('#' + nombre);
+    function campoAgregableActualizar(nombreCampo) {
+        let array = [];
+        let n1 = 1;
+        while ($('input[name="' + nombreCampo + '[' + n1 + '][1][]"]').length > 0) {
+            let fila = [];
+            let n2 = 1;
+            while ($('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]').length > 0) {
+                let id = $('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]').attr('id');
+                if (!fila[id]) {
+                    fila[id] = $('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"][id = "' + id + '"]').val();
+                }
+                n2++;
+            }
+            array.push(fila);
+            n1++;
+        }
+        return array;
+    }
+
+    function validarCamposMultiples(nombre) {//Funcion que se encarga de que los campos agregables no esten vacios
+        let primario = $(document).find('#tablas');
         let inputs = $(primario).find('input');
         let errors = [];
 
         for (i = 0; i < inputs.length; i++) {
             if (!$(inputs[i]).val()) {
-                if (!(errors[inputs[i]])) {
-                    errors[inputs[i]] = "El campo" + getName(inputs[i]) + "es obligatorio"
+                if (!(errors[$(inputs[i]).attr('name')])) {
+                    errors[$(inputs[i]).attr('name')] = "El campo" + getName(inputs[i]) + "es obligatorio"//En caso de que esté vacio se llena el array de errores con el campo correspondiente
                 }
             }
         }
         return errors;
     }
 
-    $(document).on('click', '.iconoModalModificar', function () {
+    $(document).on('click', '.iconoModificar', function () {
         button = $(this);
-        let nombreGrupo = $(this).parents('tr').find('td:eq(0)').text().trim();
-        let estadoGrupo = $(this).parents('tr').find('td:eq(1)').text().trim();
-        let estado = (estadoGrupo == "Activo") ? 1 : (estadoGrupo == "Inactivo") ? 0 : -1;
+        let codigo_sigp = $(button).parents('tr').find('td:eq(1)').text().trim();
+        let modal = $('#modalActualizarProyectoInvestigacion');
         $.ajax({
             type: "GET",
             url: "showModalActualizar",
+            data: {
+                'codigo_sigp_old': codigo_sigp,
+            },
             success: function (data) {
-                $('#ModalSectionActualizar').html(data);
-                $('#modalModificarRedes').find('#inputNombreRed').val(nombreGrupo);
-                $('#modalModificarRedes').find('#inputEstadoRed').val(estado);
+                let vista = data.vista;
+                $(modal).find('#modalSection').html(vista);
 
-                $('#modalModificarRedes').modal('show');
-            }
+                $(vista).modal('show');
+            },
         });
     });
 
     $(document).on('click', '#btnModificar', function (e) {
         e.preventDefault();
-        let nombre_old = $(button).parents('tr').find('td:eq(0)').text().trim();
+        let codigo_sigp_old = $(button).parents('tr').find('td:eq(1)').text().trim();
+        let proyecto = data.proytecto;
+        let vista = data.vista;
 
-        let nombre = $('#inputNombreRed').val();
-        let estado = $('#inputEstadoRed').val();
-        let estado_text = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : null;
+        let ano_proyecto = $('#inputAnoProyecto').val();
+        let codigo = $('#inputCodigoSIGP').val();
+        let nombre = $('#inputNombreProyecto').val();
+        let centros = $('select[name="centros[]"]').map(function () { return $(this).val(); }).get(); //Recorre el array de elementos seleccionados y los guarda en otro array
+        let grupos = $('select[name="grupos[]"]').map(function () { return $(this).val(); }).get();
+        let lineas = $('select[name="lineas[]"]').map(function () { return $(this).val(); }).get();
+        let redes = $('select[name="redes[]"]').map(function () { return $(this).val(); }).get();
+        let programas = $('select[name="programas[]"]').map(function () { return $(this).val(); }).get();
+        let semilleros = $('select[name="semilleros[]"]').map(function () { return $(this).val(); }).get();
+        let participantes = $('select[name="participantes[]"]').map(function () { return $(this).val(); }).get();
+        let resumen = $('#inputResumenProyecto').val();
+        let objetivo = $('#inputObjetivoProyecto').val();
+        let objetivos_especificos = $('input[name="objetivos_especificos[]"]').map(function () { return $(this).val(); }).get();
+        let propuesta = $('#inputPropuesta').val();
+        let impacto = $('#inputImpacto').val();
+        //Actividades
+        let descripciones = campoUnico('descripcion', 'input');
+        let actividades = campoAgregableActualizar('actividades');
+        let entregables = campoAgregableActualizar('entregables');
+        let enlaces = campoUnico('enlace_evidencia', 'input');
+        let cumplidos = campoUnico('cumplido', 'select');
+        let observaciones = campoAgregableActualizar('observaciones');
+        //Presupuestos
+        let conceptos = campoUnico('concepto', 'input');
+        let rubros = campoUnico('rubro', 'input');
+        let usos_presupuestales = campoUnico('uso_presupuestal', 'input');
+        let valores = campoAgregableActualizar('valor_planteado');
 
+        let actividades_conjunto = {
+            'descripciones': descripciones,
+            'actividades': actividades,
+            'entregables': entregables,
+            'enlaces': enlaces,
+            'cumplidos': cumplidos,
+            'observaciones': observaciones
+        }
+        let presupuestos = {
+            'conceptos': conceptos,
+            'rubros': rubros,
+            'uso_presupuestal': usos_presupuestales,
+            'valores': valores
+        }
         let token = $('#_token').val();
 
         $.ajax({
             type: "POST",
             url: "actualizar_proyecto_investigacion",
             data: {
+                'codigo_sigp__old': codigo_sigp_old,
                 '_token': token,
-                'nombre_red': nombre,
-                'nombre_red_old': nombre_old,
-                'estado_red': estado
+                'ano_ejecucion': ano_proyecto,
+                'codigo_sigp': codigo,
+                'nombre_proyecto': nombre,
+                'centros': centros,
+                'grupos': grupos,
+                'lineas': lineas,
+                'redes': redes,
+                'programas': programas,
+                'semilleros': semilleros,
+                'participantes': participantes,
+                'resumen': resumen,
+                'objetivo_general': objetivo,
+                'objetivos_especificos': objetivos_especificos,
+                'propuesta': propuesta,
+                'impacto_esperado': impacto,
+                'actividades': actividades_conjunto,
+                'presupuestos': presupuestos
             },
             success: function (data) {
-                $('#alertasModificar').html(data);
-                $(button).parents('tr').find('td:eq(0)').text(nombre);
-                $(button).parents('tr').find('td:eq(1)').text(estado_text);
+
             },
             error: function (xhr, status, error) {
                 if (xhr.status === 422) {
@@ -214,7 +287,7 @@ $(document).ready(function () {
                     let errors = validarCamposMultiples();
 
                     $.each(errors, function (clave, valor) {
-                        $("#div_" + clave).find('.errorValidacion').html(valor);
+                        $('input[name="' + clave + '"]').closest('.errorValidacion').html(valor);
                     });
                 } else {
                     console.log(error);

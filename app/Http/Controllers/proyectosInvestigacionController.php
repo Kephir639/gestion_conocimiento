@@ -69,11 +69,53 @@ class proyectosInvestigacionController extends Controller
         ])->render();
     }
 
+    public function arrayActualizar($actividadesC, $arrayDatos, $nombreTabla)
+    {
+        foreach ($actividadesC as $actividadC) {
+            if (!isset($arrayDatos[$actividadC->id_actividad_i])) {
+                $arrayDatos[$actividadC->id_actividad_i][] = DB::table($nombreTabla)
+                    ->where('id_actividad_i', $actividadC->id_actividad_i)->get();
+            }
+        }
+    }
+
     public function showModalActualizar(Request $request)
     {
+        $proyecto = proyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp_old)->get();
+        dd($proyecto);
+        $id_proyecto = $proyecto->id_p_investigacion;
+        $centros = DB::table('investigacion_has_centros')->where('id_p_investigacion', $id_proyecto)->get();
+        $grupos = DB::table('investigacion_has_grupos')->where('id_p_investigacion', $id_proyecto)->get();
+        $lineas = DB::table('investigacion_has_lineas')->where('id_p_investigacion', $id_proyecto)->get();
+        $programas = DB::table('investigacion_has_programas')->where('id_p_investigacion', $id_proyecto)->get();
+        $redes = DB::table('investigacion_has_redes')->where('id_p_investigacion', $id_proyecto)->get();
+        $semilleros = DB::table('investigacion_has_semilleros')->where('id_p_investigacion', $id_proyecto)->get();
+        $users = DB::table('investigacion_has_users')->where('id_p_investigacion', $id_proyecto)->get();
 
+        $actividadesC = DB::table('investigacion_actividades_unificadas')
+            ->where('id_p_investigacion', $id_proyecto)->orderBy('id_actividad_i', 'asc')->get();
+        $actividades = [];
+        $this->arrayActualizar($actividadesC, $actividades, 'investigacion_actividades');
+        $entregables = [];
+        $this->arrayActualizar($actividadesC, $entregables, 'investigacion_entregables');
+        $observaciones = [];
+        $this->arrayActualizar($actividadesC, $observaciones, 'investigacion_observaciones');
 
-        return view('modals.proyectos.investigacion.modificarProyectos');
+        $vista = view('modals.proyectos.investigacion.modificarProyectos', [
+            'proyecto' => $proyecto,
+            'centros' => $centros,
+            'grupos' => $grupos,
+            'lineas' => $lineas,
+            'programas' => $programas,
+            'redes' => $redes,
+            'semilleros' => $semilleros,
+            'participantes' => $users,
+            'activdadesC' => $actividadesC,
+            'actividades' => $actividades,
+            'entregables' => $entregables,
+            'observaciones' => $observaciones
+        ])->render();
+        return response()->json();
     }
 
     public function registrarProyectoInvestigacion(Request $request)
@@ -266,7 +308,7 @@ class proyectosInvestigacionController extends Controller
                     }
                     //Presupuestos
                     for ($i = 0; $i < count($conceptos); $i++) {
-                        $presupuesto = DB::table('investigacion_presupuestos')->create([
+                        $presupuesto = DB::table('investigacion_presupuestos')->insert([
                             'id_p_investigacion' => $proyecto->id_p_investigacion,
                             'concepto' => $conceptos[$i],
                             'rubro' => $rubros[$i],
@@ -384,94 +426,100 @@ class proyectosInvestigacionController extends Controller
             if (count($ajax)) {
                 return view('alertas.repetido')->render();
             } else {
-                $proyecto_investigacion = new proyectosInvestigacion();
+                try {
+                    DB::transaction();
 
-                $proyecto_investigacion->ano_ejecucion = $request->ano_ejecucion;
-                $proyecto_investigacion->codigo_sigp = $request->codigo_sigp;
-                $proyecto_investigacion->nombre_proyecto = $request->nombre_proyecto;
-                $proyecto_investigacion->resumen_proyecto = $request->resumen_proyecto;
-                $proyecto_investigacion->objetivo_general = $request->objetivo_general;
-                $proyecto_investigacion->propuesta = $request->propuesta;
-                $proyecto_investigacion->impacto = $request->impacto;
+                    $proyecto_investigacion = new proyectosInvestigacion();
 
-                $proyecto = proyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp_old)
-                    ->update($proyecto_investigacion->toArray());
+                    $proyecto_investigacion->ano_ejecucion = $request->ano_ejecucion;
+                    $proyecto_investigacion->codigo_sigp = $request->codigo_sigp;
+                    $proyecto_investigacion->nombre_proyecto = $request->nombre_proyecto;
+                    $proyecto_investigacion->resumen_proyecto = $request->resumen_proyecto;
+                    $proyecto_investigacion->objetivo_general = $request->objetivo_general;
+                    $proyecto_investigacion->propuesta = $request->propuesta;
+                    $proyecto_investigacion->impacto = $request->impacto;
 
-                //Centros
-                $proyecto_investigacion->actualizarElementos(
-                    $request->codigo_sigp_old,
-                    'investigacion_has_centros',
-                    $request->centros,
-                    'id_p_investigacion',
-                    'id_centro',
-                    'estado_ihc'
-                );
-                //Grupos
-                $proyecto_investigacion->actualizarElementos(
-                    $request->codigo_sigp_old,
-                    'investigacion_has_grupos',
-                    $request->grupos,
-                    'id_p_investigacion',
-                    'id_grupo',
-                    'estado_ihg'
-                );
-                //Lineas
-                $proyecto_investigacion->actualizarElementos(
-                    $request->codigo_sigp_old,
-                    'investigacion_has_lineas',
-                    $request->lineas,
-                    'id_p_investigacion',
-                    'id_linea',
-                    'estado_ihl'
-                );
-                //Redes
-                $proyecto_investigacion->actualizarElementos(
-                    $request->codigo_sigp_old,
-                    'investigacion_has_redes',
-                    $request->redes,
-                    'id_p_investigacion',
-                    'id_red',
-                    'estado_ihr'
-                );
-                //Programas
-                $proyecto_investigacion->actualizarElementos(
-                    $request->codigo_sigp_old,
-                    'investigacion_has_programas',
-                    $request->programas,
-                    'id_p_investigacion',
-                    'id_programa',
-                    'estado_ihp'
-                );
-                //Semilleros
-                $proyecto_investigacion->actualizarElementos(
-                    $request->codigo_sigp_old,
-                    'investigacion_has_semilleros',
-                    $request->semilleros,
-                    'id_p_investigacion',
-                    'id_semillero',
-                    'estado_ihs'
-                );
-                //Participantes
-                $proyecto_investigacion->actualizarElementos(
-                    $request->codigo_sigp_old,
-                    'investigacion_has_users',
-                    $request->grupos,
-                    'id_p_investigacion',
-                    'id',
-                    'estado_ihu'
-                );
-                //Objetivos Especificos
-                $proyecto_investigacion->actualizarElementos(
-                    $request->codigo_sigp_old,
-                    'investigacion_has_objetivos',
-                    $request->objetivos_especificos,
-                    'id_p_investigacion',
-                    'id_objetivo',
-                    'estado_objetivo_i'
-                );
-                //Actividades
+                    $proyecto = proyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp_old)
+                        ->update($proyecto_investigacion->toArray());
+                    //Centros
+                    $proyecto_investigacion->actualizarElementos(
+                        $request->codigo_sigp_old,
+                        'investigacion_has_centros',
+                        $request->centros,
+                        'id_p_investigacion',
+                        'id_centro',
+                        'estado_ihc'
+                    );
+                    //Grupos
+                    $proyecto_investigacion->actualizarElementos(
+                        $request->codigo_sigp_old,
+                        'investigacion_has_grupos',
+                        $request->grupos,
+                        'id_p_investigacion',
+                        'id_grupo',
+                        'estado_ihg'
+                    );
+                    //Lineas
+                    $proyecto_investigacion->actualizarElementos(
+                        $request->codigo_sigp_old,
+                        'investigacion_has_lineas',
+                        $request->lineas,
+                        'id_p_investigacion',
+                        'id_linea',
+                        'estado_ihl'
+                    );
+                    //Redes
+                    $proyecto_investigacion->actualizarElementos(
+                        $request->codigo_sigp_old,
+                        'investigacion_has_redes',
+                        $request->redes,
+                        'id_p_investigacion',
+                        'id_red',
+                        'estado_ihr'
+                    );
+                    //Programas
+                    $proyecto_investigacion->actualizarElementos(
+                        $request->codigo_sigp_old,
+                        'investigacion_has_programas',
+                        $request->programas,
+                        'id_p_investigacion',
+                        'id_programa',
+                        'estado_ihp'
+                    );
+                    //Semilleros
+                    $proyecto_investigacion->actualizarElementos(
+                        $request->codigo_sigp_old,
+                        'investigacion_has_semilleros',
+                        $request->semilleros,
+                        'id_p_investigacion',
+                        'id_semillero',
+                        'estado_ihs'
+                    );
+                    //Participantes
+                    $proyecto_investigacion->actualizarElementos(
+                        $request->codigo_sigp_old,
+                        'investigacion_has_users',
+                        $request->grupos,
+                        'id_p_investigacion',
+                        'id',
+                        'estado_ihu'
+                    );
+                    //Objetivos Especificos
+                    $proyecto_investigacion->actualizarElementos(
+                        $request->codigo_sigp_old,
+                        'investigacion_objetivos',
+                        $request->objetivos_especificos,
+                        'id_p_investigacion',
+                        'id_objetivo',
+                        'estado_objetivo_i'
+                    );
+                    //Actividades
 
-
+                    DB::commit();
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    dd($th);
+                }
             }
         }
     }

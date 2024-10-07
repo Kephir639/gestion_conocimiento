@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class proyectosInvestigacion extends Model
+class ProyectosInvestigacion extends Model
 {
     use HasFactory;
 
@@ -77,12 +77,13 @@ class proyectosInvestigacion extends Model
                         }
                         foreach ($array as $arr => $multiple) {
                             if (is_array($multiple)) {
-                                // dd($arr);
-                                if (!isset($arrayUnico[$llave][$arr])) {
-                                    $arrayUnico[$llave][$arr] = [];
-                                }
-                                foreach ($multiple as $ky) {
-                                    array_push($arrayUnico[$llave][$arr], $ky);
+                                // dd($multiple);
+                                foreach ($multiple as $ky => $va) {
+                                    if (!isset($arrayUnico[$llave][$ky])) {
+                                        $arrayUnico[$llave][$ky] = [];
+                                    }
+                                    array_push($arrayUnico[$llave][$ky], $va);
+                                    // dd($arrayUnico);
                                 }
                             } else {
                                 array_push($arrayUnico[$llave], $multiple);

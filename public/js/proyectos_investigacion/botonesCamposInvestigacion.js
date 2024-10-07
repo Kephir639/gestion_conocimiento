@@ -27,6 +27,7 @@ $(document).ready(function () {
     $(document).on('click', '.btnAgregar', function (e) {
         e.preventDefault();
         let inputs = $(this).closest('.input-agregar').find('.agregable'); //Encuentra los inputs agregables
+        console.log(inputs);
         let name = $(inputs[inputs.length - 1]).attr('name');// Encuentra el atributo name del ultimo input agregado
         let partes = name.split("["); //divide el string con el atributo Name
         let posiciones = [];
@@ -39,10 +40,11 @@ $(document).ready(function () {
         let divObjetivo = $(this).closest('.input-agregar'); //Encuentro el divPadre que contiene los divAgregado
 
         let item = `
-        <div class="divAgregado input-group">
-            <input type="text" class="form-control agregable" name="`+ nombreCampo + `[` + posiciones[0] + `][` + (posiciones[1] + 1) + `][]"
-                                                    required><a href="#" class="btn btn-danger p-2 btnEliminar">-</a>
-        </div>
+            <div class="divAgregado input-group">
+                <input type="text" class="form-control agregable" name="`+ nombreCampo + `[` + posiciones[0] + `][` + (posiciones[1] + 1) + `][]"
+                required><a href="#" class="btn btn-danger btnEliminar">-</a>
+                <span class="errorValidacion"></span>
+            </div>
         `;
 
         $(divObjetivo).append(item); //Agrego el nuevo input
