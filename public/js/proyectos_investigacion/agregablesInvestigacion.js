@@ -12,6 +12,7 @@ $(document).ready(function () {
     }
 
     function reiniciarInputs(grupoInputs) { //Funcion para reiniciar la posicion de los inputs[NumeroGrupo][NumeroCampo]
+        let contador = 1;
         grupoInputs.each(function () {
             let divContenedor = $(this).find('.input-agregar');
             let inputSimples = $(this).find('.simple');
@@ -80,7 +81,6 @@ $(document).ready(function () {
 
     $(document).on('click', '#btnEliminarPresupuesto', function (e) {
         e.preventDefault();
-
         let contador = 1;
         $(this).closest('.presupuestoAgregado').remove();
         let grupoInputs = $('#presupuestos').find('.grupoInput');

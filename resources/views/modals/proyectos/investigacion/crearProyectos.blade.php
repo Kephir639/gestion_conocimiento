@@ -131,7 +131,7 @@
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputObjetivosEspecificos" class="form-label">Objetivos especificos</label>
                             <input type="text" class="form-control" name="objetivos_especificos[]" required>
-                            <button class="btnAgregar">+</button>
+                            <a class="btnAgregar btn btn-success">+</a>
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_propuesta" class="col-md-12 col-sm-12 justify-content-center align-items-center">
@@ -255,8 +255,8 @@
                                                     <div class="input-agregar">
                                                         <div class="campo_principal input-group">
                                                             <input type="text" class="form-control agregable"
-                                                                name="valor_planteado[1][1][]" required><button
-                                                                class="btnAgregar btn btn-success">+</button>
+                                                                name="valor_planteado[1][1][]" required><a
+                                                                class="btnAgregar btn btn-success">+</a>
                                                             <span class="errorValidacion"></span>
                                                         </div>
                                                     </div>

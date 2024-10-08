@@ -2,6 +2,7 @@ $(document).ready(function () {
     $(document).on('click', '.btnEliminar', function (e) {
         e.preventDefault();
         let agregados = $(this).closest('.input-agregar').find('.agregable');//Compruebo si se agregaron campos
+        console.log(agregados);
         if (agregados.length > 1) {
             let name = $(this).closest('.divAgregado').find('.agregable').attr('name');
             let partes = name.split("[");
@@ -11,7 +12,6 @@ $(document).ready(function () {
             }
             let posLlave = name.indexOf("[");
             let nombreCampo = name.substr(0, posLlave);
-
             let divAbuelo = $(this).closest('.input-agregar');
             $(this).closest('.divAgregado').remove(); //Elimino el campo seleccionado
             let restante = $(divAbuelo).find('.agregable') //Encuentro los campos que quedaron
@@ -48,5 +48,27 @@ $(document).ready(function () {
         `;
 
         $(divObjetivo).append(item); //Agrego el nuevo input
+    });
+
+    $(document).on('click', '.btnAgregarObjetivo', function (e) {
+        e.preventDefault();
+        // Crear un nuevo input de objetivo específico
+        let nuevoObjetivo = `
+        <div class="input-group mb-3 objetivo-item">
+            <input type="text" class="form-control" name="objetivos_especificos[]" placeholder="Objetivo específico" required>
+            <button class="btn btn-danger btnEliminarObjetivo" type="button">-</button>
+        </div>`;
+
+        // Agregar el nuevo objetivo específico después del elemento actual
+        $('#div_objetivos_especificos').append(nuevoObjetivo);
+    });
+
+    $(document).on('click', '.btnEliminarObjetivo', function (e) {
+        e.preventDefault();
+
+        // Asegurarse de que no se elimine el último objetivo
+        if ($('.objetivo-item').length > 1) {
+            $(this).closest('.objetivo-item').remove();
+        }
     });
 });

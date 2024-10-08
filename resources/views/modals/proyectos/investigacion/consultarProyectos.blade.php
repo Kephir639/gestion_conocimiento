@@ -26,9 +26,9 @@
                                 <td>{{ $proyecto->created_at }}</td>
                                 <td>{{ $proyecto->ano_ejecucion }}</td>
                                 <td>
-                                    @if ($proyecto->estado_linea == 1)
+                                    @if ($proyecto->estado_p_investigacion == 1)
                                         Activo
-                                    @elseif ($proyecto->estado_linea == 0)
+                                    @elseif ($proyecto->estado_p_investigacion == 0)
                                         Inactivo
                                     @endif
                                 </td>

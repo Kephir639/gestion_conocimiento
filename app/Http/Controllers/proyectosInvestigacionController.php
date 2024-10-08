@@ -7,7 +7,7 @@ use App\Models\GrupoInvestigacion;
 use App\Models\LineaInvestigacion;
 use App\Models\Log;
 use App\Models\Programas;
-use App\Models\proyectosInvestigacion;
+use App\Models\ProyectosInvestigacion;
 use App\Models\Redes;
 use App\Models\Semilleros;
 use App\Models\User;
@@ -69,53 +69,17 @@ class proyectosInvestigacionController extends Controller
         ])->render();
     }
 
-    public function arrayActualizar($actividadesC, $arrayDatos, $nombreTabla)
+    public function arrayActualizar($actividadesC, $nombreTabla)
     {
+        $arrayDatos = [];
+
         foreach ($actividadesC as $actividadC) {
             if (!isset($arrayDatos[$actividadC->id_actividad_i])) {
-                $arrayDatos[$actividadC->id_actividad_i][] = DB::table($nombreTabla)
-                    ->where('id_actividad_i', $actividadC->id_actividad_i)->get();
+                $arrayDatos[$actividadC->id_actividad_i] = DB::table($nombreTabla)
+                    ->where('id_actividad_i', $actividadC->id_actividad_i)->get()->toArray();
             }
         }
-    }
-
-    public function showModalActualizar(Request $request)
-    {
-        $proyecto = proyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp_old)->get();
-        dd($proyecto);
-        $id_proyecto = $proyecto->id_p_investigacion;
-        $centros = DB::table('investigacion_has_centros')->where('id_p_investigacion', $id_proyecto)->get();
-        $grupos = DB::table('investigacion_has_grupos')->where('id_p_investigacion', $id_proyecto)->get();
-        $lineas = DB::table('investigacion_has_lineas')->where('id_p_investigacion', $id_proyecto)->get();
-        $programas = DB::table('investigacion_has_programas')->where('id_p_investigacion', $id_proyecto)->get();
-        $redes = DB::table('investigacion_has_redes')->where('id_p_investigacion', $id_proyecto)->get();
-        $semilleros = DB::table('investigacion_has_semilleros')->where('id_p_investigacion', $id_proyecto)->get();
-        $users = DB::table('investigacion_has_users')->where('id_p_investigacion', $id_proyecto)->get();
-
-        $actividadesC = DB::table('investigacion_actividades_unificadas')
-            ->where('id_p_investigacion', $id_proyecto)->orderBy('id_actividad_i', 'asc')->get();
-        $actividades = [];
-        $this->arrayActualizar($actividadesC, $actividades, 'investigacion_actividades');
-        $entregables = [];
-        $this->arrayActualizar($actividadesC, $entregables, 'investigacion_entregables');
-        $observaciones = [];
-        $this->arrayActualizar($actividadesC, $observaciones, 'investigacion_observaciones');
-
-        $vista = view('modals.proyectos.investigacion.modificarProyectos', [
-            'proyecto' => $proyecto,
-            'centros' => $centros,
-            'grupos' => $grupos,
-            'lineas' => $lineas,
-            'programas' => $programas,
-            'redes' => $redes,
-            'semilleros' => $semilleros,
-            'participantes' => $users,
-            'activdadesC' => $actividadesC,
-            'actividades' => $actividades,
-            'entregables' => $entregables,
-            'observaciones' => $observaciones
-        ])->render();
-        return response()->json();
+        return $arrayDatos;
     }
 
     public function registrarProyectoInvestigacion(Request $request)
@@ -356,6 +320,63 @@ class proyectosInvestigacionController extends Controller
         }
     }
 
+    public function showModalActualizar(Request $request)
+    {
+        $proyecto = ProyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp_old)->get();
+        $id_proyecto = $proyecto->first()->id_p_investigacion;
+        $centros = CentrosFormacion::all();
+        $centros_proyecto = DB::table('investigacion_has_centros')->where('id_p_investigacion', $id_proyecto)->get();
+        $grupos = GrupoInvestigacion::all();
+        $grupos_proyecto = DB::table('investigacion_has_grupos')->where('id_p_investigacion', $id_proyecto)->get();
+        $lineas = LineaInvestigacion::all();
+        $lineas_proyecto = DB::table('investigacion_has_lineas')->where('id_p_investigacion', $id_proyecto)->get();
+        $programas = Programas::all();
+        $programas_proyecto = DB::table('investigacion_has_programas')->where('id_p_investigacion', $id_proyecto)->get();
+        $redes = Redes::all();
+        $redes_proyecto = DB::table('investigacion_has_redes')->where('id_p_investigacion', $id_proyecto)->get();
+        $semilleros = Semilleros::all();
+        $semilleros_proyecto = DB::table('investigacion_has_semilleros')->where('id_p_investigacion', $id_proyecto)->get();
+        $users = User::all();
+        $users_proyecto = DB::table('investigacion_has_users')->where('id_p_investigacion', $id_proyecto)->get();
+        $objetivos_especificos = DB::table('investigacion_objetivos')->where('id_p_investigacion', $id_proyecto)->get();
+
+        $actividadesC = DB::table('investigacion_actividades_unificada')
+            ->where('id_p_investigacion', $id_proyecto)->orderBy('id_actividad_i', 'asc')->get();
+        $actividades = $this->arrayActualizar($actividadesC, 'investigacion_actividades');
+        $entregables = $this->arrayActualizar($actividadesC, 'investigacion_entregables');
+        $observaciones = $this->arrayActualizar($actividadesC, 'investigacion_observaciones');
+
+        $presupuestosC = DB::table('investigacion_presupuestos')
+            ->where('id_p_investigacion', $id_proyecto)->orderBy('id_presupuesto_i', 'asc')->get();
+        $valores = $this->arrayActualizar($presupuestosC, 'investigacion_presupuestos_valores');
+
+        $vista = view('modals.proyectos.investigacion.modificarProyectos', [
+            'proyecto' => $proyecto,
+            'centros' => $centros,
+            'centros_proyecto' => $centros_proyecto,
+            'grupos' => $grupos,
+            'grupos_proyecto' => $grupos_proyecto,
+            'lineas' => $lineas,
+            'lineas_proyecto' => $lineas_proyecto,
+            'programas' => $programas,
+            'programas_proyecto' => $programas_proyecto,
+            'redes' => $redes,
+            'redes_proyecto' => $redes_proyecto,
+            'semilleros' => $semilleros,
+            'semilleros_proyecto' => $semilleros_proyecto,
+            'participantes' => $users,
+            'participantes_proyecto' => $users_proyecto,
+            'objetivos' => $objetivos_especificos,
+            'actividadesCompletas' => $actividadesC,
+            'actividades' => $actividades,
+            'entregables' => $entregables,
+            'observaciones' => $observaciones,
+            'presupuestosCompletos' => $presupuestosC,
+            'valores' => $valores
+
+        ])->render();
+        return response()->json(['vista' => $vista]);
+    }
 
     public function actualizarProyectoInvestigacion(Request $request)
     {
