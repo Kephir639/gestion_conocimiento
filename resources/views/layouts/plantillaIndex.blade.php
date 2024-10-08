@@ -8,7 +8,7 @@
     <title>@yield('title')</title>
     <link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url('css/plantilla.css') }}">
-    <link rel="stylesheet" href="{{url('css/modales.css')}}">
+    <link rel="stylesheet" href="{{ url('css/modales.css') }}">
     {{-- <link rel="stylesheet" href="{{ url('libraries/select2-4.0.13/dist/css/select2.css') }}"> --}}
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <link rel="stylesheet"
@@ -51,11 +51,14 @@
                         {{-- Nota: El side-bar se debería separar, al igual que el footer y header, no todo debe estar en un mismo archivo --}}
                         <li class="sidebar-item">
                             @php
-                                $url = "index/".$contr['nombre_controlador']."/consultar_".$contr['nombre_controlador'];
+                                $url =
+                                    'index/' .
+                                    $contr['nombre_controlador'] .
+                                    '/consultar_' .
+                                    $contr['nombre_controlador'];
                             @endphp
                             <!--Cambio usando la función url de laravel para evitar errores 404-->
-                            <a href="{{url($url)}}"
-                                id="tab_{{ $contr['nombre_controlador'] }}"
+                            <a href="{{ url($url) }}" id="tab_{{ $contr['nombre_controlador'] }}"
                                 class="sidebar-tabb sidebar-link collapsed px-3 py-2" {{-- data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse" --}}
                                 aria-expanded="false">{!! html_entity_decode($contr['icono']) !!}{{ $contr['display_controlador'] }}
                             </a>
@@ -78,7 +81,8 @@
                         <path
                             d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416l384 0c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8l0-18.8c0-77.4-55-142-128-156.8L256 32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3l-64 0-64 0c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z" />
                     </svg>
-                    <span>{{ $notificaciones }}</span>
+
+                    {{-- <span>{{ $notificaciones }}</span> --}}
                 </a>
 
                 {{-- icono anterior --}}

@@ -12,8 +12,10 @@ use App\Models\Redes;
 use App\Models\Semilleros;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Expr\Cast\Array_;
 
 class proyectosInvestigacionController extends Controller
 {
@@ -71,8 +73,6 @@ class proyectosInvestigacionController extends Controller
 
     public function showModalActualizar(Request $request)
     {
-
-
         return view('modals.proyectos.investigacion.modificarProyectos');
     }
 
@@ -474,5 +474,36 @@ class proyectosInvestigacionController extends Controller
 
             }
         }
+    }
+    public function seguimientoProyecto(Request $request)
+    {
+        $reglas = [
+            'preguntas' => 'required'
+        ];
+        $mensajes = [
+            'preguntas.required' => 'Esta pregunta es obligatoria'
+        ];
+
+        $datos = $request->all();
+
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        if ($validacion->fails()) {
+            return response()->json(['errors' => $validacion->errors()], 422);
+        } else {
+
+            $sql = "SELECT r.id FROM respuesta_seguimiento r, investigacion_has_users ihu, respuesta_seguimiento_detalle rd
+            WHERE ihu.id = r.id AND r.id_respuesta = rd.id_respuesta";
+            $cuenta = (array) DB::select($sql);
+
+            if (count($cuenta)) {
+                return view('alertas.repetido')->render();
+            } else {
+            }
+        }
+    }
+    public function showModalSeguimiento()
+    {
+        return view('modals.proyectos.seguimientoProyecto');
     }
 }
