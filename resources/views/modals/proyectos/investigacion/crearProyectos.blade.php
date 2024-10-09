@@ -152,7 +152,7 @@
                             <div id="actividades">
                                 <div class="col-md-12 col-sm-12 justify-content-center align-items-center grupoInput">
                                     <label for="" class="form-label">Actividades</label>
-                                    <table id="campoActividades">
+                                    <table id="camposAgregables">
                                         <thead>
                                             <td>Descripcion</td>
                                             <td>Actividad</td>
@@ -227,7 +227,7 @@
                             <div id="presupuestos">
                                 <div class="col-md-12 col-sm-12 justify-content-center align-items-center grupoInput">
                                     <label for="" class="form-label">Presupuesto del proyecto</label>
-                                    <table id="campoActividades">
+                                    <table id="camposAgregables">
                                         <thead>
                                             <td>Concepto interno SENA</td>
                                             <td>Rubro</td>

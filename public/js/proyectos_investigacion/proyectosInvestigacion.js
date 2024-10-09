@@ -39,11 +39,12 @@ $(document).ready(function () {
         let array = [];
         let n1 = 1;
         while ($('input[name="' + nombreCampo + '[' + n1 + '][1][]"]').length > 0) {
-            let fila = [];
+            let fila = {};
             let n2 = 1;
             while ($('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]').length > 0) {
                 let id = $('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]').attr('id');
                 if (!fila[id]) {
+                    // console.log($('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"][id = "' + id + '"]').val());
                     fila[id] = $('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"][id = "' + id + '"]').val();
                 }
                 n2++;
@@ -51,6 +52,7 @@ $(document).ready(function () {
             array.push(fila);
             n1++;
         }
+        console.log(array);
         return array;
     }
 
@@ -88,11 +90,9 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '#btnModificar', function (e) {
+    $(document).on('click', '#btnActualizar', function (e) {
         e.preventDefault();
         let codigo_sigp_old = $(button).parents('tr').find('td:eq(1)').text().trim();
-        let proyecto = data.proytecto;
-        let vista = data.vista;
 
         let ano_proyecto = $('#inputAnoProyecto').val();
         let codigo = $('#inputCodigoSIGP').val();
@@ -112,6 +112,7 @@ $(document).ready(function () {
         //Actividades
         let descripciones = campoUnico('descripcion', 'input');
         let actividades = campoAgregableActualizar('actividades');
+        // console.log(actividades);
         let entregables = campoAgregableActualizar('entregables');
         let enlaces = campoUnico('enlace_evidencia', 'input');
         let cumplidos = campoUnico('cumplido', 'select');
@@ -137,12 +138,13 @@ $(document).ready(function () {
             'valores': valores
         }
         let token = $('#_token').val();
+        let estado = $('#inputEstadoProyecto').val();
 
         $.ajax({
             type: "POST",
             url: "actualizar_proyecto_investigacion",
             data: {
-                'codigo_sigp__old': codigo_sigp_old,
+                'codigo_sigp_old': codigo_sigp_old,
                 '_token': token,
                 'ano_ejecucion': ano_proyecto,
                 'codigo_sigp': codigo,
@@ -160,10 +162,11 @@ $(document).ready(function () {
                 'propuesta': propuesta,
                 'impacto_esperado': impacto,
                 'actividades': actividades_conjunto,
-                'presupuestos': presupuestos
+                'presupuestos': presupuestos,
+                'estado_proyecto': estado
             },
             success: function (data) {
-
+                $('#alertasModificar').html(data);
             },
             error: function (xhr, status, error) {
                 if (xhr.status === 422) {

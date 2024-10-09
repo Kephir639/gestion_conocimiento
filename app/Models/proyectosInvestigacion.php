@@ -24,7 +24,7 @@ class ProyectosInvestigacion extends Model
     ];
 
     public function actualizarElementos(
-        $codigo_proyecto,
+        $id_proyecto,
         $tabla_cambios, //Investigacion_Has_#
         $arrayComparacion, //Array de elementos seleccionados
         $campoGeneral,
@@ -32,12 +32,13 @@ class ProyectosInvestigacion extends Model
         $campoEstado //Campo estado de la tabla
     ) {
         $proyecto = DB::table('proyectos_investigacion')
-            ->where('codigo_sigp', $codigo_proyecto)
+            ->where('id_p_investigacion', $id_proyecto)
             ->get();
         $array_elementos = DB::table($tabla_cambios)
-            ->where($campoGeneral, $proyecto->id_p_investigacion)
-            ->get()->toArray();
+            ->where($campoGeneral, $proyecto->first()->id_p_investigacion)
+            ->get();
 
+        dd($array_elementos);
         $elementos_agregados = array_diff($array_elementos, $arrayComparacion);
         $elementos_eliminados = array_diff($arrayComparacion, $array_elementos);
 
@@ -46,12 +47,12 @@ class ProyectosInvestigacion extends Model
                 ->where($campoDiffEspecifico, $agregado)->get())) {
                 DB::table($tabla_cambios)->where([
                     $campoDiffEspecifico => $agregado,
-                    $campoGeneral => $proyecto->id_p_investigacion
+                    $campoGeneral => $proyecto->first()->id_p_investigacion
                 ])->update([$campoEstado => 1]);
             } else {
-                DB::table($tabla_cambios)->where($campoGeneral, $proyecto->id_p_investigacion)
+                DB::table($tabla_cambios)->where($campoGeneral, $proyecto->first()->id_p_investigacion)
                     ->insert([
-                        $campoGeneral => $proyecto->id_p_investigacion,
+                        $campoGeneral => $proyecto->first()->id_p_investigacion,
                         $campoDiffEspecifico => $agregado,
                         $campoEstado => 1
                     ]);
@@ -67,6 +68,7 @@ class ProyectosInvestigacion extends Model
 
     public function crearArray($datos, $clave)
     {
+        // dd($datos);
         $arrayUnico = [];
         foreach ($datos as $key => $valor) {
             if ($key === 'actividades') {
@@ -76,14 +78,14 @@ class ProyectosInvestigacion extends Model
                             $arrayUnico[$llave] = [];
                         }
                         foreach ($array as $arr => $multiple) {
+                            // dd($array);
                             if (is_array($multiple)) {
-                                // dd($multiple);
-                                foreach ($multiple as $ky => $va) {
-                                    if (!isset($arrayUnico[$llave][$ky])) {
-                                        $arrayUnico[$llave][$ky] = [];
+                                foreach ($multiple as $ky => $val) {
+                                    // dd($multiple);
+                                    if (!isset($arrayUnico[$llave][$arr])) {
+                                        $arrayUnico[$llave][$arr] = [];
                                     }
-                                    array_push($arrayUnico[$llave][$ky], $va);
-                                    // dd($arrayUnico);
+                                    array_push($arrayUnico[$llave][$arr],);
                                 }
                             } else {
                                 array_push($arrayUnico[$llave], $multiple);
@@ -93,6 +95,7 @@ class ProyectosInvestigacion extends Model
                 }
             }
         }
+        dd($arrayUnico);
         return $arrayUnico;
     }
 

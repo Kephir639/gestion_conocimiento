@@ -188,8 +188,8 @@
                                 @foreach ($actividadesCompletas as $actividadC)
                                     <div
                                         class="col-md-12 col-sm-12 justify-content-center align-items-center grupoInput {{ $loop->first ? null : 'actividadAgregada' }} ">
-                                        <label for="campoActividades" class="form-label">Actividades</label>
-                                        <table id="campoActividades">
+                                        <label for="camposAgregables" class="form-label">Actividades</label>
+                                        <table id="camposAgregables">
                                             <thead>
                                                 <td>Descripcion</td>
                                                 <td>Actividad</td>
@@ -220,7 +220,7 @@
                                                                                     value="{{ $ac->actividad }}"
                                                                                     type="text"
                                                                                     class="form-control agregable"
-                                                                                    name="actividades[{{ $divsActividades }}][{{ $cantidad }}]"
+                                                                                    name="actividades[{{ $divsActividades }}][{{ $cantidad }}][]"
                                                                                     required>
                                                                                 <a
                                                                                     class="btnAgregar btn btn-success">+</a>
@@ -231,7 +231,7 @@
                                                                                     value="{{ $ac->actividad }}"
                                                                                     type="text"
                                                                                     class="form-control agregable"
-                                                                                    name="actividades[{{ $divsActividades }}][{{ $cantidad }}]"
+                                                                                    name="actividades[{{ $divsActividades }}][{{ $cantidad }}][]"
                                                                                     required>
                                                                                 <a href="#"
                                                                                     class="btn btn-danger btnEliminar">-</a>
@@ -258,7 +258,7 @@
                                                                                     id="{{ $entr->id_entregable_i }}"
                                                                                     type="text"
                                                                                     class="form-control agregable"
-                                                                                    name="entregables[{{ $divsActividades }}][{{ $cantidad }}]"
+                                                                                    name="entregables[{{ $divsActividades }}][{{ $cantidad }}][]"
                                                                                     value="{{ $entr->entregable }}"
                                                                                     required>
                                                                                 <a
@@ -270,7 +270,7 @@
                                                                                     id="{{ $entr->id_entregable_i }}"
                                                                                     type="text"
                                                                                     class="form-control agregable"
-                                                                                    name="entregables[{{ $divsActividades }}][{{ $cantidad }}]"
+                                                                                    name="entregables[{{ $divsActividades }}][{{ $cantidad }}][]"
                                                                                     value="{{ $entr->entregable }}"
                                                                                     required>
                                                                                 <a href="#"
@@ -291,7 +291,8 @@
                                                         <span class="errorValidacion"></span>
                                                     </td>
                                                     <td>
-                                                        <select name="cumplido" id="inputCumplido">
+                                                        <select class="form-control" name="cumplido"
+                                                            id="inputCumplido">
                                                             <option value="-1">Seleccione una opcion...</option>
                                                             <option
                                                                 {{ $actividadC->cumplido == 'si' ? 'selected' : null }}
@@ -317,7 +318,7 @@
                                                                                 <input id="{{ $obs->id_observacion }}"
                                                                                     type="text"
                                                                                     class="form-control agregable"
-                                                                                    name="observaciones[{{ $divsActividades }}][{{ $cantidad }}]"
+                                                                                    name="observaciones[{{ $divsActividades }}][{{ $cantidad }}][]"
                                                                                     value="{{ $obs->observacion }}"
                                                                                     required>
                                                                                 <a
@@ -328,7 +329,7 @@
                                                                                 <input id="{{ $obs->id_observacion }}"
                                                                                     type="text"
                                                                                     class="form-control agregable"
-                                                                                    name="observaciones[{{ $divsActividades }}][{{ $cantidad }}]"
+                                                                                    name="observaciones[{{ $divsActividades }}][{{ $cantidad }}][]"
                                                                                     value="{{ $obs->observacion }}"
                                                                                     required>
                                                                                 <a href="#"
@@ -395,7 +396,7 @@
                                                                             <input type="text"
                                                                                 id="{{ $v->id_valor }}"
                                                                                 class="form-control agregable"
-                                                                                name="valor_planteado[{{ $divsPresupuestos }}][{{ $cantidad }}]"
+                                                                                name="valor_planteado[{{ $divsPresupuestos }}][{{ $cantidad }}][]"
                                                                                 value="{{ $v->valor }}" required>
                                                                             <a class="btnAgregar btn btn-success">+</a>
                                                                         </div>
@@ -404,7 +405,7 @@
                                                                             <input type="text"
                                                                                 id="{{ $v->id_valor }}"
                                                                                 class="form-control agregable"
-                                                                                name="valor_planteado[{{ $divsPresupuestos }}][{{ $cantidad }}]"
+                                                                                name="valor_planteado[{{ $divsPresupuestos }}][{{ $cantidad }}][]"
                                                                                 value="{{ $v->valor }}" required>
                                                                             <a href="#"
                                                                                 class="btn btn-danger btnEliminar">-</a>
@@ -427,14 +428,24 @@
                             <br>
                             <hr>
                             <br>
+                            <div id="div_estado_proyecto">
+                                <label for="inputEstadoProyecto">Estado proyecto</label>
+                                <select class="form-control" name="estado_proyecto" id="inputEstadoProyecto">
+                                    <option value="1">Si</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                            <br>
+                            <hr>
+                            <br>
                             <div class="col-md-12 col-sm-12 mt-3">
-                                <button class="btn btn-success w-100">Enviar</button>
+                                <button id="btnActualizar" class="btn btn-success w-100">Enviar</button>
                             </div>
                         </div>
                     </div>
                 </form>
                 <br>
-                <div id="alertasRegistrar"></div>
+                <div id="alertasModificar"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

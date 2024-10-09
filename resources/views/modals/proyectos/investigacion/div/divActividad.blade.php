@@ -1,6 +1,6 @@
 <div class="col-md-12 col-sm-12 justify-content-center align-items-center grupoInput actividadAgregada">
     <label for="" class="form-label">Actividades</label>
-    <table id="campoActividades">
+    <table id="camposAgregables">
         <thead>
             <td>Descripcion</td>
             <td>Actividad</td>

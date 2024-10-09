@@ -8,7 +8,7 @@
     <title>@yield('title')</title>
     <link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url('css/plantilla.css') }}">
-    <link rel="stylesheet" href="{{url('css/modales.css')}}">
+    <link rel="stylesheet" href="{{ url('css/modales.css') }}">
     {{-- <link rel="stylesheet" href="{{ url('libraries/select2-4.0.13/dist/css/select2.css') }}"> --}}
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <link rel="stylesheet"
@@ -102,7 +102,7 @@
                         <li>
                             <hr class="dropdown divider division my-1">
                         </li>
-                        <li class="navbar-item"><a href="/index/user/consultar_perfil"
+                        <li class="navbar-item"><a href="/index/usuarios/consultar_perfil"
                                 class="dropdown-item item-perfil w-100 text-center">Ver perfil</a>
                         </li>
                         <li id="logoutBtn" class="navbar-item"><a href="/logout"
