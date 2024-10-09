@@ -32,9 +32,12 @@
     max-width: 100%;
     width: 100%;
     height: 100%;
-    overflow: scroll;
     background-color: var(--color-fuente);
     border-radius: 10px;
+}
+
+.cuadradoVistas {
+    overflow: scroll;
 }
 
 /* Manejor del card para forms dentro de la plantilla Blade */
@@ -65,7 +68,7 @@
     display: flex;
     flex-direction: column;
     transition: var(--transiciones);
-    /* overflow-y: scroll; */
+
     grid-area: main;
 }
 
@@ -312,22 +315,27 @@ a.sidebar-tabb-drop:hover {
 
 .notifycon {
     display: flex;
-    align-items: center; /* Alinea verticalmente la campana y el contador */
+    align-items: center;
+    /* Alinea verticalmente la campana y el contador */
     position: relative;
 }
 
 .notifycon svg {
-    margin-right: 5px; /* Espacio entre la campana y el contador */
+    margin-right: 5px;
+    /* Espacio entre la campana y el contador */
 }
 
 .notifycon span {
     background: #f00;
-    border-radius: 50%; /* Hace que el contador sea completamente redondo */
+    border-radius: 50%;
+    /* Hace que el contador sea completamente redondo */
     color: #fff;
-    padding: 2px 3px; /* Ajusta el tamaño del contador */
+    padding: 2px 3px;
+    /* Ajusta el tamaño del contador */
     font-size: 12px;
     position: absolute;
-    top: 0; /* Ajusta la posición del contador en relación a la campana */
+    top: 0;
+    /* Ajusta la posición del contador en relación a la campana */
     right: 2px;
 }
 

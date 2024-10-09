@@ -253,10 +253,21 @@ class usuarioController extends Controller
         return view('modals.usuarios.modalAsignarRol', compact('roles', 'idRol', 'usuarios'));
     }
 
-    public function showPerfil()
+    public function showPerfil(Request $request)
     {
-        return view('modals.usuarios.perfilUsuario');
+        $datos = $request->all();
+        $generos = Genero::all();
+        $tipo_poblaciones = Tipo_poblacion::all();
+        $departamentos = Departamentos::all();
+        $cargos = Cargos::all();
+        $profesiones = Profesiones::all();
+        $maestrias = Maestrias::all();
+        $doctorados = Doctorados::all();
+        $controladores = $request->controladores;
+        return view('modals.usuarios.perfil.verPerfil', compact('generos', 'tipo_poblaciones', 'departamentos', 'cargos', 'profesiones', 'maestrias', 'doctorados', 'controladores'));
     }
+
+    public function editarPerfil() {}
 
     public function usersExport()
     {

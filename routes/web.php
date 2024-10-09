@@ -97,14 +97,15 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
 
     Route::get('index/proyectos_investigacion/agregar_actividad', [proyectosInvestigacionController::class, 'agregarActividad'])->withoutMiddleware('checkRoutes');
     Route::get('index/proyectos_investigacion/agregar_presupuesto', [proyectosInvestigacionController::class, 'agregarPresupuesto'])->withoutMiddleware('checkRoutes');
+
+    Route::get('index/usuarios/consultar_perfil', [usuarioController::class, 'showPerfil'])->withoutMiddleware('checkRoutes');
+    Route::post('index/usuarios/change_profile', [usuarioController::class, 'actualizarPerfil']);
 });
 
 
 Route::get('/logout', [AuthLoginController::class, 'logout']);
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->middleware('filter');
 //Usuarios
-Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil']);
-Route::post('index/usuarios/change_profile', [usuarioController::class, 'actualizarPerfil']);
 
 //Proyectos de Investigacion
 Route::get('index/proyectos_investigacion/consultar_proyecto_investigacion', [proyectosInvestigacionController::class, 'showProyectosInvestigativos']);

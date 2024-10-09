@@ -119,7 +119,7 @@
                         <li>
                             <hr class="dropdown divider division my-1">
                         </li>
-                        <li class="navbar-item"><a href="/index/user/consultar_perfil"
+                        <li class="navbar-item"><a href="/index/usuarios/consultar_perfil"
                                 class="dropdown-item item-perfil w-100 text-center">Ver perfil</a>
                         </li>
                         <li id="logoutBtn" class="navbar-item"><a href="/logout"

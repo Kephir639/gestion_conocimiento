@@ -104,7 +104,7 @@ class User extends Authenticatable
 
     public function getIdTipoPoblacionAttribute()
     {
-        return $this->attributes['id_tipo_poblacion'];
+        return $this->attributes['id_tipo'];
     }
 
     public function getCelularAttribute()

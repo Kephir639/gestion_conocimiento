@@ -3,9 +3,11 @@
 @section('title', 'Perfil Usuario')
 
 @push('styles')
+    <link rel="stylesheet" href="{{ url('css/perfil.css') }}">
 @endpush
 
 @section('content')
+
     <div class="container mt-2">
         <h2 class="text-center mb-4">Perfil de Usuario</h2>
         <hr>
@@ -147,7 +149,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3 instructorFields" style="display: none;">
+            <div class="row mb-3 instructorFields">
                 <div class="col-md-4">
                     <label for="profesion" class="form-label">Profesión</label>
                     <select class="form-select" id="profesion" name="id_profesion">
@@ -187,7 +189,7 @@
             </div>
 
 
-            <div class="row mb-3" id="aprendizFields" style="display: none;">
+            <div class="row mb-3" id="aprendizFields">
                 <div class="col-md-6">
                     <label for="Nombre_programa" class="form-label">Nombre del Programa</label>
                     <input type="text" class="form-control" id="Nombre_programa" name="Nombre_programa"
@@ -233,6 +235,6 @@
 
 @endsection
 
-@push()
+@push('scripts')
     <script src="{{ url('js/perfil.js') }}"></script>
 @endpush
