@@ -121,5 +121,6 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->mi
 Route::post('/registrarUsuario', [usuarioController::class, 'registrarUsuario'])->middleware('filter');
 
 Route::get('/get-municipios/{departamento_id}', [RegisterController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
+Route::get('/get-municipios/{departamento_id}', [usuarioController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
 //Registro
 Route::view('/registro', 'registro')->name('registro');

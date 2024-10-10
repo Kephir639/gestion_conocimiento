@@ -188,12 +188,10 @@ class usuarioController extends Controller
         return view('Auth.register', compact('departamentos', 'municipios', 'tipo_poblaciones', 'generos', 'cargos', 'profesiones', 'maestrias', 'doctorados'));
     }
 
-    public function getMunicipiosByDepartamento(Request $request)
+    public function getMunicipiosByDepartamento($departamento_id)
     {
-        $usuariosPendientes = User::orderBy('id', 'desc')->where('idRol', null)->paginate('10');
-        $notificaciones = $request->notificaciones;
-        $controladores = $request->controladores;
-        return view('modals.usuarios.asignarRol', compact('usuariosPendientes', 'controladores', 'notificaciones'));
+        $municipios = Municipio::where('departamento_id', $departamento_id)->get();
+        return response()->json($municipios);
     }
 
     public function asignarRol(Request $request)
@@ -259,15 +257,16 @@ class usuarioController extends Controller
         $generos = Genero::all();
         $tipo_poblaciones = Tipo_poblacion::all();
         $departamentos = Departamentos::all();
+        $municipios = Municipio::all();
         $cargos = Cargos::all();
         $profesiones = Profesiones::all();
         $maestrias = Maestrias::all();
         $doctorados = Doctorados::all();
         $controladores = $request->controladores;
-        return view('modals.usuarios.perfil.verPerfil', compact('generos', 'tipo_poblaciones', 'departamentos', 'cargos', 'profesiones', 'maestrias', 'doctorados', 'controladores'));
+        return view('modals.usuarios.perfil.verPerfil', compact('generos', 'tipo_poblaciones', 'departamentos', 'municipios', 'cargos', 'profesiones', 'maestrias', 'doctorados', 'controladores'));
     }
 
-    public function editarPerfil(Request $request)
+    public function actualizarPerfil(Request $request)
     {
         $reglas = [
             'name' => 'required|max:30',
@@ -314,9 +313,32 @@ class usuarioController extends Controller
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $user = auth()->user();
+            $user = new User();
+            $user->setNameAttribute($request->name);
+            $user->setApellidosAttribute($request->apellidos);
+            $user->setIdentificacionAttribute($request->name);
+            $user->setIdGeneroAttribute($request->id_genero);
+            $user->setIdTipoPoblacionAttribute($request->id_tipo);
+            $user->setEmailAttribute($request->email);
+            $user->setCelularAttribute($request->celular);
+            $user->setCelularAttribute($request->celular);
+            $user->setIdMunicipioAttribute($request->id_departamento);
+            $user->setDireccionAttribute($request->direccion);
 
-            return view('alertas.actualizarExitoso');
+            User::where(
+                'name',
+                'apellidos',
+                'tipo_documento',
+                'identificacion',
+                'id_genero',
+                'id_tipo_poblacion',
+                'email',
+                'celular',
+                'id_municipio',
+                'direccion'
+            )->update($user);
+
+            return response()->json(['message' => 'Perfil actualizado exitosamente']);
         }
     }
 

@@ -107,7 +107,7 @@
                         <option value="">Seleccione...</option>
                         @foreach ($departamentos as $departamento)
                             <option value="{{ $departamento->id_departamento }}"
-                                {{ Auth::user()->id_departamento == $departamento->id_departamento ? 'selected' : null }}>
+                                {{ Auth::user()->id_departamento == $departamento->id_departamento }}>
                                 {{ $departamento->departamento }}
                             </option>
                         @endforeach
@@ -149,7 +149,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3 instructorFields">
+            <div class="row mb-3 instructorFields" style="display: none;">
                 <div class="col-md-4">
                     <label for="profesion" class="form-label">Profesión</label>
                     <select class="form-select" id="profesion" name="id_profesion">
@@ -189,7 +189,7 @@
             </div>
 
 
-            <div class="row mb-3" id="aprendizFields">
+            <div class="row mb-3" id="aprendizFields" style="display: none;">
                 <div class="col-md-6">
                     <label for="Nombre_programa" class="form-label">Nombre del Programa</label>
                     <input type="text" class="form-control" id="Nombre_programa" name="Nombre_programa"
@@ -233,8 +233,8 @@
         </form>
     </div>
 
-@endsection
 
+@endsection
 @push('scripts')
     <script src="{{ url('js/perfil.js') }}"></script>
 @endpush

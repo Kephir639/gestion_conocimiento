@@ -143,6 +143,7 @@
     <script src="{{ url('libraries/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ url('libraries/popper.min.js') }}"></script>
     <script src="{{ url('js/bootstrap.min.js') }}"></script>
+    <script src="{{ url('js/departamentos.js') }}"></script>
     {{-- <script src="{{ url('libraries/select2-4.0.13/dist/js/select2.js') }}"></script> --}}
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
@@ -150,7 +151,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ url('js/indexSidebar.js') }}"></script>
 
-    @yield('scripts')
+    @stack('scripts')
 
 </body>
 
