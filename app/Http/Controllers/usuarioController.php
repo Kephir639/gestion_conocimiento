@@ -267,7 +267,58 @@ class usuarioController extends Controller
         return view('modals.usuarios.perfil.verPerfil', compact('generos', 'tipo_poblaciones', 'departamentos', 'cargos', 'profesiones', 'maestrias', 'doctorados', 'controladores'));
     }
 
-    public function editarPerfil() {}
+    public function editarPerfil(Request $request)
+    {
+        $reglas = [
+            'name' => 'required|max:30',
+            'apellidos' => 'required|max:30',
+            'tipo_documento' => 'required|in:CC,TI,CE,Pasaporte,PEP,PPT',
+            'numero_identificacion' => 'required|max:20|unique:users,numero_identificacion',
+            'id_genero' => 'required|integer',
+            'id_tipo' => 'required|integer',
+            'email' => 'required|email|max:255',
+            'celular' => 'required|max:15',
+            'id_departamento' => 'required|integer',
+            'id_municipio' => 'required|integer',
+            'direccion' => 'required'
+        ];
+        $mensajes = [
+            'name.required' => 'Este campo es obligatorio',
+            'name.max' => 'El campo debe contener máximo 30 caracteres',
+            'apellidos.required' => 'Este campo es obligatorio',
+            'apellidos.max' => 'El campo debe contener máximo 30 caracteres',
+            'tipo_documento.required' => 'Este campo es obligatorio',
+            'tipo_documento.in' => 'El tipo de documento no es válido',
+            'numero_identificacion.required' => 'Este campo es obligatorio',
+            'numero_identificacion.max' => 'El campo debe contener máximo 20 caracteres',
+            'numero_identificacion.unique' => 'Este número de identificación ya está registrado',
+            'id_genero.required' => 'Este campo es obligatorio',
+            'id_genero.integer' => 'El campo debe ser un número entero',
+            'id_tipo.required' => 'Este campo es obligatorio',
+            'id_tipo.integer' => 'El campo debe ser un número entero',
+            'email.required' => 'Este campo es obligatorio',
+            'email.email' => 'Esta no es una dirección de correo electrónico válida',
+            'email.max' => 'Este campo debe contener máximo 255 caracteres',
+            'email.unique' => 'Este correo electrónico ya está registrado',
+            'celular.required' => 'Este campo es obligatorio',
+            'celular.max' => 'El campo debe contener máximo 15 caracteres',
+            'id_departamento.required' => 'Este campo es obligatorio',
+            'id_departamento.integer' => 'El campo debe ser un número entero',
+            'id_municipio.required' => 'Este campo es obligatorio',
+            'id_municipio.integer' => 'El campo debe ser un número entero',
+        ];
+
+        $datos = $request->all();
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        if ($validacion->fails()) {
+            return response()->json(['errors' => $validacion->errors()], 422);
+        } else {
+            $user = auth()->user();
+
+            return view('alertas.actualizarExitoso');
+        }
+    }
 
     public function usersExport()
     {
