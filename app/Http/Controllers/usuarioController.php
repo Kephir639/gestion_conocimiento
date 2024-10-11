@@ -272,9 +272,9 @@ class usuarioController extends Controller
             'name' => 'required|max:30',
             'apellidos' => 'required|max:30',
             'tipo_documento' => 'required|in:CC,TI,CE,Pasaporte,PEP,PPT',
-            'numero_identificacion' => 'required|max:20|unique:users,numero_identificacion',
+            'numero_identificacion' => 'required|max:20|unique:users,identificacion',
             'id_genero' => 'required|integer',
-            'id_tipo' => 'required|integer',
+            'id_tipo_poblacion' => 'required|integer',
             'email' => 'required|email|max:255',
             'celular' => 'required|max:15',
             'id_departamento' => 'required|integer',
@@ -293,8 +293,8 @@ class usuarioController extends Controller
             'numero_identificacion.unique' => 'Este número de identificación ya está registrado',
             'id_genero.required' => 'Este campo es obligatorio',
             'id_genero.integer' => 'El campo debe ser un número entero',
-            'id_tipo.required' => 'Este campo es obligatorio',
-            'id_tipo.integer' => 'El campo debe ser un número entero',
+            'id_tipo_poblacion.required' => 'Este campo es obligatorio',
+            'id_tipo_poblacion.integer' => 'El campo debe ser un número entero',
             'email.required' => 'Este campo es obligatorio',
             'email.email' => 'Esta no es una dirección de correo electrónico válida',
             'email.max' => 'Este campo debe contener máximo 255 caracteres',
@@ -308,37 +308,30 @@ class usuarioController extends Controller
         ];
 
         $datos = $request->all();
+        // dd($datos);
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $user = new User();
-            $user->setNameAttribute($request->name);
-            $user->setApellidosAttribute($request->apellidos);
-            $user->setIdentificacionAttribute($request->name);
-            $user->setIdGeneroAttribute($request->id_genero);
-            $user->setIdTipoPoblacionAttribute($request->id_tipo);
-            $user->setEmailAttribute($request->email);
-            $user->setCelularAttribute($request->celular);
-            $user->setCelularAttribute($request->celular);
-            $user->setIdMunicipioAttribute($request->id_departamento);
-            $user->setDireccionAttribute($request->direccion);
 
-            User::where(
-                'name',
-                'apellidos',
-                'tipo_documento',
-                'identificacion',
-                'id_genero',
-                'id_tipo_poblacion',
-                'email',
-                'celular',
-                'id_municipio',
-                'direccion'
-            )->update($user);
+            User::where('id', Auth::user()->id)->update([
+                'name' => $request->input('name'),
+                'apellidos' => $request->input('apellidos'),
+                'tipo_documento' => $request->input('tipo_documento'),
+                'identificacion' => $request->input('numero_identificacion'),
+                'id_genero' => $request->input('id_genero'),
+                'id_tipo' => $request->input('id_tipo_poblacion'),
+                'email' => $request->input('email'),
+                'celular' => $request->input('celular'),
+                'id_cargo' => $request->input('id_cargo'),
+                'id_municipio' => $request->input('id_municipio'),
+                'id_departamento' => $request->input('id_departamento'),
+                'direccion' => $request->input('direccion'),
+            ]);
 
-            return response()->json(['message' => 'Perfil actualizado exitosamente']);
+
+            return view('alertas.actualizarExitoso');
         }
     }
 

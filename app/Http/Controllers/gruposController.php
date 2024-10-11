@@ -119,7 +119,6 @@ class gruposController extends Controller
                 $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
                 GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo->toArray());
-
                 $sql = log_auditoria::createLog(
                     'grupo',
                     $datos['nombre_grupo_old'],

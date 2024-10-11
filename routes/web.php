@@ -99,7 +99,7 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::get('index/proyectos_investigacion/agregar_presupuesto', [proyectosInvestigacionController::class, 'agregarPresupuesto'])->withoutMiddleware('checkRoutes');
 
     Route::get('index/usuarios/consultar_perfil', [usuarioController::class, 'showPerfil'])->withoutMiddleware('checkRoutes');
-    Route::post('index/usuarios/change_profile', [usuarioController::class, 'actualizarPerfil']);
+    Route::post('index/usuarios/change_profile', [usuarioController::class, 'actualizarPerfil'])->withoutMiddleware('checkRoutes');
 });
 
 

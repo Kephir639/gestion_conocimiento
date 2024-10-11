@@ -96,6 +96,10 @@ class User extends Authenticatable
     {
         return $this->attributes['identificacion'];
     }
+    public function getTipoDocumentoAttribute()
+    {
+        return $this->attributes['tipo_documento'];
+    }
 
     public function getIdGeneroAttribute()
     {
@@ -167,7 +171,10 @@ class User extends Authenticatable
     {
         $this->attributes['apellidos'] = $apellidos;
     }
-
+    public function setTipoDocumentoAttribute($tipo_doc)
+    {
+        $this->attributes['tipo_documento'] = $tipo_doc;
+    }
     public function setIdentificacionAttribute($identificacion)
     {
         $this->attributes['identificacion'] = $identificacion;
@@ -186,6 +193,10 @@ class User extends Authenticatable
     public function setCelularAttribute($celular)
     {
         $this->attributes['celular'] = $celular;
+    }
+    public function setDepartamentoAttribute($idDepartamento)
+    {
+        $this->attributes['id_departamento'] = $idDepartamento;
     }
 
     public function setIdMunicipioAttribute($idMunicipio)

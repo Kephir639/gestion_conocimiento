@@ -50,5 +50,39 @@ $(document).ready(function () {
                 }, false)
             })
     });
+    $(document).on('click', '#btnAsignarRol', function (e) {
+        button = $(this);
+        e.preventDefault();
+        let idRol = $('#inputRol').val();
+        let token = $('#_token').val();
+        let documentosSeleccionados = $('input[name="userCheckbox[]"]:checked').map(function () { return $(this).val(); }).get(); //se busca la data y luego se asigna en la variable
+        let estado = $('#inputEstado').val();
+        $.ajax({
+            type: "POST",
+            url: "change_profile",
+            data: {
+                'idRol': idRol,
+                'documentos': documentosSeleccionados,
+                'estado_usu': estado,
+                '_token': token
+            },
+            success: function (data) {
+                // Mostrar mensaje de éxito en el modal
+                $('#alertasModificar').html(data);
 
+            },
+            error: function (xhr, status, error) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+
+                    // Mostrar errores de validación en los campos correspondientes
+                    $.each(errors, function (clave, valor) {
+                        $("#div_" + clave).find('.errorValidacion').html(valor);
+                    });
+                } else {
+                    // console.log(error, status);
+                }
+            }
+        });
+    });
 });

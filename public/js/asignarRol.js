@@ -47,7 +47,7 @@ $(document).ready(function () {
     });
 
 });
-$(document).on('click', '#btnAsignarRol', function (e) {
+$(document).on('click', '#btnActualizar', function (e) {
     button = $(this);
     e.preventDefault();
     let idRol = $('#inputRol').val();

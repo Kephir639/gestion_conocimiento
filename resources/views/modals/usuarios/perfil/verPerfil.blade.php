@@ -11,7 +11,7 @@
     <div class="container mt-2">
         <h2 class="text-center mb-4">Perfil de Usuario</h2>
         <hr>
-        <form action="{{ url('index/user/change_profile') }}" method="POST">
+        <form action="{{ url('index/usuarios/change_profile') }}" method="POST">
             @csrf
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -70,11 +70,11 @@
 
                 <div class="col-md-6">
                     <label for="tipo_poblacion" class="form-label">Tipo de Población</label>
-                    <select class="form-control" id="tipo_poblacion" name="id_tipo" required>
+                    <select class="form-control" id="tipo_poblacion" name="id_tipo_poblacion" required>
                         <option value="">Seleccione...</option>
                         @foreach ($tipo_poblaciones as $tipo_poblacion)
-                            <option value="{{ $tipo_poblacion->id_tipo_poblacion }}"
-                                {{ Auth::user()->id_tipo_poblacion == $tipo_poblacion->id_tipo_poblacion ? 'selected' : null }}>
+                            <option value="{{ $tipo_poblacion->id_tipo }}"
+                                {{ Auth::user()->id_tipo == $tipo_poblacion->id_tipo ? 'selected' : null }}>
                                 {{ $tipo_poblacion->tipo_poblacion }}</option>
                         @endforeach
                     </select>
@@ -107,7 +107,7 @@
                         <option value="">Seleccione...</option>
                         @foreach ($departamentos as $departamento)
                             <option value="{{ $departamento->id_departamento }}"
-                                {{ Auth::user()->id_departamento == $departamento->id_departamento }}>
+                                {{ Auth::user()->id_departamento == $departamento->id_departamento ? 'selected' : null }}>
                                 {{ $departamento->departamento }}
                             </option>
                         @endforeach
@@ -149,7 +149,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3 instructorFields" style="display: none;">
+            <div class="row mb-3 instructorFields">
                 <div class="col-md-4">
                     <label for="profesion" class="form-label">Profesión</label>
                     <select class="form-select" id="profesion" name="id_profesion">
@@ -189,7 +189,7 @@
             </div>
 
 
-            <div class="row mb-3" id="aprendizFields" style="display: none;">
+            <div class="row mb-3" id="aprendizFields">
                 <div class="col-md-6">
                     <label for="Nombre_programa" class="form-label">Nombre del Programa</label>
                     <input type="text" class="form-control" id="Nombre_programa" name="Nombre_programa"
@@ -202,15 +202,15 @@
                         value="{{ Auth::user()->ficha }}">
                     <div class="invalid-feedback">Por favor, ingrese el número de la ficha</div>
                 </div>
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <label for="semillero" class="form-label">Semillero de Investigación</label>
                     <select class="form-select" id="semillero" name="semillero">
                         <option value="">Seleccione...</option>
-                        {{-- @foreach ($semilleros as $semillero)
+                        @foreach ($semilleros as $semillero)
                             <option value="{{ $semillero->id }}">{{ $semillero->nombre }}</option>
-                        @endforeach --}}
+                        @endforeach
                     </select>
-                </div>
+                </div> --}}
             </div>
 
             <div class="row mb-3">
@@ -228,7 +228,7 @@
             </div>
             <div class="text-center">
                 <button id="btnHabilitar">Habilitar Campos</button>
-                <button type="submit" class="btn btn-primary btn-lg mt-3">Guardar Cambios</button>
+                <button type="submit" id="btnActualizar" class="btn btn-primary btn-lg mt-3">Guardar Cambios</button>
             </div>
         </form>
     </div>
