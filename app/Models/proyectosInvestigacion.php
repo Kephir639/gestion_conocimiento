@@ -34,11 +34,14 @@ class ProyectosInvestigacion extends Model
         $proyecto = DB::table('proyectos_investigacion')
             ->where('id_p_investigacion', $id_proyecto)
             ->get();
-        $array_elementos = DB::table($tabla_cambios)
+        $elementos = DB::table($tabla_cambios)
             ->where($campoGeneral, $proyecto->first()->id_p_investigacion)
             ->get();
-
-        dd($array_elementos);
+        $array_elementos = [];
+        foreach ($elementos as $elemento) {
+            // dd($elemento);
+            array_push($array_elementos, strval($elemento->$campoDiffEspecifico));
+        }
         $elementos_agregados = array_diff($array_elementos, $arrayComparacion);
         $elementos_eliminados = array_diff($arrayComparacion, $array_elementos);
 
@@ -71,21 +74,20 @@ class ProyectosInvestigacion extends Model
         // dd($datos);
         $arrayUnico = [];
         foreach ($datos as $key => $valor) {
-            if ($key === 'actividades') {
+            if ($key === 'actividades' || $key === 'presupuestos') {
                 foreach ($valor as $llave => $array) {
                     if ($llave == $clave) {
                         if (!isset($arrayUnico[$llave])) {
                             $arrayUnico[$llave] = [];
                         }
                         foreach ($array as $arr => $multiple) {
-                            // dd($array);
                             if (is_array($multiple)) {
+                                // dd($arr);
                                 foreach ($multiple as $ky => $val) {
-                                    // dd($multiple);
                                     if (!isset($arrayUnico[$llave][$arr])) {
                                         $arrayUnico[$llave][$arr] = [];
                                     }
-                                    array_push($arrayUnico[$llave][$arr],);
+                                    array_push($arrayUnico[$llave][$arr], $val);
                                 }
                             } else {
                                 array_push($arrayUnico[$llave], $multiple);
@@ -95,7 +97,34 @@ class ProyectosInvestigacion extends Model
                 }
             }
         }
-        dd($arrayUnico);
+        return $arrayUnico;
+    }
+
+    public function actualizarArray($datos, $clave)
+    {
+        // dd($datos);
+        $arrayUnico = [];
+        foreach ($datos as $key => $valor) {
+            if ($key === 'actividades' || $key === 'presupuestos') {
+                foreach ($valor as $llave => $array) {
+                    if ($llave == $clave) {
+                        if (!isset($arrayUnico[$llave])) {
+                            $arrayUnico[$llave] = [];
+                        }
+                        foreach ($array as $arr => $multiple) {
+                            if (is_array($multiple)) {
+                                if (!isset($arrayUnico[$llave][$arr])) {
+                                    $arrayUnico[$llave][$arr] = $multiple;
+                                }
+                            } else {
+                                array_push($arrayUnico[$llave], $multiple);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // dd($arrayUnico);
         return $arrayUnico;
     }
 

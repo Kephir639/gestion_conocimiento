@@ -13,20 +13,20 @@
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputAnoProyecto" class="form-label">Año de ejecucion</label>
                             <input type="year" class="form-control" id="inputAnoProyecto" name="ano_proyecto"
-                                value="{{ $proyecto->first()->ano_ejecucion }}" required>
+                                value="{{ $proyecto[0]->ano_ejecucion }}" required>
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_codigo_SIGP" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputCodigoSIGP" class="form-label">Codigo SIGP</label>
                             <input type="text" class="form-control" id="inputCodigoSIGP" name="codigo_SIGP"
-                                value="{{ $proyecto->first()->codigo_sigp }}" required>
+                                value="{{ $proyecto[0]->codigo_sigp }}" required>
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_nombre_proyecto"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputNombreProyecto" class="form-label">Nombre del proyecto</label>
                             <input type="text" class="form-control" id="inputNombreProyecto" name="nombre_proyecto"
-                                value="{{ $proyecto->first()->nombre_proyecto }}" required>
+                                value="{{ $proyecto[0]->nombre_proyecto }}" required>
                             <span class="errorValidacion"></span>
                         </div>
                         <br>
@@ -136,14 +136,14 @@
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputResumenProyecto" class="form-label">Resumen proyecto</label>
                             <input type="text" class="form-control" id="inputResumenProyecto"
-                                value="{{ $proyecto->first()->resumen_proyecto }}" name="resumen_proyecto" required>
+                                value="{{ $proyecto[0]->resumen_proyecto }}" name="resumen_proyecto" required>
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_objetivo_general"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputObjetivoGeneral" class="form-label">Objetivo general</label>
                             <input type="text" class="form-control" id="inputObjetivoProyecto"
-                                value="{{ $proyecto->first()->objetivo_general }}" name="objetivo_general" required>
+                                value="{{ $proyecto[0]->objetivo_general }}" name="objetivo_general" required>
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_objetivos_especificos"
@@ -165,7 +165,7 @@
                         <div id="div_propuesta" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputPropuesta" class="form-label">Propuesta de sostenibilidad</label>
                             <input type="text" class="form-control" id="inputPropuesta" name="propuesta"
-                                value="{{ $proyecto->first()->propuesta }}" required>
+                                value="{{ $proyecto[0]->propuesta }}" required>
                             <span class="errorValidacion"></span>
                         </div>
                         <br>
@@ -174,7 +174,7 @@
                         <div id="div_impacto" class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputImpacto" class="form-label">Impacto esperado</label>
                             <input type="text" class="form-control" id="inputImpacto" name="impacto"
-                                value="{{ $proyecto->first()->impacto }}" required>
+                                value="{{ $proyecto[0]->impacto }}" required>
                             <span class="errorValidacion"></span>
                         </div>
                         <br>
@@ -207,11 +207,10 @@
                                                         <span class="errorValidacion"></span>
                                                     </td>
                                                     <td>
-                                                        @php
-                                                            $cantidad = 1;
-                                                        @endphp
+
                                                         <div class="input-agregar">
                                                             @foreach ($actividades as $actividad => $act)
+                                                                @php $cantidad = 1; @endphp
                                                                 @foreach ($act as $ac)
                                                                     @if ($ac->id_actividad_i == $actividadC->id_actividad_i)
                                                                         @if ($loop->first)
@@ -245,11 +244,9 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        @php
-                                                            $cantidad = 1;
-                                                        @endphp
                                                         <div class="input-agregar">
                                                             @foreach ($entregables as $entregable => $entreg)
+                                                                @php $cantidad = 1; @endphp
                                                                 @foreach ($entreg as $entr)
                                                                     @if ($entr->id_actividad_i == $actividadC->id_actividad_i)
                                                                         @if ($loop->first)
@@ -286,12 +283,13 @@
                                                     </td>
                                                     <td>
                                                         <input type="text" class="form-control" id="inputEnlace"
-                                                            name="enlace_evidencia"
+                                                            name="enlace_evidencia[{{ $divsActividades }}][]"
                                                             value="{{ $actividadC->enlace_evidencia }}" required>
                                                         <span class="errorValidacion"></span>
                                                     </td>
                                                     <td>
-                                                        <select class="form-control" name="cumplido"
+                                                        <select class="form-control"
+                                                            name="cumplido[{{ $divsActividades }}][]"
                                                             id="inputCumplido">
                                                             <option value="-1">Seleccione una opcion...</option>
                                                             <option
@@ -306,11 +304,9 @@
                                                         <span class="errorValidacion"></span>
                                                     </td>
                                                     <td>
-                                                        @php
-                                                            $cantidad = 1;
-                                                        @endphp
                                                         <div class="input-agregar">
                                                             @foreach ($observaciones as $observacion => $observ)
+                                                                @php $cantidad = 1; @endphp
                                                                 @foreach ($observ as $obs)
                                                                     @if ($obs->id_actividad_i == $actividadC->id_actividad_i)
                                                                         @if ($loop->first)
@@ -345,7 +341,11 @@
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                            <a id="btnAgregarActividad" class="btn btn-success">+</a>
+                                            @if ($loop->first)
+                                                <a id="btnAgregarActividad" class="btn btn-success">+</a>
+                                            @else
+                                                <a id="btnEliminarActividad" class="btn btn-success">+</a>
+                                            @endif
                                         </table>
                                     </div>
                                     @php $divsActividades++ @endphp
@@ -384,11 +384,9 @@
                                                         value="{{ $presupuesto->uso_presupuestal }}" required>
                                                 </td>
                                                 <td>
-                                                    @php
-                                                        $cantidad = 1;
-                                                    @endphp
                                                     <div class="input-agregar">
                                                         @foreach ($valores as $valor => $val)
+                                                            @php $cantidad = 1; @endphp
                                                             @foreach ($val as $v)
                                                                 @if ($v->id_presupuesto_i == $presupuesto->id_presupuesto_i)
                                                                     @if ($loop->first)
@@ -420,7 +418,11 @@
                                                 </td>
                                             </tr>
                                         </tbody>
-                                        <button id="btnAgregarPresupuesto" class="btn btn-success">+</button>
+                                        @if ($loop->first)
+                                            <button id="btnAgregarPresupuesto" class="btn btn-success">+</button>
+                                        @else
+                                            <button id="btnEliminarPresupuesto" class="btn btn-success">+</button>
+                                        @endif
                                     </table>
                                 </div>
                                 @php $divsPresupuestos++ @endphp
@@ -431,8 +433,15 @@
                             <div id="div_estado_proyecto">
                                 <label for="inputEstadoProyecto">Estado proyecto</label>
                                 <select class="form-control" name="estado_proyecto" id="inputEstadoProyecto">
-                                    <option value="1">Si</option>
-                                    <option value="0">No</option>
+                                    <option value="">Selecciona un estado</option>
+                                    <option value="1"
+                                        {{ $proyecto[0]->estado_p_investigacion == 1 ? 'selected' : null }}>
+                                        Si
+                                    </option>
+                                    <option value="0"
+                                        {{ $proyecto[0]->estado_p_investigacion == 0 ? 'selected' : null }}>
+                                        No
+                                    </option>
                                 </select>
                             </div>
                             <br>

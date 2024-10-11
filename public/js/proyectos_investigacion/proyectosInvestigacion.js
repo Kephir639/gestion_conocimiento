@@ -224,9 +224,9 @@ $(document).ready(function () {
         let cumplidos = campoUnico('cumplido', 'select');
         let observaciones = campoAgregable('observaciones');
         //Presupuestos
-        let conceptos = campoUnico('concepto');
-        let rubros = campoUnico('rubro');
-        let usos_presupuestales = campoUnico('uso_presupuestal');
+        let conceptos = campoUnico('concepto', 'input');
+        let rubros = campoUnico('rubro', 'input');
+        let usos_presupuestales = campoUnico('uso_presupuestal', 'input');
         let valores = campoAgregable('valor_planteado');
 
         let actividades_conjunto = {

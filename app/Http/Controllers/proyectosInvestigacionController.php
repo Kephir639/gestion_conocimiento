@@ -75,24 +75,6 @@ class proyectosInvestigacionController extends Controller
         ])->render();
     }
 
-    public function arrayActualizar($actividadesC, $nombreTabla, $identificador)
-    {
-        $arrayDatos = [];
-        foreach ($actividadesC as $actividadC) {
-            if (isset($actividadC->$identificador)) {
-                $id_ac = strval($actividadC->$identificador);
-                if (!in_array($id_ac, $arrayDatos)) {
-                    $result = DB::table($nombreTabla)->where($identificador, $actividadC->$identificador)->get()->toArray();
-                    $arrayDatos[$actividadC->$identificador] = $result;
-                }
-            } else {
-                continue;
-            }
-        }
-        // dd($arrayDatos);
-        return $arrayDatos;
-    }
-
     public function registrarProyectoInvestigacion(Request $request)
     {
         // dd($request->all());
@@ -166,7 +148,7 @@ class proyectosInvestigacionController extends Controller
 
                     $proyecto = proyectosInvestigacion::create($proyecto_investigacion->toArray());
 
-                    // dd($proyecto);
+                    // dd($datos);
                     $actividades = $proyecto_investigacion->crearArray($datos, 'actividades');
                     $entregables = $proyecto_investigacion->crearArray($datos, 'entregables');
                     $observaciones = $proyecto_investigacion->crearArray($datos, 'observaciones');
@@ -242,9 +224,8 @@ class proyectosInvestigacionController extends Controller
                             'estado_objetivo_i' => 1
                         ]);
                     }
-
                     //Registrar actividades asociadas al proyecto de investigacion
-                    for ($i = 0; $i < count($descripciones); $i++) {
+                    for ($i = 0; $i < count($descripciones['descripciones']); $i++) {
                         $actividad = DB::table('investigacion_actividades_unificada')->insert([
                             'id_p_investigacion' => $proyecto->id,
                             'descripcion' => $descripciones['descripciones'][$i],
@@ -254,51 +235,55 @@ class proyectosInvestigacionController extends Controller
                         ]);
                         $id_actividad_i = DB::getPdo()->lastInsertId();
                         foreach ($actividades as $key => $arrayActividad) {
-                            foreach ($arrayActividad as $actividad => $act) {
+                            foreach ($arrayActividad as $actividad) {
                                 DB::table('investigacion_actividades')->insert([
                                     'id_actividad_i' => $id_actividad_i,
-                                    'actividad' => $act[$i],
+                                    'actividad' => $actividad[$i],
                                     'estado_actividad_i' => 1
                                 ]);
                             }
                         }
                         foreach ($entregables as $key => $arrayEntregables) {
-                            foreach ($arrayEntregables as $entregable => $entrg) {
+                            foreach ($arrayEntregables as $entregable) {
                                 DB::table('investigacion_entregables')->insert([
                                     'id_actividad_i' => $id_actividad_i,
-                                    'entregable' => $entrg[$i],
+                                    'entregable' => $entregable[$i],
                                     'estado_entregable_i' => 1
                                 ]);
                             }
                         }
                         foreach ($observaciones as $key => $arrayobservaciones) {
-                            foreach ($arrayobservaciones as $observacion => $obs) {
+                            foreach ($arrayobservaciones as $observacion) {
                                 DB::table('investigacion_observaciones')->insert([
                                     'id_actividad_i' => $id_actividad_i,
-                                    'observacion' => $obs[$i],
+                                    'observacion' => $observacion[$i],
                                     'estado_observacion_i' => 1
                                 ]);
                             }
                         }
                     }
+                    // dd($valores);
                     //Presupuestos
-                    for ($i = 0; $i < count($conceptos); $i++) {
+                    for ($i = 0; $i < count($conceptos['conceptos']); $i++) {
                         $presupuesto = DB::table('investigacion_presupuestos')->insert([
-                            'id_p_investigacion' => $proyecto->id_p_investigacion,
-                            'concepto' => $conceptos[$i],
-                            'rubro' => $rubros[$i],
-                            'uso_presupuestal' => $uso_presupuestal[$i],
+                            'id_p_investigacion' => $proyecto->id,
+                            'concepto' => $conceptos['conceptos'][$i],
+                            'rubro' => $rubros['rubros'][$i],
+                            'uso_presupuestal' => $uso_presupuestal['uso_presupuestal'][$i],
                             'estado_presupuesto_i' => 1
                         ]);
                         $id_presupuesto_i = DB::getPdo()->lastInsertId();
-                        foreach ($valores as $valor) {
-                            DB::table('investigacion_presupuestos_valores')->insert([
-                                'id_presupuesto_i' => $id_presupuesto_i,
-                                'valor' => $valor,
-                                'estado_valor_i' => 1
-                            ]);
+                        foreach ($valores as $clave => $valor) {
+                            foreach ($valor as $val) {
+                                DB::table('investigacion_presupuestos_valores')->insert([
+                                    'id_presupuesto_i' => $id_presupuesto_i,
+                                    'valor' => $val[$i],
+                                    'estado_valor_i' => 1
+                                ]);
+                            }
                         }
                     }
+                    // dd("a");
                     DB::commit();
                 } catch (\Throwable $th) {
                     DB::rollBack();
@@ -334,7 +319,7 @@ class proyectosInvestigacionController extends Controller
     public function showModalActualizar(Request $request)
     {
         $proyecto = ProyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp_old)->get();
-        $id_proyecto = $proyecto->first()->id_p_investigacion;
+        $id_proyecto = $proyecto[0]->id_p_investigacion;
         $centros = CentrosFormacion::all();
         $centros_proyecto = DB::table('investigacion_has_centros')->where('id_p_investigacion', $id_proyecto)->get();
         $grupos = GrupoInvestigacion::all();
@@ -360,7 +345,7 @@ class proyectosInvestigacionController extends Controller
         $presupuestosC = DB::table('investigacion_presupuestos')
             ->where('id_p_investigacion', $id_proyecto)->orderBy('id_presupuesto_i', 'asc')->get();
         $valores = $this->arrayActualizar($presupuestosC, 'investigacion_presupuestos_valores', 'id_presupuesto_i');
-
+        // dd($valores);
         $vista = view('modals.proyectos.investigacion.modificarProyectos', [
             'proyecto' => $proyecto,
             'centros' => $centros,
@@ -387,6 +372,24 @@ class proyectosInvestigacionController extends Controller
 
         ])->render();
         return response()->json(['vista' => $vista]);
+    }
+
+    public function arrayActualizar($actividadesC, $nombreTabla, $identificador)
+    {
+        $arrayDatos = [];
+        foreach ($actividadesC as $actividadC) {
+            if (isset($actividadC->$identificador)) {
+                $id_ac = strval($actividadC->$identificador);
+                if (!in_array($id_ac, $arrayDatos)) {
+                    $result = DB::table($nombreTabla)->where($identificador, $actividadC->$identificador)->get()->toArray();
+                    $arrayDatos[$actividadC->$identificador] = $result;
+                }
+            } else {
+                continue;
+            }
+        }
+        // dd($arrayDatos);
+        return $arrayDatos;
     }
 
     public function actualizarProyectoInvestigacion(Request $request)
@@ -489,20 +492,20 @@ class proyectosInvestigacionController extends Controller
                         ->update($proyecto_investigacion->toArray());
                     $proyecto = ProyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp)->get();
                     // dd($datos);
-                    $actividades = $proyecto_investigacion->crearArray($datos, 'actividades');
-                    $entregables = $proyecto_investigacion->crearArray($datos, 'entregables');
-                    $observaciones = $proyecto_investigacion->crearArray($datos, 'observaciones');
-                    $descripciones = $proyecto_investigacion->crearArray($datos, 'descripciones');
-                    $enlaces = $proyecto_investigacion->crearArray($datos, 'enlaces');
-                    $cumplidos = $proyecto_investigacion->crearArray($datos, 'cumplidos');
-                    $conceptos = $proyecto_investigacion->crearArray($datos, 'conceptos');
-                    $rubros = $proyecto_investigacion->crearArray($datos, 'rubros');
-                    $uso_presupuestal = $proyecto_investigacion->crearArray($datos, 'uso_presupuestal');
-                    $valores = $proyecto_investigacion->crearArray($datos, 'valores');
-                    dd($actividades);
+                    $actividades = $proyecto_investigacion->actualizarArray($datos, 'actividades');
+                    $entregables = $proyecto_investigacion->actualizarArray($datos, 'entregables');
+                    $observaciones = $proyecto_investigacion->actualizarArray($datos, 'observaciones');
+                    $descripciones = $proyecto_investigacion->actualizarArray($datos, 'descripciones');
+                    $enlaces = $proyecto_investigacion->actualizarArray($datos, 'enlaces');
+                    $cumplidos = $proyecto_investigacion->actualizarArray($datos, 'cumplidos');
+                    $conceptos = $proyecto_investigacion->actualizarArray($datos, 'conceptos');
+                    $rubros = $proyecto_investigacion->actualizarArray($datos, 'rubros');
+                    $uso_presupuestal = $proyecto_investigacion->actualizarArray($datos, 'uso_presupuestal');
+                    $valores = $proyecto_investigacion->actualizarArray($datos, 'valores');
+                    // dd($actividades);
                     //Centros
                     $proyecto_investigacion->actualizarElementos(
-                        $proyecto->first()->id_p_investigacion,
+                        $proyecto[0]->id_p_investigacion,
                         'investigacion_has_centros',
                         $request->centros,
                         'id_p_investigacion',
@@ -511,7 +514,7 @@ class proyectosInvestigacionController extends Controller
                     );
                     //Grupos
                     $proyecto_investigacion->actualizarElementos(
-                        $proyecto->first()->id_p_investigacion,
+                        $proyecto[0]->id_p_investigacion,
                         'investigacion_has_grupos',
                         $request->grupos,
                         'id_p_investigacion',
@@ -520,7 +523,7 @@ class proyectosInvestigacionController extends Controller
                     );
                     //Lineas
                     $proyecto_investigacion->actualizarElementos(
-                        $proyecto->first()->id_p_investigacion,
+                        $proyecto[0]->id_p_investigacion,
                         'investigacion_has_lineas',
                         $request->lineas,
                         'id_p_investigacion',
@@ -529,7 +532,7 @@ class proyectosInvestigacionController extends Controller
                     );
                     //Redes
                     $proyecto_investigacion->actualizarElementos(
-                        $proyecto->first()->id_p_investigacion,
+                        $proyecto[0]->id_p_investigacion,
                         'investigacion_has_redes',
                         $request->redes,
                         'id_p_investigacion',
@@ -538,7 +541,7 @@ class proyectosInvestigacionController extends Controller
                     );
                     //Programas
                     $proyecto_investigacion->actualizarElementos(
-                        $proyecto->first()->id_p_investigacion,
+                        $proyecto[0]->id_p_investigacion,
                         'investigacion_has_programas',
                         $request->programas,
                         'id_p_investigacion',
@@ -547,7 +550,7 @@ class proyectosInvestigacionController extends Controller
                     );
                     //Semilleros
                     $proyecto_investigacion->actualizarElementos(
-                        $proyecto->first()->id_p_investigacion,
+                        $proyecto[0]->id_p_investigacion,
                         'investigacion_has_semilleros',
                         $request->semilleros,
                         'id_p_investigacion',
@@ -556,7 +559,7 @@ class proyectosInvestigacionController extends Controller
                     );
                     //Participantes
                     $proyecto_investigacion->actualizarElementos(
-                        $proyecto->first()->id_p_investigacion,
+                        $proyecto[0]->id_p_investigacion,
                         'investigacion_has_users',
                         $request->grupos,
                         'id_p_investigacion',
@@ -565,21 +568,22 @@ class proyectosInvestigacionController extends Controller
                     );
                     //Objetivos Especificos
                     $proyecto_investigacion->actualizarElementos(
-                        $proyecto->first()->id_p_investigacion,
+                        $proyecto[0]->id_p_investigacion,
                         'investigacion_objetivos',
                         $request->objetivos_especificos,
                         'id_p_investigacion',
-                        'id_objetivo',
+                        'id_objetivo_i',
                         'estado_objetivo_i'
                     );
                     //Actividades
-                    dd($actividades);
-                    for ($i = 0; $i < count($descripciones); $i++) {
-
-                        $actividad = DB::table('investigacion_actividades_unificada')
-                            ->where('id_p_investigacion', $proyecto->first()->id_p_investigacion)
+                    $listaActividades = DB::table('investigacion_actividades_unificada')
+                        ->where('id_p_investigacion', $proyecto[0]->id_p_investigacion)->get();
+                    $i = 0;
+                    foreach ($listaActividades as $listAct) {
+                        DB::table('investigacion_actividades_unificada')
+                            ->where('id_actividad_i', $listAct->id_actividad_i)
                             ->update([
-                                'id_p_investigacion' => $proyecto->first()->id_p_investigacion,
+                                'id_p_investigacion' => $proyecto[0]->id_p_investigacion,
                                 'descripcion' => $descripciones['descripciones'][$i],
                                 'enlace_evidencia' => $enlaces['enlaces'][$i],
                                 'cumplido' => $cumplidos['cumplidos'][$i],
@@ -587,59 +591,73 @@ class proyectosInvestigacionController extends Controller
                             ]);
                         foreach ($actividades as $key => $arrayActividad) {
                             foreach ($arrayActividad as $actividad => $act) {
-                                DB::table('investigacion_actividades')->where('id_actividad_i')
-                                    ->update([
-                                        'id_actividad_i' => $id_actividad_i,
-                                        'actividad' => $act[$i],
-                                        'estado_actividad_i' => $datos['estado_proyecto']
-                                    ]);
+                                foreach ($act as $actualizarAct)
+                                    DB::table('investigacion_actividades')->where('id_actividad_i')
+                                        ->update([
+                                            'id_actividad_i' => $listAct->id_actividad_i,
+                                            'actividad' => $actualizarAct,
+                                            'estado_actividad_i' => $datos['estado_proyecto']
+                                        ]);
                             }
                         }
                         foreach ($entregables as $key => $arrayEntregables) {
                             foreach ($arrayEntregables as $entregable => $entrg) {
-                                DB::table('investigacion_entregables')->where('id_actividad_i')
-                                    ->update([
-                                        'id_actividad_i' => $id_actividad_i,
-                                        'entregable' => $entrg[$i],
-                                        'estado_entregable_i' => $datos['estado_proyecto']
-                                    ]);
+                                foreach ($entrg as $entr) {
+                                    DB::table('investigacion_entregables')->where('id_actividad_i')
+                                        ->update([
+                                            'id_actividad_i' => $listAct->id_actividad_i,
+                                            'entregable' => $entr,
+                                            'estado_entregable_i' => $datos['estado_proyecto']
+                                        ]);
+                                }
                             }
                         }
                         foreach ($observaciones as $key => $arrayobservaciones) {
                             foreach ($arrayobservaciones as $observacion => $obs) {
-                                DB::table('investigacion_observaciones')->where('id_actividad_i')
-                                    ->update([
-                                        'id_actividad_i' => $id_actividad_i,
-                                        'observacion' => $obs[$i],
-                                        'estado_observacion_i' => $datos['estado_proyecto']
-                                    ]);
+                                foreach ($obs as $actualizarObjetivo) {
+                                    DB::table('investigacion_observaciones')->where('id_actividad_i')
+                                        ->update([
+                                            'id_actividad_i' => $listAct->id_actividad_i,
+                                            'observacion' => $actualizarObjetivo,
+                                            'estado_observacion_i' => $datos['estado_proyecto']
+                                        ]);
+                                }
                             }
                         }
+                        $i++;
                     }
+
                     //Presupuestos
-                    for ($i = 0; $i < count($conceptos); $i++) {
-                        $presupuesto = DB::table('investigacion_presupuestos')->where('id_p_investigacion', $proyecto->first()->id_p_investigacion)
+                    $listaPresupuestos = DB::table('investigacion_presupuestos')
+                        ->where('id_p_investigacion', $proyecto[0]->id_p_investigacion)->get();
+                    $i = 0;
+                    foreach ($listaPresupuestos as $listaPres) {
+                        DB::table('investigacion_presupuestos')
+                            ->where('id_presupuesto_i', $listaPres->id_presupuesto_i)
                             ->update([
-                                'id_p_investigacion' => $proyecto->first()->id_p_investigacion,
-                                'concepto' => $conceptos[$i],
-                                'rubro' => $rubros[$i],
-                                'uso_presupuestal' => $uso_presupuestal[$i],
+                                'id_p_investigacion' => $proyecto[0]->id_p_investigacion,
+                                'concepto' => $conceptos['conceptos'][$i],
+                                'rubro' => $rubros['rubros'][$i],
+                                'uso_presupuestal' => $uso_presupuestal['uso_presupuestal'][$i],
                                 'estado_presupuesto_i' => $datos['estado_proyecto']
                             ]);
-                        $id_presupuesto_i = DB::getPdo()->lastInsertId();
                         foreach ($valores as $valor) {
+                            // dd($valores);
                             DB::table('investigacion_presupuestos_valores')->where('id_presupuesto_i')
                                 ->update([
-                                    'id_presupuesto_i' => $id_presupuesto_i,
+                                    'id_presupuesto_i' => $listaPres->id_presupuesto_i,
                                     'valor' => $valor,
                                     'estado_valor_i' => $datos['estado_proyecto']
                                 ]);
                         }
+                        $i++;
                     }
-
+                    dd($datos);
+                    // dd("a");
                     DB::commit();
                 } catch (\Throwable $th) {
                     DB::rollBack();
+                    return view('noHay');
                     dd($th);
                 }
             }
