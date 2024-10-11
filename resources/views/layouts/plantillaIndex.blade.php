@@ -96,8 +96,8 @@
                         </svg>
                     </a>
                     <ul class="dropdown-menu menuD dropdown-menu-end" id="dropdownPerfil">
-                        <li class="navbar-item"><span class="dropdown-item text-center">Nombre
-                                Usuario</span>
+                        <li class="navbar-item"><span class="dropdown-item text-center">{{ Auth::user()->name }}
+                                {{ Auth::user()->apellidos }}</span>
                         </li>
                         <li>
                             <hr class="dropdown divider division my-1">

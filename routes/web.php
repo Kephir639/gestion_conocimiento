@@ -79,6 +79,8 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::get('index/semilleros/showModalValidar', [semillerosController::class, 'showModalValidar'])->withoutMiddleware('checkRoutes');
     Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
     //Usuarios
+    Route::get('index/usuarios/consultar_usuario', [usuarioController::class, 'showUsuarios']);
+
     Route::get('index/usuarios/consultar_perfil', [usuarioController::class, 'showPerfil']);
     Route::post('index/usuarios/change_profile', [usuarioController::class, 'actualizarPerfil']);
 

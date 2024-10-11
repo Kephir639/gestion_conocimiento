@@ -24,7 +24,7 @@ class usuarioController extends Controller
         $listaUsuarios = User::orderBy('id', 'desc')->paginate(10);
         $controladores = $request->controladores;
 
-        return view('modals.usuario.consultarUsuario', [
+        return view('modals.usuarios.consultarUsuarios', [
             'listaUsuarios' => $listaUsuarios,
             'controladores' => $controladores
         ]);
