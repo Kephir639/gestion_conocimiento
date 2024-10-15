@@ -93,12 +93,12 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::get('index/semilleros/showModalValidar', [semillerosController::class, 'showModalValidar'])->withoutMiddleware('checkRoutes');
     Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
 
-    //Usuarios
+    //usuarios - Perfil
     Route::get('index/usuarios/consultar_usuarios', [usuarioController::class, 'showUsuarios']);
     Route::post('index/usuarios/actualizar_usuarios', [usuarioController::class, 'editarUsuario']);
+    Route::get('index/usuarios/exportar_usuarios', [usuarioController::class, 'usersExport'])->withoutMiddleware('checkRoutes');
 
-    //Perfil
-    Route::get('index/usuarios/consultar_perfil', [usuarioController::class, 'showPerfil']);
+    Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil']);
     Route::post('index/usuarios/actualizar_perfil', [usuarioController::class, 'actualizarPerfil']);
 
     //Proyectos de Investigacion

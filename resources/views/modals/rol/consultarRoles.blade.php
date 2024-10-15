@@ -2,13 +2,13 @@
 
 @section('title', 'Roles')
 @push('styles')
-    <link rel="stylesheet" href="{{ url('css/roles.css') }}">
+    <link rel="stylesheet" href="{{ url('css/tablas.css') }}">
     <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">
         <div class="row p-3">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="col-12">
                 <table class="table tablaGrupos">
                     <thead class="tableHeadre">
                         <tr class="tituloTabla">
@@ -74,47 +74,3 @@
 @section('scripts')
     <script src="{{ url('js/roles.js') }}"></script>
 @endsection
-
-{{-- @extends('layouts.plantillaIndex')
-
-@section('title', 'Inicio')
-@section('content')
-    <div class="cuadradoVistas">
-        <div class="indexBackground row">
-            <div class="backgroundText">
-                <h2>Lista de roles</h2>
-                <input type="hidden">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Rol</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($roles as $rol)
-                            <tr>
-
-                                <td>{{ $rol->rol }}</td>
-
-                                @if ($rol->estado == '1')
-                                    <td>Activo</td>
-                                @else
-                                    <td>Inactivo</td>
-                                @endif
-                                <td>
-                                    <a href="{{ url('roles/crearRol') }}" class="btn btn-primary">Agregar</a>
-
-                                    <a href="{{ url('roles/editarRol/' . $rol->id_rol) }}"
-                                        class="btn btn-warning">Editar</a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-@endsection --}}
