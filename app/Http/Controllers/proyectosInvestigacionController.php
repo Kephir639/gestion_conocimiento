@@ -652,7 +652,6 @@ class proyectosInvestigacionController extends Controller
                         }
                         $i++;
                     }
-                    dd($datos);
                     // dd("a");
                     DB::commit();
                 } catch (\Throwable $th) {

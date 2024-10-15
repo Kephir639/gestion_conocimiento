@@ -304,4 +304,9 @@ class usuarioController extends Controller
             }
         }
     }
+
+    public function editarUsuario(Request $request)
+    {
+        $datos = $request->all();
+    }
 }
