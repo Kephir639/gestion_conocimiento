@@ -8,7 +8,6 @@ use App\Http\Controllers\gruposController;
 use App\Http\Controllers\inicioController;
 use App\Http\Controllers\lineaController;
 use App\Http\Controllers\log_auditoria;
-use App\Http\Controllers\log_auditoria;
 use App\Http\Controllers\proyectosInvestigacionController;
 use App\Http\Controllers\rolController;
 use App\Http\Controllers\redesController;
