@@ -30,7 +30,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'lineas')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_linea')
+                                                @if ($func['nombre_funcion'] == 'actualizar_lineas')
                                                     <button title="Modificar Linea" class="btn iconoModificar p-0"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
@@ -51,7 +51,7 @@
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'lineas')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_linea')
+                        @if ($func['nombre_funcion'] == 'crear_lineas')
                             <button title="Registrar Lineas" id="BtnRegistrarLinea" class="btn iconoRegistrar p-0"><svg
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path

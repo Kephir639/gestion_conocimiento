@@ -33,7 +33,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'cargos')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_cargo')
+                                                @if ($func['nombre_funcion'] == 'actualizar_cargos')
                                                     <button title="Modificar cargo" class="btn iconoModificar p-0">
                                                         <svg class="iconoM" width="34" height="34"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -55,7 +55,7 @@
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'cargos')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_cargo')
+                        @if ($func['nombre_funcion'] == 'crear_cargos')
                             <button title="Registrar Cargo" id="BtnRegistrarCargo" class="btn iconoRegistrar p-0"><svg
                                     xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
                                     <path

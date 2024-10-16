@@ -32,8 +32,8 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'redes')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_red')
-                                                    <button title="Modificar Red" class="btn iconoModalModificar p-0"><svg
+                                                @if ($func['nombre_funcion'] == 'actualizar_redes')
+                                                    <button title="Modificar Red" class="btn iconoModificar p-0"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
                                                             <path
@@ -52,7 +52,7 @@
                 @foreach ($controladores as $controlador)
                     @if ($controlador['nombre_controlador'] == 'redes')
                         @foreach ($controlador['funciones'] as $func)
-                            @if ($func['nombre_funcion'] == 'crear_red')
+                            @if ($func['nombre_funcion'] == 'crear_redes')
                                 <button href="#" title="Registrar Red" id="BtnModalRegistrarRed" class="btn p-0"><svg
                                         xmlns="http://www.w3.org/2000/svg" class="iconoRegistrar" width="36"
                                         class="" viewBox="0 0 24 24">

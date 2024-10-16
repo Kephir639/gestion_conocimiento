@@ -2,12 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class log_auditoria extends Controller
 {
+    public function showLog(Request $request)
+    {
+        $listaLog = Log::orderBy('id_log', 'desc')->paginate('10');
+        $controladores = $request->controladores;
+
+        return view('consultarLog', [
+            'listaLog' => $listaLog,
+            'controladores' => $controladores
+        ]);
+    }
+
     public static function createLog($modulo, $elemento, $accion, $nuevo = "")
     {
         $sql = [

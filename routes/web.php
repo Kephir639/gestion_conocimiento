@@ -7,6 +7,7 @@ use App\Http\Controllers\centroController;
 use App\Http\Controllers\gruposController;
 use App\Http\Controllers\inicioController;
 use App\Http\Controllers\lineaController;
+use App\Http\Controllers\log_auditoria;
 use App\Http\Controllers\proyectosInvestigacionController;
 use App\Http\Controllers\rolController;
 use App\Http\Controllers\redesController;
@@ -110,6 +111,9 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
 
     Route::get('index/proyectos_investigacion/agregar_actividad', [proyectosInvestigacionController::class, 'agregarActividad'])->withoutMiddleware('checkRoutes');
     Route::get('index/proyectos_investigacion/agregar_presupuesto', [proyectosInvestigacionController::class, 'agregarPresupuesto'])->withoutMiddleware('checkRoutes');
+
+    //Auditoria
+    Route::get('index/auditorias/consultar_auditorias', [log_auditoria::class, 'showLog']);
 });
 
 Route::get('logout', [AuthLoginController::class, 'logout']);

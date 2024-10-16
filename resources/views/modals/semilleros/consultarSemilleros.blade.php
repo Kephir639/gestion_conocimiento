@@ -50,7 +50,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'consultar_semillero')
+                                                @if ($func['nombre_funcion'] == 'consultar_semilleros')
                                                     <button title="Ver semillero" class="btn p-0"><svg
                                                             xmlns="http://www.w3.org/2000/svg" class="iconoConsultar"
                                                             viewBox="0 0 24 24">
@@ -66,7 +66,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_semillero')
+                                                @if ($func['nombre_funcion'] == 'modificar_semilleros')
                                                     <button title="Modificar semillero" class="btn p-0"><svg
                                                             class="iconoModificar" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
@@ -103,7 +103,7 @@
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'semilleros')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_semillero')
+                        @if ($func['nombre_funcion'] == 'crear_semilleros')
                             <button title="Registrar Semillero" id="BtnRegistrarSemillero"
                                 class="btn iconoRegistrar p-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path

@@ -36,7 +36,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'proyectos_investigacion')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'actualizar_proyecto_investigacion')
+                                                @if ($func['nombre_funcion'] == 'actualizar_proyectos_investigacion')
                                                     <button title="Modificar Proyecto" class="btn iconoModificar p-0"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
@@ -58,7 +58,7 @@
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'proyectos_investigacion')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_proyecto_investigacion')
+                        @if ($func['nombre_funcion'] == 'crear_proyectos_investigacion')
                             <button title="Registrar Proyectos" id="BtnRegistrarProyecto"
                                 class="btn iconoRegistrar p-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path

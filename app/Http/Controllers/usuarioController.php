@@ -316,6 +316,35 @@ class usuarioController extends Controller
     public function editarUsuario(Request $request)
     {
         $datos = $request->all();
+
+        $reglas = [
+            'id_rol' => 'required',
+            'estado_usu' => 'required'
+        ];
+
+        $mensajes = [
+            'id_rol.required' => 'Este campo es obligatorio',
+            'estado_usu.required' => 'Esto campo es obligatorio'
+        ];
+
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        if ($validacion->fails()) {
+            return response()->json(['errors' => $validacion->errors()], 422);
+        } else {
+            $ajax = User::where('numero_identificacion', $request->documento)->first();
+            if (count($ajax)) {
+                return view('alertas.repetido')->render();
+            } else {
+                $user = new User();
+                $user->idRol = $request->id_rol;
+                $user->estado_usu = $request->estado_usu;
+
+                User::where('numero_identificacion', $request->documento)->update($user->toArray());
+
+                return view('alertas.modificarExitoso')->render();
+            }
+        }
     }
 
     public function usersExport()
