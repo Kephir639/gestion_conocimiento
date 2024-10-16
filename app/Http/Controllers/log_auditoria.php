@@ -41,7 +41,7 @@ class log_auditoria extends Controller
 
     public function consultarAuditoria(Request $request)
     {
-        $listaLog = Log::orderBy('id_log', 'desc')->paginate('10');
+        $listaLog = Log::orderBy('id_log', 'desc')->paginate('3');
         $controladores = $request->controladores;
         $notificaciones = $request->notificaciones;
 
