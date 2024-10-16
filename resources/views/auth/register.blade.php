@@ -177,9 +177,9 @@
                     <label for="semillero" class="form-label">Semillero de Investigación</label>
                     <select class="form-select" id="semillero" name="semillero">
                         <option value="" selected>Seleccione...</option>
-                        {{-- @foreach ($semilleros as $semillero)
-                            <option value="{{ $semillero->id }}">{{ $semillero->nombre }}</option>
-                        @endforeach --}}
+                        @foreach ($semilleros as $semillero)
+                            <option value="{{ $semillero->id_semillero }}">{{ $semillero->iniciales_semillero }}</option>   
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -196,13 +196,6 @@
                     <div class="invalid-feedback">Por favor, ingrese su password.</div>
                 </div>
 
-                {{-- <div class="col-md-6">
-                    <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
-                    <input type="password" class="form-control" id="contraseña_confirmation"
-                        name="contraseña_confirmation" required>
-                    <div class="invalid-feedback">Por favor, confirme su contraseña.</div>
-                </div> --}}
-            </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary btn-lg mt-3">Registrar</button>
             </div>

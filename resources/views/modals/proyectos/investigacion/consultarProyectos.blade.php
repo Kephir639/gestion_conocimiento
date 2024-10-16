@@ -33,6 +33,9 @@
                                     @endif
                                 </td>
                                 <td>
+                                    <button title="Seguimiento Proyecto" class="btn iconoSeguimiento p-0">hola</button>
+                                </td>
+                                <td>
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'proyectos_investigacion')
                                             @foreach ($controlador['funciones'] as $func)
@@ -55,6 +58,7 @@
                     </tbody>
                 </table>
             </div>
+
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'proyectos_investigacion')
                     @foreach ($controlador['funciones'] as $func)

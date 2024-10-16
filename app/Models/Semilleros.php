@@ -16,6 +16,7 @@ class Semilleros extends Model
         'nombre_semillero',
         'iniciales_semillero',
         'fecha_creacion',
+        'lider_semillero',
         'mision',
         'vision',
         'objetivo_general',
@@ -57,6 +58,16 @@ class Semilleros extends Model
     public function setInicialesSemilleroAttribute($value)
     {
         $this->attributes['iniciales_semillero'] = strtoupper($value);
+    }
+
+    public function getLiderSemilleroAttribute()
+    {
+        return $this->attributes['lider_semillero'];
+    }
+
+    public function setLiderSemilleroAttribute($value)
+    {
+        $this->attributes['lider_semillero'] = strtoupper($value);
     }
 
     public function getFechaCreacionAttribute()

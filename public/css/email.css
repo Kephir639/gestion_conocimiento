@@ -1,0 +1,110 @@
+:root {
+    --color-primario: #007832;
+    --color-secundario: #00324D;
+    --color-primario-hover: #08a835;
+    --color-secundario-hover: #0d5c86;
+    --fuente-primaria: 'Poppins', sans-serif;
+    --color-fuente: #f2f2f2;
+    --color-texto: #333333;
+    --sombra: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --borde-radius: 10px;
+}
+
+/* General Page Styles */
+body {
+    font-family: var(--fuente-primaria);
+    background-color: var(--color-secundario);
+    color: var(--color-texto);
+}
+
+.container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Card Styles */
+.card {
+    background-color: whitesmoke;
+    border-radius: var(--borde-radius);
+    box-shadow: var(--sombra);
+    border: none;
+}
+
+.card-header {
+    background-color: var(--color-fuente);
+    border-top-left-radius: var(--borde-radius);
+    border-top-right-radius: var(--borde-radius);
+    color: var(--color-texto);
+    font-size: 1.5rem;
+    padding: 15px;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* Form Styles */
+.form-control {
+    border-radius: var(--borde-radius);
+    border: 1px solid var(--color-secundario);
+}
+
+.input-group-text {
+    background-color: var(--color-secundario);
+    color: var(--color-fuente);
+    border: none;
+    border-radius: var(--borde-radius);
+}
+
+.form-check-label {
+    color: var(--color-texto);
+}
+
+.form-check-input:checked {
+    background-color: var(--color-secundario);
+    border-color: var(--color-secundario);
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: var(--color-primario);
+    border: none;
+    border-radius: var(--borde-radius);
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primario-hover);
+}
+
+.btn-link {
+    color: var(--color-secundario);
+    text-decoration: underline;
+}
+
+.btn-link:hover {
+    color: var(--color-secundario-hover);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 15px;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+
+    .btn-link {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

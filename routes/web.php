@@ -8,6 +8,7 @@ use App\Http\Controllers\gruposController;
 use App\Http\Controllers\inicioController;
 use App\Http\Controllers\lineaController;
 use App\Http\Controllers\log_auditoria;
+use App\Http\Controllers\log_auditoria;
 use App\Http\Controllers\proyectosInvestigacionController;
 use App\Http\Controllers\rolController;
 use App\Http\Controllers\redesController;
@@ -99,11 +100,16 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::post('index/usuarios/actualizar_usuarios', [usuarioController::class, 'editarUsuario']);
     Route::get('index/usuarios/exportar_usuarios', [usuarioController::class, 'usersExport'])->withoutMiddleware('checkRoutes');
 
+    //Perfil
     Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil']);
     Route::post('index/usuarios/actualizar_perfil', [usuarioController::class, 'actualizarPerfil']);
 
+    Route::get('index/usuarios/asignar_rol', [usuarioController::class, 'showAsignarRol']);
+    Route::get('index/usuarios/showModalAsignarRol', [usuarioController::class, 'showModalAsignarRol'])->withoutMiddleware('checkRoutes');
+    Route::post('index/usuarios/asignarRol', [usuarioController::class, 'asignarRol'])->withoutMiddleware('checkRoutes');
+
     //Proyectos de Investigacion
-    Route::get('index/proyectos_investigacion/consultar_proyecto_investigacion', [proyectosInvestigacionController::class, 'showProyectosInvestigativos']);
+    Route::get('index/proyectos_investigacion/consultar_proyectos_investigacion', [proyectosInvestigacionController::class, 'showProyectosInvestigativos'])->withoutMiddleware('checkRoutes');;
     Route::get('index/proyectos_investigacion/showModalRegistrar', [proyectosInvestigacionController::class, 'showModalRegistrar'])->withoutMiddleware('checkRoutes');
     Route::post('index/proyectos_investigacion/crear_proyecto_investigacion', [proyectosInvestigacionController::class, 'registrarProyectoInvestigacion']);
     Route::get('index/proyectos_investigacion/showModalActualizar', [proyectosInvestigacionController::class, 'showModalActualizar'])->withoutMiddleware('checkRoutes');
@@ -122,5 +128,6 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->mi
 Route::post('/registrarUsuario', [usuarioController::class, 'registrarUsuario'])->middleware('filter');
 
 Route::get('/get-municipios/{departamento_id}', [RegisterController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
+Route::get('/get-municipios/{departamento_id}', [usuarioController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
 //Registro
 Route::view('/registro', 'registro')->name('registro');

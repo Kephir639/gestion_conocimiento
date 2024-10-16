@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url('css/plantilla.css') }}">
     <link rel="stylesheet" href="{{ url('css/modales.css') }}">
+    <link rel="stylesheet" href="{{ url('css/modales.css') }}">
     {{-- <link rel="stylesheet" href="{{ url('libraries/select2-4.0.13/dist/css/select2.css') }}"> --}}
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <link rel="stylesheet"
@@ -51,11 +52,14 @@
                         {{-- Nota: El side-bar se debería separar, al igual que el footer y header, no todo debe estar en un mismo archivo --}}
                         <li class="sidebar-item">
                             @php
-                                $url = "index/".$contr['nombre_controlador']."/consultar_".$contr['nombre_controlador'];
+                                $url =
+                                    'index/' .
+                                    $contr['nombre_controlador'] .
+                                    '/consultar_' .
+                                    $contr['nombre_controlador'];
                             @endphp
                             <!--Cambio usando la función url de laravel para evitar errores 404-->
-                            <a href="{{url($url)}}"
-                                id="tab_{{ $contr['nombre_controlador'] }}"
+                            <a href="{{ url($url) }}" id="tab_{{ $contr['nombre_controlador'] }}"
                                 class="sidebar-tabb sidebar-link collapsed px-3 py-2" {{-- data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse" --}}
                                 aria-expanded="false">{!! html_entity_decode($contr['icono']) !!}{{ $contr['display_controlador'] }}
                             </a>
@@ -70,20 +74,34 @@
                     <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
                 </svg>
             </button>
-            {{-- @if (Auth::user()->idRol == 1)
-                <div class="notifycon mr-5"><svg xmlns="http://www.w3.org/2000/svg" class="mt-2" width="24"
-                        height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1)">
+            @if (Auth::user()->idRol == 1)
+                <a href="{{ url('index/usuarios/asignar_rol') }}" class="notifycon mr-5"
+                    style="text-decoration: none; color: inherit;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mt-2" width="20" height="20"
+                        viewBox="0 0 448 512" style="fill: rgb(255, 255, 255)">
+                        <path
+                            d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416l384 0c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8l0-18.8c0-77.4-55-142-128-156.8L256 32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3l-64 0-64 0c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z" />
+                    </svg>
+
+                    {{-- <span>{{ $notificaciones }}</span> --}}
+                </a>
+
+                {{-- icono anterior --}}
+                {{-- <svg xmlns="http://www.w3.org/2000/svg" class="mt-2" width="25"
+                        height="25" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1)">
                         <path
                             d="M12 10c1.151 0 2-.848 2-2s-.849-2-2-2c-1.15 0-2 .848-2 2s.85 2 2 2zm0 1c-2.209 0-4 1.612-4 3.6v.386h8V14.6c0-1.988-1.791-3.6-4-3.6z">
                         </path>
                         <path
                             d="M19 2H5c-1.103 0-2 .897-2 2v13c0 1.103.897 2 2 2h4l3 3 3-3h4c1.103 0 2-.897 2-2V4c0-1.103-.897-2-2-2zm-5 15-2 2-2-2H5V4h14l.002 13H14z">
                         </path>
-                    </svg><span>{{ $usuariosPendientes }}</span></div>
-                <div class="notify-box mr-3 mt-4 p-1" id="box">
-                    <h2>Usuario pendientes para asignacion de rol <span>{{ $usuariosPendientes }}</span></h2>
-                </div>
-            @endif --}}
+                    </svg> --}}
+
+
+                {{-- <div class="notify-box mr-3 mt-4 p-1" id="box">
+                    <h2>Usuario pendientes para asignacion de rol <span>{{ $notificaciones }}</span></h2>
+                </div> --}}
+            @endif
             <div class="nabvar-collapse navbar">
                 <ul class="navbar-nav ml-auto">
                 </ul>
@@ -103,12 +121,12 @@
                         <li>
                             <hr class="dropdown divider division my-1">
                         </li>
-                        <li class="navbar-item"><a href="/index/usuarios/consultar_perfil"
-                                class="dropdown-item item-perfil w-100 text-center">Ver perfil</a>
+                        <li class="navbar-item"><a href="/index/usuarios/consultar_perfil" <li class="navbar-item"><a
+                                    href="/index/usuarios/consultar_perfil"
+                                    class="dropdown-item item-perfil w-100 text-center">Ver perfil</a>
                         </li>
                         <li id="logoutBtn" class="navbar-item"><a href="/logout"
-                                class="dropdown-item item-perfil w-100 text-center">Cerrrar
-                                Sesión</a>
+                                class="dropdown-item item-perfil w-100 text-center">Cerrar sesión</a>
                         </li>
                     </ul>
                 </li>
@@ -128,6 +146,7 @@
     <script src="{{ url('libraries/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ url('libraries/popper.min.js') }}"></script>
     <script src="{{ url('js/bootstrap.min.js') }}"></script>
+    <script src="{{ url('js/departamentos.js') }}"></script>
     {{-- <script src="{{ url('libraries/select2-4.0.13/dist/js/select2.js') }}"></script> --}}
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
@@ -135,7 +154,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ url('js/indexSidebar.js') }}"></script>
 
-    @yield('scripts')
+    @stack('scripts')
 
 </body>
 

@@ -6,7 +6,6 @@
     @push('styles')
         <link rel="stylesheet" href="{{ url('css/cargos.css') }}">
     @endpush
-
     <div class="container mt-2">
         <div class="row p-3">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -18,6 +17,7 @@
                             <th id="acciones">ACCIONES</th>
                         </tr>
                     </thead>
+
                     <tbody id="tablebody_cargos">
                         @foreach ($cargos as $cargo)
                             <tr>
@@ -51,6 +51,8 @@
                         @endforeach
                     </tbody>
                 </table>
+
+
             </div>
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'cargos')
@@ -69,9 +71,15 @@
             <div id="ModalSection">
             </div>
         </div>
+        <div class="col-12">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {{ $cargos->links('pagination::bootstrap-5') }}
+                </ul>
+            </nav>
+        </div>
     </div>
 @endsection
-
 @section('scripts')
     <script src="{{ url('js/cargos.js') }}"></script>
 @endsection

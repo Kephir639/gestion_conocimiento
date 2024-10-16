@@ -68,6 +68,13 @@
             </div>
         </div>
     </div>
+    <div class="col-12">
+        <nav>
+            <ul class="pagination justify-content-center">
+                {{ $listaCentros->links('pagination::bootstrap-5') }}
+            </ul>
+        </nav>
+    </div>
     </div>
 @endsection
 

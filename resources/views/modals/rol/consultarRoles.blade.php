@@ -69,6 +69,14 @@
             </div>
         </div>
     </div>
+    <div class="col-12">
+        <nav>
+            <ul class="pagination justify-content-center">
+                {{ $listaRoles->links('pagination::bootstrap-5') }}
+            </ul>
+        </nav>
+    </div>
+    </div>
 @endsection
 
 @section('scripts')

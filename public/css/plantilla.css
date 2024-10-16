@@ -32,16 +32,18 @@
     max-width: 100%;
     width: 100%;
     height: 100%;
-    overflow: scroll;
     background-color: var(--color-fuente);
     border-radius: 10px;
 }
+
+
 
 /* Manejor del card para forms dentro de la plantilla Blade */
 .cuadradoPlantilla {
     max-width: 100%;
     width: 100%;
     height: 100%;
+    overflow: auto;
     display: grid;
     place-items: center;
 }
@@ -49,8 +51,8 @@
 .app {
     display: grid;
     grid-template-areas:
-        'aside header header'
-        'aside main main';
+    'aside header header'
+    'aside main main';
     grid-template-rows: 60px 1fr;
     grid-template-columns: 0px 1fr 1fr;
     /*min-height: 500px;*/
@@ -62,10 +64,10 @@
 .main {
     width: 100%;
     height: 100%;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     transition: var(--transiciones);
-    /* overflow-y: scroll; */
     grid-area: main;
 }
 
@@ -306,30 +308,40 @@ a.sidebar-tabb-drop:hover {
 
 .notifycon {
     cursor: pointer;
-    line-height: 50px;
+    line-height: 10px;
+}
+
+
+.notifycon {
+    display: flex;
+    align-items: center;
+    /* Alinea verticalmente la campana y el contador */
+    position: relative;
+}
+
+.notifycon svg {
+    margin-right: 5px;
+    /* Espacio entre la campana y el contador */
 }
 
 .notifycon span {
     background: #f00;
     border-radius: 50%;
+    /* Hace que el contador sea completamente redondo */
     color: #fff;
-    vertical-align: top;
-    margin-left: -20px;
-}
-
-.notifycon svg {
-    display: inline-block;
+    padding: 2px 3px;
+    /* Ajusta el tamaño del contador */
+    font-size: 12px;
+    position: absolute;
+    top: 0;
+    /* Ajusta la posición del contador en relación a la campana */
+    right: 2px;
 }
 
 .notifycon:hover {
     opacity: .7;
 }
 
-.notify-box {
-    width: 300px;
-    position: absolute;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
 
 @keyframes slide {
     0% {

@@ -38,4 +38,14 @@ class log_auditoria extends Controller
 
         return ($accion === "actualizo") ? $sqlAct : $sql;
     }
+
+    public function consultarAuditoria(Request $request)
+    {
+        $listaLog = Log::orderBy('id_log', 'desc')->paginate('10');
+        $controladores = $request->controladores;
+        $notificaciones = $request->notificaciones;
+
+
+        return view('modals.auditoria.consultarAuditoria', compact('listaLog', 'controladores', 'notificaciones'));
+    }
 }

@@ -7,12 +7,11 @@ use Illuminate\Support\Facades\Auth;
 
 class inicioController extends Controller
 {
-    public function index(Request $request)
-    {
-        $controladores = $request->controladores;
-        $usuariosPendientes = $request->ususariosPendientes;
-
-
-        return view('index', compact('controladores', 'usuariosPendientes'));
-    }
+        public function index(Request $request)
+        {
+                $controladores = $request->controladores;
+                $usuariosPendientes = $request->usuariosPendientes;
+                $notificaciones = $request->notificaciones;
+                return view('layouts.plantillaIndex', compact('controladores', 'usuariosPendientes', 'notificaciones'));
+        }
 }

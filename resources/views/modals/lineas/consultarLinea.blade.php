@@ -2,6 +2,7 @@
 @section('title', 'Lineas de invesitigacion')
 @push('styles')
     <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
+    <link rel="stylesheet" href="{{ url('css/lineas.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">
@@ -63,6 +64,13 @@
                 @endif
             @endforeach
             <div id="ModalSection"></div>
+        </div>
+        <div class="col-12">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {{ $listaLineas->links('pagination::bootstrap-5') }}
+                </ul>
+            </nav>
         </div>
     </div>
 @endsection
