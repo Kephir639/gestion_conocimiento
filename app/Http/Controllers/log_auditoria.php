@@ -28,8 +28,6 @@ class log_auditoria extends Controller
             'fecha_realizacion' => Carbon::now(),
             'documento_responsable' => "'" . Auth::user()->identificacion . "'"
         ];
-
-
         $sqlAct = [
             'accion_realizada' => "'Se " . $accion . " el/la " . $modulo . ": " . $elemento . " a " . $nuevo . "'",
             'fecha_realizacion' => Carbon::now(),
@@ -44,7 +42,6 @@ class log_auditoria extends Controller
         $listaLog = Log::orderBy('id_log', 'desc')->paginate('3');
         $controladores = $request->controladores;
         $notificaciones = $request->notificaciones;
-
 
         return view('modals.auditoria.consultarAuditoria', compact('listaLog', 'controladores', 'notificaciones'));
     }

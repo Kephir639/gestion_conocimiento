@@ -33,9 +33,6 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button title="Seguimiento Proyecto" class="btn iconoSeguimiento p-0">hola</button>
-                                </td>
-                                <td>
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'proyectos_investigacion')
                                             @foreach ($controlador['funciones'] as $func)
@@ -77,8 +74,8 @@
         <div id="ModalSection"></div>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/proyectos_investigacion/proyectosInvestigacion.js') }}"></script>
     <script src="{{ url('js/proyectos_investigacion/agregablesInvestigacion.js') }}"></script>
     <script src="{{ url('js/proyectos_investigacion/botonesCamposInvestigacion.js') }}"></script>
-@endsection
+@endpush

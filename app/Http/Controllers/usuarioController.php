@@ -234,6 +234,15 @@ class usuarioController extends Controller
         }
     }
 
+    public function showAsignarRol(Request $request)
+    {
+        $usuariosPendientes = User::orderBy('id', 'desc')->where('idRol', null)->paginate('3');
+
+        $controladores = $request->controladores;
+        $notificaciones = $request->notificaciones;
+        return view('modals.usuarios.asignarRol', compact('usuariosPendientes', 'controladores', 'notificaciones'));
+    }
+
     public function showModalAsignarRol(Request $request)
     {
         $rolExistente = "SELECT * FROM roles";
@@ -359,6 +368,25 @@ class usuarioController extends Controller
                 return view('alertas.modificarExitoso')->render();
             }
         }
+    }
+
+    public function inhabilitarPerfil(Request $request)
+    {
+        $datos = $request->all();
+
+        $reglas = [
+            'documento' => 'required'
+        ];
+
+        $validacion = Validator::make($datos, $reglas);
+
+        if ($validacion->fails()) {
+            return response()->json(['errors', $validacion->errors()], 422);
+        } else {
+            User::where('identificacion', $request->validacion)->update('estado_usu', 0);
+        }
+
+        return view('alerta.usuarioInhabilidato')->render();
     }
 
     public function usersExport()

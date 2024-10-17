@@ -103,7 +103,7 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil']);
     Route::post('index/usuarios/actualizar_perfil', [usuarioController::class, 'actualizarPerfil']);
 
-    Route::get('index/usuarios/asignar_rol', [usuarioController::class, 'showAsignarRol']);
+    Route::get('index/usuarios/asignar_roles', [usuarioController::class, 'showAsignarRol']);
     Route::get('index/usuarios/showModalAsignarRol', [usuarioController::class, 'showModalAsignarRol'])->withoutMiddleware('checkRoutes');
     Route::post('index/usuarios/asignarRol', [usuarioController::class, 'asignarRol'])->withoutMiddleware('checkRoutes');
 

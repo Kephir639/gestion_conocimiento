@@ -75,7 +75,7 @@
                 </svg>
             </button>
             @if (Auth::user()->idRol == 1)
-                <a href="{{ url('index/usuarios/asignar_rol') }}" class="notifycon mr-5"
+                <a href="{{ url('index/usuarios/asignar_roles') }}" class="notifycon mr-5"
                     style="text-decoration: none; color: inherit;">
                     <svg xmlns="http://www.w3.org/2000/svg" class="mt-2" width="20" height="20"
                         viewBox="0 0 448 512" style="fill: rgb(255, 255, 255)">
