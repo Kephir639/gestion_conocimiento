@@ -43,3 +43,33 @@
 .table tbody td {
     vertical-align: middle;
 }
+
+/* paginacion */
+
+
+.pagination .page-link {
+    color: var(--color-Negro);
+    /* Color del texto */
+    background-color: var(--color-fuente);
+    /* Color de fondo del botón */
+
+    /* Color del borde */
+}
+
+.pagination .page-link:hover {
+    background-color: var(--color-primario-hover);
+    /* Color de fondo al pasar el mouse */
+    border-color: var(--color-primario-hover);
+    color: var(--color-fuente);
+    /* Color del texto al pasar el mouse */
+}
+
+/* Cambia el estilo del enlace activo */
+.pagination .page-item.active .page-link {
+    color: var(--color-fuente);
+    /* Color del texto */
+    background-color: var(--color-primario-hover);
+    /* Color de fondo del enlace activo */
+    border-color: var(--color-primario-hover);
+    /* Color del borde del enlace activo */
+}

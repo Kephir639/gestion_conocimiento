@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class proyectosInvestigacion extends Model
+class ProyectosInvestigacion extends Model
 {
     use HasFactory;
 
@@ -24,7 +24,7 @@ class proyectosInvestigacion extends Model
     ];
 
     public function actualizarElementos(
-        $codigo_proyecto,
+        $id_proyecto,
         $tabla_cambios, //Investigacion_Has_#
         $arrayComparacion, //Array de elementos seleccionados
         $campoGeneral,
@@ -32,12 +32,16 @@ class proyectosInvestigacion extends Model
         $campoEstado //Campo estado de la tabla
     ) {
         $proyecto = DB::table('proyectos_investigacion')
-            ->where('codigo_sigp', $codigo_proyecto)
+            ->where('id_p_investigacion', $id_proyecto)
             ->get();
-        $array_elementos = DB::table($tabla_cambios)
-            ->where($campoGeneral, $proyecto->id_p_investigacion)
-            ->get()->toArray();
-
+        $elementos = DB::table($tabla_cambios)
+            ->where($campoGeneral, $proyecto->first()->id_p_investigacion)
+            ->get();
+        $array_elementos = [];
+        foreach ($elementos as $elemento) {
+            // dd($elemento);
+            array_push($array_elementos, strval($elemento->$campoDiffEspecifico));
+        }
         $elementos_agregados = array_diff($array_elementos, $arrayComparacion);
         $elementos_eliminados = array_diff($arrayComparacion, $array_elementos);
 
@@ -46,12 +50,12 @@ class proyectosInvestigacion extends Model
                 ->where($campoDiffEspecifico, $agregado)->get())) {
                 DB::table($tabla_cambios)->where([
                     $campoDiffEspecifico => $agregado,
-                    $campoGeneral => $proyecto->id_p_investigacion
+                    $campoGeneral => $proyecto->first()->id_p_investigacion
                 ])->update([$campoEstado => 1]);
             } else {
-                DB::table($tabla_cambios)->where($campoGeneral, $proyecto->id_p_investigacion)
+                DB::table($tabla_cambios)->where($campoGeneral, $proyecto->first()->id_p_investigacion)
                     ->insert([
-                        $campoGeneral => $proyecto->id_p_investigacion,
+                        $campoGeneral => $proyecto->first()->id_p_investigacion,
                         $campoDiffEspecifico => $agregado,
                         $campoEstado => 1
                     ]);
@@ -67,18 +71,26 @@ class proyectosInvestigacion extends Model
 
     public function crearArray($datos, $clave)
     {
-        $arrayUnico = [[]];
+        // dd($datos);
+        $arrayUnico = [];
         foreach ($datos as $key => $valor) {
-            if ($key === 'actividades') {
+            if ($key === 'actividades' || $key === 'presupuestos') {
                 foreach ($valor as $llave => $array) {
                     if ($llave == $clave) {
+                        if (!isset($arrayUnico[$llave])) {
+                            $arrayUnico[$llave] = [];
+                        }
                         foreach ($array as $arr => $multiple) {
                             if (is_array($multiple)) {
-                                foreach ($multiple as $ky) {
-                                    array_push($arrayUnico[$llave], $ky);
+                                // dd($arr);
+                                foreach ($multiple as $ky => $val) {
+                                    if (!isset($arrayUnico[$llave][$arr])) {
+                                        $arrayUnico[$llave][$arr] = [];
+                                    }
+                                    array_push($arrayUnico[$llave][$arr], $val);
                                 }
                             } else {
-                                array_push($arrayUnico[$llave], $arr);
+                                array_push($arrayUnico[$llave], $multiple);
                             }
                         }
                     }
@@ -86,5 +98,123 @@ class proyectosInvestigacion extends Model
             }
         }
         return $arrayUnico;
+    }
+
+    public function actualizarArray($datos, $clave)
+    {
+        // dd($datos);
+        $arrayUnico = [];
+        foreach ($datos as $key => $valor) {
+            if ($key === 'actividades' || $key === 'presupuestos') {
+                foreach ($valor as $llave => $array) {
+                    if ($llave == $clave) {
+                        if (!isset($arrayUnico[$llave])) {
+                            $arrayUnico[$llave] = [];
+                        }
+                        foreach ($array as $arr => $multiple) {
+                            if (is_array($multiple)) {
+                                if (!isset($arrayUnico[$llave][$arr])) {
+                                    $arrayUnico[$llave][$arr] = $multiple;
+                                }
+                            } else {
+                                array_push($arrayUnico[$llave], $multiple);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // dd($arrayUnico);
+        return $arrayUnico;
+    }
+
+    public function getAnoEjecucion()
+    {
+        return $this->ano_ejecucion;
+    }
+
+    public function getCodigoSigp()
+    {
+        return $this->codigo_sigp;
+    }
+
+    public function getNombreProyecto()
+    {
+        return $this->nombre_proyecto;
+    }
+
+    public function getResumenProyecto()
+    {
+        return $this->resumen_proyecto;
+    }
+
+    public function getObjetivoGeneral()
+    {
+        return $this->objetivo_general;
+    }
+
+    public function getPropuesta()
+    {
+        return $this->propuesta;
+    }
+
+    public function getTipologia()
+    {
+        return $this->tipologia;
+    }
+
+    public function getImpacto()
+    {
+        return $this->impacto;
+    }
+
+    public function getEstadoPInvestigacion()
+    {
+        return $this->estado_p_investigacion;
+    }
+
+    public function setAnoEjecucion($anoEjecucion)
+    {
+        $this->attributes['ano_ejecucion'] = $anoEjecucion;
+    }
+
+    public function setCodigoSigp($codigoSigp)
+    {
+        $this->attributes['codigo_sigp'] = $codigoSigp;
+    }
+
+    public function setNombreProyecto($nombreProyecto)
+    {
+        $this->attributes['nombre_proyecto'] = $nombreProyecto;
+    }
+
+    public function setResumenProyecto($resumenProyecto)
+    {
+        $this->attributes['resumen_proyecto'] = $resumenProyecto;
+    }
+
+    public function setObjetivoGeneral($objetivoGeneral)
+    {
+        $this->attributes['objetivo_general'] = $objetivoGeneral;
+    }
+
+    public function setPropuesta($propuesta)
+    {
+        $this->attributes['propuesta'] = $propuesta;
+    }
+
+    public function setTipologia($tipologia)
+    {
+        $this->attributes['tipologia'] = $tipologia;
+    }
+
+    public function setImpacto($impacto)
+    {
+        $this->attributes['impacto'] = $impacto;
+    }
+
+    public function setEstadoPInvestigacion($estadoPInvestigacion)
+    {
+        $this->attributes['estado_p_investigacion'] = $estadoPInvestigacion;
     }
 }

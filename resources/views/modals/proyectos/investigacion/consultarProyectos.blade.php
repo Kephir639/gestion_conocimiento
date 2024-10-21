@@ -11,6 +11,7 @@
                     <thead class="tableHeadre">
                         <tr class="tituloTabla">
                             <th id="nombre">NOMBRE</th>
+                            <th>CODIGO SIGP</th>
                             <th>FECHA CARACTERIZACION</th>
                             <th>AÑO DE EJECUCION</th>
                             <th>ESTADO</th>
@@ -21,12 +22,13 @@
                         @foreach ($listaProyectos as $proyecto)
                             <tr>
                                 <td>{{ $proyecto->nombre_proyecto }}</td>
+                                <td>{{ $proyecto->codigo_sigp }}</td>
                                 <td>{{ $proyecto->created_at }}</td>
                                 <td>{{ $proyecto->ano_ejecucion }}</td>
                                 <td>
-                                    @if ($proyecto->estado_linea == 1)
+                                    @if ($proyecto->estado_p_investigacion == 1)
                                         Activo
-                                    @elseif ($proyecto->estado_linea == 0)
+                                    @elseif ($proyecto->estado_p_investigacion == 0)
                                         Inactivo
                                     @endif
                                 </td>
@@ -34,7 +36,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'proyectos_investigacion')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_proyecto_investigacion')
+                                                @if ($func['nombre_funcion'] == 'actualizar_proyectos_investigacion')
                                                     <button title="Modificar Proyecto" class="btn iconoModificar p-0"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
@@ -53,10 +55,11 @@
                     </tbody>
                 </table>
             </div>
+
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'proyectos_investigacion')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_proyecto_investigacion')
+                        @if ($func['nombre_funcion'] == 'crear_proyectos_investigacion')
                             <button title="Registrar Proyectos" id="BtnRegistrarProyecto"
                                 class="btn iconoRegistrar p-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
@@ -71,6 +74,8 @@
         <div id="ModalSection"></div>
     </div>
 @endsection
-@section('scripts')
-    <script src="{{ url('js/proyectosInvestigacion.js') }}"></script>
-@endsection
+@push('scripts')
+    <script src="{{ url('js/proyectos_investigacion/proyectosInvestigacion.js') }}"></script>
+    <script src="{{ url('js/proyectos_investigacion/agregablesInvestigacion.js') }}"></script>
+    <script src="{{ url('js/proyectos_investigacion/botonesCamposInvestigacion.js') }}"></script>
+@endpush

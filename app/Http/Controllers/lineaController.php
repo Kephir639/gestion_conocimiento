@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class lineaController extends Controller
 {
-    public function showLineas()
+    public function showLineas(Request $request)
     {
         $controladores = request()->controladores;
         $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');

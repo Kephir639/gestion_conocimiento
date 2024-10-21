@@ -19,15 +19,15 @@ class checkNotifications
     {
         // dd(Auth::user());
         if (Auth::user()->idRol == 1) {
-            $usuariosPendientes = User::where('idRol', null)->orderBy('id', 'desc')->count();
+            $notificaciones = User::where('idRol', null)->orderBy('id', 'desc')->count();
 
             // dd("a");
-            $request->merge(['usuariosPendientes' => $usuariosPendientes]);
+            $request->merge(['notificaciones' => $notificaciones]);
         } else {
-            $request->merge(['usuarioPendientes' => []]);
+            $request->merge(['notificaciones' => []]);
         }
-        // (Auth::user()->id_rol == 1) ? $request->merge(['usuariosPendientes', User::where('id_rol', null)->orderBy('id', 'desc')->get()]) : $request->merge(['usuarioPendientes', []]);
-        // dd($usuariosPendientes);
+        // (Auth::user()->id_rol == 1) ? $request->merge(['notificaciones', User::where('id_rol', null)->orderBy('id', 'desc')->get()]) : $request->merge(['usuarioPendientes', []]);
+        // dd($notificaciones);
         return $next($request);
     }
 }

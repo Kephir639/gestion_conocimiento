@@ -12,10 +12,10 @@ class centroController extends Controller
 {
     public function showCentros(Request $request)
     {
-        $listaCentros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('10');
+        $listaCentros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('3');
         $controladores = $request->controladores;
-
-        return view('modals.centros.consultarCentros', compact('listaCentros', 'controladores'));
+        $notificaciones = $request->notificaciones;
+        return view('modals.centros.consultarCentros', compact('notificaciones', 'listaCentros', 'controladores'));
     }
 
     public function showModalRegistrar()
@@ -127,6 +127,7 @@ class centroController extends Controller
                 'nombre_centro' => $datos['nombre_centro'],
                 'codigo_centro' => $datos['codigo_centro']
             ])->get();
+
 
             if (count($ajax)) {
                 //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos

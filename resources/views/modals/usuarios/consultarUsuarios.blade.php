@@ -2,6 +2,7 @@
 
 @section('title', 'Consultar Usuarios')
 <link rel="stylesheet" href="{{ url('css/tablas.css') }}">
+<link rel="stylesheet" href="{{ url('css/tablas.css') }}">
 @push('styles')
 @endpush
 

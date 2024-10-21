@@ -6,7 +6,6 @@
     @push('styles')
         <link rel="stylesheet" href="{{ url('css/cargos.css') }}">
     @endpush
-
     <div class="container mt-2">
         <div class="row p-3">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -18,6 +17,7 @@
                             <th id="acciones">ACCIONES</th>
                         </tr>
                     </thead>
+
                     <tbody id="tablebody_cargos">
                         @foreach ($cargos as $cargo)
                             <tr>
@@ -33,7 +33,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'cargos')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_cargo')
+                                                @if ($func['nombre_funcion'] == 'actualizar_cargos')
                                                     <button title="Modificar cargo" class="btn iconoModificar p-0">
                                                         <svg class="iconoM" width="34" height="34"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -51,11 +51,13 @@
                         @endforeach
                     </tbody>
                 </table>
+
+
             </div>
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'cargos')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_cargo')
+                        @if ($func['nombre_funcion'] == 'crear_cargos')
                             <button title="Registrar Cargo" id="BtnRegistrarCargo" class="btn iconoRegistrar p-0"><svg
                                     xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
                                     <path
@@ -69,9 +71,15 @@
             <div id="ModalSection">
             </div>
         </div>
+        <div class="col-12">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {{ $cargos->links('pagination::bootstrap-5') }}
+                </ul>
+            </nav>
+        </div>
     </div>
 @endsection
-
 @section('scripts')
     <script src="{{ url('js/cargos.js') }}"></script>
 @endsection

@@ -2,6 +2,7 @@
 @section('title', 'Lineas de invesitigacion')
 @push('styles')
     <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
+    <link rel="stylesheet" href="{{ url('css/lineas.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">
@@ -30,7 +31,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'lineas')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_linea')
+                                                @if ($func['nombre_funcion'] == 'actualizar_lineas')
                                                     <button title="Modificar Linea" class="btn iconoModificar p-0"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
@@ -51,7 +52,7 @@
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'lineas')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_linea')
+                        @if ($func['nombre_funcion'] == 'crear_lineas')
                             <button title="Registrar Lineas" id="BtnRegistrarLinea" class="btn iconoRegistrar p-0"><svg
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
@@ -63,6 +64,13 @@
                 @endif
             @endforeach
             <div id="ModalSection"></div>
+        </div>
+        <div class="col-12">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {{ $listaLineas->links('pagination::bootstrap-5') }}
+                </ul>
+            </nav>
         </div>
     </div>
 @endsection

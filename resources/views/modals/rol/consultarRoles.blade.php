@@ -33,7 +33,7 @@
                                         @if ($controlador['nombre_controlador'] == 'roles')
                                             @foreach ($controlador['funciones'] as $func)
                                                 {{-- @dump($controlador['funciones']) --}}
-                                                @if ($func['nombre_funcion'] == 'modificar_rol')
+                                                @if ($func['nombre_funcion'] == 'actualizar_roles')
                                                     <button title="Modificar rol" class="btn p-0"><svg
                                                             class="iconoModificar" width="34" height="34"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -51,10 +51,10 @@
                     </tbody>
                 </table>
             </div>
-            @foreach ($controladores as $controlador)
+            {{-- @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'roles')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_rol')
+                        @if ($func['nombre_funcion'] == 'crear_roles')
                             <button title="Registrar Rol" id="BtnRegistrarRol" class="btn p-0"><svg class="iconoRegistrar"
                                     xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
                                     <path
@@ -64,10 +64,18 @@
                         @endif
                     @endforeach
                 @endif
-            @endforeach
+            @endforeach --}}
             <div id="ModalSection">
             </div>
         </div>
+    </div>
+    <div class="col-12">
+        <nav>
+            <ul class="pagination justify-content-center">
+                {{ $listaRoles->links('pagination::bootstrap-5') }}
+            </ul>
+        </nav>
+    </div>
     </div>
 @endsection
 

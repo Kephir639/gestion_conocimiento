@@ -15,10 +15,10 @@ class RolController extends Controller
 {
     public function consultarRol(Request $request)
     {
-        $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate('10');
+        $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate('5');
         $controladores = $request->controladores;
-
-        return view('modals.rol.consultarRoles', compact('listaRoles', 'controladores'));
+        $notificaciones = $request->notificaciones;
+        return view('modals.rol.consultarRoles', compact('listaRoles', 'controladores', 'notificaciones'));
     }
 
     public function showModalRegistrar()

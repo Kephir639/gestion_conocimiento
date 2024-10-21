@@ -13,6 +13,7 @@ use App\Models\Tipo_poblacion;
 use App\Models\Genero;
 use App\Models\Cargos;
 use App\Models\Doctorados;
+use App\Models\Log;
 use App\Models\Maestrias;
 use App\Models\Profesiones;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,7 @@ class usuarioController extends Controller
             ->select('id', 'name', 'apellidos', 'tipo_documento', 'numero_identificacion', 'email', 'estado_usu', 'rol')
             ->paginate(10);
         $controladores = $request->controladores;
-        //dd($listaUsuarios);
+
         return view('modals.usuarios.consultarUsuarios', [
             'listaUsuarios' => $listaUsuarios,
             'controladores' => $controladores
@@ -163,8 +164,21 @@ class usuarioController extends Controller
                         ]);
                     }
                 }
+                
+                $listausuarios = User::orderBy('id', 'desc')->paginate(10);
+                $controladores = $request->controladores;
 
-                return redirect()->route('login')->with('success', 'Usuario registrado con éxito, debes esperar que un Administrador te acepte en el sistema.');
+                $tabla = view('modals.usuarios.tablaUsuario', [
+                    'listaUsuarios' => $listausuarios,
+                    'controladores' => $controladores
+                ])->render();
+
+                $alerta = view('alertas.registrarExitoso')->render();
+
+                return response()->json([
+                    'tabla' => $tabla,
+                    'alerta' => $alerta
+                ]);
             }
         }
     }
@@ -190,36 +204,90 @@ class usuarioController extends Controller
         return response()->json($municipios);
     }
 
-    public function showPerfil()
+    public function asignarRol(Request $request)
     {
-        return view('modals.usuarios.perfil.verPerfil');
+        $reglas = [
+            'idRol' => 'required',
+            'documentos' => 'required',
+            'estado_usu' => 'required'
+        ];
+        $mensajes = [
+            'idRol.required' => 'Este campo es requerido',
+            'documentos.required' => 'Seleccione al menos un usuario',
+            'estado_usu.required' => 'El estado es requerido',
+        ];
+        $datos = $request->all();
+        // dd($datos);
+        $rolAsignado = $datos['idRol'];
+        $respuestas = [];
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        unset($datos['_token']);
+        unset($datos['controladores']);
+
+        if ($validacion->fails()) {
+            $respuestas['error'] = true;
+            return response()->json(['errors' => $validacion->errors()], 422);
+        } else {
+            foreach ($request->documentos as $documento) {
+                $rolAsignado = new User();
+                $rolAsignado->setIdRolAttribute($request->idRol);
+                User::where('identificacion', $documento)->update($rolAsignado->toArray());
+                // $rol = Rol::select('rol')->where('idRol', $datos['idRol'])->get();
+            }
+
+            return view('alertas.modifcarExitoso');
+        }
+    }
+
+    public function showAsignarRol(Request $request)
+    {
+        $usuariosPendientes = User::orderBy('id', 'desc')->where('idRol', null)->paginate('3');
+
+        $controladores = $request->controladores;
+        $notificaciones = $request->notificaciones;
+        return view('modals.usuarios.asignarRol', compact('usuariosPendientes', 'controladores', 'notificaciones'));
+    }
+
+    public function showModalAsignarRol(Request $request)
+    {
+        $rolExistente = "SELECT * FROM roles";
+        $idRol = $request->idRol;
+        $usuarios = $request->documentos;
+        $roles = DB::select($rolExistente);
+        return view('modals.usuarios.modalAsignarRol', compact('roles', 'idRol', 'usuarios'));
+    }
+
+    public function showPerfil(Request $request)
+    {
+        $datos = $request->all();
+        $generos = Genero::all();
+        $tipo_poblaciones = Tipo_poblacion::all();
+        $departamentos = Departamentos::all();
+        $municipios = Municipio::all();
+        $cargos = Cargos::all();
+        $profesiones = Profesiones::all();
+        $maestrias = Maestrias::all();
+        $doctorados = Doctorados::all();
+        $controladores = $request->controladores;
+        return view('modals.usuarios.perfil.verPerfil', compact('generos', 'tipo_poblaciones', 'departamentos', 'municipios', 'cargos', 'profesiones', 'maestrias', 'doctorados', 'controladores'));
     }
 
     public function actualizarPerfil(Request $request)
     {
         $reglas = [
-            //'idRol' => 'required|integer',
             'name' => 'required|max:30',
             'apellidos' => 'required|max:30',
             'tipo_documento' => 'required|in:CC,TI,CE,Pasaporte,PEP,PPT',
-            'numero_identificacion' => 'required|max:20|unique:users,numero_identificacion',
+            'numero_identificacion' => 'required|max:20|unique:users,identificacion',
             'id_genero' => 'required|integer',
-            'id_tipo' => 'required|integer',
+            'id_tipo_poblacion' => 'required|integer',
             'email' => 'required|email|max:255',
             'celular' => 'required|max:15',
             'id_departamento' => 'required|integer',
             'id_municipio' => 'required|integer',
-            'direccion' => 'required',
-            'id_cargo' => 'required|integer',
-            'id_profesion' => 'nullable|integer',
-            'id_maestria' => 'nullable|integer',
-            'id_doctorado' => 'nullable|integer',
-            'Nombre_programa' => 'required',
-            'ficha' => 'required|integer',
-            'semillero_id' => 'nullable|integer',
-            'password' => 'required|max:20'
+            'direccion' => 'required'
         ];
-
         $mensajes = [
             'name.required' => 'Este campo es obligatorio',
             'name.max' => 'El campo debe contener máximo 30 caracteres',
@@ -232,8 +300,8 @@ class usuarioController extends Controller
             'numero_identificacion.unique' => 'Este número de identificación ya está registrado',
             'id_genero.required' => 'Este campo es obligatorio',
             'id_genero.integer' => 'El campo debe ser un número entero',
-            'id_tipo.required' => 'Este campo es obligatorio',
-            'id_tipo.integer' => 'El campo debe ser un número entero',
+            'id_tipo_poblacion.required' => 'Este campo es obligatorio',
+            'id_tipo_poblacion.integer' => 'El campo debe ser un número entero',
             'email.required' => 'Este campo es obligatorio',
             'email.email' => 'Esta no es una dirección de correo electrónico válida',
             'email.max' => 'Este campo debe contener máximo 255 caracteres',
@@ -244,71 +312,91 @@ class usuarioController extends Controller
             'id_departamento.integer' => 'El campo debe ser un número entero',
             'id_municipio.required' => 'Este campo es obligatorio',
             'id_municipio.integer' => 'El campo debe ser un número entero',
-            'direccion.required' => 'Este campo es obligatorio',
-            'id_cargo.required' => 'Este campo es obligatorio',
-            'id_cargo.integer' => 'El campo debe ser un número entero',
-            'id_profesion.integer' => 'El campo debe ser un número entero',
-            'id_maestria.integer' => 'El campo debe ser un número entero',
-            'id_doctorado.integer' => 'El campo debe ser un número entero',
-            'Nombre_programa.required' => 'Este campo es obligatorio',
-            'ficha.required' => 'Este campo es obligatorio',
-            'ficha.integer' => 'El campo debe ser un número entero',
-            'password.required' => 'Este campo es obligatorio',
-            //'password.regex' => 'La contraseña debe contener mínimo 8 y máximo 15 caracteres: 1 Minúscula, 1 Mayúscula, 1 Número Entero, 1 Carácter Especial'
         ];
 
         $datos = $request->all();
+        // dd($datos);
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            if (User::where('numero_identificacion', $datos['numero_identificacion'])->exists()) {
+
+            User::where('id', Auth::user()->id)->update([
+                'name' => $request->input('name'),
+                'apellidos' => $request->input('apellidos'),
+                'tipo_documento' => $request->input('tipo_documento'),
+                'identificacion' => $request->input('numero_identificacion'),
+                'id_genero' => $request->input('id_genero'),
+                'id_tipo' => $request->input('id_tipo_poblacion'),
+                'email' => $request->input('email'),
+                'celular' => $request->input('celular'),
+                'id_cargo' => $request->input('id_cargo'),
+                'id_municipio' => $request->input('id_municipio'),
+                'id_departamento' => $request->input('id_departamento'),
+                'direccion' => $request->input('direccion'),
+            ]);
+
+
+            return view('alertas.actualizarExitoso');
+        }
+    }
+
+    public function editarUsuario(Request $request)
+    {
+        $datos = $request->all();
+
+        $reglas = [
+            'id_rol' => 'required',
+            'estado_usu' => 'required'
+        ];
+
+        $mensajes = [
+            'id_rol.required' => 'Este campo es obligatorio',
+            'estado_usu.required' => 'Esto campo es obligatorio'
+        ];
+
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        if ($validacion->fails()) {
+            return response()->json(['errors' => $validacion->errors()], 422);
+        } else {
+            $ajax = User::where('numero_identificacion', $request->documento)->first();
+            if (count($ajax)) {
                 return view('alertas.repetido')->render();
             } else {
-                $usuario = new User();
-                //$usuario->idRol = $request->idRol;
-                $usuario->name = $request->name;
-                $usuario->apellidos = $request->apellidos;
-                $usuario->tipo_documento = $request->tipo_documento;
-                $usuario->identificacion = $request->identificacion;
-                $usuario->id_genero = $request->id_genero;
-                $usuario->id_tipo = $request->id_tipo;
-                $usuario->email = $request->email;
-                $usuario->celular = $request->celular;
-                $usuario->id_departamento = $request->id_departamento;
-                $usuario->id_municipio = $request->id_municipio;
-                $usuario->direccion = $request->direccion;
-                $usuario->id_cargo = $request->id_cargo;
-                $usuario->id_profesion = $request->id_profesion;
-                $usuario->id_maestria = $request->id_maestria;
-                $usuario->id_doctorado = $request->id_doctorado;
-                $usuario->Nombre_programa = $request->Nombre_programa;
-                $usuario->ficha = $request->ficha;
-                $usuario->semillero_id = $request->semillero_id;
-                $usuario->password = Hash::make($request->password);
-                $usuario->estado_usu = in_array($request->id_cargo, ['Aprendiz', 'Dinamizador SENNOVA', 'Auditor']) ? 1 : 0;
+                $user = new User();
+                $user->idRol = $request->id_rol;
+                $user->estado_usu = $request->estado_usu;
 
-                $actualizado = user::where('identificacion', Auth::user()->identificacion)->update($usuario->toArray());
+                User::where('numero_identificacion', $request->documento)->update($user->toArray());
 
-                $listausuarios = User::orderBy('id', 'desc')->paginate(10);
-                $controladores = $request->controladores;
-
-                $tabla = view('modals.usuarios.tablaUsuario', [
-                    'listaUsuarios' => $listausuarios,
-                    'controladores' => $controladores
-                ])->render();
-
-                $alerta = view('alertas.registrarExitoso')->render();
-
-                return response()->json([
-                    'tabla' => $tabla,
-                    'alerta' => $alerta
-                ]);
+                return view('alertas.modificarExitoso')->render();
             }
         }
     }
 
+    public function inhabilitarPerfil(Request $request)
+    {
+        $datos = $request->all();
+
+        $reglas = [
+            'documento' => 'required'
+        ];
+
+        $validacion = Validator::make($datos, $reglas);
+
+        if ($validacion->fails()) {
+            return response()->json(['errors', $validacion->errors()], 422);
+        } else {
+            User::where('identificacion', $request->validacion)->update('estado_usu', 0);
+        }
+
+        return view('alerta.usuarioInhabilidato')->render();
+    }
+
+    public function usersExport()
+    {
     public function usersExport()
     {
         return Excel::download(new UsersExport, 'usuarios.xlsx');

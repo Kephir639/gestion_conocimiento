@@ -22,7 +22,7 @@
     <div class="main-content">
         <!-- Banner -->
         <div class="banner-container">
-            <img src="img/baner.png" alt="Banner">
+            <img src="{{ url('/img/baner.png') }}" alt="Banner">
         </div>
 
         <!-- Navbar -->
@@ -70,8 +70,12 @@
                         <p style="color: #222222;">Somos una organización dedicada a fomentar el conocimiento y el
                             aprendizaje colaborativo.</p>
                         <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/2TG9nyCkxDg"
-                                allowfullscreen></iframe>
+
+                            <iframe class="embed-responsive-item"
+                                src="https://www.youtube.com/embed/2TG9nyCkxDg?si=C8H_hVsgk5gbsOND"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -109,27 +113,27 @@
         <div class="footer-content">
             <div class="footer-team">
                 <div class="team-member">
-                    <img src="img/logoSena.png" alt="Subdirector">
+                    <img src="{{ url('img/logoSena.png') }}" alt="Subdirector">
                     <p><i class="fas fa-user-tie"></i> Subdirector: Alex Amed Valencia</p>
                 </div>
                 <div class="team-member">
-                    <img src="img/nestor.png" alt="Coordinador Misional">
+                    <img src="{{ url('img/nestor.png') }}" alt="Coordinador Misional">
                     <p><i class="fas fa-user-tie"></i> Coordinador Misional: Nestor Espitia</p>
                 </div>
                 <div class="team-member">
-                    <img src="img/mecatronicalogo.png" alt="Coordinador Académico A">
+                    <img src="{{ url('img/mecatronicalogo.png') }}" alt="Coordinador Académico A">
                     <p><i class="fas fa-user-tie"></i> Diseño y Mantenimiento Mecatrónico</p>
                 </div>
                 <div class="team-member">
-                    <img src="img/digital.png" alt="Coordinador Académico B">
+                    <img src="{{ url('img/digital.png') }}" alt="Coordinador Académico B">
                     <p><i class="fas fa-user-tie"></i> Comunicación Digital</p>
                 </div>
                 <div class="team-member">
-                    <img src="img/trasversalidad.png" alt="Coordinador Académico C">
+                    <img src="{{ url('img/trasversalidad.png') }}" alt="Coordinador Académico C">
                     <p><i class="fas fa-user-tie"></i>Transversalidad Tecnológica</p>
                 </div>
                 <div class="team-member">
-                    <img src="img/vestuario.png" alt="Coordinador Académico D">
+                    <img src="{{ url('img/vestuario.png') }}" alt="Coordinador Académico D">
                     <p><i class="fas fa-user-tie"></i> Vestuario Inteligente</p>
                 </div>
             </div>

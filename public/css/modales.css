@@ -22,25 +22,25 @@
 }
 
 
-.modal-fixed{
-    --bs-modal-width:70%;
+.modal-fixed {
+    --bs-modal-width: 70%;
 }
-#campoActividades {
+
+#camposAgregables {
     border-collapse: collapse;
     width: 100%;
 }
 
-#campoActividades th, #campoActividades td {
-    /* border: 1px solid #ddd; */
+#camposAgregables th,
+#camposAgregables td {
     padding: 5px;
-    text-align: left;
 }
 
-#campoActividades th {
+#camposAgregables th {
     background-color: #f0f0f0;
 }
 
-#campoActividades .btnAgregar {
+#camposAgregables .btnAgregar {
     color: #fff;
     border: none;
     font-size: 16px;
@@ -49,7 +49,7 @@
     border-bottom-left-radius: 0%;
 }
 
-#campoActividades .btnEliminar {
+#camposAgregables .btnEliminar {
     color: #fff;
     border: none;
     font-size: 16px;
@@ -58,34 +58,19 @@
     border-bottom-left-radius: 0%;
 }
 
-#campoActividades td {
+#camposAgregables td {
     vertical-align: top;
 }
 
-#campoActividades select {
+#camposAgregables select {
     width: 100%;
 }
 
-#campoActividades td {
+#camposAgregables td {
     position: relative;
-    /* padding-right: 40px; */
 }
 
-.input-agregar {
-    display: flex;
-    align-items: center;
-}
-
-.input-agregar input[type="text"] {
-    flex: 1;
-}
-
-.input-agregar button {
-    margin-left: 0;
-}
-
-.agregable{
+.agregable {
     border-top-right-radius: 0%;
     border-bottom-right-radius: 0%;
 }
-
