@@ -1,4 +1,4 @@
-document.getElementById('cargo').addEventListener('change', function() {
+document.getElementById('cargo').addEventListener('change', function () {
     var aprendizFields = document.getElementById('aprendizFields');
     if (this.value == 'aprendiz') {
         aprendizFields.style.display = 'block';
@@ -6,3 +6,5 @@ document.getElementById('cargo').addEventListener('change', function() {
         aprendizFields.style.display = 'none';
     }
 });
+
+

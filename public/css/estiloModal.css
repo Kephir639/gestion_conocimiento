@@ -1,0 +1,59 @@
+.modal-content {
+    border-radius: 9px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    background-color: #007430;
+    /* Color primario (puedes usar tu variable personalizada si tienes una) */
+    color: #fff;
+    border-bottom: none;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.modal-header h5 {
+    margin: 0;
+    font-weight: bold;
+}
+
+.modal-body {
+    padding: 20px;
+    background-color: #f8f9fa;
+    /* Fondo suave */
+}
+
+.modal-footer {
+    border-top: none;
+    background-color: #f8f9fa;
+}
+
+.btn-close {
+    color: #fff;
+    opacity: 1;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+textarea.form-control,
+input.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.btn-success {
+    background-color: #007430;
+    border: none;
+    font-weight: bold;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+#alertasRegistrarSemillero {
+    margin-top: 10px;
+}

@@ -24,11 +24,11 @@ class usuarioController extends Controller
 {
     public function showUsuarios(Request $request)
     {
-        $usuario= User::table;
-        $rol= Rol::table;
+        $usuario = User::table;
+        $rol = Rol::table;
         $listaUsuarios = DB::table($usuario)
-            ->join($rol,"$usuario.idRol","=","$rol.id_rol")
-            ->select('id','name','apellidos','tipo_documento','identificacion','email','estado_usu','rol')
+            ->join($rol, "$usuario.idRol", "=", "$rol.id_rol")
+            ->select('id', 'name', 'apellidos', 'tipo_documento', 'numero_identificacion', 'email', 'estado_usu', 'rol')
             ->paginate(10);
         $controladores = $request->controladores;
         //dd($listaUsuarios);
@@ -52,72 +52,82 @@ class usuarioController extends Controller
     {
         $reglas = [
             'idRol' => 'nullable|integer',
-            'name' => 'required|max:30',
-            'apellidos' => 'required|max:30',
+            'name' => ['required', 'max:30', 'regex:/^[\pL\s]+$/u'], // Solo letras y espacios
+            'apellidos' => ['required', 'max:30', 'regex:/^[\pL\s]+$/u'], // Solo letras y espacios
             'tipo_documento' => 'required|in:CC,TI,CE,Pasaporte,PEP,PPT',
-            'numero_identificacion' => 'required|max:20|unique:users,numero_identificacion',
+            'numero_identificacion' => ['required', 'max:20', 'regex:/^[0-9]+$/', 'unique:users,numero_identificacion'], // Solo números
             'id_genero' => 'required|integer',
             'id_tipo' => 'required|integer',
-            'email' => 'required|email|max:255',
-            'celular' => 'required|max:15',
+            'email' => 'required|email|max:255|unique:users,email',
+            'celular' => ['required', 'max:15', 'regex:/^[0-9]+$/'], // Solo números
             'id_departamento' => 'required|integer',
             'id_municipio' => 'required|integer',
-            'direccion' => 'required',
+            'direccion' => 'required|max:255',
             'id_cargo' => 'required|integer',
             'id_profesion' => 'nullable|integer',
             'id_maestria' => 'nullable|integer',
             'id_doctorado' => 'nullable|integer',
-            'Nombre_programa' => 'nullable',
+            'Nombre_programa' => 'nullable|max:255',
             'ficha' => 'nullable|integer',
             'semillero_id' => 'nullable|integer',
-            'password' => 'required|max:20'
+            'password' => [
+                'required',
+                'max:20',
+                // 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,15}$/'
+            ]
         ];
 
+
         $mensajes = [
-            'name.required' => 'Este campo es obligatorio',
-            'name.max' => 'El campo debe contener máximo 30 caracteres',
-            'apellidos.required' => 'Este campo es obligatorio',
-            'apellidos.max' => 'El campo debe contener máximo 30 caracteres',
-            'tipo_documento.required' => 'Este campo es obligatorio',
-            'tipo_documento.in' => 'El tipo de documento no es válido',
-            'numero_identificacion.required' => 'Este campo es obligatorio',
-            'numero_identificacion.max' => 'El campo debe contener máximo 20 caracteres',
-            'numero_identificacion.unique' => 'Este número de identificación ya está registrado',
-            'id_genero.required' => 'Este campo es obligatorio',
-            'id_genero.integer' => 'El campo debe ser un número entero',
-            'id_tipo.required' => 'Este campo es obligatorio',
-            'id_tipo.integer' => 'El campo debe ser un número entero',
-            'email.required' => 'Este campo es obligatorio',
-            'email.email' => 'Esta no es una dirección de correo electrónico válida',
-            'email.max' => 'Este campo debe contener máximo 255 caracteres',
-            'email.unique' => 'Este correo electrónico ya está registrado',
-            'celular.required' => 'Este campo es obligatorio',
-            'celular.max' => 'El campo debe contener máximo 15 caracteres',
-            'id_departamento.required' => 'Este campo es obligatorio',
-            'id_departamento.integer' => 'El campo debe ser un número entero',
-            'id_municipio.required' => 'Este campo es obligatorio',
-            'id_municipio.integer' => 'El campo debe ser un número entero',
-            'direccion.required' => 'Este campo es obligatorio',
-            'id_cargo.required' => 'Este campo es obligatorio',
-            'id_cargo.integer' => 'El campo debe ser un número entero',
-            'id_profesion.integer' => 'El campo debe ser un número entero',
-            'id_maestria.integer' => 'El campo debe ser un número entero',
-            'id_doctorado.integer' => 'El campo debe ser un número entero',
-            'Nombre_programa.required' => 'Este campo es obligatorio',
-            'ficha.required' => 'Este campo es obligatorio',
-            'ficha.integer' => 'El campo debe ser un número entero',
-            'password.required' => 'Este campo es obligatorio',
-            'password.regex' => 'La contraseña debe contener mínimo 8 y máximo 15 caracteres: 1 Minúscula, 1 Mayúscula, 1 Número Entero, 1 Carácter Especial'
+            'name.required' => 'El nombre es obligatorio.',
+            'name.max' => 'El nombre no debe exceder de 30 caracteres.',
+            'name.regex' => 'El nombre solo puede contener letras y espacios.',
+            'apellidos.required' => 'Los apellidos son obligatorios.',
+            'apellidos.max' => 'Los apellidos no deben exceder de 30 caracteres.',
+            'apellidos.regex' => 'Los apellidos solo pueden contener letras y espacios.',
+            'tipo_documento.required' => 'El tipo de documento es obligatorio.',
+            'tipo_documento.in' => 'El tipo de documento seleccionado no es válido.',
+            'numero_identificacion.required' => 'El número de identificación es obligatorio.',
+            'numero_identificacion.max' => 'El número de identificación no debe exceder de 20 caracteres.',
+            'numero_identificacion.regex' => 'El número de identificación solo puede contener números.',
+            'numero_identificacion.unique' => 'Este número de identificación ya está registrado.',
+            'id_genero.required' => 'El género es obligatorio.',
+            'id_genero.integer' => 'El género debe ser un número entero.',
+            'id_tipo.required' => 'El tipo de usuario es obligatorio.',
+            'id_tipo.integer' => 'El tipo de usuario debe ser un número entero.',
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'El correo electrónico no es válido.',
+            'email.max' => 'El correo electrónico no debe exceder de 255 caracteres.',
+            'email.unique' => 'Este correo electrónico ya está registrado.',
+            'celular.required' => 'El número de celular es obligatorio.',
+            'celular.max' => 'El número de celular no debe exceder de 15 caracteres.',
+            'celular.regex' => 'El número de celular solo puede contener números.',
+            'id_departamento.required' => 'El departamento es obligatorio.',
+            'id_departamento.integer' => 'El departamento debe ser un número entero.',
+            'id_municipio.required' => 'El municipio es obligatorio.',
+            'id_municipio.integer' => 'El municipio debe ser un número entero.',
+            'direccion.required' => 'La dirección es obligatoria.',
+            'direccion.max' => 'La dirección no debe exceder de 255 caracteres.',
+            'id_cargo.required' => 'El cargo es obligatorio.',
+            'id_cargo.integer' => 'El cargo debe ser un número entero.',
+            'id_profesion.integer' => 'La profesión debe ser un número entero.',
+            'id_maestria.integer' => 'La maestría debe ser un número entero.',
+            'id_doctorado.integer' => 'El doctorado debe ser un número entero.',
+            'Nombre_programa.max' => 'El nombre del programa no debe exceder de 255 caracteres.',
+            'ficha.integer' => 'La ficha debe ser un número entero.',
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.regex' => 'La contraseña debe tener entre 8 y 15 caracteres, incluir al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.'
         ];
+
 
         $datos = $request->all();
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
         if ($validacion->fails()) {
-            return response()->json(['errors' => $validacion->errors()], 422);
+            return back()->withErrors($validacion)->withInput();
         } else {
             if (User::where('numero_identificacion', $datos['numero_identificacion'])->exists()) {
-                return view('alertas.repetido')->render();
+                return view('alertas.repetido');
             } else {
                 $usuario = new User();
                 $usuario->idRol = 0;
@@ -137,7 +147,7 @@ class usuarioController extends Controller
                 $usuario->id_maestria = $request->id_maestria;
                 $usuario->id_doctorado = $request->id_doctorado;
                 $usuario->Nombre_programa = $request->Nombre_programa;
-                $usuario->ficha = $request->ficha;
+                $usuario->ficha = $request->filled('ficha') ? $request->ficha : null;
                 $usuario->semillero_id = $request->semillero_id;
                 $usuario->password = Hash::make($request->password);
                 $usuario->estado_usu = in_array($request->id_cargo, ['Aprendiz', 'Dinamizador SENNOVA', 'Auditor']) ? 1 : 0;
@@ -154,20 +164,7 @@ class usuarioController extends Controller
                     }
                 }
 
-                $listausuarios = User::orderBy('id', 'desc')->paginate(10);
-                $controladores = $request->controladores;
-
-                $tabla = view('modals.usuarios.tablaUsuario', [
-                    'listaUsuarios' => $listausuarios,
-                    'controladores' => $controladores
-                ])->render();
-
-                $alerta = view('alertas.registrarExitoso')->render();
-
-                return response()->json([
-                    'tabla' => $tabla,
-                    'alerta' => $alerta
-                ]);
+                return redirect()->route('login')->with('success', 'Usuario registrado con éxito, debes esperar que un Administrador te acepte en el sistema.');
             }
         }
     }
@@ -312,7 +309,8 @@ class usuarioController extends Controller
         }
     }
 
-    public function usersExport (){
+    public function usersExport()
+    {
         return Excel::download(new UsersExport, 'usuarios.xlsx');
     }
 }

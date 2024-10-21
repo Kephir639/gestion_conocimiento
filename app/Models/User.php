@@ -26,7 +26,7 @@ class User extends Authenticatable
         'password',
         'apellidos',
         'tipo_documento',
-        'identificacion',
+        'numero_identificacion',
         'id_genero',
         'id_tipo_poblacion',
         'email',
@@ -94,7 +94,7 @@ class User extends Authenticatable
 
     public function getIdentificacionAttribute()
     {
-        return $this->attributes['identificacion'];
+        return $this->attributes['numero_identificacion'];
     }
 
     public function getIdGeneroAttribute()
@@ -170,7 +170,7 @@ class User extends Authenticatable
 
     public function setIdentificacionAttribute($identificacion)
     {
-        $this->attributes['identificacion'] = $identificacion;
+        $this->attributes['numero_identificacion'] = $identificacion;
     }
 
     public function setIdGeneroAttribute($idGenero)

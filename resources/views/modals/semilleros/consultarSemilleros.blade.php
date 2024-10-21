@@ -2,6 +2,7 @@
 @section('title', 'Semilleros de investigacion')
 @push('styles')
     <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
+    <link rel="stylesheet" href="{{ url('css/estiloModal.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">
@@ -45,7 +46,6 @@
                             <th>NOMBRE</th>
                             <th>LIDER</th>
                             <th>FECHA CREACION</th>
-                            <th>ESTADO</th>
                             <th>ACCIONES</th>
                         </tr>
                     </thead>
@@ -56,13 +56,13 @@
                                 <td>{{ $semillero->nombre_semillero }}</td>
                                 <td>{{ $semillero->lider_semillero }}</td>
                                 <td>{{ $semillero->fecha_creacion }}</td>
-                                <td>
-                                    @if ($semillero->estado_gurpo == 1)
+                                {{-- <td>
+                                    @if ($semillero->estado_grupo == 1)
                                         Activo
                                     @elseif ($semillero->estado_grupo == 0)
                                         Inactivo
-                                    @endif
-                                </td>
+                                    @endif --}}
+                                {{-- </td> --}}
                                 <td>
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
@@ -84,9 +84,9 @@
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'actualizar_semillero')
-                                                    <button title="Modificar semillero" id="BtnModificarSemillero"
-                                                        class="btn p-0"><svg class="iconoModificar"
-                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                    <button title="Modificar semillero" class="btn p-0"><svg
+                                                            class="iconoModificar" xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 24 24">
                                                             <path
                                                                 d="M16 2H8C4.691 2 2 4.691 2 8v13a1 1 0 0 0 1 1h13c3.309 0 6-2.691 6-6V8c0-3.309-2.691-6-6-6zM8.999 17H7v-1.999l5.53-5.522 1.999 1.999L8.999 17zm6.473-6.465-1.999-1.999 1.524-1.523 1.999 1.999-1.524 1.523z">
                                                             </path>
@@ -135,7 +135,7 @@
         </div>
     </div>
 @endsection
-@push('scripts')
+@section('scripts')
     <script src="{{ url('js/semilleros.js') }}"></script>
     <script src="{{ url('js/objetivosEspecificos.js') }}"></script>
-@endpush
+@endsection

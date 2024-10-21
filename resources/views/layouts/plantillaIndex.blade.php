@@ -8,7 +8,7 @@
     <title>@yield('title')</title>
     <link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url('css/plantilla.css') }}">
-    <link rel="stylesheet" href="{{url('css/modales.css')}}">
+    <link rel="stylesheet" href="{{ url('css/modales.css') }}">
     {{-- <link rel="stylesheet" href="{{ url('libraries/select2-4.0.13/dist/css/select2.css') }}"> --}}
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <link rel="stylesheet"
@@ -51,11 +51,14 @@
                         {{-- Nota: El side-bar se debería separar, al igual que el footer y header, no todo debe estar en un mismo archivo --}}
                         <li class="sidebar-item">
                             @php
-                                $url = "index/".$contr['nombre_controlador']."/consultar_".$contr['nombre_controlador'];
+                                $url =
+                                    'index/' .
+                                    $contr['nombre_controlador'] .
+                                    '/consultar_' .
+                                    $contr['nombre_controlador'];
                             @endphp
                             <!--Cambio usando la función url de laravel para evitar errores 404-->
-                            <a href="{{url($url)}}"
-                                id="tab_{{ $contr['nombre_controlador'] }}"
+                            <a href="{{ url($url) }}" id="tab_{{ $contr['nombre_controlador'] }}"
                                 class="sidebar-tabb sidebar-link collapsed px-3 py-2" {{-- data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse" --}}
                                 aria-expanded="false">{!! html_entity_decode($contr['icono']) !!}{{ $contr['display_controlador'] }}
                             </a>
@@ -128,12 +131,38 @@
     <script src="{{ url('libraries/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ url('libraries/popper.min.js') }}"></script>
     <script src="{{ url('js/bootstrap.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- <script src="{{ url('libraries/select2-4.0.13/dist/js/select2.js') }}"></script> --}}
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
         integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ url('js/indexSidebar.js') }}"></script>
+    <script>
+        @if ($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: '<ul>@foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach</ul>',
+            });
+        @endif
+
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: '{{ session('success') }}',
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}',
+            });
+        @endif
+    </script>
 
     @yield('scripts')
 

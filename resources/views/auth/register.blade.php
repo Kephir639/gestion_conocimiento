@@ -9,6 +9,29 @@
 @section('content')
     <div class="container mt-5">
         <h2 class="text-center mb-4">Registro de Usuario</h2>
+        {{-- Alertas de validación --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <hr>
         <form action="{{ url('/registrarUsuario') }}" method="POST" class="needs-validation" novalidate>
             @csrf
@@ -75,7 +98,6 @@
                     <label for="email" class="form-label">Correo</label>
                     <div class="input-group">
                         <input type="email" class="form-control" id="email" name="email" required>
-                        {{-- <span class="input-group-text">@sena.com</span> --}}
                     </div>
                     <div class="invalid-feedback">Por favor, ingrese un correo válido.</div>
                 </div>
@@ -178,7 +200,7 @@
                     <select class="form-select" id="semillero" name="semillero">
                         <option value="" selected>Seleccione...</option>
                         @foreach ($semilleros as $semillero)
-                            <option value="{{ $semillero->id_semillero }}">{{ $semillero->iniciales_semillero }}</option>   
+                            <option value="{{ $semillero->id_semillero }}">{{ $semillero->iniciales_semillero }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -186,19 +208,19 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="password" class="form-label">password</label>
+                    <label for="password" class="form-label">Contraseña</label>
                     <div class="input-group">
                         <input type="password" class="form-control" id="password" name="password" required>
                         <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                             <i class="fa fa-eye"></i>
                         </button>
                     </div>
-                    <div class="invalid-feedback">Por favor, ingrese su password.</div>
+                    <div class="invalid-feedback">Por favor, ingrese su Contraseña.</div>
                 </div>
 
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-lg mt-3">Registrar</button>
-            </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg mt-3">Registrar</button>
+                </div>
         </form>
     </div>
 
