@@ -50,55 +50,6 @@ $(document).ready(function () {
                 }, false)
             })
     });
-    $(document).on('click', '#btnActualizar', function (e) {
-        e.preventDefault();
-
-        // Recoger los valores de los campos
-        let token = $('meta[name="csrf-token"]').attr('content');  // Tomar el token desde meta tag
-        let nombre = $('#name').val();
-        let apellido = $('#apellidos').val();
-        let tipo_documento = $('#tipo_documento').val();
-        let identificacion = $('#numero_identificacion').val();
-        let genero = $('#genero').val();
-        let tipo_poblacion = $('#tipo_poblacion').val();
-        let email = $('#email').val();
-        let celular = $('#celular').val();
-        let departamento = $('#departamento').val();
-        let municipio = $('#municipio').val();
-        let direccion = $('#direccion').val();
-
-        $.ajax({
-            type: "POST",
-            url: "change_profile",
-            data: {
-                '_token': token,  // Enviar el token correctamente
-                'name': nombre,
-                'apellido': apellido,
-                'tipo_documento': tipo_documento,
-                'identificacion': identificacion,
-                'genero': genero,
-                'tipo_poblacion': tipo_poblacion,
-                'email': email,
-                'celular': celular,
-                'departamento': departamento,
-                'municipio': municipio,
-                'direccion': direccion
-            },
-            success: function (data) {
-                $('#alertasModificar').html(data);  // Mostrar mensaje de éxito
-            },
-            error: function (xhr, status, error) {
-                if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    $.each(errors, function (clave, valor) {
-                        $("#div_" + clave).find('.errorValidacion').html(valor);
-                    });
-                } else {
-                    // Manejo de otros errores
-                }
-            }
-        });
-    });
 
 
 });
