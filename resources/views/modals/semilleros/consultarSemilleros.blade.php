@@ -67,7 +67,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'consultar_semillero')
+                                                @if ($func['nombre_funcion'] == 'consultar_semilleros')
                                                     <button title="Ver semillero" id="BtnVerSemilleros" class="btn p-0"><svg
                                                             xmlns="http://www.w3.org/2000/svg" class="iconoConsultar"
                                                             viewBox="0 0 24 24">

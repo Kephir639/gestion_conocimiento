@@ -70,7 +70,7 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::post('/roles/actualizar_rol', [rolController::class, 'actualizarRol']);
 
     //semilleros
-    Route::get('index/semilleros/consultar_semillero', [semillerosController::class, 'showSemilleros']);
+    Route::get('index/semilleros/consultar_semilleros', [semillerosController::class, 'showSemilleros']);
     Route::get('index/semilleros/showModalRegistrar', [semillerosController::class, 'showModalRegistrar'])->withoutMiddleware('checkRoutes');
     Route::post('index/semilleros/crear_semillero', [semillerosController::class, 'registrarSemilleros']);
     Route::get('index/semilleros/showModalVer', [semillerosController::class, 'verSemilleros']);
