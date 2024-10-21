@@ -50,39 +50,55 @@ $(document).ready(function () {
                 }, false)
             })
     });
-    $(document).on('click', '#btnAsignarRol', function (e) {
-        button = $(this);
+    $(document).on('click', '#btnActualizar', function (e) {
         e.preventDefault();
-        let idRol = $('#inputRol').val();
-        let token = $('#_token').val();
-        let documentosSeleccionados = $('input[name="userCheckbox[]"]:checked').map(function () { return $(this).val(); }).get(); //se busca la data y luego se asigna en la variable
-        let estado = $('#inputEstado').val();
+
+        // Recoger los valores de los campos
+        let token = $('meta[name="csrf-token"]').attr('content');  // Tomar el token desde meta tag
+        let nombre = $('#name').val();
+        let apellido = $('#apellidos').val();
+        let tipo_documento = $('#tipo_documento').val();
+        let identificacion = $('#numero_identificacion').val();
+        let genero = $('#genero').val();
+        let tipo_poblacion = $('#tipo_poblacion').val();
+        let email = $('#email').val();
+        let celular = $('#celular').val();
+        let departamento = $('#departamento').val();
+        let municipio = $('#municipio').val();
+        let direccion = $('#direccion').val();
+
         $.ajax({
             type: "POST",
             url: "change_profile",
             data: {
-                'idRol': idRol,
-                'documentos': documentosSeleccionados,
-                'estado_usu': estado,
-                '_token': token
+                '_token': token,  // Enviar el token correctamente
+                'name': nombre,
+                'apellido': apellido,
+                'tipo_documento': tipo_documento,
+                'identificacion': identificacion,
+                'genero': genero,
+                'tipo_poblacion': tipo_poblacion,
+                'email': email,
+                'celular': celular,
+                'departamento': departamento,
+                'municipio': municipio,
+                'direccion': direccion
             },
             success: function (data) {
-                // Mostrar mensaje de éxito en el modal
-                $('#alertasModificar').html(data);
-
+                $('#alertasModificar').html(data);  // Mostrar mensaje de éxito
             },
             error: function (xhr, status, error) {
                 if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
-
-                    // Mostrar errores de validación en los campos correspondientes
                     $.each(errors, function (clave, valor) {
                         $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
                 } else {
-                    // console.log(error, status);
+                    // Manejo de otros errores
                 }
             }
         });
     });
+
+
 });

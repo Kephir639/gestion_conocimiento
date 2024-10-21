@@ -12,11 +12,11 @@
         <h2 class="text-center mb-4">Perfil de Usuario</h2>
         <hr>
         <form action="{{ url('index/usuarios/change_profile') }}" method="POST">
-            @csrf
             <div class="row mb-3">
+                @csrf
                 <div class="col-md-6">
                     <label for=name" class="form-label">Nombres</label>
-                    <input type="text" class="form-control" id=name" name="name" value="{{ Auth::user()->name }}"
+                    <input type="text" class="form-control" id="name" name="name" value="{{ Auth::user()->name }}"
                         required>
                     <div class="invalid-feedback">Por favor, ingrese sus nombres.</div>
                 </div>

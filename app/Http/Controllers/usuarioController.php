@@ -311,29 +311,26 @@ class usuarioController extends Controller
         // dd($datos);
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
-        if ($validacion->fails()) {
-            return response()->json(['errors' => $validacion->errors()], 422);
-        } else {
 
-            User::where('id', Auth::user()->id)->update([
-                'name' => $request->input('name'),
-                'apellidos' => $request->input('apellidos'),
-                'tipo_documento' => $request->input('tipo_documento'),
-                'identificacion' => $request->input('numero_identificacion'),
-                'id_genero' => $request->input('id_genero'),
-                'id_tipo' => $request->input('id_tipo_poblacion'),
-                'email' => $request->input('email'),
-                'celular' => $request->input('celular'),
-                'id_cargo' => $request->input('id_cargo'),
-                'id_municipio' => $request->input('id_municipio'),
-                'id_departamento' => $request->input('id_departamento'),
-                'direccion' => $request->input('direccion'),
-            ]);
+        User::where('id', Auth::user()->id)->update([
+            'name' => $request->input('name'),
+            'apellidos' => $request->input('apellidos'),
+            'tipo_documento' => $request->input('tipo_documento'),
+            'identificacion' => $request->input('numero_identificacion'),
+            'id_genero' => $request->input('id_genero'),
+            'id_tipo' => $request->input('id_tipo_poblacion'),
+            'email' => $request->input('email'),
+            'celular' => $request->input('celular'),
+            'id_cargo' => $request->input('id_cargo'),
+            'id_municipio' => $request->input('id_municipio'),
+            'id_departamento' => $request->input('id_departamento'),
+            'direccion' => $request->input('direccion'),
+        ]);
 
 
-            return view('alertas.actualizarExitoso');
-        }
+        return view('modals.usuarios.perfil.verPerfil');
     }
+
 
     public function usersExport()
     {
