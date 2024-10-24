@@ -36,8 +36,6 @@
     border-radius: 10px;
 }
 
-
-
 /* Manejor del card para forms dentro de la plantilla Blade */
 .cuadradoPlantilla {
     max-width: 100%;
@@ -51,9 +49,9 @@
 .app {
     display: grid;
     grid-template-areas:
-    'aside header header'
-    'aside main main';
-    grid-template-rows: 60px 1fr;
+        'aside header header'
+        'aside main main';
+    grid-template-rows: 60px 90%;
     grid-template-columns: 0px 1fr 1fr;
     /*min-height: 500px;*/
     height: 100svh;

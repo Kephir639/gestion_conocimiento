@@ -13,35 +13,33 @@ use Illuminate\Support\Facades\Validator;
 
 class cargoController extends Controller
 {
-    public function showCargos(Request $request)
+    public function showCargos(Request $request) //Muestra la vista con la lista de cargos disponibles
     {
-        $sql = "SELECT nombre_cargo, estado FROM cargos";
-
-        $cargos = Cargo::orderBy('id_cargo', 'desc')->paginate(2);
+        $cargos = Cargo::orderBy('estado_cargo', 'asc')->paginate(6);
         $controladores = $request->controladores;
         $notificaciones = $request->notificaciones;
         return view('modals.cargo.consultarCargos', compact('cargos', 'controladores', 'notificaciones'));
     }
 
-    public function showModalRegistrar()
+    public function showModalRegistrar() //Muestra la modal para registrar un nuevo cargo
     {
         return view('modals.cargo.crearCargo');
     }
 
 
-    public function registrarCargo(Request $request)
+    public function registrarCargo(Request $request) //Proceso de registro del nuevo cargo
     {
         $reglas = [
-            'nombre_cargo' => 'required'
+            'nombre_cargo' => 'required|max:30|regex:/^[\pL\s]+$/u'
         ];
 
         $mensajes = [
             'nombre_cargo.required' => 'Este campo es obligatorio',
-            'nombre_cargo.max' => 'Este campo debe contener maximo 30 caracteres'
+            'nombre_cargo.max' => 'Este campo debe contener maximo 30 caracteres',
+            'nombre_cargo.regex' => 'Este campo solo puede contener letras'
         ];
 
         $datos = $request->all();
-        $respuestas = [];
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
         unset($datos['_token']);
@@ -50,58 +48,64 @@ class cargoController extends Controller
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
-            $respuestas['error'] = false;
             $ajax = Cargo::where('nombre_cargo', $datos['nombre_cargo'])->get();
             if (count($ajax)) {
-                return view('alertas.repetido')->render();
+                //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
+                $alerta = view('alertas.repetido')->render();
+                return response()->json(['alerta' => $alerta]);
             } else {
                 $cargo = new Cargo();
 
                 $cargo->setNombreCargoAttribute($request->nombre_cargo);
                 $cargo->setEstadoAttribute(1);
 
-                Cargo::create($cargo->toArray());
+                if (Cargo::create($cargo->toArray())) {
+                    $sql = log_auditoria::createLog(
+                        'cargo',
+                        $cargo->getNombreCargoAttribute(),
+                        'registro'
+                    );
+                    Log::insert($sql);
 
-                $sql = log_auditoria::createLog(
-                    'cargo',
-                    $cargo->getNombreCargoAttribute(),
-                    'registro'
-                );
-                Log::insert($sql);
+                    $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
+                    $controladores = $request->controladores;
 
-                $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
-                $controladores = $request->controladores;
+                    $tabla = view('modals.cargo.tablaCargo', [
+                        'listaCargos' => $listaCargos,
+                        'controladores' => $controladores
+                    ])->render();
+                    $alerta = view('alertas.registrarExitoso')->render();
 
-                $tabla = view('modals.cargo.tablaCargo', [
-                    'listaCargos' => $listaCargos,
-                    'controladores' => $controladores
-                ])->render();
-                $alerta = view('alertas.registrarExitoso')->render();
-
-                return response()->json([
-                    'tabla' => $tabla,
-                    'alerta' => $alerta
-                ]);
+                    return response()->json([
+                        'tabla' => $tabla,
+                        'alerta' => $alerta
+                    ]);
+                } else {
+                    $alerta = view('alertas.registroError')->render();
+                    return response()->json(['alerta' => $alerta]);
+                }
             }
         }
     }
 
-    public function showModalActualizar()
+    public function showModalActualizar() //Muestra la modal para actualizar la informacion del cargo
     {
         return view('modals.cargo.modificarCargo');
     }
 
-    public function actualizarCargo(Request $request)
+    public function actualizarCargo(Request $request) //Proceso de actualizacion de la informacion del cargo
     {
         $reglas = [
-            'nombre_cargo' => 'required|max:30',
-            'estado_cargo' => 'required|gte:0'
+            'nombre_cargo' => 'required|max:30|regex:/^[\pL\s]+$/u',
+            'estado_cargo' => 'required|gte:0|regex:/^[0-9]+$/'
         ];
         $mensajes = [
             'nombre_cargo.required' => 'Este campo es obligatorio',
             'nombre_cargo.max' => 'Este campo debe contener maximo 30 caracteres',
+            'nombre_cargo.regex' => 'Este campo solo puede contener letras',
             'estado_cargo.required' => 'Este campo es obligatorio',
-            'estado_cargo.gte' => 'Seleccione una de las opciones'
+            'estado_cargo.gte' => 'Seleccione una de las opciones',
+            'estado_cargo.regex' => 'Seleccione una opcion valida😡',
         ];
 
         $respuestas = [];
@@ -118,24 +122,42 @@ class cargoController extends Controller
                 'estado_cargo' => $datos['estado_cargo']
             ])->get();
             if (count($ajax)) {
-                return view('alertas.repetido');
+                //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
+                $alerta = view('alertas.repetido')->render();
+                return response()->json(['alerta' => $alerta]);
             } else {
                 $cargo = new Cargo();
 
                 $cargo->setNombreCargoAttribute($request->nombre_cargo);
                 $cargo->setEstadoAttribute($request->estado_cargo);
 
-                Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo->toArray());
+                if (Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo->toArray())) {
+                    $sql = log_auditoria::createLog(
+                        'cargo',
+                        $datos['nombre_cargo_old'],
+                        'actualizo',
+                        $cargo->getNombreCargoAttribute()
+                    );
+                    Log::insert($sql);
 
-                $sql = log_auditoria::createLog(
-                    'cargo',
-                    $datos['nombre_cargo_old'],
-                    'actualizo',
-                    $cargo->getNombreCargoAttribute()
-                );
-                Log::insert($sql);
 
-                return view('alertas.modifcarExitoso');
+                    $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
+                    $controladores = $request->controladores;
+
+                    $alerta = view('alertas.actualizarExitoso')->render();
+                    $tabla = view('modals.cargo.tablaCargo', [
+                        'listaCargos' => $listaCargos,
+                        'controladores' => $controladores
+                    ])->render();
+
+                    return response()->json([
+                        'alerta' => $alerta,
+                        'tabla' => $tabla
+                    ]);
+                } else {
+                    $alerta = view('alertas.modificarError')->render();
+                    return response()->json(['alerta' => $alerta]);
+                }
             }
         }
     }

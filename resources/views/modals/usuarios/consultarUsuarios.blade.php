@@ -25,23 +25,23 @@
                                 <th>ACCIONES</th>
                             </tr>
                         </thead>
-                        <tbody id="tablebody_roles">
+                        <tbody id="tablebody_usuarios">
                             @foreach ($listaUsuarios as $usuario)
                                 <tr>
                                     <td>{{ $usuario->id }}</td>
                                     <td>{{ $usuario->tipo_documento }}</td>
-                                    <td>{{ $usuario->numero_identificacion }}</td>
+                                    <td>{{ $usuario->identificacion }}</td>
                                     <td>{{ $usuario->name }}</td>
                                     <td>{{ $usuario->apellidos }}</td>
                                     <td>{{ $usuario->email }}</td>
                                     <td>{{ $usuario->rol }}</td>
-                                    <td>{{ $usuario->estado_usu }}</td>
+                                    <td>{{ $usuario->estado_usu == 1 ? 'Activo' : 'Inactivo' }}</td>
                                     <td class="justify-content-center align-items-center ">
                                         @foreach ($controladores as $controlador)
                                             @if ($controlador['nombre_controlador'] == 'usuarios')
                                                 @foreach ($controlador['funciones'] as $func)
                                                     {{-- @dump($controlador['funciones']) --}}
-                                                    @if ($func['nombre_funcion'] == 'actualizar_usuario')
+                                                    @if ($func['nombre_funcion'] == 'actualizar_usuarios')
                                                         <button title="Modificar rol" class="btn p-0">
                                                             <svg class="iconoModificar" width="34" height="34"
                                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -60,7 +60,7 @@
                         </tbody>
                     </table>
                 @else
-                    <h1>Nuai</h1>
+                    <h1>No hay usuarios registrados</h1>
                 @endif
             </div>
             <div class="row mt-2">
@@ -75,3 +75,7 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ url('js/usuarios.js') }}"></script>
+@endpush

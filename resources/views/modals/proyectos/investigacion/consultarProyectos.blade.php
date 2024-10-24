@@ -18,7 +18,7 @@
                             <th id="acciones">ACCIONES</th>
                         </tr>
                     </thead>
-                    <tbody id="tablebody_lineas">
+                    <tbody id="tablebody_proyectos">
                         @foreach ($listaProyectos as $proyecto)
                             <tr>
                                 <td>{{ $proyecto->nombre_proyecto }}</td>
@@ -55,7 +55,6 @@
                     </tbody>
                 </table>
             </div>
-
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'proyectos_investigacion')
                     @foreach ($controlador['funciones'] as $func)

@@ -11,7 +11,7 @@
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
                         <div id="div_nombre_grupo"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="inputNombreGrupo" class="form-label">Nombre</label>
+                            <label for="inputNombreGrupo" class="form-label">Nombre grupo</label>
                             <input type="text" class="form-control" id="inputNombreGrupo" name="nombre_grupo"
                                 required>
                             <span class="errorValidacion"></span>

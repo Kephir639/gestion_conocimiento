@@ -73,7 +73,7 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
 
     // Roles
     Route::get('index/roles/consultar_roles', [rolController::class, 'consultarRol']);
-    Route::get('index/rol/permisoRol', [rolController::class, 'consultarPermiso'])->withoutMiddleware('checkRoutes');
+    Route::get('index/roles/permisoRol', [rolController::class, 'consultarPermiso'])->withoutMiddleware('checkRoutes');
     Route::get('index/roles/funciones', [rolController::class, 'consultarFunciones'])->withoutMiddleware('checkRoutes');
 
     Route::get('index/roles/showModalRegistrar', [rolController::class, 'showModalRegistrar'])->withoutMiddleware('checkRoutes');
@@ -95,11 +95,12 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
 
     //usuarios - Perfil
     Route::get('index/usuarios/consultar_usuarios', [usuarioController::class, 'showUsuarios']);
-    Route::post('index/usuarios/actualizar_usuarios', [usuarioController::class, 'editarUsuario']);
+    Route::get('index/usuarios/showModalActualizar', [usuarioController::class, 'showModalActualizar'])->withoutMiddleware('checkRoutes');
+    Route::post('index/usuarios/actualizar_usuarios', [usuarioController::class, 'editarUsuario'])->withoutMiddleware('filter');
     Route::get('index/usuarios/exportar_usuarios', [usuarioController::class, 'usersExport'])->withoutMiddleware('checkRoutes');
 
     //Perfil
-    Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil']);
+    Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil'])->withoutMiddleware('checkRoutes');
     Route::post('index/usuarios/actualizar_perfil', [usuarioController::class, 'actualizarPerfil']);
 
     Route::get('index/usuarios/asignar_roles', [usuarioController::class, 'showAsignarRol']);

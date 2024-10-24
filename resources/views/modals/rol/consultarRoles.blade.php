@@ -79,6 +79,6 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/roles.js') }}"></script>
-@endsection
+@endpush

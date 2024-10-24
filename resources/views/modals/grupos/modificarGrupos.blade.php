@@ -11,14 +11,14 @@
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
                         <div id="div_nombre_grupo"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="inputNombreGrupo" class="form-label">Nombre</label>
+                            <label for="inputNombreGrupo" class="form-label">Nombre grupo</label>
                             <input type="text" class="form-control" id="inputNombreGrupo" name="nombre_grupo"
                                 required>
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_estado_grupo"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="inputEstadoGrupo" class="form-label">Estado</label>
+                            <label for="inputEstadoGrupo" class="form-label">Estado grupo</label>
                             <select type="select" class="form-control" id="inputEstadoGrupo" name="estado_grupo"
                                 required>
                                 <option value="-1">Seleccione una opcion</option>

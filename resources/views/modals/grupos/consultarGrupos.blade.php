@@ -74,9 +74,8 @@
             </nav>
         </div>
     </div>
-
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/gruposInvestigacion.js') }}"></script>
-@endsection
+@endpush

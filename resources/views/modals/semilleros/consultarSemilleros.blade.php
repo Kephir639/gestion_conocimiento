@@ -135,7 +135,7 @@
         </div>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/semilleros.js') }}"></script>
     <script src="{{ url('js/objetivosEspecificos.js') }}"></script>
-@endsection
+@endpush

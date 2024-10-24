@@ -1,11 +1,11 @@
 $(document).ready(function () {
     let button = '';
     //Metodo para abrir la modal de modificar
-    $(document).on('click', '#iconoModificar', function () {
+    $(document).on('click', '.iconoModificar', function () {
         button = $(this);
 
-        let nombreRol = $(this).parents('tr').find('td:eq(0)').text().trim();
-        let estadoRol = $(this).parents('tr').find('td:eq(1)').text().trim();
+        let nombreRol = $(button).parents('tr').find('td:eq(0)').text().trim();
+        let estadoRol = $(button).parents('tr').find('td:eq(1)').text().trim();
 
         let estado = (estadoRol == "Activo") ? 1 : (estadoRol == "Inactivo") ? 0 : -1;
 
@@ -17,14 +17,12 @@ $(document).ready(function () {
             },
             success: function (data) {
                 let permisos = data.permisos;
-                let rol = data.id_rol;
 
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: "showModalActualizar",
                     data: {
                         'permisos': permisos,
-                        'id_rol': rol
                     },
                     success: function (data) {
                         $('#ModalSection').html(data.modal);
@@ -55,7 +53,6 @@ $(document).ready(function () {
 
     $(document).on('click', '#btnActualizar', function (e) {
         e.preventDefault();
-
         $.ajax({
             type: "GET",
             url: "funciones",
@@ -86,7 +83,7 @@ $(document).ready(function () {
                         'estado_rol': estado,
                         'funciones_agregadas': funcionesAgregadas,
                         'funciones_eliminadas': funcionesEliminadas,
-                        'nombre_rol_old' : nombre_old,
+                        'nombre_rol_old': nombre_old,
                         '_token': token
                     },
                     success: function (dataPost) {

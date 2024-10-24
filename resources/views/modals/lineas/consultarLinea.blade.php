@@ -11,8 +11,8 @@
                 <table class="table">
                     <thead class="tableHeadre">
                         <tr class="tituloTabla">
-                            <th id="nombre">NOMBRE</th>
-                            <th>ESTADO</th>
+                            <th id="nombre">NOMBRE LINEA</th>
+                            <th>ESTADO LINEA</th>
                             <th id="acciones">ACCIONES</th>
                         </tr>
                     </thead>
@@ -74,6 +74,6 @@
         </div>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/lineasInvestigacion.js') }}"></script>
-@endsection
+@endpush

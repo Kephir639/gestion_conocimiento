@@ -83,7 +83,7 @@ $(document).ready(function () {
             },
             success: function (data) {
                 let vista = data.vista;
-                $(modal).find('#modalSection').html(vista);
+                $(modal).find('#ModalSection').html(vista);
 
                 $(vista).modal('show');
             },

@@ -21,32 +21,31 @@ use stdClass;
 class proyectosInvestigacionController extends Controller
 {
 
-    public function showProyectosInvestigativos(Request $request)
+    public function showProyectosInvestigativos(Request $request) //Muestra la vista con los proyectos vinculados al usuario
     {
+        //Sql que trae los proyectos vinculados al usuario
         $sql = "SELECT * FROM proyectos_investigacion pi, users u, investigacion_has_users ihu
         WHERE pi.id_p_investigacion = ihu.id_p_investigacion
-        AND ihu.id = " . Auth::user()->id . " ORDER BY pi.id_p_investigacion DESC LIMIT 10 OFFSET 0";
-        $listaProyectos =  DB::select($sql);
-        // dd($listaProyectos);
+        AND ihu.id = " . Auth::user()->id . " ORDER BY pi.id_p_investigacion DESC LIMIT 6 OFFSET 0";
+        //En este caso solo el administrador puede ver todos los proyectos registrados
+        $listaProyectos = (Auth::user()->id != 1) ? DB::select($sql) : DB::table('proyectos_investigacion')->orderBy('id_proyecto_i', 'desc')->paginate(6);
         $controladores = $request->controladores;
-
         return view('modals.proyectos.investigacion.consultarProyectos', [
             'listaProyectos' => $listaProyectos,
             'controladores' => $controladores
         ]);
     }
 
-    public function showModalRegistrar(Request $request)
+    public function showModalRegistrar(Request $request) //Muestra la modal para registrar un proyecto
     {
-        $centros = CentrosFormacion::all();
-        $grupos = GrupoInvestigacion::all();
-        $lineas = LineaInvestigacion::all();
-        $redes = Redes::all();
-        $programas = Programas::all();
-        $semilleros = Semilleros::all();
-        $participantes = User::all();
+        $centros = CentrosFormacion::where('id_centro', 1)->get();
+        $grupos = GrupoInvestigacion::where('id_grupo', 1)->get();
+        $lineas = LineaInvestigacion::where('id_linea', 1)->get();
+        $redes = Redes::where('id_red', 1)->get();
+        $programas = Programas::where('id_programa', 1)->get();
+        $semilleros = Semilleros::where('id_semillero', 1)->get();
+        $participantes = User::where('id', 1)->get();
 
-        // dd($centros, $grupos, $lineas, $programas, $semilleros, $participantes);
         return view('modals.proyectos.investigacion.crearProyectos', [
             'centros' => $centros,
             'grupos' => $grupos,
@@ -58,7 +57,7 @@ class proyectosInvestigacionController extends Controller
         ]);
     }
 
-    public function agregarActividad(Request $request)
+    public function agregarActividad(Request $request) //Funcion que devuelve un nuevo campo de actividad
     {
         $contador_actividad = $request->contador_actividad;
 
@@ -67,7 +66,7 @@ class proyectosInvestigacionController extends Controller
         ])->render();
     }
 
-    public function agregarPresupuesto(Request $request)
+    public function agregarPresupuesto(Request $request) //Funcion que devuelve un nuevo campo de presupuesto
     {
         $contador_presupuesto = $request->contador_presupuesto;
 
@@ -78,12 +77,10 @@ class proyectosInvestigacionController extends Controller
 
     public function registrarProyectoInvestigacion(Request $request)
     {
-        // dd($request->all());
-
         $reglas = [
-            'ano_ejecucion' => 'required',
-            'codigo_sigp' => 'required',
-            'nombre_proyecto' => 'required',
+            'ano_ejecucion' => 'required|max:4|regex:/^[0-9]+$/',
+            'codigo_sigp' => 'required|regex:/^[a-zA-Z0-9 ]+$/',
+            'nombre_proyecto' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
             'centros' => 'required',
             'grupos' => 'required',
             'lineas' => 'required',
@@ -92,12 +89,12 @@ class proyectosInvestigacionController extends Controller
             'semilleros' => 'required',
             'participantes' => 'required',
             'resumen' => 'required',
-            'objetivo_general' => 'required',
-            'objetivos_especificos' => 'required',
-            'propuesta' => 'required',
-            'impacto_esperado' => 'required',
-            'actividades' => 'required',
-            'presupuestos' => 'required'
+            'objetivo_general' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'objetivos_especificos' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'propuesta' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'impacto_esperado' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'actividades' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'presupuestos' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/'
         ];
         $mensajes = [
             'ano_ejecucion.required' => 'Este campo es obligatorio',
