@@ -86,9 +86,9 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::get('index/semilleros/consultar_semilleros', [SemillerosController::class, 'showSemilleros']);
     Route::get('index/semilleros/showModalVer', [SemillerosController::class, 'verSemilleros'])->withoutMiddleware('checkRoutes');
     Route::get('index/semilleros/showModalRegistrar', [SemillerosController::class, 'showModalRegistrar'])->withoutMiddleware('checkRoutes');
-    Route::post('index/semilleros/crear_semillero', [SemillerosController::class, 'registrarSemilleros']);
+    Route::post('index/semilleros/crear_semilleros', [SemillerosController::class, 'registrarSemilleros']);
     Route::get('index/semilleros/showModalActualizar', [SemillerosController::class, 'showModalActualizar'])->withoutMiddleware('checkRoutes');
-    Route::post('index/semilleros/actualizar_semillero', [SemillerosController::class, 'actualizarSemilleros']);
+    Route::post('index/semilleros/actualizar_semilleros', [SemillerosController::class, 'actualizarSemilleros']);
     //Semilleros - Validacion
     Route::get('index/semilleros/showModalValidar', [semillerosController::class, 'showModalValidar'])->withoutMiddleware('checkRoutes');
     Route::post('index/semilleros/validarUsuarios', [semillerosController::class, 'validarUsuarios']);
@@ -109,9 +109,9 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     //Proyectos de Investigacion
     Route::get('index/proyectos_investigacion/consultar_proyectos_investigacion', [proyectosInvestigacionController::class, 'showProyectosInvestigativos'])->withoutMiddleware('checkRoutes');;
     Route::get('index/proyectos_investigacion/showModalRegistrar', [proyectosInvestigacionController::class, 'showModalRegistrar'])->withoutMiddleware('checkRoutes');
-    Route::post('index/proyectos_investigacion/crear_proyecto_investigacion', [proyectosInvestigacionController::class, 'registrarProyectoInvestigacion']);
+    Route::post('index/proyectos_investigacion/crear_proyectos_investigacion', [proyectosInvestigacionController::class, 'registrarProyectoInvestigacion']);
     Route::get('index/proyectos_investigacion/showModalActualizar', [proyectosInvestigacionController::class, 'showModalActualizar'])->withoutMiddleware('checkRoutes');
-    Route::post('index/proyectos_investigacion/actualizar_proyecto_investigacion', [proyectosInvestigacionController::class, 'actualizarProyectoInvestigacion']);
+    Route::post('index/proyectos_investigacion/actualizar_proyectos_investigacion', [proyectosInvestigacionController::class, 'actualizarProyectoInvestigacion']);
 
     Route::get('index/proyectos_investigacion/agregar_actividad', [proyectosInvestigacionController::class, 'agregarActividad'])->withoutMiddleware('checkRoutes');
     Route::get('index/proyectos_investigacion/agregar_presupuesto', [proyectosInvestigacionController::class, 'agregarPresupuesto'])->withoutMiddleware('checkRoutes');

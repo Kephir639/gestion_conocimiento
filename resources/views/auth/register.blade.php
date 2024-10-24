@@ -133,10 +133,45 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <label for="direccion" class="form-label">Dirección</label>
-                    <input type="text" class="form-control" id="direccion" name="direccion" required>
-                    <div class="invalid-feedback">Por favor, ingrese su dirección.</div>
+                    <div class="input-group">
+                        <!-- Select para el tipo de vía -->
+                        <select class="form-select" id="tipo_via" required>
+                            <option value="Carrera">Carrera</option>
+                            <option value="Calle">Calle</option>
+                            <option value="Transversal">Transversal</option>
+                            <option value="Diagonal">Diagonal</option>
+                            <option value="Avenida">Avenida</option>
+                        </select>
+
+                        <!-- Campo para el número de vía, máximo 5 caracteres -->
+                        <input type="text" class="form-control" id="direccion_carrera" placeholder=""
+                            pattern="[0-9]+" maxlength="5" required>
+
+                        <span class="input-group-text">#</span>
+
+                        <!-- Campo para el número principal, máximo 5 caracteres -->
+                        <input type="text" class="form-control" id="direccion_numero1" placeholder=""
+                            pattern="[0-9]+" maxlength="5" required>
+
+                        <span class="input-group-text">-</span>
+
+                        <!-- Campo para el número secundario, máximo 5 caracteres -->
+                        <input type="text" class="form-control" id="direccion_numero2" placeholder=""
+                            pattern="[0-9]+" maxlength="5" required>
+                    </div>
+
+                    <!-- Mostrar previsualización de la dirección -->
+                    <div class="mt-2">
+                        <label class="form-label">Previsualización:</label>
+                        <p id="direccion_preview"></p>
+                    </div>
+
+                    <div class="invalid-feedback">Por favor, ingrese una dirección válida.</div>
                 </div>
             </div>
+
+
+
             <div class="row mb-3">
                 <div class="col-md-12">
                     <label for="cargo" class="form-label">Cargo</label>
@@ -215,49 +250,39 @@
                             <i class="fa fa-eye"></i>
                         </button>
                     </div>
-                    <div class="invalid-feedback">Por favor, ingrese su Contraseña.</div>
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                        La contraseña debe tener entre 8 y 15 caracteres, incluir al menos una letra mayúscula, una letra
+                        minúscula, un número y un carácter especial.
+                    </small>
+
+                    <ul id="passwordRequirements" class="list-unstyled" style="display: none;">
+                        <li id="length" class="text-danger">Debe tener entre 8 y 15 caracteres</li>
+                        <li id="uppercase" class="text-danger">Debe tener al menos una letra mayúscula</li>
+                        <li id="lowercase" class="text-danger">Debe tener al menos una letra minúscula</li>
+                        <li id="number" class="text-danger">Debe tener al menos un número</li>
+                        <li id="special" class="text-danger">Debe tener al menos un carácter especial</li>
+                    </ul>
                 </div>
 
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary btn-lg mt-3">Registrar</button>
+                <div class="col-md-6">
+                    <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password_confirmation"
+                            name="password_confirmation" required>
+                        <button type="button" class="btn btn-outline-secondary" id="togglePasswordConfirmation">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback">Por favor, confirme su contraseña.</div>
                 </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg mt-3">Registrar</button>
+            </div>
         </form>
     </div>
 
-    <script>
-        // Validación personalizada de Bootstrap
-        (function() {
-            'use strict'
-            var forms = document.querySelectorAll('.needs-validation')
-            Array.prototype.slice.call(forms)
-                .forEach(function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
-                        }
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-        })()
-    </script>
 
 
-    <script>
-        document.getElementById('togglePassword').addEventListener('click', function(e) {
-            const passwordInput = document.getElementById('password');
-            const icon = this.querySelector('i');
 
-            // Cambia el tipo de input entre 'password' y 'text'
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
-    </script>
 @endsection

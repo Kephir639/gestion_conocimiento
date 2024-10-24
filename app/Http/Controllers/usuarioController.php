@@ -56,11 +56,11 @@ class usuarioController extends Controller
             'name' => ['required', 'max:30', 'regex:/^[\pL\s]+$/u'], // Solo letras y espacios
             'apellidos' => ['required', 'max:30', 'regex:/^[\pL\s]+$/u'], // Solo letras y espacios
             'tipo_documento' => 'required|in:CC,TI,CE,Pasaporte,PEP,PPT',
-            'numero_identificacion' => ['required', 'max:20', 'regex:/^[0-9]+$/', 'unique:users,numero_identificacion'], // Solo números
+            'numero_identificacion' => ['required', 'min:7', 'max:15', 'regex:/^[0-9]+$/', 'unique:users,numero_identificacion'], // Mínimo 7 caracteres y solo números
             'id_genero' => 'required|integer',
             'id_tipo' => 'required|integer',
             'email' => 'required|email|max:255|unique:users,email',
-            'celular' => ['required', 'max:15', 'regex:/^[0-9]+$/'], // Solo números
+            'celular' => ['required', 'min:7', 'max:15', 'regex:/^3[0-9]+$/'], // Mínimo 10 caracteres, comienza con 3, solo números
             'id_departamento' => 'required|integer',
             'id_municipio' => 'required|integer',
             'direccion' => 'required|max:255',
@@ -74,9 +74,11 @@ class usuarioController extends Controller
             'password' => [
                 'required',
                 'max:20',
-                // 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,15}$/'
-            ]
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\W_~]).{8,15}$/',
+                'confirmed'
+            ],
         ];
+
 
 
         $mensajes = [
@@ -89,6 +91,7 @@ class usuarioController extends Controller
             'tipo_documento.required' => 'El tipo de documento es obligatorio.',
             'tipo_documento.in' => 'El tipo de documento seleccionado no es válido.',
             'numero_identificacion.required' => 'El número de identificación es obligatorio.',
+            'numero_identificacion.min' => 'El número de identificación debe tener al menos 7 caracteres.',
             'numero_identificacion.max' => 'El número de identificación no debe exceder de 20 caracteres.',
             'numero_identificacion.regex' => 'El número de identificación solo puede contener números.',
             'numero_identificacion.unique' => 'Este número de identificación ya está registrado.',
@@ -101,8 +104,9 @@ class usuarioController extends Controller
             'email.max' => 'El correo electrónico no debe exceder de 255 caracteres.',
             'email.unique' => 'Este correo electrónico ya está registrado.',
             'celular.required' => 'El número de celular es obligatorio.',
+            'celular.min' => 'El número de celular debe tener al menos 10 caracteres.',
             'celular.max' => 'El número de celular no debe exceder de 15 caracteres.',
-            'celular.regex' => 'El número de celular solo puede contener números.',
+            'celular.regex' => 'El número de celular debe comenzar con 3 y solo puede contener números.',
             'id_departamento.required' => 'El departamento es obligatorio.',
             'id_departamento.integer' => 'El departamento debe ser un número entero.',
             'id_municipio.required' => 'El municipio es obligatorio.',
@@ -117,9 +121,9 @@ class usuarioController extends Controller
             'Nombre_programa.max' => 'El nombre del programa no debe exceder de 255 caracteres.',
             'ficha.integer' => 'La ficha debe ser un número entero.',
             'password.required' => 'La contraseña es obligatoria.',
-            'password.regex' => 'La contraseña debe tener entre 8 y 15 caracteres, incluir al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.'
+            'password.regex' => 'La contraseña debe tener entre 8 y 15 caracteres, incluir al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
         ];
-
 
         $datos = $request->all();
         $validacion = Validator::make($datos, $reglas, $mensajes);
@@ -164,21 +168,8 @@ class usuarioController extends Controller
                         ]);
                     }
                 }
-                
-                $listausuarios = User::orderBy('id', 'desc')->paginate(10);
-                $controladores = $request->controladores;
 
-                $tabla = view('modals.usuarios.tablaUsuario', [
-                    'listaUsuarios' => $listausuarios,
-                    'controladores' => $controladores
-                ])->render();
-
-                $alerta = view('alertas.registrarExitoso')->render();
-
-                return response()->json([
-                    'tabla' => $tabla,
-                    'alerta' => $alerta
-                ]);
+                return redirect()->route('login')->with('success', 'Usuario registrado con éxito, debes esperar que un Administrador te acepte en el sistema.');
             }
         }
     }
@@ -395,8 +386,6 @@ class usuarioController extends Controller
         return view('alerta.usuarioInhabilidato')->render();
     }
 
-    public function usersExport()
-    {
     public function usersExport()
     {
         return Excel::download(new UsersExport, 'usuarios.xlsx');

@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url('css/plantilla.css') }}">
     <link rel="stylesheet" href="{{ url('css/modales.css') }}">
+    <link rel="stylesheet" href="{{ url('css/estiloModal.css') }}">
+    <link rel="stylesheet" href="{{ url('css/estiloTablas.css') }}">
     {{-- <link rel="stylesheet" href="{{ url('libraries/select2-4.0.13/dist/css/select2.css') }}"> --}}
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <link rel="stylesheet"

@@ -24,7 +24,7 @@ body {
 
 /* Card Styles */
 .card {
-    background-color:whitesmoke;
+    background-color: whitesmoke;
     border-radius: var(--borde-radius);
     box-shadow: var(--sombra);
     border: none;
@@ -37,6 +37,7 @@ body {
     color: var(--color-texto);
     font-size: 1.5rem;
     padding: 15px;
+    text-align: center;
 }
 
 .card-body {
@@ -108,4 +109,3 @@ body {
     justify-content: center;
     align-items: center;
 }
-

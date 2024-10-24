@@ -33,7 +33,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "actualizar_semillero",  // Cambia la URL según tu configuración
+            url: "actualizar_semilleros ",  // Cambia la URL según tu configuración
             data: {
                 '_token': token,
                 'nombre_semillero': nombre,

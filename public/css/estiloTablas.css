@@ -1,0 +1,105 @@
+:root {
+    --color-Negro: #222222;
+    --color-sombraNegra: #2e2b2b94;
+    --color-fuente-background: rgba(255, 255, 255, 0.3);
+    --color-fondoGris: #777777;
+    --color-fuente: whitesmoke;
+    --color-primario-obscuro: #007430;
+    --color-primario: #007832;
+    --color-verdeAguamarina: #1A936F;
+    --color-primario-hover: #08a835;
+    --color-secundario: #00324D;
+    --color-secundario-hover: #0d5c86;
+    --color-azulNavy: #1C5D99;
+    --color-azulNavy-pastel: #bbcde5;
+    --color-alternativo-azulCielo: #50E5F9;
+    --color-alternativo-amarillo: #FDC300;
+    --color--danger: #ffc107;
+    --fuente-primaria: 'Work sans', 'Calibri';
+    --tamaño-sidebar: 260px;
+    --tamaño-sidebar-negativo: -260px;
+    --transiciones: all 0.35s ease-in-out;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: var(--color-fuente-background);
+    color: var(--color-fuente);
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--color-primario);
+    box-shadow: 0 4px 8px var(--color-sombraNegra);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #007832;
+    color: var(--color-fuente);
+    font-size: medium;
+}
+
+.tableHeadre {
+    background-color: var(--color-secundario);
+    color: var(--color-fuente);
+    text-align: left;
+}
+
+/* .tituloTabla th {
+    padding: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+} */
+
+.table tbody tr {
+    background-color: var(--color-fuente-background);
+    transition: background-color 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: var(--color-secundario-hover);
+}
+
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--color-primario-obscuro);
+}
+
+.btn svg {
+
+    width: 30px;
+    height: 30px;
+    transition: fill 0.3s ease;
+}
+
+.btn:hover svg {
+    fill: var(--color-primario-hover);
+}
+
+/* Iconos */
+.iconoConsultar,
+.iconoModificar,
+.iconoVerificar {
+    fill: var(--color-primario);
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.iconoConsultar:hover {
+    fill: var(--color-primario-hover);
+}
+
+/* Estilo de botones */
+.btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.btn:hover {
+    background-color: var(--color-sombraNegra);
+    border-radius: 5px;
+}

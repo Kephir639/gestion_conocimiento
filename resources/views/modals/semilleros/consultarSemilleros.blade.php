@@ -10,7 +10,7 @@
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'semilleros')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_semillero')
+                        @if ($func['nombre_funcion'] == 'crear_semilleros')
                             <button title="Registrar Semillero" id="BtnRegistrarSemillero" class="btn iconoRegistrar p-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
@@ -83,7 +83,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'actualizar_semillero')
+                                                @if ($func['nombre_funcion'] == 'actualizar_semilleros')
                                                     <button title="Modificar semillero" class="btn p-0"><svg
                                                             class="iconoModificar" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
@@ -135,7 +135,7 @@
         </div>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/semilleros.js') }}"></script>
     <script src="{{ url('js/objetivosEspecificos.js') }}"></script>
-@endsection
+@endpush
