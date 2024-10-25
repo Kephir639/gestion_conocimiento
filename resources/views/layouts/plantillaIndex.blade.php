@@ -57,9 +57,15 @@
                                     $contr['nombre_controlador'] .
                                     '/consultar_' .
                                     $contr['nombre_controlador'];
+                                $url =
+                                    'index/' .
+                                    $contr['nombre_controlador'] .
+                                    '/consultar_' .
+                                    $contr['nombre_controlador'];
                             @endphp
                             <!--Cambio usando la función url de laravel para evitar errores 404-->
-                            <a href="{{ url($url) }}" id="tab_{{ $contr['nombre_controlador'] }}"
+                            <a href="{{ url($url) }}" id="tab_{{ $contr['nombre_controlador'] }}" <a
+                                href="{{ url($url) }}" id="tab_{{ $contr['nombre_controlador'] }}"
                                 class="sidebar-tabb sidebar-link collapsed px-3 py-2" {{-- data-bs-target="#{{ $contr['nombre_controlador'] }}" data-bs-toggle="collapse" --}}
                                 aria-expanded="false">{!! html_entity_decode($contr['icono']) !!}{{ $contr['display_controlador'] }}
                             </a>
@@ -75,7 +81,7 @@
                 </svg>
             </button>
             @if (Auth::user()->idRol == 1)
-                <a href="{{ url('index/usuarios/asignar_rol') }}" class="notifycon mr-5"
+                <a href="{{ url('index/usuarios/asignar_roles') }}" class="notifycon mr-5"
                     style="text-decoration: none; color: inherit;">
                     <svg xmlns="http://www.w3.org/2000/svg" class="mt-2" width="20" height="20"
                         viewBox="0 0 448 512" style="fill: rgb(255, 255, 255)">
@@ -115,13 +121,15 @@
                         </svg>
                     </a>
                     <ul class="dropdown-menu menuD dropdown-menu-end" id="dropdownPerfil">
-                        <li class="navbar-item"><span class="dropdown-item text-center">{{ Auth::user()->name }}</span>
+                        <li class="navbar-item"><span class="dropdown-item text-center">{{ Auth::user()->name }}
+                                {{ Auth::user()->apellidos }}</span>
                         </li>
                         <li>
                             <hr class="dropdown divider division my-1">
                         </li>
-                        <li class="navbar-item"><a href="/index/usuarios/consultar_perfil"
-                                class="dropdown-item item-perfil w-100 text-center">Ver perfil</a>
+                        <li class="navbar-item"><a href="/index/usuarios/consultar_perfil" <li class="navbar-item"><a
+                                    href="/index/usuarios/consultar_perfil"
+                                    class="dropdown-item item-perfil w-100 text-center">Ver perfil</a>
                         </li>
                         <li id="logoutBtn" class="navbar-item"><a href="/logout"
                                 class="dropdown-item item-perfil w-100 text-center">Cerrar sesión</a>
@@ -145,12 +153,38 @@
     <script src="{{ url('libraries/popper.min.js') }}"></script>
     <script src="{{ url('js/bootstrap.min.js') }}"></script>
     <script src="{{ url('js/departamentos.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- <script src="{{ url('libraries/select2-4.0.13/dist/js/select2.js') }}"></script> --}}
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
         integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ url('js/indexSidebar.js') }}"></script>
+    <script>
+        @if ($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: '<ul>@foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach</ul>',
+            });
+        @endif
+
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: '{{ session('success') }}',
+            });
+        @endif
+
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}',
+            });
+        @endif
+    </script>
 
     @stack('scripts')
 

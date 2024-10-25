@@ -101,16 +101,40 @@ class RolController extends Controller
                         'alerta' => $alerta
                     ]);
                 } else {
-                    //Alerta de error
+                    return 'Error';
                 }
             }
         }
     }
 
+    public function consultarPermiso(Request $request)
+    {
+        $idRol = Rol::select('id_rol')->where('rol', $request->nombre_rol)->get();
+        dd($idRol->first()->id_rol);
+        $permisos = DB::table('permisos')->select('id_permiso', 'id_funcion')
+            ->where('id_rol', $idRol->first()->id_rol)->get();
+
+        dd($permisos);
+        return response()->json([
+            'permisos' => $permisos
+        ]);
+    }
+
+    public function consultarFunciones()
+    {
+        $sql = "SELECT fun.display_funcion nombre, fun.id_funcion id, con.id_controlador,
+        con.displayController controlador FROM funciones fun, controladores con WHERE con.id_controlador = fun.id_controlador
+        ORDER BY fun.id_controlador";
+
+        $funciones = DB::select($sql);
+
+        return $funciones;
+    }
+
     public function showModalActualizar(Request $request)
     {
+        dd($request->all());
         $permisos = $request->permisos;
-        $idRol = Crypt::decrypt($request->id_rol);
 
         $permisoIds = array();
         foreach ($permisos as $permiso) {
@@ -186,30 +210,5 @@ class RolController extends Controller
                 return view('alertas.modifcarExitoso');
             }
         }
-    }
-
-    public function consultarPermiso(Request $request)
-    {
-        $idRol = Rol::select('id')->where('rol', $request->nombre_rol)->get();
-        $sql = "SELECT id_permiso, id_funcion FROM permisos WHERE id_rol = $idRol";
-
-        $idRolCrypt = Crypt::encrypt($idRol);
-        $permisos = DB::select($sql);
-
-        return response()->json([
-            'permisos' => $permisos,
-            'id_rol' => $idRolCrypt
-        ]);
-    }
-
-    public function consultarFunciones()
-    {
-        $sql = "SELECT fun.display_funcion nombre, fun.id_funcion id, con.id_controlador,
-        con.displayController controlador FROM funciones fun, controladores con WHERE con.id_controlador = fun.id_controlador
-        ORDER BY fun.id_controlador";
-
-        $funciones = DB::select($sql);
-
-        return $funciones;
     }
 }

@@ -1,4 +1,5 @@
-<div class="modal fade" id="modalVincularPendientes" tabindex="-1" aria-labelledby="vincularPendientesLabel" aria-hidden="true">
+<div class="modal fade" id="modalVincularPendientes" tabindex="-1" aria-labelledby="vincularPendientesLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-success text-white">
@@ -8,7 +9,7 @@
             <div class="modal-body">
                 <div class="table-responsive">
                     <table class="table table-striped table-hover align-middle">
-                        <thead class="table-dark">
+                        <thead class="table-bordered">
                             <tr>
                                 <th>NOMBRE</th>
                                 <th>APELLIDO</th>
@@ -42,10 +43,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-primary">Guardar cambios</button>
             </div>
         </div>
     </div>
 </div>
-

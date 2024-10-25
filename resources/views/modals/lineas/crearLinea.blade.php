@@ -11,12 +11,13 @@
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
                         <div id="div_nombre_linea"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="inputNombreLinea" class="form-label">Nombre</label>
+                            <label for="inputNombreLinea" class="form-label">Nombre Linea</label>
                             <input type="text" class="form-control" id="inputNombreLinea" name="nombre_linea"
                                 required>
+                            <span class="errorValidacion"></span>
                         </div>
                         <div class="col-md-12 col-sm-12 mt-3">
-                            <button class="btn btn-success w-100">Enviar</button>
+                            <button id="btnRegistrar" class="btn btn-success w-100">Enviar</button>
                         </div>
                     </div>
                 </form>

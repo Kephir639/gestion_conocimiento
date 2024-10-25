@@ -10,32 +10,28 @@ use Illuminate\Support\Facades\Validator;
 
 class gruposController extends Controller
 {
-    public function showGrupos(Request $request)
+    public function showGrupos(Request $request) //Muestra la vista con la lista de grupos registrados
     {
-        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
+        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('6');
         $controladores = $request->controladores;
         $notificaciones = $request->notificaciones;
         return view('modals.grupos.consultarGrupos', compact('listaGrupos', 'controladores', 'notificaciones'));
     }
 
-    public function showModalRegistrar()
+    public function showModalRegistrar() //Muestra la modal de registrar grupo
     {
         return view('modals.grupos.crearGrupos');
     }
 
-    public function showModalActualizar()
-    {
-        return view('modals.grupos.modificarGrupos');
-    }
-
-    public function registrarGrupo(Request $request)
+    public function registrarGrupo(Request $request) //Proceso de registro del grupo
     {
         $reglas = [
-            'nombre_grupo' => 'required|max:30'
+            'nombre_grupo' => 'required|max:30|regex:/^(?=.*[a-zA-ZñÑáéíóúÁÉÍÓÚ])(?=.*\d)[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]{15,}$/'
         ];
         $mensajes = [
             'nombre_grupo.required' => 'Este campo es obligatorio',
-            'nombre_grupo.max' => 'Este campo debe contener maximo 30 caracteres'
+            'nombre_grupo.max' => 'Este campo debe contener maximo 30 caracteres',
+            'nombre_grupo.regex' => 'Este campo debe tener minimo 15 letras y no permite caracteres especiales'
         ];
 
         $datos = $request->all();
@@ -45,55 +41,68 @@ class gruposController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
+            //Devolvemos los errrores de validacion al ajax
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $ajax = GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo'])->get();
-
             if (count($ajax)) {
-                return view('alertas.repetido')->render();
+                //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
+                $alerta = view('alertas.repetido')->render();
+                return response()->json(['alerta' => $alerta]);
             } else {
                 $grupo = new GrupoInvestigacion();
 
                 $grupo->setNombreGrupoAttribute($request->nombre_grupo);
                 $grupo->setEstadoGrupoAttribute(1);
 
-                GrupoInvestigacion::create($grupo->toArray());
+                if (GrupoInvestigacion::create($grupo->toArray())) {
+                    $sql = log_auditoria::createLog(
+                        'grupo',
+                        $grupo->getNombreGrupoAttribute(),
+                        'registro'
+                    );
+                    Log::insert($sql);
 
-                $sql = log_auditoria::createLog(
-                    'grupo',
-                    $grupo->getNombreGrupoAttribute(),
-                    'registro'
-                );
-                Log::insert($sql);
+                    $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
+                    $controladores = $request->controladores;
 
-                $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
-                $controladores = $request->controladores;
+                    $tabla = view('modals.grupos.tablaGrupo', [
+                        'listaGrupos' => $listaGrupos,
+                        'controladores' => $controladores
+                    ])->render();
+                    $alerta = view('alertas.registrarExitoso')->render();
 
-                $tabla = view('modals.grupos.tablaGrupo', [
-                    'listaGrupos' => $listaGrupos,
-                    'controladores' => $controladores
-                ])->render();
-                $alerta = view('alertas.registrarExitoso')->render();
-
-                return response()->json([
-                    'tabla' => $tabla,
-                    'alerta' => $alerta
-                ]);
+                    return response()->json([
+                        'tabla' => $tabla,
+                        'alerta' => $alerta
+                    ]);
+                } else {
+                    $alerta = view('alertas.registroError')->render();
+                    return response()->json(['alerta' => $alerta]);
+                }
             }
         }
     }
 
-    public function actualizarGrupo(Request $request)
+    public function showModalActualizar() //Muestra la modal de actualizar grupo
+    {
+        return view('modals.grupos.modificarGrupos');
+    }
+
+    public function actualizarGrupo(Request $request) //Proceso de actualizacion del grupo
     {
         $reglas = [
-            'nombre_grupo' => 'required|max:30',
-            'estado_grupo' => 'required|gte:0'
+            'nombre_grupo' => 'required|max:30|regex:/^(?=.*[a-zA-ZñÑáéíóúÁÉÍÓÚ])(?=.*\d)[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]{15,}$/',
+            'estado_grupo' => 'required|gte:0|regex:/^[0-9]+$/'
         ];
         $mensajes = [
             'nombre_grupo.required' => 'Este campo es obligatorio',
             'nombre_grupo.max' => 'Este campo debe contener maximo 30 caracteres',
+            'nombre_grupo.regex' => 'Este campo debe tener minimo 15 letras y no permite caracteres especiales',
             'estado_grupo.required' => 'Este campo es obligatorio',
-            'estado_grupo.gte' => '!!Seleccione una de las opciones¡¡'
+            'estado_grupo.gte' => '!!Seleccione una de las opciones¡¡',
+            'estado_grupo.regex' => '!!Seleccione una opcion valida😡¡¡'
+
         ];
 
         $datos = $request->all();
@@ -103,6 +112,7 @@ class gruposController extends Controller
         unset($datos['controladores']);
 
         if ($validacion->fails()) {
+            //Devolvemos los errores de validacion al ajax
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $ajax = GrupoInvestigacion::where([
@@ -111,23 +121,41 @@ class gruposController extends Controller
             ])->get();
 
             if (count($ajax)) {
-                return view('alertas.repetido')->render();
+                //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
+                $alerta = view('alertas.repetido')->render();
+                return response()->json(['alerta' => $alerta]);
             } else {
                 $grupo = new GrupoInvestigacion();
 
                 $grupo->setNombreGrupoAttribute($request->nombre_grupo);
                 $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
-                GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo->toArray());
-                $sql = log_auditoria::createLog(
-                    'grupo',
-                    $datos['nombre_grupo_old'],
-                    'actualizo',
-                    $grupo->getNombreGrupoAttribute()
-                );
-                Log::insert($sql);
+                if (GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo->toArray())) {
+                    $sql = log_auditoria::createLog(
+                        'grupo',
+                        $datos['nombre_grupo_old'],
+                        'actualizo',
+                        $grupo->getNombreGrupoAttribute()
+                    );
+                    Log::insert($sql);
 
-                return view('alertas.modifcarExitoso')->render();
+                    $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
+                    $controladores = $request->controladores;
+
+                    $tabla = view('modals.grupos.tablaGrupo', [
+                        'listaGrupos' => $listaGrupos,
+                        'controladores' => $controladores
+                    ])->render();
+                    $alerta = view('alertas.modifcarExitoso')->render();
+
+                    return response()->json([
+                        'tabla' => $tabla,
+                        'alerta' => $alerta
+                    ]);
+                } else {
+                    $alerta = view('alertas.modificarError')->render();
+                    return response()->json(['alerta' => $alerta]);
+                }
             }
         }
     }

@@ -32,7 +32,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'grupos')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_grupo')
+                                                @if ($func['nombre_funcion'] == 'actualizar_grupos')
                                                     <button title="Modificar Grupo" class="btn iconoModificar p-0"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
@@ -53,7 +53,7 @@
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'grupos')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_grupo')
+                        @if ($func['nombre_funcion'] == 'crear_grupos')
                             <button title="Registrar Grupo" id="BtnRegistrarGrupo" class="btn iconoRegistrar p-0"><svg
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
@@ -74,9 +74,8 @@
             </nav>
         </div>
     </div>
-
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/gruposInvestigacion.js') }}"></script>
-@endsection
+@endpush

@@ -13,7 +13,7 @@
                 @if ($controlador['nombre_controlador'] == 'redes')
                     {{-- @dd($controlador['funciones']) --}}
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'modificar_red')
+                        @if ($func['nombre_funcion'] == 'actualizar_red')
                             <button title="Modificar Red" id="BtnModificarRed" class="btn" data-bs-toggle="modal"
                                 data-bs-target="#modalModificarRedes"><svg class="iconoModificar"
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

@@ -3,6 +3,7 @@
 @section('title', 'Centros Formativos')
 @push('styles')
     <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
+    <link rel="stylesheet" href="{{ url('css/estiloModal.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">
@@ -33,7 +34,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'centros')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_centro')
+                                                @if ($func['nombre_funcion'] == 'actualizar_centros')
                                                     <button title="Modificar Centro" class="btn p-0 iconoModificar"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
@@ -53,7 +54,7 @@
                 @foreach ($controladores as $controlador)
                     @if ($controlador['nombre_controlador'] == 'centros')
                         @foreach ($controlador['funciones'] as $func)
-                            @if ($func['nombre_funcion'] == 'crear_centro')
+                            @if ($func['nombre_funcion'] == 'crear_centros')
                                 <button href="#" title="Registrar Red" id="BtnRegistrarCentro" class="btn p-0"><svg
                                         xmlns="http://www.w3.org/2000/svg" class="iconoRegistrar" viewBox="0 0 24 24">
                                         <path
@@ -78,6 +79,6 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/centros.js') }}"></script>
-@endsection
+@endpush

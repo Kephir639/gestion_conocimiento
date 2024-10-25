@@ -9,6 +9,7 @@ use App\Models\Log;
 use App\Models\Programas;
 use App\Models\Redes;
 use App\Models\Semilleros;
+use App\Models\SemilleroObjetivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -17,14 +18,29 @@ class semillerosController extends Controller
 {
     public function showSemilleros(Request $request)
     {
-        $listaSemilleros = Semilleros::orderBy('id_semillero', 'desc')->paginate('10');
+        // Get all semilleros from the database
+        $listaSemilleros = DB::table('semilleros_investigacion')->orderBy('id_semillero', 'desc')->paginate(10);
         $controladores = $request->controladores;
-
-        return view('modals.semilleros.consultarSemilleros', [
-            'listaSemilleros' => $listaSemilleros,
-            'controladores' => $controladores
-        ]);
+        // Return view with the list of semilleros
+        return view('modals.semilleros.consultarSemilleros', compact('listaSemilleros', 'controladores'));
     }
+
+    public function verSemilleros(Request $request)
+    {
+        // Buscar semillero usando las iniciales recibidas desde la petición
+        $semillero = DB::table('semilleros_investigacion')
+            ->where('iniciales_semillero', $request->iniciales)
+            ->first(); // Cambié a first() para obtener un solo registro en lugar de una colección
+
+        // Verificar si el semillero fue encontrado
+        if (!$semillero) {
+            return response()->json(['message' => 'Semillero no encontrado'], 404);
+        }
+
+        // Devolver la vista con los detalles del semillero
+        return view('modals.semilleros.verSemilleros', compact('semillero'));
+    }
+
 
     public function showModalRegistrar()
     {
@@ -48,18 +64,8 @@ class semillerosController extends Controller
         return view('modals.semilleros.modificarSemilleros');
     }
 
-    public function verSemilleros(Request $request)
-    {
-        // $semilleros = DB::table('semilleros_investigacion')->get();
 
-        // // Si es una solicitud AJAX, devuelve JSON
-        // if ($request->ajax()) {
-        //     return response()->json(['semilleros_investigacion' => $semilleros]);
-        // }
 
-        // De lo contrario, devuelve la vista
-        return view('modals.semilleros.verSemilleros');
-    }
 
     public function showModalValidar()
     {
@@ -111,147 +117,123 @@ class semillerosController extends Controller
     public function registrarSemilleros(Request $request)
     {
         $reglas = [
-            'nombre_semillero' => 'required',
-            'iniciales_semillero' => 'required',
+            'nombre_semillero' => ['required', 'max:30', 'regex:/^[\pL\s]+$/u'],
+            'iniciales_semillero' => ['required', 'max:10', 'regex:/^[\pL\s]+$/u'],
             'fecha_creacion' => 'required|date',
-            'lider_semillero' => 'required',
-            'integrantes' => 'required',
-            'mision' => 'required',
-            'vision' => 'required',
-            'objetivo_general' => 'required',
-            'objetivos_especificos' => 'required',
-            'id_grupo' => 'required',
-            // 'id_plan' => 'required',
-            // 'estado' => 'required'
-            // 'grupos' => 'required',
-            // 'lineas' => 'required',
-            // 'programas' => 'required',
-            // 'redes' => 'required',
-            // 'integrantes' => 'required',
-            // 'actividades' => 'required',
-            // 'tareas' => 'required',
-            // 'responsables' => 'required',
-            // 'frecuencia' => 'required',
-            // 'estado' => 'required'
+            'lider_semillero' => ['required', 'max:30', 'regex:/^[\pL\s]+$/u'],
+            'mision' => ['required', 'max:50', 'regex:/^[\pL\s]+$/u'],
+            'vision' => ['required', 'max:50', 'regex:/^[\pL\s]+$/u'],
+            'objetivo_general' => 'required|string',
+            'objetivos_especificos' => 'required|array',
+            'objetivos_especificos.*' => 'required|string',
+            'id_grupo' => 'required|integer',
         ];
 
         $mensajes = [
             'nombre_semillero.required' => 'Este campo es obligatorio',
-            'iniciales_semillero.required' => 'Este campo es obligatorio',
-            'fecha_creacion.required' => 'Este campo es obligatorio',
-            'fecha_creacion.date' => 'Este campo debe ser una fecha valida',
-            'lider_semillero.required' => 'Este campo es obligatorio',
-            'mision.required' => 'Este campo es obligatorio',
-            'vision.required' => 'Este campo es obligatorio',
-            'objetivo_general.required' => 'Este campo es obligatorio',
-            'objetivos_especificos.required' => 'Este campo es obligatorio',
-            'id_grupo.required' => 'Este campo es obligatorio',
-            // 'id_plan.required' => 'Este campo es obligatorio',
-            // 'estado.required' => 'Este campo es obligatorio'
+            'string' => 'Este campo debe ser una cadena de texto',
+            'max' => 'Este campo debe tener máximo :max caracteres',
+            'integer' => 'Este campo debe ser un número entero',
+            'date' => 'Este campo debe ser una fecha válida',
         ];
-        $datos = $request->all();
-        $validacion = Validator::make($request, $reglas, $mensajes);
-        unset($request['_token']);
-        unset($request['controladores']);
+
+        // Validación de los datos
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
-        } else {
-            $respuestas['error'] = false;
-            if (Semilleros::where('nombre_semillero', $datos['nombre_semillero'])->exist()) {
-                return response()->json(['estado' => false], 200);
-            } else {
-                $semillero = new Semilleros();
-
-                $semillero->setIdSemilleroAttribute($request->id_semillero);
-                $semillero->setNombreSemilleroAttribute($request->nombre_semillero);
-                $semillero->setInicialesSemilleroAttribute($request->inciales_semillero);
-                $semillero->setFechaCreacionAttribute($request->fecha_creacion);
-                $semillero->setLiderSemilleroAttribute($request->lider_semillero);
-                $semillero->setMisionAttribute($request->mision);
-                $semillero->setVisionAttribute($request->vision);
-                $semillero->setObjetivoGeneralAttribute($request->objetivo_general);
-                $semillero->setObjetivosEspecificosAttribute($request->objetivos_especificos);
-                $semillero->setIdGrupoAttribute($request->id_grupo);
-                // $semillero->setIdPlanAttribute($request->id_plan);
-                // $semillero->setEstadoSemilleroAttribute($request->estado_semillero);
-
-                Semilleros::create($semillero->toArray());
-
-                $sql = log_auditoria::createLog(
-                    'semillero',
-                    $semillero->getNombreSemilleroAttribute(),
-                    'registro'
-                );
-                Log::insert($sql);
-
-                return response()->json(['estado' => true], 200);
-            }
+            return response()->json([
+                'error' => true,
+                'mensajes' => $validacion->errors()
+            ], 400);
         }
+
+        // Verificar si el semillero ya existe
+        if (Semilleros::where('nombre_semillero', $request->nombre_semillero)->exists()) {
+            return response()->json(['estado' => false, 'mensaje' => 'El semillero ya existe'], 409);
+        }
+
+        // Crear el semillero sin incluir el campo objetivos_especificos en la tabla de semilleros
+        $semillero = new Semilleros();
+        $semillero->nombre_semillero = $request->nombre_semillero;
+        $semillero->iniciales_semillero = $request->iniciales_semillero;
+        $semillero->fecha_creacion = $request->fecha_creacion;
+        $semillero->lider_semillero = $request->lider_semillero;
+        $semillero->mision = $request->mision;
+        $semillero->vision = $request->vision;
+        $semillero->objetivo_general = $request->objetivo_general;
+        $semillero->id_grupo = $request->id_grupo;
+
+        // Guardar el semillero
+        $semillero->save();
+
+        // Guardar los objetivos específicos en la tabla `semilleros_objetivos`
+        foreach ($request->objetivos_especificos as $objetivo) {
+            SemilleroObjetivo::create([
+                'semillero_id' => $semillero->id_semillero,
+                'objetivo_especifico' => $objetivo,
+            ]);
+        }
+
+        // Registrar log de auditoría
+        log_auditoria::createLog('semillero', $semillero->nombre_semillero, 'registro');
+
+        return response()->json(['estado' => true, 'mensaje' => 'Semillero registrado correctamente'], 201);
     }
+
 
     public function actualizarSemilleros(Request $request)
     {
         $reglas = [
-            'nombre_semillero' => 'required',
-            'iniciales_semillero' => 'required',
-            'fecha_creacion' => 'required|date',
-            'lider_semillero' => 'required',
-            'mision' => 'required',
-            'vision' => 'required',
-            'objetivo_general' => 'required',
-            'objetivos_especificos' => 'required',
-            'id_grupo' => 'required',
-            'estado' => 'required'
+            'nombre_semillero' => ['required', 'max:255', 'regex:/^[\pL\s]+$/u'],
+            'iniciales_semillero' => ['required', 'max:30', 'regex:/^[\pL\s]+$/u'],
+            'lider_semillero' => ['required', 'max:30', 'regex:/^[\pL\s]+$/u'],
         ];
 
         $mensajes = [
             'nombre_semillero.required' => 'Este campo es obligatorio',
+            'nombre_semillero.max' => 'Este campo debe contener máximo 255 caracteres',
             'iniciales_semillero.required' => 'Este campo es obligatorio',
-            'fecha_creacion.required' => 'Este campo es obligatorio',
-            'fecha_creacion.date' => 'Este campo debe ser una fecha valida',
-            'lider_semillero.required' => 'Este campo es obligatorio',
-            'mision.required' => 'Este campo es obligatorio',
-            'vision.required' => 'Este campo es obligatorio',
-            'objetivo_general.required' => 'Este campo es obligatorio',
-            'objetivos_especificos.required' => 'Este campo es obligatorio',
-            'id_grupo.required' => 'Este campo es obligatorio',
-            'id_plan.required' => 'Este campo es obligatorio',
-            'estado.required' => 'Este campo es obligatorio'
+            'iniciales_semillero.max' => 'Este campo debe contener máximo 10 caracteres',
+            'lider_semillero.required' => 'Este campo es obligatorio'
         ];
-        $validacion = Validator::make($request, $reglas, $mensajes);
+
+        $respuestas = [];
         $datos = $request->all();
-        unset($request['_token']);
-        unset($request['controladores']);
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        unset($datos['_token']);
+        unset($datos['controladores']);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
-            return redirect()->back()->withErrors($respuestas['mensaje']);
+            return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             $respuestas['error'] = false;
-            if (Semilleros::where('nombre_semillero', $datos['nombre_semillero'])->exist()) {
-                return redirect()->back()->with(true, 'existe');
+            $semilleroExistente = Semilleros::where([
+                ['nombre_semillero', '=', $datos['nombre_semillero']],
+                ['iniciales_semillero', '=', $datos['iniciales_semillero']],
+                ['lider_semillero', '=', $datos['lider_semillero']]
+            ])->first();
+
+            if ($semilleroExistente) {
+                return view('alertas.repetido');
             } else {
                 $semillero = new Semilleros();
 
-                $semillero->setIdSemilleroAttribute($request->id_semillero);
                 $semillero->setNombreSemilleroAttribute($request->nombre_semillero);
-                $semillero->setInicialesSemilleroAttribute($request->inciales_semillero);
-                $semillero->setFechaCreacionAttribute($request->fecha_creacion);
+                $semillero->setInicialesSemilleroAttribute($request->iniciales_semillero);
                 $semillero->setLiderSemilleroAttribute($request->lider_semillero);
-                $semillero->setMisionAttribute($request->mision);
-                $semillero->setVisionAttribute($request->vision);
-                $semillero->setObjetivoGeneralAttribute($request->objetivo_general);
-                $semillero->setObjetivosEspecificosAttribute($request->objetivos_especificos);
-                $semillero->setIdGrupoAttribute($request->id_grupo);
-                $semillero->setEstadoSemilleroAttribute($request->estado_semillero);
 
                 Semilleros::where('nombre_semillero', $datos['nombre_semillero_old'])->update($semillero->toArray());
 
-                return response()->json(['estado' => true], 200);
+                $sql = log_auditoria::createLog(
+                    'semillero',
+                    $datos['nombre_semillero_old'],
+                    'actualizo',
+                    $semillero->getNombreSemilleroAttribute()
+                );
+                log::insert($sql);
+
+                return view('alertas.modificarExitoso');
             }
         }
     }

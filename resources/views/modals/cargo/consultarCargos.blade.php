@@ -5,6 +5,8 @@
 @section('content')
     @push('styles')
         <link rel="stylesheet" href="{{ url('css/cargos.css') }}">
+        <link rel="stylesheet" href="{{ url('css/estiloModal.css') }}">
+        <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
     @endpush
     <div class="container mt-2">
         <div class="row p-3">
@@ -33,7 +35,7 @@
                                     @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'cargos')
                                             @foreach ($controlador['funciones'] as $func)
-                                                @if ($func['nombre_funcion'] == 'modificar_cargo')
+                                                @if ($func['nombre_funcion'] == 'actualizar_cargos')
                                                     <button title="Modificar cargo" class="btn iconoModificar p-0">
                                                         <svg class="iconoM" width="34" height="34"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -51,13 +53,11 @@
                         @endforeach
                     </tbody>
                 </table>
-
-
             </div>
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'cargos')
                     @foreach ($controlador['funciones'] as $func)
-                        @if ($func['nombre_funcion'] == 'crear_cargo')
+                        @if ($func['nombre_funcion'] == 'crear_cargos')
                             <button title="Registrar Cargo" id="BtnRegistrarCargo" class="btn iconoRegistrar p-0"><svg
                                     xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24">
                                     <path
@@ -80,6 +80,6 @@
         </div>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/cargos.js') }}"></script>
-@endsection
+@endpush

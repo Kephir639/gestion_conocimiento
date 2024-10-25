@@ -15,9 +15,10 @@
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
 
-                            <div class="row mb-3">
-                                <label for="email"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Email') }}</label>
+                            <div class="mb-3 row">
+                                <label for="documento" class="col-md-4 col-form-label text-md-end">
+                                    <i></i> {{ __('Correo Electrónico') }}
+                                </label>
 
                                 <div class="col-md-6">
                                     <input id="email" type="email"

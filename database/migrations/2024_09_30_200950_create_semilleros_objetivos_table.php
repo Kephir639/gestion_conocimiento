@@ -9,13 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('semilleros_objetivos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('semillero_id');
+            $table->text('objetivo_especifico');
             $table->timestamps();
+
+            // Llave foránea a la tabla semilleros
+            $table->foreign('semillero_id')->references('id')->on('semilleros')->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.

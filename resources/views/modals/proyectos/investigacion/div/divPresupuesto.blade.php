@@ -1,6 +1,6 @@
 <div class="col-md-12 col-sm-12 justify-content-center align-items-center presupuestoAgregado grupoInput">
     <label for="" class="form-label">Presupuesto del proyecto</label>
-    <table id="campoActividades">
+    <table id="camposAgregables">
         <thead>
             <td>Concepto interno SENA</td>
             <td>Rubro</td>
