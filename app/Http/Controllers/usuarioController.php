@@ -416,7 +416,6 @@ class usuarioController extends Controller
         return view('alerta.usuarioInhabilidato')->render();
     }
 
-
     public function usersExport()
     {
         return Excel::download(new UsersExport, 'usuarios.xlsx');
