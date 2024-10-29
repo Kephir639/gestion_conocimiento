@@ -2,8 +2,7 @@ $(document).ready(function () {
     let button = '';
 
     $(document).on('click', '.iconoModificar', function () {//Metodo para mostrar la modal de actualizar
-        button = $(this);//Establecemos el punto de referencia
-        console.log('a');
+        button = $(this);//Establecemos el punto de referencia        
         //Obtenemos los datos de la tabla con el punto de referencia
         let nombreLinea = $(button).parents('tr').find('td:eq(0)').text().trim();
         let estadoLinea = $(button).parents('tr').find('td:eq(1)').text().trim();

@@ -58,35 +58,40 @@ class lineaController extends Controller
                 $alerta = view('alertas.repetido')->render();
                 return response()->json(['alerta' => $alerta]);
             } else {
-                $linea = new LineaInvestigacion();
+                try {
+                    DB::beginTransaction();
+                    $linea = new LineaInvestigacion();
+                    $linea->setNombreLineaAttribute($request->nombre_linea);
+                    $linea->setEstadoAttribute(1);
 
-                $linea->setNombreLineaAttribute($request->nombre_linea);
-                $linea->setEstadoAttribute(1);
+                    if (LineaInvestigacion::create($linea->toArray())) {
+                        $sql = log_auditoria::createLog(
+                            'linea',
+                            $linea->getNombreLineaAttribute(),
+                            'registro'
+                        );
+                        Log::insert($sql);
 
-                if (LineaInvestigacion::create($linea->toArray())) {
-                    $sql = log_auditoria::createLog(
-                        'linea',
-                        $linea->getNombreLineaAttribute(),
-                        'registro'
-                    );
-                    Log::insert($sql);
+                        $listaLinea = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
+                        $controladores = $request->controladores;
 
-                    $listaLinea = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
-                    $controladores = $request->controladores;
-
-                    $tabla = view('modals.lineas.tablaLineas', [
-                        'listaLineas' => $listaLinea,
-                        'controladores' => $controladores
-                    ])->render();
-                    $alerta = view('alertas.registrarExitoso')->render();
-
-                    return response()->json([
-                        'tabla' => $tabla,
-                        'alerta' => $alerta
-                    ]);
-                } else {
-                    $alerta = view('alertas.registroError')->render();
-                    return response()->json(['alerta' => $alerta]);
+                        $tabla = view('modals.lineas.tablaLineas', [
+                            'listaLineas' => $listaLinea,
+                            'controladores' => $controladores
+                        ])->render();
+                        $alerta = view('alertas.registrarExitoso')->render();
+                        DB::commit();
+                        return response()->json([
+                            'tabla' => $tabla,
+                            'alerta' => $alerta
+                        ]);
+                    } else {
+                        $alerta = view('alertas.registroError')->render();
+                        return response()->json(['alerta' => $alerta]);
+                    }
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    throw $th;
                 }
             }
         }
@@ -101,7 +106,7 @@ class lineaController extends Controller
     {
         $reglas = [
             'nombre_linea' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
-            'estado_linea' => 'required|gte:0|lte:1|regex:/^[0-9]+$/'
+            'estado_linea' => 'required|gte:0|lte:1|regex:/^[0-1]+$/'
         ];
         $mensajes = [
             'nombre_linea.required' => 'Este campo es obligatorio',
@@ -133,38 +138,43 @@ class lineaController extends Controller
                 $alerta = view('alertas.repetido')->render();
                 return response()->json(['alerta' => $alerta]);
             } else {
-                $linea = new LineaInvestigacion();
+                try {
+                    DB::beginTransaction();
+                    $linea = new LineaInvestigacion();
+                    $linea->setNombreLineaAttribute($request->nombre_linea);
+                    $linea->setEstadoAttribute($request->estado_linea);
 
-                $linea->setNombreLineaAttribute($request->nombre_linea);
-                $linea->setEstadoAttribute($request->estado_linea);
+                    if (LineaInvestigacion::where('nombre_linea', $datos['nombre_linea_old'])
+                        ->update($linea->toArray())
+                    ) {
+                        $sql = log_auditoria::createLog(
+                            'linea',
+                            $datos['nombre_linea_old'],
+                            'actualizo',
+                            $linea->getNombreLineaAttribute()
+                        );
+                        Log::insert($sql);
 
-                if (LineaInvestigacion::where('nombre_linea', $datos['nombre_linea_old'])
-                    ->update($linea->toArray())
-                ) {
-                    $sql = log_auditoria::createLog(
-                        'linea',
-                        $datos['nombre_linea_old'],
-                        'actualizo',
-                        $linea->getNombreLineaAttribute()
-                    );
-                    Log::insert($sql);
+                        $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
+                        $controladores = $request->controladores;
 
-                    $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
-                    $controladores = $request->controladores;
-
-                    $tabla = view('modals.lineas.tablaLinea', [
-                        'listaLineas' => $listaLineas,
-                        'controladores' => $controladores
-                    ])->render();
-                    $alerta = view('alertas.actualizarExitoso')->render();
-
-                    return response()->json([
-                        'tabla' => $tabla,
-                        'alerta' => $alerta
-                    ]);
-                } else {
-                    $alerta = view('alertas.modificarError')->render();
-                    return response()->json(['alerta' => $alerta]);
+                        $tabla = view('modals.lineas.tablaLinea', [
+                            'listaLineas' => $listaLineas,
+                            'controladores' => $controladores
+                        ])->render();
+                        $alerta = view('alertas.actualizarExitoso')->render();
+                        DB::commit();
+                        return response()->json([
+                            'tabla' => $tabla,
+                            'alerta' => $alerta
+                        ]);
+                    } else {
+                        $alerta = view('alertas.modificarError')->render();
+                        return response()->json(['alerta' => $alerta]);
+                    }
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    throw $th;
                 }
             }
         }

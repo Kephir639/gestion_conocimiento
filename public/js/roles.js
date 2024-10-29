@@ -43,8 +43,6 @@ $(document).ready(function () {
             type: "GET",
             url: "showModalRegistrar",
             success: function (data) {
-                console.log('registrar');
-                console.log(data.modal);
                 $(document).find('#ModalSection').html(data.modal);
                 $('#modalRegistrarRol').modal('show');
             }
@@ -130,8 +128,6 @@ $(document).ready(function () {
                     $.each(errors, function (clave, valor) {
                         $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
-                } else {
-                    console.log(error, status);
                 }
             }
         });

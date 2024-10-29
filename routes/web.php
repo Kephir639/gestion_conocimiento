@@ -9,10 +9,12 @@ use App\Http\Controllers\inicioController;
 use App\Http\Controllers\lineaController;
 use App\Http\Controllers\log_auditoria;
 use App\Http\Controllers\proyectosInvestigacionController;
+use App\Http\Controllers\proyectoFormativoController;
 use App\Http\Controllers\rolController;
 use App\Http\Controllers\redesController;
 use App\Http\Controllers\semillerosController;
 use App\Http\Controllers\usuarioController;
+use App\Models\ProyectoFormativo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -130,3 +132,7 @@ Route::get('/get-municipios/{departamento_id}', [RegisterController::class, 'get
 Route::get('/get-municipios/{departamento_id}', [usuarioController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
 //Registro
 Route::view('/registro', 'registro')->name('registro');
+
+#Proyectos formativos
+Route::get('index/proyectos_formativos/consultar_proyectos_formativos', [ProyectoFormativoController::class, 'showProyectoFormativo'])->middleware('checkPermisos');
+Route::get('index/proyectos_formativos/crear_proyectos_formativos', [ProyectoFormativoController::class, 'showProyectoFormativo'])->middleware('checkPermisos');

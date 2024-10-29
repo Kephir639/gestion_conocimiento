@@ -23,6 +23,11 @@ class ProyectosInvestigacion extends Model
         'estado_p_investigacion'
     ];
 
+    /*Esta funcion se encarga de registrar o actualizar los campos multiples segun sea necesario,
+    lo hace comparando el array de elementos existentes con el array de items recibido, entonces
+    se decide, si es necesario actualizar el estado del registro en la tabla intermedia(en caso de
+    que se haya "Eliminado") a inactivo(0), se tenga que registrar en caso de que aun no exista en la BD,
+    y tambien cambiar el estado a Activo(1) en caso de que se haya agregado y exista en la BD*/
     public function actualizarElementos(
         $id_proyecto,
         $tabla_cambios, //Investigacion_Has_#
@@ -39,7 +44,6 @@ class ProyectosInvestigacion extends Model
             ->get();
         $array_elementos = [];
         foreach ($elementos as $elemento) {
-            // dd($elemento);
             array_push($array_elementos, strval($elemento->$campoDiffEspecifico));
         }
         $elementos_agregados = array_diff($array_elementos, $arrayComparacion);
@@ -69,27 +73,29 @@ class ProyectosInvestigacion extends Model
         }
     }
 
+    /*Esta funcion se encarga re recorrer el array de valores($datos) enviado por el formulario y crear
+    un array nuevo que contenga solamente los elementos del array seleccionado($clave), de cada actividad
+    o presupuesto*/
     public function crearArray($datos, $clave)
     {
-        // dd($datos);
         $arrayUnico = [];
         foreach ($datos as $key => $valor) {
+            //Accede a los arrays anidados con las respuestas de los campos dinamicos
             if ($key === 'actividades' || $key === 'presupuestos') {
                 foreach ($valor as $llave => $array) {
-                    if ($llave == $clave) {
+                    if ($llave == $clave) { //Accede al array de respuestas que necesitamos
                         if (!isset($arrayUnico[$llave])) {
                             $arrayUnico[$llave] = [];
                         }
                         foreach ($array as $arr => $multiple) {
-                            if (is_array($multiple)) {
-                                // dd($arr);
+                            if (is_array($multiple)) { //Ingresa si es un array anidado que contiene los campos dinamicos
                                 foreach ($multiple as $ky => $val) {
                                     if (!isset($arrayUnico[$llave][$arr])) {
                                         $arrayUnico[$llave][$arr] = [];
                                     }
                                     array_push($arrayUnico[$llave][$arr], $val);
                                 }
-                            } else {
+                            } else { //En caso de ser un campo simple se registran las respuestas en un array
                                 array_push($arrayUnico[$llave], $multiple);
                             }
                         }
@@ -100,9 +106,12 @@ class ProyectosInvestigacion extends Model
         return $arrayUnico;
     }
 
+    /*Realiza el mismo trabajo que la funcion crearArray, solo que, en este caso necesitamos que la clave del
+    nuevo array coincida con las claves de la informacion que pasamos, esto porque esas claves son el id correspondiente
+    al registro de la BD y con el seremos capaces de determinar si se agrego un elemento nuevo, si se elimino uno existente
+    o si se agrego uno que ya exisistia*/
     public function actualizarArray($datos, $clave)
     {
-        // dd($datos);
         $arrayUnico = [];
         foreach ($datos as $key => $valor) {
             if ($key === 'actividades' || $key === 'presupuestos') {
@@ -124,7 +133,6 @@ class ProyectosInvestigacion extends Model
                 }
             }
         }
-        // dd($arrayUnico);
         return $arrayUnico;
     }
 

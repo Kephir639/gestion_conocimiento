@@ -50,35 +50,40 @@ class gruposController extends Controller
                 $alerta = view('alertas.repetido')->render();
                 return response()->json(['alerta' => $alerta]);
             } else {
-                $grupo = new GrupoInvestigacion();
+                try {
+                    DB::beginTransaction();
+                    $grupo = new GrupoInvestigacion();
+                    $grupo->setNombreGrupoAttribute($request->nombre_grupo);
+                    $grupo->setEstadoGrupoAttribute(1);
 
-                $grupo->setNombreGrupoAttribute($request->nombre_grupo);
-                $grupo->setEstadoGrupoAttribute(1);
+                    if (GrupoInvestigacion::create($grupo->toArray())) {
+                        $sql = log_auditoria::createLog(
+                            'grupo',
+                            $grupo->getNombreGrupoAttribute(),
+                            'registro'
+                        );
+                        Log::insert($sql);
 
-                if (GrupoInvestigacion::create($grupo->toArray())) {
-                    $sql = log_auditoria::createLog(
-                        'grupo',
-                        $grupo->getNombreGrupoAttribute(),
-                        'registro'
-                    );
-                    Log::insert($sql);
+                        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
+                        $controladores = $request->controladores;
 
-                    $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
-                    $controladores = $request->controladores;
-
-                    $tabla = view('modals.grupos.tablaGrupo', [
-                        'listaGrupos' => $listaGrupos,
-                        'controladores' => $controladores
-                    ])->render();
-                    $alerta = view('alertas.registrarExitoso')->render();
-
-                    return response()->json([
-                        'tabla' => $tabla,
-                        'alerta' => $alerta
-                    ]);
-                } else {
-                    $alerta = view('alertas.registroError')->render();
-                    return response()->json(['alerta' => $alerta]);
+                        $tabla = view('modals.grupos.tablaGrupo', [
+                            'listaGrupos' => $listaGrupos,
+                            'controladores' => $controladores
+                        ])->render();
+                        $alerta = view('alertas.registrarExitoso')->render();
+                        DB::commit();
+                        return response()->json([
+                            'tabla' => $tabla,
+                            'alerta' => $alerta
+                        ]);
+                    } else {
+                        $alerta = view('alertas.registroError')->render();
+                        return response()->json(['alerta' => $alerta]);
+                    }
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    throw $th;
                 }
             }
         }
@@ -93,7 +98,7 @@ class gruposController extends Controller
     {
         $reglas = [
             'nombre_grupo' => 'required|max:30|regex:/^(?=.*[a-zA-ZñÑáéíóúÁÉÍÓÚ])(?=.*\d)[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]{15,}$/',
-            'estado_grupo' => 'required|gte:0|regex:/^[0-9]+$/'
+            'estado_grupo' => 'required|gte:0|regex:/^[0-1]+$/'
         ];
         $mensajes = [
             'nombre_grupo.required' => 'Este campo es obligatorio',
@@ -125,36 +130,41 @@ class gruposController extends Controller
                 $alerta = view('alertas.repetido')->render();
                 return response()->json(['alerta' => $alerta]);
             } else {
-                $grupo = new GrupoInvestigacion();
+                try {
+                    DB::beginTransaction();
+                    $grupo = new GrupoInvestigacion();
+                    $grupo->setNombreGrupoAttribute($request->nombre_grupo);
+                    $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
-                $grupo->setNombreGrupoAttribute($request->nombre_grupo);
-                $grupo->setEstadoGrupoAttribute($request->estado_grupo);
+                    if (GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo->toArray())) {
+                        $sql = log_auditoria::createLog(
+                            'grupo',
+                            $datos['nombre_grupo_old'],
+                            'actualizo',
+                            $grupo->getNombreGrupoAttribute()
+                        );
+                        Log::insert($sql);
 
-                if (GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo->toArray())) {
-                    $sql = log_auditoria::createLog(
-                        'grupo',
-                        $datos['nombre_grupo_old'],
-                        'actualizo',
-                        $grupo->getNombreGrupoAttribute()
-                    );
-                    Log::insert($sql);
+                        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
+                        $controladores = $request->controladores;
 
-                    $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
-                    $controladores = $request->controladores;
-
-                    $tabla = view('modals.grupos.tablaGrupo', [
-                        'listaGrupos' => $listaGrupos,
-                        'controladores' => $controladores
-                    ])->render();
-                    $alerta = view('alertas.modifcarExitoso')->render();
-
-                    return response()->json([
-                        'tabla' => $tabla,
-                        'alerta' => $alerta
-                    ]);
-                } else {
-                    $alerta = view('alertas.modificarError')->render();
-                    return response()->json(['alerta' => $alerta]);
+                        $tabla = view('modals.grupos.tablaGrupo', [
+                            'listaGrupos' => $listaGrupos,
+                            'controladores' => $controladores
+                        ])->render();
+                        $alerta = view('alertas.modifcarExitoso')->render();
+                        DB::commit();
+                        return response()->json([
+                            'tabla' => $tabla,
+                            'alerta' => $alerta
+                        ]);
+                    } else {
+                        $alerta = view('alertas.modificarError')->render();
+                        return response()->json(['alerta' => $alerta]);
+                    }
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    throw $th;
                 }
             }
         }

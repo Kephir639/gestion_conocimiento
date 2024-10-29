@@ -24,11 +24,11 @@ class proyectosInvestigacionController extends Controller
     public function showProyectosInvestigativos(Request $request) //Muestra la vista con los proyectos vinculados al usuario
     {
         //Sql que trae los proyectos vinculados al usuario
-        $sql = "SELECT * FROM proyectos_investigacion pi, users u, investigacion_has_users ihu
+        $sql = "SELECT * FROM proyectos_investigacion pi, investigacion_has_users ihu
         WHERE pi.id_p_investigacion = ihu.id_p_investigacion
         AND ihu.id = " . Auth::user()->id . " ORDER BY pi.id_p_investigacion DESC LIMIT 6 OFFSET 0";
         //En este caso solo el administrador puede ver todos los proyectos registrados
-        $listaProyectos = (Auth::user()->id != 1) ? DB::select($sql) : DB::table('proyectos_investigacion')->orderBy('id_proyecto_i', 'desc')->paginate(6);
+        $listaProyectos = (Auth::user()->idRol != 1) ? DB::select($sql) : DB::table('proyectos_investigacion')->orderBy('id_proyecto_i', 'desc')->paginate(6);
         $controladores = $request->controladores;
         return view('modals.proyectos.investigacion.consultarProyectos', [
             'listaProyectos' => $listaProyectos,
@@ -75,20 +75,20 @@ class proyectosInvestigacionController extends Controller
         ])->render();
     }
 
-    public function registrarProyectoInvestigacion(Request $request)
+    public function registrarProyectoInvestigacion(Request $request) //Proceso de registro del proyecto de investigacion
     {
         $reglas = [
             'ano_ejecucion' => 'required|max:4|regex:/^[0-9]+$/',
             'codigo_sigp' => 'required|regex:/^[a-zA-Z0-9 ]+$/',
             'nombre_proyecto' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
-            'centros' => 'required',
-            'grupos' => 'required',
-            'lineas' => 'required',
-            'redes' => 'required',
-            'programas' => 'required',
-            'semilleros' => 'required',
-            'participantes' => 'required',
-            'resumen' => 'required',
+            'centros' => 'required|regex:/^[1-9]+$/',
+            'grupos' => 'required|regex:/^[1-9]+$/',
+            'lineas' => 'required|regex:/^[1-9]+$/',
+            'redes' => 'required|regex:/^[1-9]+$/',
+            'programas' => 'required|regex:/^[1-9]+$/',
+            'semilleros' => 'required|regex:/^[1-9]+$/',
+            'participantes' => 'required|regex:/^[1-9]+$/',
+            'resumen' => 'required|regex:/^[1-9]+$/',
             'objetivo_general' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
             'objetivos_especificos' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
             'propuesta' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
@@ -98,28 +98,42 @@ class proyectosInvestigacionController extends Controller
         ];
         $mensajes = [
             'ano_ejecucion.required' => 'Este campo es obligatorio',
+            'ano_ejecucion.regex' => 'Este campo solo puede contener letras y numeros',
             'codigo_sigp.required' => 'Este campo es obligatorio',
+            'codigo_sigp.regex' => 'Este campo solo puede contener letras y numeros',
             'nombre_proyecto.required' => 'Este campo es obligatorio',
+            'nombre_proyecto.regex' => 'Este campo solo puede contener letras y numeros',
             'centros.required' => 'Este campo es obligatorio',
+            'centros.regex' => 'Seleccione una opcion valida😡',
             'grupos.required' => 'Este campo es obligatorio',
+            'grupos.regex' => 'Seleccione una opcion valida😡',
             'lineas.required' => 'Este campo es obligatorio',
+            'lineas.regex' => 'Seleccione una opcion valida😡',
             'redes.required' => 'Este campo es obligatorio',
+            'redes.regex' => 'Seleccione una opcion valida😡',
             'programas.required' => 'Este campo es obligatorio',
+            'programas.regex' => 'Seleccione una opcion valida😡',
             'semilleros.required' => 'Este campo es obligatorio',
+            'semilleros.regex' => 'Seleccione una opcion valida😡',
             'participantes.required' => 'Este campo es obligatorio',
+            'participantes.regex' => 'Seleccione una opcion valida😡',
             'resumen.required' => 'Este campo es obligatorio',
+            'resumen.regex' => 'Este campo solo puede contener letras y numeros',
             'objetivo_general.required' => 'Este campo es obligatorio',
+            'objetivo_general.regex' => 'Este campo solo puede contener letras y numeros',
             'objetivos_especificos.required' => 'Este campo es obligatorio',
+            'objetivos_especificos.regex' => 'Este campo solo puede contener letras y numeros',
             'propuesta.required' => 'Este campo es obligatorio',
+            'propuesta.regex' => 'Este campo solo puede contener letras y numeros',
             'impacto_esperado.required' => 'Este campo es obligatorio',
+            'impacto_esperado.regex' => 'Este campo solo puede contener letras y numeros',
             'actividades.required' => 'Este campo es obligatorio',
-            'presupuestos.required' => 'Este campo es obligatorio'
+            'actividades.regex' => 'Este campo solo puede contener letras y numeros',
+            'presupuestos.required' => 'Este campo es obligatorio',
+            'presupuestos.regex' => 'Este campo solo puede contener letras y numeros'
         ];
-
         $datos = $request->all();
-
         unset($datos['controladores']);
-        // dd($datos);
 
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
@@ -128,7 +142,9 @@ class proyectosInvestigacionController extends Controller
         } else {
             $ajax = DB::table('proyectos_investigacion')->where('codigo_sigp', $datos['codigo_sigp'])->get();
             if (count($ajax)) {
-                return view('alertas.repetido');
+                //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
+                $alerta = view('alertas.repetido')->render();
+                return response()->json(['alerta' => $alerta]);
             } else {
                 $proyecto_investigacion = new proyectosInvestigacion();
 
@@ -146,7 +162,6 @@ class proyectosInvestigacionController extends Controller
 
                     $proyecto = proyectosInvestigacion::create($proyecto_investigacion->toArray());
 
-                    // dd($datos);
                     $actividades = $proyecto_investigacion->crearArray($datos, 'actividades');
                     $entregables = $proyecto_investigacion->crearArray($datos, 'entregables');
                     $observaciones = $proyecto_investigacion->crearArray($datos, 'observaciones');
@@ -260,7 +275,6 @@ class proyectosInvestigacionController extends Controller
                             }
                         }
                     }
-                    // dd($valores);
                     //Presupuestos
                     for ($i = 0; $i < count($conceptos['conceptos']); $i++) {
                         $presupuesto = DB::table('investigacion_presupuestos')->insert([
@@ -281,69 +295,69 @@ class proyectosInvestigacionController extends Controller
                             }
                         }
                     }
-                    // dd("a");
+                    $sql = log_auditoria::createLog(
+                        'proyecto_investigacion',
+                        $proyecto_investigacion->nombre_proyecto,
+                        'registro'
+                    );
+                    Log::insert($sql);
+
                     DB::commit();
+
+                    $listaProyectos = proyectosInvestigacion::orderBy('id_p_investigacion', 'desc')->paginate('10');
+                    $controladores = $request->controladores;
+                    $tabla = view('modals.redes.tablaProyectos', [
+                        'listaProyectos' => $listaProyectos,
+                        'controladores' => $controladores
+                    ])->render();
+                    $alerta = view('alertas.registrarExitoso')->render();
+
+                    return response()->json([
+                        'tabla' => $tabla,
+                        'alerta' => $alerta
+                    ]);
                 } catch (\Throwable $th) {
                     DB::rollBack();
-
-                    dd($th);
+                    $alerta = view('alertas.registroError')->render();
+                    return response()->json(['alerta' => $alerta]);
                 }
-
-
-                $sql = log_auditoria::createLog(
-                    'proyecto_investigacion',
-                    $proyecto_investigacion->nombre_proyecto,
-                    'registro'
-                );
-                Log::insert($sql);
-                $listaProyectos = proyectosInvestigacion::orderBy('id_p_investigacion', 'desc')->paginate('10');
-                $controladores = $request->controladores;
-
-                $tabla = view('modals.redes.tablaProyectos', [
-                    'listaProyectos' => $listaProyectos,
-                    'controladores' => $controladores
-                ])->render();
-
-                $alerta = view('alertas.registrarExitoso')->render();
-
-                return response()->json([
-                    'tabla' => $tabla,
-                    'alerta' => $alerta
-                ]);
             }
         }
     }
 
-    public function showModalActualizar(Request $request)
+    public function showModalActualizar(Request $request) //Manda la modal de actualizar proyecto
     {
+        //Obtenemos los datos para los selectores y los campos que ya estan vinculados al proyecto
         $proyecto = ProyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp_old)->get();
         $id_proyecto = $proyecto[0]->id_p_investigacion;
-        $centros = CentrosFormacion::all();
+        $centros = CentrosFormacion::where('estado_centro', 1)->get();
         $centros_proyecto = DB::table('investigacion_has_centros')->where('id_p_investigacion', $id_proyecto)->get();
-        $grupos = GrupoInvestigacion::all();
+        $grupos = GrupoInvestigacion::where('estado_grupo', 1)->get();
         $grupos_proyecto = DB::table('investigacion_has_grupos')->where('id_p_investigacion', $id_proyecto)->get();
-        $lineas = LineaInvestigacion::all();
+        $lineas = LineaInvestigacion::where('estado_linea', 1)->get();
         $lineas_proyecto = DB::table('investigacion_has_lineas')->where('id_p_investigacion', $id_proyecto)->get();
-        $programas = Programas::all();
+        $programas = Programas::where('estado_programa', 1)->get();
         $programas_proyecto = DB::table('investigacion_has_programas')->where('id_p_investigacion', $id_proyecto)->get();
-        $redes = Redes::all();
+        $redes = Redes::where('estado_red', 1)->get();
         $redes_proyecto = DB::table('investigacion_has_redes')->where('id_p_investigacion', $id_proyecto)->get();
-        $semilleros = Semilleros::all();
+        $semilleros = Semilleros::where('estado_semillero', 1)->get();
         $semilleros_proyecto = DB::table('investigacion_has_semilleros')->where('id_p_investigacion', $id_proyecto)->get();
-        $users = User::all();
+        $users = User::where('estado_usu', 1)->get();
         $users_proyecto = DB::table('investigacion_has_users')->where('id_p_investigacion', $id_proyecto)->get();
         $objetivos_especificos = DB::table('investigacion_objetivos')->where('id_p_investigacion', $id_proyecto)->get();
 
+        //Obtenemos las actividades y los campos de las tablas intermedias de actividades
         $actividadesC = DB::table('investigacion_actividades_unificada')
             ->where('id_p_investigacion', $id_proyecto)->orderBy('id_actividad_i', 'asc')->get();
         $actividades = $this->arrayActualizar($actividadesC, 'investigacion_actividades', 'id_actividad_i');
         $entregables = $this->arrayActualizar($actividadesC, 'investigacion_entregables', 'id_actividad_i');
         $observaciones = $this->arrayActualizar($actividadesC, 'investigacion_observaciones', 'id_actividad_i');
-
+        //Obtenemos los presupuestos y los campos de las tablas intermedias de presupuestas
         $presupuestosC = DB::table('investigacion_presupuestos')
             ->where('id_p_investigacion', $id_proyecto)->orderBy('id_presupuesto_i', 'asc')->get();
         $valores = $this->arrayActualizar($presupuestosC, 'investigacion_presupuestos_valores', 'id_presupuesto_i');
-        // dd($valores);
+
+
         $vista = view('modals.proyectos.investigacion.modificarProyectos', [
             'proyecto' => $proyecto,
             'centros' => $centros,
@@ -367,11 +381,11 @@ class proyectosInvestigacionController extends Controller
             'observaciones' => $observaciones,
             'presupuestosCompletos' => $presupuestosC,
             'valores' => $valores
-
         ])->render();
         return response()->json(['vista' => $vista]);
     }
 
+    //Esta funcion se encarga de obtener los datos de las tablas intermedias para acomodarlos en arrays anidados
     public function arrayActualizar($actividadesC, $nombreTabla, $identificador)
     {
         $arrayDatos = [];
@@ -386,50 +400,65 @@ class proyectosInvestigacionController extends Controller
                 continue;
             }
         }
-        // dd($arrayDatos);
         return $arrayDatos;
     }
 
-    public function actualizarProyectoInvestigacion(Request $request)
+    public function actualizarProyectoInvestigacion(Request $request) //Proceso de actualizacion del proyecto
     {
         $reglas = [
-            'ano_ejecucion' => 'required',
-            'codigo_sigp' => 'required',
-            'nombre_proyecto' => 'required',
-            'centros' => 'required',
-            'grupos' => 'required',
-            'lineas' => 'required',
-            'redes' => 'required',
-            'programas' => 'required',
-            'semilleros' => 'required',
-            'participantes' => 'required',
-            'resumen' => 'required',
-            'objetivo_general' => 'required',
-            'objetivos_especificos' => 'required',
-            'propuesta' => 'required',
-            'impacto_esperado' => 'required',
-            'actividades' => 'required',
-            'presupuestos' => 'required'
-
+            'ano_ejecucion' => 'required|max:4|regex:/^[0-9]+$/',
+            'codigo_sigp' => 'required|regex:/^[a-zA-Z0-9 ]+$/',
+            'nombre_proyecto' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'centros' => 'required|regex:/^[1-9]+$/',
+            'grupos' => 'required|regex:/^[1-9]+$/',
+            'lineas' => 'required|regex:/^[1-9]+$/',
+            'redes' => 'required|regex:/^[1-9]+$/',
+            'programas' => 'required|regex:/^[1-9]+$/',
+            'semilleros' => 'required|regex:/^[1-9]+$/',
+            'participantes' => 'required|regex:/^[1-9]+$/',
+            'resumen' => 'required|regex:/^[1-9]+$/',
+            'objetivo_general' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'objetivos_especificos' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'propuesta' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'impacto_esperado' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'actividades' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/',
+            'presupuestos' => 'required|regex:/^[a-zA-Z0-9 áéíóúÁÉÍÓÚ]+$/'
         ];
         $mensajes = [
             'ano_ejecucion.required' => 'Este campo es obligatorio',
+            'ano_ejecucion.regex' => 'Este campo solo puede contener letras y numeros',
             'codigo_sigp.required' => 'Este campo es obligatorio',
+            'codigo_sigp.regex' => 'Este campo solo puede contener letras y numeros',
             'nombre_proyecto.required' => 'Este campo es obligatorio',
+            'nombre_proyecto.regex' => 'Este campo solo puede contener letras y numeros',
             'centros.required' => 'Este campo es obligatorio',
+            'centros.regex' => 'Seleccione una opcion valida😡',
             'grupos.required' => 'Este campo es obligatorio',
+            'grupos.regex' => 'Seleccione una opcion valida😡',
             'lineas.required' => 'Este campo es obligatorio',
+            'lineas.regex' => 'Seleccione una opcion valida😡',
             'redes.required' => 'Este campo es obligatorio',
+            'redes.regex' => 'Seleccione una opcion valida😡',
             'programas.required' => 'Este campo es obligatorio',
+            'programas.regex' => 'Seleccione una opcion valida😡',
             'semilleros.required' => 'Este campo es obligatorio',
+            'semilleros.regex' => 'Seleccione una opcion valida😡',
             'participantes.required' => 'Este campo es obligatorio',
+            'participantes.regex' => 'Seleccione una opcion valida😡',
             'resumen.required' => 'Este campo es obligatorio',
+            'resumen.regex' => 'Este campo solo puede contener letras y numeros',
             'objetivo_general.required' => 'Este campo es obligatorio',
+            'objetivo_general.regex' => 'Este campo solo puede contener letras y numeros',
             'objetivos_especificos.required' => 'Este campo es obligatorio',
+            'objetivos_especificos.regex' => 'Este campo solo puede contener letras y numeros',
             'propuesta.required' => 'Este campo es obligatorio',
+            'propuesta.regex' => 'Este campo solo puede contener letras y numeros',
             'impacto_esperado.required' => 'Este campo es obligatorio',
+            'impacto_esperado.regex' => 'Este campo solo puede contener letras y numeros',
             'actividades.required' => 'Este campo es obligatorio',
-            'presupuestos.required' => 'Este campo es obligatorio'
+            'actividades.regex' => 'Este campo solo puede contener letras y numeros',
+            'presupuestos.required' => 'Este campo es obligatorio',
+            'presupuestos.regex' => 'Este campo solo puede contener letras y numeros'
         ];
         $datos = $request->all();
 
@@ -470,7 +499,9 @@ class proyectosInvestigacionController extends Controller
                 ->join($tablas[6], $tablas[6] . '.' . $identificador,  $tablas[7] . '.' . $identificador . '')
                 ->get();
             if (count($ajax)) {
-                return view('alertas.repetido')->render();
+                //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
+                $alerta = view('alertas.repetido')->render();
+                return response()->json(['alerta' => $alerta]);
             } else {
                 try {
                     DB::beginTransaction();
@@ -489,7 +520,7 @@ class proyectosInvestigacionController extends Controller
                     ProyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp_old)
                         ->update($proyecto_investigacion->toArray());
                     $proyecto = ProyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp)->get();
-                    // dd($datos);
+
                     $actividades = $proyecto_investigacion->actualizarArray($datos, 'actividades');
                     $entregables = $proyecto_investigacion->actualizarArray($datos, 'entregables');
                     $observaciones = $proyecto_investigacion->actualizarArray($datos, 'observaciones');
@@ -500,7 +531,7 @@ class proyectosInvestigacionController extends Controller
                     $rubros = $proyecto_investigacion->actualizarArray($datos, 'rubros');
                     $uso_presupuestal = $proyecto_investigacion->actualizarArray($datos, 'uso_presupuestal');
                     $valores = $proyecto_investigacion->actualizarArray($datos, 'valores');
-                    // dd($actividades);
+
                     //Centros
                     $proyecto_investigacion->actualizarElementos(
                         $proyecto[0]->id_p_investigacion,
@@ -650,45 +681,28 @@ class proyectosInvestigacionController extends Controller
                         }
                         $i++;
                     }
-                    // dd("a");
+
+
+                    $listaProyectos = proyectosInvestigacion::orderBy('id_p_investigacion', 'desc')->paginate('10');
+                    $controladores = $request->controladores;
+                    $tabla = view('modals.redes.tablaProyectos', [
+                        'listaProyectos' => $listaProyectos,
+                        'controladores' => $controladores
+                    ])->render();
+                    $alerta = view('alertas.modificarExitoso')->render();
+
+                    return response()->json([
+                        'tabla' => $tabla,
+                        'alerta' => $alerta
+                    ]);
+
                     DB::commit();
                 } catch (\Throwable $th) {
                     DB::rollBack();
-                    return view('noHay');
-                    dd($th);
+                    $alerta = view('alertas.modificarError')->render();
+                    return response()->json(['alerta' => $alerta]);
                 }
             }
         }
-    }
-    public function seguimientoProyecto(Request $request)
-    {
-        $reglas = [
-            'preguntas' => 'required'
-        ];
-        $mensajes = [
-            'preguntas.required' => 'Esta pregunta es obligatoria'
-        ];
-
-        $datos = $request->all();
-
-        $validacion = Validator::make($datos, $reglas, $mensajes);
-
-        if ($validacion->fails()) {
-            return response()->json(['errors' => $validacion->errors()], 422);
-        } else {
-
-            $sql = "SELECT r.id FROM respuesta_seguimiento r, investigacion_has_users ihu, respuesta_seguimiento_detalle rd
-            WHERE ihu.id = r.id AND r.id_respuesta = rd.id_respuesta";
-            $cuenta = (array) DB::select($sql);
-
-            if (count($cuenta)) {
-                return view('alertas.repetido')->render();
-            } else {
-            }
-        }
-    }
-    public function showModalSeguimiento()
-    {
-        return view('modals.proyectos.seguimientoProyecto');
     }
 }
