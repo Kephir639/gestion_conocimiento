@@ -11,14 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class RedesController extends Controller
 {
-
+    #Inicio consultas
     public function showRedes(Request $request) //Muestra la vista con la lista de redes registradas
     {
         $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('6');
         $controladores = $request->controladores;
         $usuariosPendientes = $request->usuariosPendientes;
         $notificaciones = $request->notificaciones;
-        // dd($request);
         return view('modals.redes.consultarRedes', compact('listaRedes', 'controladores', 'usuariosPendientes', 'notificaciones'));
     }
 
@@ -27,6 +26,13 @@ class RedesController extends Controller
         return view('modals.redes.crearRedes');
     }
 
+    public function showModalActualizar() //Muestra la modal para acutalizar las redes de investgacion
+    {
+        return view('modals.redes.modificarRedes');
+    }
+    #Fin consultas
+
+    #Inicio peticiones
     public function registrarRed(Request $request) //Proceso para registrar una nueva red de investigacion
     {
         $reglas = [
@@ -94,11 +100,6 @@ class RedesController extends Controller
         }
     }
 
-    public function showModalActualizar() //Muestra la modal para acutalizar las redes de investgacion
-    {
-        return view('modals.redes.modificarRedes');
-    }
-
     public function actualizarRed(Request $request) //Proceso de actualizacion de la red
     {
         $reglas = [
@@ -163,4 +164,8 @@ class RedesController extends Controller
             }
         }
     }
+    #Fin peticiones
+
+    #Funciones individuales
+
 }

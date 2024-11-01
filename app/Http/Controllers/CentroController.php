@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class centroController extends Controller
 {
+    #Inicio consultas
     public function showCentros(Request $request) //Muestra la vista con la lista de centros registrados
     {
         $listaCentros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('6');
@@ -23,6 +24,15 @@ class centroController extends Controller
         return view('modals.centros.crearCentros');
     }
 
+    public function showModalActualizar() //Muestra la modal para actualizar la informacion del centro
+    {
+        return view('modals.centros.modificarCentros');
+    }
+
+
+    #Fin consultas
+
+    #Inicio peticiones
     public function registrarCentro(Request $request) //Proceso para el registro del centro
     {
         $reglas = [
@@ -94,15 +104,10 @@ class centroController extends Controller
                     }
                 } catch (\Throwable $th) {
                     DB::rollBack();
-                    dd($th);
+                    throw ($th);
                 }
             }
         }
-    }
-
-    public function showModalActualizar() //Muestra la modal para actualizar la informacion del centro
-    {
-        return view('modals.centros.modificarCentros');
     }
 
     public function actualizarCentro(Request $request) //Proceso para actualizar la informacion del centro
@@ -179,9 +184,10 @@ class centroController extends Controller
                     }
                 } catch (\Throwable $th) {
                     DB::rollBack();
-                    dd($th);
+                    throw $th;
                 }
             }
         }
     }
+    #Fin peticiones
 }

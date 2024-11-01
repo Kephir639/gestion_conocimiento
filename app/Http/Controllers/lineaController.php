@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\LineaInvestigacion;
 use App\Models\Log;
-use App\Models\Semilleros;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class lineaController extends Controller
 {
+    #Inicio consultas
     public function showLineas(Request $request) //Muestra la vista con la lista de lineas de investigacion
     {
         $controladores = request()->controladores;
@@ -28,6 +27,13 @@ class lineaController extends Controller
         return view('modals.lineas.crearLinea');
     }
 
+    public function showModalActualizar() //Muestra la modal de actualizar
+    {
+        return view('modals.lineas.modificarLinea');
+    }
+    #Fin consultas
+
+    #Inicio peticiones
     public function registrarLinea(Request $request) //Proceso de registro de la linea de investigacion
     {
         $reglas = [
@@ -95,11 +101,6 @@ class lineaController extends Controller
                 }
             }
         }
-    }
-
-    public function showModalActualizar() //Muestra la modal de actualizar
-    {
-        return view('modals.lineas.modificarLinea');
     }
 
     public function actualizarLinea(Request $request) //Proceso de actualizacion de lineas de investigacion
@@ -179,4 +180,8 @@ class lineaController extends Controller
             }
         }
     }
+    #Fin peticiones
+
+    #Funciones Individuales
+
 }

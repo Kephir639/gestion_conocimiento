@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class gruposController extends Controller
 {
+    #Inicio consultas
     public function showGrupos(Request $request) //Muestra la vista con la lista de grupos registrados
     {
         $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('6');
@@ -23,6 +24,13 @@ class gruposController extends Controller
         return view('modals.grupos.crearGrupos');
     }
 
+    public function showModalActualizar() //Muestra la modal de actualizar grupo
+    {
+        return view('modals.grupos.modificarGrupos');
+    }
+    #Fin consultas
+
+    #Inicio peticiones
     public function registrarGrupo(Request $request) //Proceso de registro del grupo
     {
         $reglas = [
@@ -87,11 +95,6 @@ class gruposController extends Controller
                 }
             }
         }
-    }
-
-    public function showModalActualizar() //Muestra la modal de actualizar grupo
-    {
-        return view('modals.grupos.modificarGrupos');
     }
 
     public function actualizarGrupo(Request $request) //Proceso de actualizacion del grupo
@@ -169,4 +172,9 @@ class gruposController extends Controller
             }
         }
     }
+    #Fin peticiones
+
+    #Funciones Individuales    
+
+
 }

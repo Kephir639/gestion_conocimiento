@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class cargoController extends Controller
 {
+    #Inicio consultas
     public function showCargos(Request $request) //Muestra la vista con la lista de cargos disponibles
     {
         $cargos = Cargo::orderBy('estado_cargo', 'asc')->paginate(6);
@@ -26,7 +27,14 @@ class cargoController extends Controller
         return view('modals.cargo.crearCargo');
     }
 
+    public function showModalActualizar() //Muestra la modal para actualizar la informacion del cargo
+    {
+        return view('modals.cargo.modificarCargo');
+    }
 
+    #Fin consultas
+
+    #Inicio peticiones
     public function registrarCargo(Request $request) //Proceso de registro del nuevo cargo
     {
         $reglas = [
@@ -95,10 +103,7 @@ class cargoController extends Controller
         }
     }
 
-    public function showModalActualizar() //Muestra la modal para actualizar la informacion del cargo
-    {
-        return view('modals.cargo.modificarCargo');
-    }
+
 
     public function actualizarCargo(Request $request) //Proceso de actualizacion de la informacion del cargo
     {
@@ -172,4 +177,8 @@ class cargoController extends Controller
             }
         }
     }
+    #Fin peticiones    
+
+    #Funciones individuales
+
 }

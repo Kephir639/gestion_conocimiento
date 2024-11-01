@@ -432,7 +432,7 @@
                             <br>
                             <div id="div_estado_proyecto">
                                 <label for="inputEstadoProyecto">Estado proyecto</label>
-                                <select class="form-control" name="estado_proyecto" id="inputEstadoProyecto">
+                                <select class="form-control" name="estado_proyecto_i" id="inputEstadoProyecto">
                                     <option value="">Selecciona un estado</option>
                                     <option value="1"
                                         {{ $proyecto[0]->estado_p_investigacion == 1 ? 'selected' : null }}>
