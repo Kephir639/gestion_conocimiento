@@ -1,11 +1,11 @@
 $(document).ready(function () {
     let button = '';
     //Metodo para abrir la modal de modificar
-    $(document).on('click', '#iconoModificar', function () {
+    $(document).on('click', '.iconoModificar', function () {
         button = $(this);
 
-        let nombreRol = $(this).parents('tr').find('td:eq(0)').text().trim();
-        let estadoRol = $(this).parents('tr').find('td:eq(1)').text().trim();
+        let nombreRol = $(button).parents('tr').find('td:eq(0)').text().trim();
+        let estadoRol = $(button).parents('tr').find('td:eq(1)').text().trim();
 
         let estado = (estadoRol == "Activo") ? 1 : (estadoRol == "Inactivo") ? 0 : -1;
 
@@ -17,20 +17,18 @@ $(document).ready(function () {
             },
             success: function (data) {
                 let permisos = data.permisos;
-                let rol = data.id_rol;
 
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: "showModalActualizar",
                     data: {
                         'permisos': permisos,
-                        'id_rol': rol
                     },
                     success: function (data) {
                         $('#ModalSection').html(data.modal);
 
-                        $(this).find('#inputNombreRol').val(nombreRol);
-                        $(this).find('#inputEstadoRol').val(estado);
+                        $('#modalModificarRol').find('#inputNombreRol').val(nombreRol);
+                        $('#modalModificarRol').find('#inputEstadoRol').val(estado);
 
                         $('#modalModificarRol').modal('show');
                     }
@@ -45,9 +43,7 @@ $(document).ready(function () {
             type: "GET",
             url: "showModalRegistrar",
             success: function (data) {
-                console.log('registrar');
-                console.log(data.modal);
-                $(document).find('#ModalSection').html(data.modal);
+                $('#ModalSection').html(data.modal);
                 $('#modalRegistrarRol').modal('show');
             }
         });
@@ -55,7 +51,6 @@ $(document).ready(function () {
 
     $(document).on('click', '#btnActualizar', function (e) {
         e.preventDefault();
-
         $.ajax({
             type: "GET",
             url: "funciones",
@@ -73,10 +68,6 @@ $(document).ready(function () {
                 let funcionesEliminadas = null;
                 funcionesAgregadas = funciones_actualizadas.filter((funcion) => !funciones.includes(funcion));
                 funcionesEliminadas = funciones.filter((funcion) => !funciones_actualizadas.includes(funcion));
-                // for (funcion of funciones_actualizadas) {
-                // }
-                // for (funcion of funciones) {
-                // }
 
                 $.ajax({
                     type: "POST",
@@ -86,7 +77,7 @@ $(document).ready(function () {
                         'estado_rol': estado,
                         'funciones_agregadas': funcionesAgregadas,
                         'funciones_eliminadas': funcionesEliminadas,
-                        'nombre_rol_old' : nombre_old,
+                        'nombre_rol_old': nombre_old,
                         '_token': token
                     },
                     success: function (dataPost) {
@@ -122,7 +113,6 @@ $(document).ready(function () {
             success: function (response) {
                 //Mostrar los registros actualizados
                 $('#tablebody_roles').html(data.tabla);
-
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);
             },
@@ -133,8 +123,6 @@ $(document).ready(function () {
                     $.each(errors, function (clave, valor) {
                         $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
-                } else {
-                    console.log(error, status);
                 }
             }
         });

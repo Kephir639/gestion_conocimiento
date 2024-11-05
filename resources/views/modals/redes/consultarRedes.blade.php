@@ -77,6 +77,6 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/redesInvestigacion.js') }}"></script>
-@endsection
+@endpush

@@ -17,17 +17,13 @@ class checkNotifications
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // dd(Auth::user());
         if (Auth::user()->idRol == 1) {
             $notificaciones = User::where('idRol', null)->orderBy('id', 'desc')->count();
 
-            // dd("a");
             $request->merge(['notificaciones' => $notificaciones]);
         } else {
             $request->merge(['notificaciones' => []]);
         }
-        // (Auth::user()->id_rol == 1) ? $request->merge(['notificaciones', User::where('id_rol', null)->orderBy('id', 'desc')->get()]) : $request->merge(['usuarioPendientes', []]);
-        // dd($notificaciones);
         return $next($request);
     }
 }

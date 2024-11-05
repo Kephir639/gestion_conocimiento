@@ -28,7 +28,7 @@
                             <label for="inputEstadoCentro" class="form-label">Estado</label>
                             <select type="select" class="form-control" id="inputEstadoCentro" name="estado_centro"
                                 required>
-                                <option value="-1">Seleccione una opcion</option>
+                                <option value="">Seleccione una opcion</option>
                                 <option value="1">Activo</option>
                                 <option value="0">Inactivo</option>
                             </select>

@@ -1,55 +1,57 @@
 $(document).ready(function () {
     let button = '';
-    //Metodo para abrir la modal de modificar
-    $(document).on('click', '.iconoModificar', function () {
-        button = $(this);
+
+    $(document).on('click', '.iconoModificar', function () { //Metodo para abrir la modal de modificar
+        button = $(this); //Establecemos el punto de referencia
+        //Sacamos la informacion de la tabla
         let codigoCentro = $(this).parents('tr').find('td:eq(0)').text().trim();
         let nombreCentro = $(this).parents('tr').find('td:eq(1)').text().trim();
         let estado = $(this).parents('tr').find('td:eq(2)').text().trim();
         let estadoCentro = (estado == "Activo") ? 1 : (estado == "Inactivo") ? 0 : -1;
-        $.ajax({
+        $.ajax({//Solicitud de ajax para sacar la modal del controlador
             type: "GET",
             url: "showModalActualizar",
             success: function (data) {
+                //Pondemos la modal en el DOM
                 $('#ModalSection').html(data);
-
+                //Cargamos la informacion del centro en la modal
                 $('#modalModificarCentros').find('#inputCodigoCentro').val(codigoCentro);
                 $('#modalModificarCentros').find('#inputNombreCentro').val(nombreCentro);
                 $('#modalModificarCentros').find('#inputEstadoCentro').val(estadoCentro);
-
+                //Mostramos la modal
                 $('#modalModificarCentros').modal('show');
             }
         });
     });
 
-    //Metodo para abrir la modal de registrar
-    $(document).on('click', '#BtnRegistrarCentro', function () {
+    $(document).on('click', '#BtnRegistrarCentro', function () {//Metodo para abrir la modal de registrar
         button = $(this);
-        $.ajax({
+        $.ajax({//Relizamos una solicitud ajax para sacar la modal del controlador
             type: "GET",
             url: "showModalRegistrar",
             success: function (data) {
+                //Agregamos la modal en el DOM
                 $('#ModalSection').html(data);
+                //Mostramos la modal
                 $('#modalRegistrarCentro').modal('show');
             }
         });
     });
 
-    $(document).on('click', '#btnActualizar', function (e) {
-        //Solicitud de Ajax para realizar la actualizacion del elemento
+    $(document).on('click', '#btnActualizar', function (e) {//Funcion para realizar la actualizacion del elemento
         e.preventDefault();
+        //Obtenemos un dato de referencia para la actualizacion
         let nombre_old = $(button).parents('tr').find('td:eq(1)').text().trim();
-
+        //Obtenemos la informacion de los inputs
         let codigo = $('#inputCodigoCentro').val();
         let nombre = $('#inputNombreCentro').val();
         let estado = $('#inputEstadoCentro').val();
+        //Obtenemos el token de autenticacion(Input Hidden)
         let token = $('#_token').val();
 
-        let estado_text = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : null;
-
-        $.ajax({
+        $.ajax({//Realizamos una peticion ajax para enviar la informacion del centro para su actualizacion
             type: "POST",
-            url: "actualizarCentro",
+            url: "actualizar_centros",
             data: {
                 '_token': token,
                 'codigo_centro': codigo,
@@ -58,36 +60,35 @@ $(document).ready(function () {
                 'nombre_centro_old': nombre_old
             },
             success: function (data) {
-                $('#alertasModificar').html(data);
-                $(button).parents('tr').find('td:eq(0)').text(codigo);
-                $(button).parents('tr').find('td:eq(1)').text(nombre);
-                $(button).parents('tr').find('td:eq(2)').text(estado_text);
+                //Mostrar los registros actualizados
+                $('#tablebody_centros').html(data.tabla);
+                //Mostrar Alerta
+                $('#alertasModificar').html(data.alerta);
             },
-            error: function (xhr, status, error) {
+            error: function (xhr, status, error) { //En caso de recibir un error
                 if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
+                    let errors = xhr.responseJSON.errors; //Obtenemos los errores de la validacion
 
                     $.each(errors, function (clave, valor) {
+                        //Mostramos los errores correspondientes en cada input
                         $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
-                } else {
-                    console.log(error, status);
                 }
             }
         });
     });
 
-    $(document).on('click', '#btnRegistrar', function (e) {
-        //Solicitud de Ajax para realizar el registro del elemento
+    $(document).on('click', '#btnRegistrar', function (e) { //Funcion para realizar el registro del elemento
         e.preventDefault();
-
+        //Obtenemos los datos de los inputs
         let codigo = $('#inputCodigoCentro').val();
         let nombre = $('#inputNombreCentro').val();
+        //Obtenemos el token de autenticacion(Input Hidden)
         let token = $('#_token').val();
 
-        $.ajax({
+        $.ajax({//Realizamos una solicitud ajax para realizar el registro del centro
             type: "POST",
-            url: "registrarCentros",
+            url: "crear_centros",
             data: {
                 '_token': token,
                 'codigo_centro': codigo,
@@ -96,19 +97,17 @@ $(document).ready(function () {
             success: function (data) {
                 //Mostrar los registros actualizados
                 $('#tablebody_centros').html(data.tabla);
-
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);
             },
-            error: function (xhr, status, error) {
+            error: function (xhr, status, error) { //En caso de recibir un error
                 if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
+                    let errors = xhr.responseJSON.errors; //Obtenemos los errores de la validacion
 
                     $.each(errors, function (clave, valor) {
+                        //Mostramos los errores correspondientes en cada input
                         $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
-                } else {
-                    console.log(error, status);
                 }
             }
         });

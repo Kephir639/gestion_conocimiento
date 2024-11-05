@@ -25,7 +25,6 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        // dd("a");
         return view('index');
     }
 }

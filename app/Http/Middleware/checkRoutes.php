@@ -42,8 +42,6 @@ class checkRoutes
     {
         // Obtener el rol del usuario actual
         $rol = Auth::user()->idRol;
-        // dd($rol);
-        // dd($id_funcion);
         // Verificar si el usuario tiene permiso para acceder a la función
         $permission = DB::table('permisos')
             ->where(['id_funcion' => $id_funcion, 'id_rol' => $rol])

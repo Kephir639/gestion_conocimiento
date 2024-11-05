@@ -79,8 +79,6 @@ $(document).ready(function () {
                     $.each(errors, function (clave, valor) {
                         $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
-                } else {
-                    // console.log(error, status);
                 }
             }
         });

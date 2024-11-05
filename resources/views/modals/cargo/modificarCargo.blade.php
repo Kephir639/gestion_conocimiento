@@ -9,19 +9,24 @@
                 <form id="formModificar">
                     <div class="row mt-3">
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
+                        <div id="div_nombre_cargo"
+                            class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputNombreCargo" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="inputNombreCargo" name="nombre_cargo"
                                 required>
+                            <span class="errorValidacion"></span>
                         </div>
-                        <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
+                        <div id="div_estado_cargo"
+                            class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputEstadoCargo" class="form-label">Estado</label>
                             <select type="select" class="form-control" id="inputEstadoCargo" name="estado_cargo"
                                 required>
-                                <option value="-1">Seleccione una opcion...</option>
+                                <option value="">Seleccione una opcion...</option>
                                 <option value="1">Activo</option>
                                 <option value="0">Inactivo</option>
                             </select>
+                            <span class="errorValidacion"></span>
+
                         </div>
                         <div class="col-md-12 col-sm-12 mt-3">
                             <button id="btnActualizar" class="btn btn-success w-100">Enviar</button>

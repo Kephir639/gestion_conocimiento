@@ -34,7 +34,7 @@
                             <th id="acciones">ACCIONES</th>
                         </tr>
                     </thead>
-                    <tbody id="tablebody_lineas">
+                    <tbody id="tablebody_proyectos">
                         @foreach ($listaProyectos as $proyecto)
                             <tr>
                                 <td>{{ $proyecto->nombre_proyecto }}</td>
@@ -86,6 +86,20 @@
                     </tbody>
                 </table>
             </div>
+            @foreach ($controladores as $controlador)
+                @if ($controlador['nombre_controlador'] == 'proyectos_investigacion')
+                    @foreach ($controlador['funciones'] as $func)
+                        @if ($func['nombre_funcion'] == 'crear_proyectos_investigacion')
+                            <button title="Registrar Proyectos" id="BtnRegistrarProyecto"
+                                class="btn iconoRegistrar p-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path
+                                        d="M5 21h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2zm2-10h4V7h2v4h4v2h-4v4h-2v-4H7v-2z">
+                                    </path>
+                                </svg></button>
+                        @endif
+                    @endforeach
+                @endif
+            @endforeach
         </div>
         <div id="ModalSection"></div>
     </div>

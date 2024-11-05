@@ -227,8 +227,9 @@
                 </div>
             </div>
             <div class="text-center">
-                <button id="btnHabilitar">Habilitar Campos</button>
+                <button id="btnHabilitar" class="btn btn-success">Habilitar Campos</button>
                 <button type="submit" id="btnActualizar" class="btn btn-primary btn-lg mt-3">Guardar Cambios</button>
+                <button id="btnInhabilitarPerfil" class="btn btn-danger p-1">Eliminar Cuenta</button>
             </div>
         </form>
     </div>

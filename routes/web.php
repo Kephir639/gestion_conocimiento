@@ -9,10 +9,12 @@ use App\Http\Controllers\inicioController;
 use App\Http\Controllers\lineaController;
 use App\Http\Controllers\log_auditoria;
 use App\Http\Controllers\proyectosInvestigacionController;
+use App\Http\Controllers\proyectoFormativoController;
 use App\Http\Controllers\rolController;
 use App\Http\Controllers\redesController;
 use App\Http\Controllers\semillerosController;
 use App\Http\Controllers\usuarioController;
+use App\Models\ProyectoFormativo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +34,7 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar'])->withoutMiddleware('checkRoutes');
     Route::post('index/redes/crear_redes', [redesController::class, 'registrarRed']);
 
-    Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar'])->withoutMiddleware('checkRoutes');
+    Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalActualizar'])->withoutMiddleware('checkRoutes');
     Route::post('index/redes/actualizar_redes', [redesController::class, 'actualizarRed']);
 
     //Lineas
@@ -73,7 +75,7 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
 
     // Roles
     Route::get('index/roles/consultar_roles', [rolController::class, 'consultarRol']);
-    Route::get('index/rol/permisoRol', [rolController::class, 'consultarPermiso'])->withoutMiddleware('checkRoutes');
+    Route::get('index/roles/permisoRol', [rolController::class, 'consultarPermiso'])->withoutMiddleware('checkRoutes');
     Route::get('index/roles/funciones', [rolController::class, 'consultarFunciones'])->withoutMiddleware('checkRoutes');
 
     Route::get('index/roles/showModalRegistrar', [rolController::class, 'showModalRegistrar'])->withoutMiddleware('checkRoutes');
@@ -95,11 +97,12 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
 
     //usuarios - Perfil
     Route::get('index/usuarios/consultar_usuarios', [usuarioController::class, 'showUsuarios']);
-    Route::post('index/usuarios/actualizar_usuarios', [usuarioController::class, 'editarUsuario']);
+    Route::get('index/usuarios/showModalActualizar', [usuarioController::class, 'showModalActualizar'])->withoutMiddleware('checkRoutes');
+    Route::post('index/usuarios/actualizar_usuarios', [usuarioController::class, 'editarUsuario'])->withoutMiddleware('filter');
     Route::get('index/usuarios/exportar_usuarios', [usuarioController::class, 'usersExport'])->withoutMiddleware('checkRoutes');
 
     //Perfil
-    Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil']);
+    Route::get('index/usuarios/ver_perfil', [usuarioController::class, 'showPerfil'])->withoutMiddleware('checkRoutes');
     Route::post('index/usuarios/actualizar_perfil', [usuarioController::class, 'actualizarPerfil']);
 
     Route::get('index/usuarios/asignar_roles', [usuarioController::class, 'showAsignarRol']);
@@ -129,3 +132,7 @@ Route::get('/get-municipios/{departamento_id}', [RegisterController::class, 'get
 Route::get('/get-municipios/{departamento_id}', [usuarioController::class, 'getMunicipiosByDepartamento'])->middleware('filter');
 //Registro
 Route::view('/registro', 'registro')->name('registro');
+
+#Proyectos formativos
+Route::get('index/proyectos_formativos/consultar_proyectos_formativos', [ProyectoFormativoController::class, 'showProyectoFormativo'])->middleware('checkPermisos');
+Route::get('index/proyectos_formativos/crear_proyectos_formativos', [ProyectoFormativoController::class, 'showProyectoFormativo'])->middleware('checkPermisos');

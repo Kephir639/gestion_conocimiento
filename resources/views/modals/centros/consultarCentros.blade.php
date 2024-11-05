@@ -3,6 +3,7 @@
 @section('title', 'Centros Formativos')
 @push('styles')
     <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
+    <link rel="stylesheet" href="{{ url('css/estiloModal.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">
@@ -78,6 +79,6 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/centros.js') }}"></script>
-@endsection
+@endpush

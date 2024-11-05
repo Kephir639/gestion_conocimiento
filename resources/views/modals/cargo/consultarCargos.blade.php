@@ -5,6 +5,8 @@
 @section('content')
     @push('styles')
         <link rel="stylesheet" href="{{ url('css/cargos.css') }}">
+        <link rel="stylesheet" href="{{ url('css/estiloModal.css') }}">
+        <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
     @endpush
     <div class="container mt-2">
         <div class="row p-3">
@@ -51,8 +53,6 @@
                         @endforeach
                     </tbody>
                 </table>
-
-
             </div>
             @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'cargos')
@@ -80,6 +80,6 @@
         </div>
     </div>
 @endsection
-@section('scripts')
+@push('scripts')
     <script src="{{ url('js/cargos.js') }}"></script>
-@endsection
+@endpush
