@@ -142,7 +142,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "actualizar_proyecto_investigacion",
+            url: "actualizar_proyectos_investigacion",
             data: {
                 'codigo_sigp_old': codigo_sigp_old,
                 '_token': token,
@@ -247,7 +247,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "crear_proyecto_investigacion",
+            url: "crear_proyectos_investigacion",
             data: {
                 '_token': token,
                 'ano_ejecucion': ano_proyecto,

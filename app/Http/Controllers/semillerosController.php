@@ -69,50 +69,61 @@ class semillerosController extends Controller
 
     public function showModalValidar()
     {
-        // $sql =
-        //     "SELECT u.id, u.name, u.apellidos, u.identificacion, u.ficha,
-        //     u.programa,shu.id_semillero shu.id, s.id_semillero
-        //     FROM users s, semilleros_investigacion s, semilleros_has_user shu
-        //     WHERE u.id = shu.id AND shu.id_semillero = s.id_semillero
-        //     ORDER BY id_SemHasUser DESC";
-        // $info_integrantes = DB::select($sql);
+        $sql = "
+        SELECT u.id, u.name, u.apellidos, u.numero_identificacion, u.ficha,
+               u.Nombre_programa, shu.id_semillero, s.id_semillero as id_semi
+        FROM users u
+        JOIN semilleros_has_user shu ON u.id = shu.id
+        JOIN semilleros_investigacion s ON shu.id_semillero = s.id_semillero
+        ORDER BY shu.id_SemHasUser DESC";
 
-        // $integrantes = [];
+        $info_integrantes = DB::select($sql);
 
-        // foreach ($info_integrantes as $integrante) {
-        //     $id_usuario = $integrante->id;
+        $integrantes = [];
 
-        //     if (!isset($integrantes[$id_usuario])) {
-        //         $integrantes[$id_usuario] = [
-        //             'nombre' => $integrante->name,
-        //             'apellido' => $integrante->apellidos,
-        //             'documento' => $integrante->identificacion,
-        //             'ficha' => $integrante->ficha,
-        //             'programa_formacion' => $integrante->programa
-        //         ];
-        //     }
-        // }
+        foreach ($info_integrantes as $integrante) {
+            $id_usuario = $integrante->id;
 
-        return view('modals.semilleros.modalPendientes');
+            if (!isset($integrantes[$id_usuario])) {
+                //dd($info_integrantes);
+
+                $integrantes[$id_usuario] = [
+                    'nombre' => $integrante->name,
+                    'apellido' => $integrante->apellidos,
+                    'documento' => $integrante->numero_identificacion,
+                    'ficha' => $integrante->ficha,
+                    'programa_formacion' => $integrante->Nombre_programa,
+                    'id_semillero' => $integrante->id_semillero
+                ];
+            }
+        }
+
+        return view('modals.semilleros.modalPendientes', compact('integrantes'));
     }
+
+
+
 
     public function validarUsuario(Request $request)
     {
         $aceptados = $request->aceptados;
         $idUsuarios = [];
+
         foreach ($aceptados as $aceptado) {
-            $sql = "SELECT id FROM users WHERE identificacion = '" . $aceptados . "' ";
-            $idUsuarios[] = DB::select($sql);
+            // Consulta preparada para evitar inyecciones SQL
+            $idUsuarios[] = DB::table('users')->where('identificacion', $aceptado)->pluck('id');
         }
 
-        foreach ($idUsuarios as $id) {
-            $sql = "UPDATE semilleros_has_user SET estado_shu = 1 WHERE id = '" . $id . "'";
-            DB::update($sql);
+        foreach ($idUsuarios as $idUsuario) {
+            DB::table('semilleros_has_user')
+                ->where('id_user', $idUsuario)
+                ->update(['estado_shu' => 1]);
         }
 
         $alerta = view('alertas.validacionExitosa')->render();
         return response()->json(['alerta' => $alerta]);
     }
+
 
     public function registrarSemilleros(Request $request)
     {

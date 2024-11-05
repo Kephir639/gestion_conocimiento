@@ -9,10 +9,11 @@
                 <form>
                     <div class="row mt-3">
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
-                        
+
                         <div class="col-md-12 col-sm-12 justify-content-center align-items-center">
                             <label for="inputNombreSemillero" class="form-label">Nombre del Semillero</label>
-                            <input type="text" class="form-control" id="inputNombreSemillero" name="nombre_semillero" required>
+                            <input type="text" class="form-control" id="inputNombreSemillero" name="nombre_semillero"
+                                required>
                         </div>
 
                         <div class="col-md-12 col-sm-12 justify-content-center align-items-center mt-3">

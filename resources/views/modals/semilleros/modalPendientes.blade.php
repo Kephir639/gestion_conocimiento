@@ -20,31 +20,37 @@
                             </tr>
                         </thead>
                         <tbody class="tablebody_pendientes">
-                            {{-- Ejemplo de datos --}}
-                            {{-- @foreach ($integrantes as $integrante)
+
+                            @php $n = 1; @endphp
+                            @foreach ($integrantes as $clave => $integrante)
                                 <tr>
-                                    <td>{{ $integrante->name }}</td>
-                                    <td>{{ $integrante->apellidos }}</td>
-                                    <td>{{ $integrante->documento }}</td>
-                                    <td>{{ $integrante->ficha }}</td>
-                                    <td>{{ $integrante->programa }}</td>
+                                    <td>{{ $integrante['nombre'] }}</td>
+                                    <td>{{ $integrante['apellido'] }}</td>
+                                    <td>{{ $integrante['documento'] }}</td>
+                                    <td>{{ $integrante['ficha'] }}</td>
+                                    <td>{{ $integrante['programa_formacion'] }}</td>
+                                    <!-- Cambio a programa_formacion -->
                                     <td class="text-center">
-                                        <button title="Verificar Usuario" class="btn btn-success btn-sm me-1">
-                                            <i class="fas fa-check-circle"></i>
+                                        <button title="Verificar Usuario" class="btn btn-success btn-sm me-1"
+                                            onclick="validarUsuario('{{ $clave }}', '{{ $integrante['id_semillero'] }}')">
+                                            <i class="fas fa-check-circle">Aceptar</i>
                                         </button>
-                                        <button class="btn btn-danger btn-sm btnRechazar">
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="rechazarUsuario('{{ $clave }}')">
                                             <i class="fas fa-times-circle"></i> Rechazar
                                         </button>
                                     </td>
                                 </tr>
-                            @endforeach --}}
+                                @php $n++ @endphp
+                            @endforeach
                         </tbody>
+
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary">Guardar cambios</button>
+                <button type="button" class="btn btn-secondary">Guardar cambios</button>
             </div>
         </div>
     </div>

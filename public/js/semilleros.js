@@ -143,6 +143,50 @@ $(document).ready(function () {
 
 
 
+    function validarUsuario(idUsuario, idSemillero) {
+        $.ajax({
+            url: "validarUsuarios", // Asegúrate que la ruta sea correcta
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id_usuario: idUsuario,
+                id_semillero: idSemillero,
+                accion: 'validar'
+            },
+            success: function (response) {
+                alert('Usuario validado correctamente');
+                location.reload(); // Refrescar para ver los cambios
+            },
+            error: function (xhr) {
+                alert('Ocurrió un error');
+            }
+        });
+    }
+
+    function rechazarUsuario(idUsuario) {
+        $.ajax({
+            url: "validarUsuarios", // Asegúrate que la ruta sea correcta
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id_usuario: idUsuario,
+                accion: 'rechazar'
+            },
+            success: function (response) {
+                alert('Usuario rechazado correctamente');
+                location.reload(); // Refrescar para ver los cambios
+            },
+            error: function (xhr) {
+                alert('Ocurrió un error');
+            }
+        });
+    }
+
+
+
+
+
+
     // Evento para abrir el modal de ver semillero
     $(document).on('click', '.iconoConsultar', function () {
         let inicialesSemillero = $(this).parents('tr').find('td:eq(0)').text().trim();
