@@ -34,7 +34,7 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::get('index/redes/showModalRegistrar', [redesController::class, 'showModalRegistrar'])->withoutMiddleware('checkRoutes');
     Route::post('index/redes/crear_redes', [redesController::class, 'registrarRed']);
 
-    Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalModificar'])->withoutMiddleware('checkRoutes');
+    Route::get('index/redes/showModalActualizar', [redesController::class, 'showModalActualizar'])->withoutMiddleware('checkRoutes');
     Route::post('index/redes/actualizar_redes', [redesController::class, 'actualizarRed']);
 
     //Lineas

@@ -17,7 +17,6 @@ class usuarioActivo
     public function handle(Request $request, Closure $next): Response
     {
         $estado = Auth::user()->estado_usu;
-        // dd(Auth::user());
 
         if ($estado == 1) {
             return $next($request);

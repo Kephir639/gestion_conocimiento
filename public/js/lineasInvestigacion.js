@@ -14,10 +14,10 @@ $(document).ready(function () {
                 //Agregamon la modal al DOM
                 $('#ModalSection').html(data);
                 //Añadimos  la informacion a la modal
-                $('#modalModificarLineas').find('#inputNombreLinea').val(nombreLinea);
-                $('#modalModificarLineas').find('#inputEstadoLinea').val(estado);
+                $('#ModalModificarLineas').find('#inputNombreLinea').val(nombreLinea);
+                $('#ModalModificarLineas').find('#inputEstadoLinea').val(estado);
                 //Mostramos la modal
-                $('#modalModificarLineas').modal('show');
+                $('#ModalModificarLineas').modal('show');
             }
         });
     });

@@ -25,12 +25,12 @@ class ProyectoFormativo extends Model
 
     public function getNombreProyectoAttribute($value)
     {
-        return $value; // Ejemplo de transformación
+        return $value;
     }
 
     public function setNombreProyectoAttribute($value)
     {
-        $this->attributes['nombre_proyecto'] = $value; // Sin transformación
+        $this->attributes['nombre_proyecto'] = $value;
     }
 
     public function getObjetivoGeneralAttribute($value)
@@ -40,7 +40,7 @@ class ProyectoFormativo extends Model
 
     public function setObjetivoGeneralAttribute($value)
     {
-        $this->attributes['objetivo_general'] = $value; // Sin transformación
+        $this->attributes['objetivo_general'] = $value;
     }
 
     public function getDescripcionProblemaAttribute($value)
@@ -50,7 +50,7 @@ class ProyectoFormativo extends Model
 
     public function setDescripcionProblemaAttribute($value)
     {
-        $this->attributes['descripcion_problema'] = $value; // Sin transformación
+        $this->attributes['descripcion_problema'] = $value;
     }
 
     public function getDescripcionActividadAttribute($value)
@@ -60,7 +60,7 @@ class ProyectoFormativo extends Model
 
     public function setDescripcionActividadAttribute($value)
     {
-        $this->attributes['descripcion_actividad'] = $value; // Sin transformación
+        $this->attributes['descripcion_actividad'] = $value;
     }
 
     public function getExperienciaAprendizAttribute($value)
@@ -70,7 +70,7 @@ class ProyectoFormativo extends Model
 
     public function setExperienciaAprendizAttribute($value)
     {
-        $this->attributes['experiencia_aprendiz'] = $value; // Sin transformación
+        $this->attributes['experiencia_aprendiz'] = $value;
     }
 
     public function getDificultadSolucionAttribute($value)
@@ -80,7 +80,7 @@ class ProyectoFormativo extends Model
 
     public function setDificultadSolucionAttribute($value)
     {
-        $this->attributes['dificultad_solucion'] = $value; // Sin transformación
+        $this->attributes['dificultad_solucion'] = $value;
     }
 
     public function getLeccionAprendidaAttribute($value)
@@ -90,7 +90,7 @@ class ProyectoFormativo extends Model
 
     public function setLeccionAprendidaAttribute($value)
     {
-        $this->attributes['leccion_aprendida'] = $value; // Sin transformación
+        $this->attributes['leccion_aprendida'] = $value;
     }
 
     public function getRecomendacionesAttribute($value)
@@ -100,7 +100,7 @@ class ProyectoFormativo extends Model
 
     public function setRecomendacionesAttribute($value)
     {
-        $this->attributes['recomendaciones'] = $value; // Sin transformación
+        $this->attributes['recomendaciones'] = $value;
     }
 
     public function getConclusionesAttribute($value)
@@ -110,6 +110,6 @@ class ProyectoFormativo extends Model
 
     public function setConclusionesAttribute($value)
     {
-        $this->attributes['conclusiones'] = $value; // Sin transformación
+        $this->attributes['conclusiones'] = $value;
     }
 }

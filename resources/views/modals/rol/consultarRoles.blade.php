@@ -22,9 +22,9 @@
                             <tr>
                                 <td>{{ $roles->rol }}</td>
                                 <td>
-                                    @if ($roles->estado == 1)
+                                    @if ($roles->estado_rol == 1)
                                         Activo
-                                    @elseif ($roles->estado == 0)
+                                    @elseif ($roles->estado_rol == 0)
                                         Inactivo
                                     @endif
                                 </td>

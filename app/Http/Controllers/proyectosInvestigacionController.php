@@ -641,7 +641,6 @@ class proyectosInvestigacionController extends Controller
                                 'estado_presupuesto_i' => $datos['estado_proyecto']
                             ]);
                         foreach ($valores as $valor) {
-                            // dd($valores);
                             DB::table('investigacion_presupuestos_valores')->where('id_presupuesto_i')
                                 ->update([
                                     'id_presupuesto_i' => $listaPres->id_presupuesto_i,

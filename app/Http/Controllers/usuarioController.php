@@ -33,7 +33,7 @@ class usuarioController extends Controller
             ->paginate(10);
         $controladores = $request->controladores;
         $notificaciones = $request->notificaciones;
-        $compact = ['controladores', 'notificaciones'];
+        $compact = ['controladores', 'notificaciones', 'listaUsuarios'];
 
         return view('modals.usuarios.consultarUsuarios', compact($compact)); //Se envia la modal al Ajax para ser mostrada
     }

@@ -12,8 +12,8 @@
 
                         <div id="div_nombre_linea"
                             class="col-md-12 col-sm-12 justify-content-center align-items-center">
-                            <label for="inputNombreSemillero" class="form-label">Nombre del Semillero</label>
-                            <input type="text" class="form-control" id="inputNombreSemillero" name="nombre_semillero"
+                            <label for="inputNombreLinea" class="form-label">Nombre de la Linea</label>
+                            <input type="text" class="form-control" id="inputNombreLinea" name="nombre_linea"
                                 required>
                             <span class="errorValidacion"></span>
                         </div>

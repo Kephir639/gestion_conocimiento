@@ -52,7 +52,6 @@ class RedesController extends Controller
 
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
-            // dd($validacion->errors());
         } else {
             $ajax = Redes::where('nombre_red', $datos['nombre_red'])->get();
             if (count($ajax)) {

@@ -18,7 +18,6 @@ class seguimientoController extends Controller
             ->join('respuesta_seguimiento_detalle as rd', 'rs.id_respuesta', '=', 'rd.id_respuesta')
             ->where('ihu.id_p_investigacion', $id_p_investigacion)
             ->get();
-        dd($sql);
         // $sql = "SELECT * FROM respuesta_seguimiento rs, investigacion_has_users ihu,respuesta_seguimiento_detalle rd
         //         WHERE rs.id_respuesta = rd.id_respuesta 
         //         AND rs.id_ihu = ihu.id_ihu";
