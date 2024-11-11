@@ -51,7 +51,7 @@
     grid-template-areas:
         'aside header header'
         'aside main main';
-    grid-template-rows: 60px 90%;
+    grid-template-rows: 60px 1fr;
     grid-template-columns: 0px 1fr 1fr;
     /*min-height: 500px;*/
     height: 100svh;

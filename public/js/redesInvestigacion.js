@@ -1,6 +1,6 @@
 $(document).ready(function () {
     let button = '';
-    $(document).on('click', '.iconoModalModificar', function () {//Metodo para abrir la modal de modificar
+    $(document).on('click', '.iconoModificar', function () {//Metodo para abrir la modal de modificar
         button = $(this);//Establecemos el punto de referencia
         //Obtenemos los datos de la tabla utilizando los puntos de referencia
         let nombreGrupo = $(this).parents('tr').find('td:eq(0)').text().trim();
@@ -99,8 +99,6 @@ $(document).ready(function () {
                     $.each(errors, function (clave, valor) {
                         $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
-                } else {
-                    console.log(error, status);
                 }
             }
         });

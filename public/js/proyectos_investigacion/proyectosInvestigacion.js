@@ -19,7 +19,7 @@ $(document).ready(function () {
         return array;
     }
 
-    function campoAgregable(nombreCampo) { //Crea una serie de arrays con los valores de los inputs agregables
+    function campoAgregable(nombreCampo) { //Crea un array anidado con los valores de los inputs agregables
         let array = [];
         let n1 = 1;
         while ($('input[name="' + nombreCampo + '[' + n1 + '][1][]"]').length > 0) {
@@ -35,6 +35,7 @@ $(document).ready(function () {
         return array;
     }
 
+    //Crea un array anidado con los valores de los inputs agregables, utilizando su ID como clave de la dupla
     function campoAgregableActualizar(nombreCampo) {
         let array = [];
         let n1 = 1;
@@ -44,7 +45,6 @@ $(document).ready(function () {
             while ($('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]').length > 0) {
                 let id = $('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"]').attr('id');
                 if (!fila[id]) {
-                    // console.log($('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"][id = "' + id + '"]').val());
                     fila[id] = $('input[name="' + nombreCampo + '[' + n1 + '][' + n2 + '][]"][id = "' + id + '"]').val();
                 }
                 n2++;
@@ -52,7 +52,6 @@ $(document).ready(function () {
             array.push(fila);
             n1++;
         }
-        console.log(array);
         return array;
     }
 
@@ -71,29 +70,31 @@ $(document).ready(function () {
         return errors;
     }
 
-    $(document).on('click', '.iconoModificar', function () {
-        button = $(this);
+    $(document).on('click', '.iconoModificar', function () { //Se encarga de mostrar la modal
+        button = $(this);//Establecemos el punto de referencia
+        //Obtenemos el valor de referencia para obtener los datos en el controlador
         let codigo_sigp = $(button).parents('tr').find('td:eq(1)').text().trim();
         let modal = $('#modalActualizarProyectoInvestigacion');
-        $.ajax({
+        $.ajax({//Realizamos una peticion ajax para obtener la modal 
             type: "GET",
             url: "showModalActualizar",
             data: {
                 'codigo_sigp_old': codigo_sigp,
             },
             success: function (data) {
-                let vista = data.vista;
-                $(modal).find('#ModalSection').html(vista);
-
+                //Agregamos la modal al DOM                
+                $(modal).find('#ModalSection').html(data.vista);
+                //Mostramos la modal
                 $(vista).modal('show');
             },
         });
     });
 
-    $(document).on('click', '#btnActualizar', function (e) {
+    $(document).on('click', '#btnActualizar', function (e) { //Funcion que se encarga de enviar la informacion para actualizar el elemento
         e.preventDefault();
+        //Obtenemos el valor de referencia para la actualizacion
         let codigo_sigp_old = $(button).parents('tr').find('td:eq(1)').text().trim();
-
+        //Obtenemos los valores del formulario
         let ano_proyecto = $('#inputAnoProyecto').val();
         let codigo = $('#inputCodigoSIGP').val();
         let nombre = $('#inputNombreProyecto').val();
@@ -112,7 +113,6 @@ $(document).ready(function () {
         //Actividades
         let descripciones = campoUnico('descripcion', 'input');
         let actividades = campoAgregableActualizar('actividades');
-        // console.log(actividades);
         let entregables = campoAgregableActualizar('entregables');
         let enlaces = campoUnico('enlace_evidencia', 'input');
         let cumplidos = campoUnico('cumplido', 'select');
@@ -137,12 +137,13 @@ $(document).ready(function () {
             'uso_presupuestal': usos_presupuestales,
             'valores': valores
         }
+        //Obtenemos el token de autenticacion(Input Hidden)
         let token = $('#_token').val();
         let estado = $('#inputEstadoProyecto').val();
 
-        $.ajax({
+        $.ajax({ //Realizamos una peticion ajax para enviar los datos al controlador
             type: "POST",
-            url: "actualizar_proyecto_investigacion",
+            url: "actualizar_proyectos_investigacion",
             data: {
                 'codigo_sigp_old': codigo_sigp_old,
                 '_token': token,
@@ -166,7 +167,9 @@ $(document).ready(function () {
                 'estado_proyecto': estado
             },
             success: function (data) {
-                $('#alertasModificar').html(data);
+                $('#alertasModificar').html(data.alerta);
+
+                $('#tablebody_proyectosI').html(data.tabla)
             },
             error: function (xhr, status, error) {
                 if (xhr.status === 422) {
@@ -196,7 +199,6 @@ $(document).ready(function () {
     //Funcion para registrar un proyecto
     $(document).on('click', '#btnRegistrar', function (e) {
         e.preventDefault();
-        console.log('Funciona')
         let n1 = 1;
         let n2 = 1;
         let b1 = true;
@@ -247,7 +249,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "crear_proyecto_investigacion",
+            url: "crear_proyectos_investigacion",
             data: {
                 '_token': token,
                 'ano_ejecucion': ano_proyecto,
@@ -292,8 +294,6 @@ $(document).ready(function () {
                     $.each(errors, function (clave, valor) {
                         $('input[name="' + clave + '"]').closest('.errorValidacion').html(valor);
                     });
-                } else {
-                    console.log(error);
                 }
             }
         });

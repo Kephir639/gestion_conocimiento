@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\LineaInvestigacion;
 use App\Models\Log;
-use App\Models\Semilleros;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class lineaController extends Controller
 {
+    #Inicio consultas
     public function showLineas(Request $request) //Muestra la vista con la lista de lineas de investigacion
     {
         $controladores = request()->controladores;
@@ -28,6 +27,13 @@ class lineaController extends Controller
         return view('modals.lineas.crearLinea');
     }
 
+    public function showModalActualizar() //Muestra la modal de actualizar
+    {
+        return view('modals.lineas.modificarLinea');
+    }
+    #Fin consultas
+
+    #Inicio peticiones
     public function registrarLinea(Request $request) //Proceso de registro de la linea de investigacion
     {
         $reglas = [
@@ -58,50 +64,50 @@ class lineaController extends Controller
                 $alerta = view('alertas.repetido')->render();
                 return response()->json(['alerta' => $alerta]);
             } else {
-                $linea = new LineaInvestigacion();
+                try {
+                    DB::beginTransaction();
+                    $linea = new LineaInvestigacion();
+                    $linea->setNombreLineaAttribute($request->nombre_linea);
+                    $linea->setEstadoAttribute(1);
 
-                $linea->setNombreLineaAttribute($request->nombre_linea);
-                $linea->setEstadoAttribute(1);
+                    if (LineaInvestigacion::create($linea->toArray())) {
+                        $sql = log_auditoria::createLog(
+                            'linea',
+                            $linea->getNombreLineaAttribute(),
+                            'registro'
+                        );
+                        Log::insert($sql);
 
-                if (LineaInvestigacion::create($linea->toArray())) {
-                    $sql = log_auditoria::createLog(
-                        'linea',
-                        $linea->getNombreLineaAttribute(),
-                        'registro'
-                    );
-                    Log::insert($sql);
+                        $listaLinea = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
+                        $controladores = $request->controladores;
 
-                    $listaLinea = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
-                    $controladores = $request->controladores;
-
-                    $tabla = view('modals.lineas.tablaLineas', [
-                        'listaLineas' => $listaLinea,
-                        'controladores' => $controladores
-                    ])->render();
-                    $alerta = view('alertas.registrarExitoso')->render();
-
-                    return response()->json([
-                        'tabla' => $tabla,
-                        'alerta' => $alerta
-                    ]);
-                } else {
-                    $alerta = view('alertas.registroError')->render();
-                    return response()->json(['alerta' => $alerta]);
+                        $tabla = view('modals.lineas.tablaLineas', [
+                            'listaLineas' => $listaLinea,
+                            'controladores' => $controladores
+                        ])->render();
+                        $alerta = view('alertas.registrarExitoso')->render();
+                        DB::commit();
+                        return response()->json([
+                            'tabla' => $tabla,
+                            'alerta' => $alerta
+                        ]);
+                    } else {
+                        $alerta = view('alertas.registroError')->render();
+                        return response()->json(['alerta' => $alerta]);
+                    }
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    throw $th;
                 }
             }
         }
-    }
-
-    public function showModalActualizar() //Muestra la modal de actualizar
-    {
-        return view('modals.lineas.modificarLinea');
     }
 
     public function actualizarLinea(Request $request) //Proceso de actualizacion de lineas de investigacion
     {
         $reglas = [
             'nombre_linea' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
-            'estado_linea' => 'required|gte:0|lte:1|regex:/^[0-9]+$/'
+            'estado_linea' => 'required|gte:0|lte:1|regex:/^[0-1]+$/'
         ];
         $mensajes = [
             'nombre_linea.required' => 'Este campo es obligatorio',
@@ -133,40 +139,49 @@ class lineaController extends Controller
                 $alerta = view('alertas.repetido')->render();
                 return response()->json(['alerta' => $alerta]);
             } else {
-                $linea = new LineaInvestigacion();
+                try {
+                    DB::beginTransaction();
+                    $linea = new LineaInvestigacion();
+                    $linea->setNombreLineaAttribute($request->nombre_linea);
+                    $linea->setEstadoAttribute($request->estado_linea);
 
-                $linea->setNombreLineaAttribute($request->nombre_linea);
-                $linea->setEstadoAttribute($request->estado_linea);
+                    if (LineaInvestigacion::where('nombre_linea', $datos['nombre_linea_old'])
+                        ->update($linea->toArray())
+                    ) {
+                        $sql = log_auditoria::createLog(
+                            'linea',
+                            $datos['nombre_linea_old'],
+                            'actualizo',
+                            $linea->getNombreLineaAttribute()
+                        );
+                        Log::insert($sql);
 
-                if (LineaInvestigacion::where('nombre_linea', $datos['nombre_linea_old'])
-                    ->update($linea->toArray())
-                ) {
-                    $sql = log_auditoria::createLog(
-                        'linea',
-                        $datos['nombre_linea_old'],
-                        'actualizo',
-                        $linea->getNombreLineaAttribute()
-                    );
-                    Log::insert($sql);
+                        $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
+                        $controladores = $request->controladores;
 
-                    $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
-                    $controladores = $request->controladores;
-
-                    $tabla = view('modals.lineas.tablaLinea', [
-                        'listaLineas' => $listaLineas,
-                        'controladores' => $controladores
-                    ])->render();
-                    $alerta = view('alertas.actualizarExitoso')->render();
-
-                    return response()->json([
-                        'tabla' => $tabla,
-                        'alerta' => $alerta
-                    ]);
-                } else {
-                    $alerta = view('alertas.modificarError')->render();
-                    return response()->json(['alerta' => $alerta]);
+                        $tabla = view('modals.lineas.tablaLinea', [
+                            'listaLineas' => $listaLineas,
+                            'controladores' => $controladores
+                        ])->render();
+                        $alerta = view('alertas.actualizarExitoso')->render();
+                        DB::commit();
+                        return response()->json([
+                            'tabla' => $tabla,
+                            'alerta' => $alerta
+                        ]);
+                    } else {
+                        $alerta = view('alertas.modificarError')->render();
+                        return response()->json(['alerta' => $alerta]);
+                    }
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    throw $th;
                 }
             }
         }
     }
+    #Fin peticiones
+
+    #Funciones Individuales
+
 }

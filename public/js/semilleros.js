@@ -33,7 +33,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "actualizar_semillero",  // Cambia la URL según tu configuración
+            url: "actualizar_semilleros ",  // Cambia la URL según tu configuración
             data: {
                 '_token': token,
                 'nombre_semillero': nombre,
@@ -139,6 +139,50 @@ $(document).ready(function () {
             }
         });
     });
+
+
+
+
+    function validarUsuario(idUsuario, idSemillero) {
+        $.ajax({
+            url: "validarUsuarios", // Asegúrate que la ruta sea correcta
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id_usuario: idUsuario,
+                id_semillero: idSemillero,
+                accion: 'validar'
+            },
+            success: function (response) {
+                alert('Usuario validado correctamente');
+                location.reload(); // Refrescar para ver los cambios
+            },
+            error: function (xhr) {
+                alert('Ocurrió un error');
+            }
+        });
+    }
+
+    function rechazarUsuario(idUsuario) {
+        $.ajax({
+            url: "validarUsuarios", // Asegúrate que la ruta sea correcta
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id_usuario: idUsuario,
+                accion: 'rechazar'
+            },
+            success: function (response) {
+                alert('Usuario rechazado correctamente');
+                location.reload(); // Refrescar para ver los cambios
+            },
+            error: function (xhr) {
+                alert('Ocurrió un error');
+            }
+        });
+    }
+
+
 
 
 

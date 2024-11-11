@@ -52,4 +52,12 @@ $(document).ready(function () {
     });
 
 
+                    // Mostrar errores de validación en los campos correspondientes
+                    $.each(errors, function (clave, valor) {
+                        $("#div_" + clave).find('.errorValidacion').html(valor);
+                    });
+                }
+            }
+        });
+    });
 });

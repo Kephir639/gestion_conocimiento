@@ -33,7 +33,6 @@ $(document).ready(function () {
                 '_token': token
             },
             success: function (data) {
-                console.log(data);
                 $('#alertasActualizar').html(data.alerta);//Se muestra el alerta correspondiente en la modal
 
                 $('#tablebody_usuarios').html(data.tabla);//Se actualiza la tabla con la informacion nueva

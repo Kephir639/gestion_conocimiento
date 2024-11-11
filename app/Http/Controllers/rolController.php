@@ -110,11 +110,9 @@ class RolController extends Controller
     public function consultarPermiso(Request $request)
     {
         $idRol = Rol::select('id_rol')->where('rol', $request->nombre_rol)->get();
-        dd($idRol->first()->id_rol);
         $permisos = DB::table('permisos')->select('id_permiso', 'id_funcion')
             ->where('id_rol', $idRol->first()->id_rol)->get();
 
-        dd($permisos);
         return response()->json([
             'permisos' => $permisos
         ]);
@@ -133,12 +131,11 @@ class RolController extends Controller
 
     public function showModalActualizar(Request $request)
     {
-        dd($request->all());
         $permisos = $request->permisos;
 
         $permisoIds = array();
         foreach ($permisos as $permiso) {
-            $permisoIds[] = $permiso->id_funcion;
+            $permisoIds[] = $permiso['id_funcion'];
         }
 
         $funciones = $this->consultarFunciones();

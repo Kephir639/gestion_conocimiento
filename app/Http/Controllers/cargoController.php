@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class cargoController extends Controller
 {
+    #Inicio consultas
     public function showCargos(Request $request) //Muestra la vista con la lista de cargos disponibles
     {
         $cargos = Cargo::orderBy('estado_cargo', 'asc')->paginate(6);
@@ -26,7 +27,14 @@ class cargoController extends Controller
         return view('modals.cargo.crearCargo');
     }
 
+    public function showModalActualizar() //Muestra la modal para actualizar la informacion del cargo
+    {
+        return view('modals.cargo.modificarCargo');
+    }
 
+    #Fin consultas
+
+    #Inicio peticiones
     public function registrarCargo(Request $request) //Proceso de registro del nuevo cargo
     {
         $reglas = [
@@ -54,50 +62,54 @@ class cargoController extends Controller
                 $alerta = view('alertas.repetido')->render();
                 return response()->json(['alerta' => $alerta]);
             } else {
-                $cargo = new Cargo();
+                try {
+                    DB::beginTransaction();
+                    $cargo = new Cargo();
+                    $cargo->setNombreCargoAttribute($request->nombre_cargo);
+                    $cargo->setEstadoAttribute(1);
 
-                $cargo->setNombreCargoAttribute($request->nombre_cargo);
-                $cargo->setEstadoAttribute(1);
+                    if (Cargo::create($cargo->toArray())) {
+                        $sql = log_auditoria::createLog(
+                            'cargo',
+                            $cargo->getNombreCargoAttribute(),
+                            'registro'
+                        );
+                        Log::insert($sql);
 
-                if (Cargo::create($cargo->toArray())) {
-                    $sql = log_auditoria::createLog(
-                        'cargo',
-                        $cargo->getNombreCargoAttribute(),
-                        'registro'
-                    );
-                    Log::insert($sql);
+                        $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
+                        $controladores = $request->controladores;
 
-                    $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
-                    $controladores = $request->controladores;
+                        $tabla = view('modals.cargo.tablaCargo', [
+                            'listaCargos' => $listaCargos,
+                            'controladores' => $controladores
+                        ])->render();
+                        $alerta = view('alertas.registrarExitoso')->render();
 
-                    $tabla = view('modals.cargo.tablaCargo', [
-                        'listaCargos' => $listaCargos,
-                        'controladores' => $controladores
-                    ])->render();
-                    $alerta = view('alertas.registrarExitoso')->render();
+                        DB::commit();
 
-                    return response()->json([
-                        'tabla' => $tabla,
-                        'alerta' => $alerta
-                    ]);
-                } else {
-                    $alerta = view('alertas.registroError')->render();
-                    return response()->json(['alerta' => $alerta]);
+                        return response()->json([
+                            'tabla' => $tabla,
+                            'alerta' => $alerta
+                        ]);
+                    } else {
+                        $alerta = view('alertas.registroError')->render();
+                        return response()->json(['alerta' => $alerta]);
+                    }
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    throw $th;
                 }
             }
         }
     }
 
-    public function showModalActualizar() //Muestra la modal para actualizar la informacion del cargo
-    {
-        return view('modals.cargo.modificarCargo');
-    }
+
 
     public function actualizarCargo(Request $request) //Proceso de actualizacion de la informacion del cargo
     {
         $reglas = [
             'nombre_cargo' => 'required|max:30|regex:/^[\pL\s]+$/u',
-            'estado_cargo' => 'required|gte:0|regex:/^[0-9]+$/'
+            'estado_cargo' => 'required|gte:0|regex:/^[0-1]+$/'
         ];
         $mensajes = [
             'nombre_cargo.required' => 'Este campo es obligatorio',
@@ -108,7 +120,6 @@ class cargoController extends Controller
             'estado_cargo.regex' => 'Seleccione una opcion valida😡',
         ];
 
-        $respuestas = [];
         $datos = $request->all();
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
@@ -126,39 +137,48 @@ class cargoController extends Controller
                 $alerta = view('alertas.repetido')->render();
                 return response()->json(['alerta' => $alerta]);
             } else {
-                $cargo = new Cargo();
+                try {
+                    DB::beginTransaction();
+                    $cargo = new Cargo();
 
-                $cargo->setNombreCargoAttribute($request->nombre_cargo);
-                $cargo->setEstadoAttribute($request->estado_cargo);
+                    $cargo->setNombreCargoAttribute($request->nombre_cargo);
+                    $cargo->setEstadoAttribute($request->estado_cargo);
 
-                if (Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo->toArray())) {
-                    $sql = log_auditoria::createLog(
-                        'cargo',
-                        $datos['nombre_cargo_old'],
-                        'actualizo',
-                        $cargo->getNombreCargoAttribute()
-                    );
-                    Log::insert($sql);
+                    if (Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo->toArray())) {
+                        $sql = log_auditoria::createLog(
+                            'cargo',
+                            $datos['nombre_cargo_old'],
+                            'actualizo',
+                            $cargo->getNombreCargoAttribute()
+                        );
+                        Log::insert($sql);
 
+                        $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
+                        $controladores = $request->controladores;
 
-                    $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
-                    $controladores = $request->controladores;
-
-                    $alerta = view('alertas.actualizarExitoso')->render();
-                    $tabla = view('modals.cargo.tablaCargo', [
-                        'listaCargos' => $listaCargos,
-                        'controladores' => $controladores
-                    ])->render();
-
-                    return response()->json([
-                        'alerta' => $alerta,
-                        'tabla' => $tabla
-                    ]);
-                } else {
-                    $alerta = view('alertas.modificarError')->render();
-                    return response()->json(['alerta' => $alerta]);
+                        $alerta = view('alertas.actualizarExitoso')->render();
+                        $tabla = view('modals.cargo.tablaCargo', [
+                            'listaCargos' => $listaCargos,
+                            'controladores' => $controladores
+                        ])->render();
+                        DB::commit();
+                        return response()->json([
+                            'alerta' => $alerta,
+                            'tabla' => $tabla
+                        ]);
+                    } else {
+                        $alerta = view('alertas.modificarError')->render();
+                        return response()->json(['alerta' => $alerta]);
+                    }
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    throw $th;
                 }
             }
         }
     }
+    #Fin peticiones    
+
+    #Funciones individuales
+
 }

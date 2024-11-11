@@ -57,7 +57,7 @@
                                 <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                             </a>
                             <a href="{{ url('/register') }}" class="btn btn-secondary btn-animate">
-                                <i class="fas fa-user-plus"></i> Registrarse 
+                                <i class="fas fa-user-plus"></i> Registrarse
                             </a>
                         </div>
                     </div>

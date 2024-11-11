@@ -27,8 +27,8 @@ $(document).ready(function () {
                     success: function (data) {
                         $('#ModalSection').html(data.modal);
 
-                        $(this).find('#inputNombreRol').val(nombreRol);
-                        $(this).find('#inputEstadoRol').val(estado);
+                        $('#modalModificarRol').find('#inputNombreRol').val(nombreRol);
+                        $('#modalModificarRol').find('#inputEstadoRol').val(estado);
 
                         $('#modalModificarRol').modal('show');
                     }
@@ -43,9 +43,7 @@ $(document).ready(function () {
             type: "GET",
             url: "showModalRegistrar",
             success: function (data) {
-                console.log('registrar');
-                console.log(data.modal);
-                $(document).find('#ModalSection').html(data.modal);
+                $('#ModalSection').html(data.modal);
                 $('#modalRegistrarRol').modal('show');
             }
         });
@@ -70,10 +68,6 @@ $(document).ready(function () {
                 let funcionesEliminadas = null;
                 funcionesAgregadas = funciones_actualizadas.filter((funcion) => !funciones.includes(funcion));
                 funcionesEliminadas = funciones.filter((funcion) => !funciones_actualizadas.includes(funcion));
-                // for (funcion of funciones_actualizadas) {
-                // }
-                // for (funcion of funciones) {
-                // }
 
                 $.ajax({
                     type: "POST",
@@ -119,7 +113,6 @@ $(document).ready(function () {
             success: function (response) {
                 //Mostrar los registros actualizados
                 $('#tablebody_roles').html(data.tabla);
-
                 //Mostrar Alerta
                 $('#alertasRegistrar').html(data.alerta);
             },
@@ -130,8 +123,6 @@ $(document).ready(function () {
                     $.each(errors, function (clave, valor) {
                         $("#div_" + clave).find('.errorValidacion').html(valor);
                     });
-                } else {
-                    console.log(error, status);
                 }
             }
         });
