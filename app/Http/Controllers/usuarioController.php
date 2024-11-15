@@ -316,35 +316,33 @@ class usuarioController extends Controller
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
 
-            User::where('id', Auth::user()->id)->update([
-                'name' => $request->input('name'),
-                'apellidos' => $request->input('apellidos'),
-                'tipo_documento' => $request->input('tipo_documento'),
-                'identificacion' => $request->input('identificacion'),
-                'id_genero' => $request->input('id_genero'),
-                'id_tipo' => $request->input('id_tipo_poblacion'),
-                'email' => $request->input('email'),
-                'celular' => $request->input('celular'),
-                'id_cargo' => $request->input('id_cargo'),
-                'id_municipio' => $request->input('id_municipio'),
-                'id_departamento' => $request->input('id_departamento'),
-                'direccion' => $request->input('direccion'),
-            ]);
-            $listaUsuarios = User::paginate('10');
+        User::where('id', Auth::user()->id)->update([
+            'name' => $request->input('name'),
+            'apellidos' => $request->input('apellidos'),
+            'tipo_documento' => $request->input('tipo_documento'),
+            'identificacion' => $request->input('identificacion'),
+            'id_genero' => $request->input('id_genero'),
+            'id_tipo' => $request->input('id_tipo_poblacion'),
+            'email' => $request->input('email'),
+            'celular' => $request->input('celular'),
+            'id_cargo' => $request->input('id_cargo'),
+            'id_municipio' => $request->input('id_municipio'),
+            'id_departamento' => $request->input('id_departamento'),
+            'direccion' => $request->input('direccion'),
+        ]);
+        $listaUsuarios = User::paginate('10');
 
-            $alerta = view('alertas.actualizarExitoso');
-            $tabla = view('modals.usuarios.tablaUsuarios', [
-                'controladores' => $request->controladores,
-                'listaUsuarios' => $listaUsuarios
-            ]);
+        $alerta = view('alertas.actualizarExitoso');
+        $tabla = view('modals.usuarios.tablaUsuarios', [
+            'controladores' => $request->controladores,
+            'listaUsuarios' => $listaUsuarios
+        ]);
 
-            return response()->json([
-                'tabla' => $tabla,
-                'alerta' => $alerta
-            ]);
-        }
+        return response()->json([
+            'tabla' => $tabla,
+            'alerta' => $alerta
+        ]);
     }
-
     public function editarUsuario(Request $request) //Actualiza la informacion del usuario(Admin)
     {
         $datos = $request->all();

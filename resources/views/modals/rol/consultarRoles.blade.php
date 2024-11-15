@@ -51,7 +51,7 @@
                     </tbody>
                 </table>
             </div>
-            {{-- @foreach ($controladores as $controlador)
+            @foreach ($controladores as $controlador)
                 @if ($controlador['nombre_controlador'] == 'roles')
                     @foreach ($controlador['funciones'] as $func)
                         @if ($func['nombre_funcion'] == 'crear_roles')
@@ -64,7 +64,7 @@
                         @endif
                     @endforeach
                 @endif
-            @endforeach --}}
+            @endforeach
             <div id="ModalSection">
             </div>
         </div>
