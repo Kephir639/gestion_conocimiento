@@ -293,12 +293,12 @@
                                                             id="inputCumplido">
                                                             <option value="-1">Seleccione una opcion...</option>
                                                             <option
-                                                                {{ $actividadC->cumplido == 'si' ? 'selected' : null }}
-                                                                value="si">Si
+                                                                {{ $actividadC->cumplido == '1' ? 'selected' : null }}
+                                                                value="1">Si
                                                             </option>
                                                             <option
-                                                                {{ $actividadC->cumplido == 'no' ? 'selected' : null }}
-                                                                value="no">No
+                                                                {{ $actividadC->cumplido == '0' ? 'selected' : null }}
+                                                                value="0">No
                                                             </option>
                                                         </select>
                                                         <span class="errorValidacion"></span>
@@ -432,7 +432,7 @@
                             <br>
                             <div id="div_estado_proyecto">
                                 <label for="inputEstadoProyecto">Estado proyecto</label>
-                                <select class="form-control" name="estado_proyecto_i" id="inputEstadoProyecto">
+                                <select class="form-control" name="estado_p_investigacion" id="inputEstadoProyecto">
                                     <option value="">Selecciona un estado</option>
                                     <option value="1"
                                         {{ $proyecto[0]->estado_p_investigacion == 1 ? 'selected' : null }}>

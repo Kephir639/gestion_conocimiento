@@ -126,10 +126,10 @@
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_objetivos_especificos"
-                            class="col-md-12 col-sm-12 justify-content-center align-items-center">
+                            class="col-md-12 col-sm-12 justify-content-center align-items-center objetivo-item">
                             <label for="inputObjetivosEspecificos" class="form-label">Objetivos especificos</label>
                             <input type="text" class="form-control" name="objetivos_especificos[]" required>
-                            <a class="btnAgregar btn btn-success">+</a>
+                            <a class="btnAgregarObjetivo btn btn-success">+</a>
                             <span class="errorValidacion"></span>
                         </div>
                         <div id="div_propuesta" class="col-md-12 col-sm-12 justify-content-center align-items-center">

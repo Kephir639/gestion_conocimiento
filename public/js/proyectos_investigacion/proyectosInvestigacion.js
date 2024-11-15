@@ -73,8 +73,7 @@ $(document).ready(function () {
     $(document).on('click', '.iconoModificar', function () { //Se encarga de mostrar la modal
         button = $(this);//Establecemos el punto de referencia
         //Obtenemos el valor de referencia para obtener los datos en el controlador
-        let codigo_sigp = $(button).parents('tr').find('td:eq(1)').text().trim();
-        let modal = $('#modalActualizarProyectoInvestigacion');
+        let codigo_sigp = $(button).parents('tr').find('td:eq(1)').text().trim();        
         $.ajax({//Realizamos una peticion ajax para obtener la modal 
             type: "GET",
             url: "showModalActualizar",
@@ -83,9 +82,9 @@ $(document).ready(function () {
             },
             success: function (data) {
                 //Agregamos la modal al DOM                
-                $(modal).find('#ModalSection').html(data.vista);
+                $(document).find('#ModalSection').html(data.vista);
                 //Mostramos la modal
-                $(vista).modal('show');
+                $('#modalActualizarProyectoInvestigacion').modal('show');
             },
         });
     });
@@ -164,7 +163,7 @@ $(document).ready(function () {
                 'impacto_esperado': impacto,
                 'actividades': actividades_conjunto,
                 'presupuestos': presupuestos,
-                'estado_proyecto': estado
+                'estado_p_investigacion': estado
             },
             success: function (data) {
                 $('#alertasModificar').html(data.alerta);
