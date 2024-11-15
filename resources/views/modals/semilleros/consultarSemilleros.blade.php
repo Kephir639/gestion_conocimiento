@@ -95,7 +95,7 @@
                                             @endforeach
                                         @endif
                                     @endforeach
-                                    @foreach ($controladores as $controlador)
+                                    {{-- @foreach ($controladores as $controlador)
                                         @if ($controlador['nombre_controlador'] == 'semilleros')
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'validar_integrante')
@@ -110,7 +110,7 @@
                                                 @endif
                                             @endforeach
                                         @endif
-                                    @endforeach
+                                    @endforeach --}}
                                 </td>
                             </tr>
                         @endforeach
