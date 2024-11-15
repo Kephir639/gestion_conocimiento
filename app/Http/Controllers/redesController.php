@@ -36,7 +36,7 @@ class RedesController extends Controller
     public function registrarRed(Request $request) //Proceso para registrar una nueva red de investigacion
     {
         $reglas = [
-            'nombre_red' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'nombre_red' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
         ];
         $mensajes = [
             'nombre_red.required' => 'Este campo es obligatorio',
@@ -102,7 +102,7 @@ class RedesController extends Controller
     public function actualizarRed(Request $request) //Proceso de actualizacion de la red
     {
         $reglas = [
-            'nombre_red' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'nombre_red' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
             'estado_red' => 'required|regex:/^[0-1]+$/'
         ];
         $mensajes = [
@@ -130,7 +130,8 @@ class RedesController extends Controller
                     $red->setNombreRedAttribute($request->nombre_red);
                     $red->setEstadoRedAttribute($request->estado_red);
 
-                    if (Redes::where('nombre_red', $datos['nombre_red_old'])->update($red->toArray())) {
+                    if (Redes::where('id_red', $datos['id_red'])->update($red->toArray())) {
+
                         $sql = log_auditoria::createLog(
                             'red',
                             $datos['nombre_red_old'],

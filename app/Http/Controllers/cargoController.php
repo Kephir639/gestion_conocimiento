@@ -38,7 +38,7 @@ class cargoController extends Controller
     public function registrarCargo(Request $request) //Proceso de registro del nuevo cargo
     {
         $reglas = [
-            'nombre_cargo' => 'required|max:30|regex:/^[\pL\s]+$/u'
+            'nombre_cargo' => 'required|max:100|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/'
         ];
 
         $mensajes = [
@@ -108,8 +108,8 @@ class cargoController extends Controller
     public function actualizarCargo(Request $request) //Proceso de actualizacion de la informacion del cargo
     {
         $reglas = [
-            'nombre_cargo' => 'required|max:30|regex:/^[\pL\s]+$/u',
-            'estado_cargo' => 'required|gte:0|regex:/^[0-1]+$/'
+            'nombre_cargo' => 'required|max:100|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'estado_cargo' => 'required|regex:/^[0-1]+$/'
         ];
         $mensajes = [
             'nombre_cargo.required' => 'Este campo es obligatorio',
@@ -144,7 +144,7 @@ class cargoController extends Controller
                     $cargo->setNombreCargoAttribute($request->nombre_cargo);
                     $cargo->setEstadoAttribute($request->estado_cargo);
 
-                    if (Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo->toArray())) {
+                    if (Cargo::where('id_cargo', $datos['id_cargo'])->update($cargo->toArray())) {
                         $sql = log_auditoria::createLog(
                             'cargo',
                             $datos['nombre_cargo_old'],

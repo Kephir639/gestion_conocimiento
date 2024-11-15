@@ -42,10 +42,13 @@ $(document).ready(function () {
         e.preventDefault();
         //Obtenemos un dato de referencia para la actualizacion
         let nombre_old = $(button).parents('tr').find('td:eq(1)').text().trim();
+        let codigo_old = $(button).parents('tr').find('td:eq(0)').text().trim();
+
         //Obtenemos la informacion de los inputs
+        let id_centro = $(button).attr('id');
         let codigo = $('#inputCodigoCentro').val();
         let nombre = $('#inputNombreCentro').val();
-        let estado = $('#inputEstadoCentro').val();
+        let estado = $('#inputEstadoCentro').val();        
         //Obtenemos el token de autenticacion(Input Hidden)
         let token = $('#_token').val();
 
@@ -54,10 +57,12 @@ $(document).ready(function () {
             url: "actualizar_centros",
             data: {
                 '_token': token,
+                'id_centro': id_centro,
                 'codigo_centro': codigo,
                 'nombre_centro': nombre,
                 'estado_centro': estado,
-                'nombre_centro_old': nombre_old
+                'nombre_centro_old': nombre_old,
+                'codigo_centro_old': codigo_old
             },
             success: function (data) {
                 //Mostrar los registros actualizados

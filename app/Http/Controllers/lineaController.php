@@ -15,6 +15,7 @@ class lineaController extends Controller
     {
         $controladores = request()->controladores;
         $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('6');
+        // dd($listaLineas);
 
         return view('modals.lineas.consultarLinea', [
             'listaLineas' => $listaLineas,
@@ -37,7 +38,7 @@ class lineaController extends Controller
     public function registrarLinea(Request $request) //Proceso de registro de la linea de investigacion
     {
         $reglas = [
-            'nombre_linea' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/'
+            'nombre_linea' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/'
         ];
 
         $mensajes = [
@@ -78,6 +79,10 @@ class lineaController extends Controller
                         );
                         Log::insert($sql);
 
+                        DB::commit();
+
+                        DB::commit();
+
                         $listaLinea = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('6');
                         $controladores = $request->controladores;
                         DB::commit();
@@ -106,8 +111,8 @@ class lineaController extends Controller
     public function actualizarLinea(Request $request) //Proceso de actualizacion de lineas de investigacion
     {
         $reglas = [
-            'nombre_linea' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
-            'estado_linea' => 'required|gte:0|lte:1|regex:/^[0-1]+$/'
+            'nombre_linea' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'estado_linea' => 'required|regex:/^[0-1]+$/'
         ];
         $mensajes = [
             'nombre_linea.required' => 'Este campo es obligatorio',
@@ -145,7 +150,7 @@ class lineaController extends Controller
                     $linea->setNombreLineaAttribute($request->nombre_linea);
                     $linea->setEstadoAttribute($request->estado_linea);
 
-                    if (LineaInvestigacion::where('nombre_linea', $datos['nombre_linea_old'])
+                    if (LineaInvestigacion::where('id_linea', $datos['id_linea'])
                         ->update($linea->toArray())
                     ) {
                         $sql = log_auditoria::createLog(

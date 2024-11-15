@@ -41,9 +41,9 @@ $(document).ready(function () {
         //Obtenemos un valor de referencia para la actualizacion
         let nombre_old = $(button).parents('tr').find('td:eq(0)').text().trim();
         //Obtenemos los datos de los inputs
+        let id_grupo = $(button).attr('id');
         let nombre = $('#inputNombreGrupo').val();
-        let estado = $('#inputEstadoGrupo').val();
-        let estado_text = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : null;
+        let estado = $('#inputEstadoGrupo').val();        
         //Obtenemos el token de autenticacion(Input Hidden)
         let token = $('#_token').val();
 
@@ -52,15 +52,17 @@ $(document).ready(function () {
             url: "actualizar_grupos",
             data: {
                 '_token': token,
+                'id_grupo': id_grupo,
                 'nombre_grupo': nombre,
                 'nombre_grupo_old': nombre_old,
                 'estado_grupo': estado
             },
             success: function (data) {
+                console.log(nombre_old);
                 //Mostramos el alerta correcpondiente
                 $('#alertasModificar').html(data.alerta);
                 //Mostramos la tabla con los datos actualizados
-                $('#tabla_grupos').html(data.tabla)
+                $('#tablebody_grupos').html(data.tabla)
             },
             error: function (xhr, status, error) { //En caso de recibir un error
                 if (xhr.status === 422) {

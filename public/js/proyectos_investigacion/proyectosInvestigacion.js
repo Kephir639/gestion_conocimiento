@@ -73,12 +73,12 @@ $(document).ready(function () {
     $(document).on('click', '.iconoModificar', function () { //Se encarga de mostrar la modal
         button = $(this);//Establecemos el punto de referencia
         //Obtenemos el valor de referencia para obtener los datos en el controlador
-        let codigo_sigp = $(button).parents('tr').find('td:eq(1)').text().trim();        
+        let id_p_investigacion = $(button).attr('id');       
         $.ajax({//Realizamos una peticion ajax para obtener la modal 
             type: "GET",
             url: "showModalActualizar",
             data: {
-                'codigo_sigp_old': codigo_sigp,
+                'id_p_investigacion': id_p_investigacion,
             },
             success: function (data) {
                 //Agregamos la modal al DOM                
@@ -94,6 +94,7 @@ $(document).ready(function () {
         //Obtenemos el valor de referencia para la actualizacion
         let codigo_sigp_old = $(button).parents('tr').find('td:eq(1)').text().trim();
         //Obtenemos los valores del formulario
+        let id_p_investigacion = $(button).attr('id');
         let ano_proyecto = $('#inputAnoProyecto').val();
         let codigo = $('#inputCodigoSIGP').val();
         let nombre = $('#inputNombreProyecto').val();
@@ -146,6 +147,7 @@ $(document).ready(function () {
             data: {
                 'codigo_sigp_old': codigo_sigp_old,
                 '_token': token,
+                'id_p_investigacion': id_p_investigacion,
                 'ano_ejecucion': ano_proyecto,
                 'codigo_sigp': codigo,
                 'nombre_proyecto': nombre,

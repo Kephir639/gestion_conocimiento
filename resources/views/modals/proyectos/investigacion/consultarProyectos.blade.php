@@ -38,7 +38,8 @@
                                         @if ($controlador['nombre_controlador'] == 'proyectos_investigacion')
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'actualizar_proyectos_investigacion')
-                                                    <button title="Modificar Proyecto" class="btn iconoModificar p-0"><svg
+                                                    <button id="{{ $proyecto->id_p_investigacion }}"
+                                                        title="Modificar Proyecto" class="btn iconoModificar p-0"><svg
                                                             class="iconoM" xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24">
                                                             <path

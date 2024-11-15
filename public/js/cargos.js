@@ -39,9 +39,10 @@ $(document).ready(function () {
     $(document).on('click', '#btnActualizar', function (e) {//Funcion para actualizar la informacion        
         e.preventDefault();
         //Obtenemos un dato de referencia de la tabla sin actualizar
-        let nombre_old = button.parents('tr').find('td:eq(0)').text().trim();
+        let id_cargo = $(button).attr('id');
         //Sacamos la informacion de los inputs y las ponemos en variables
         let nombre_cargo = $('#inputNombreCargo').val();
+        let nombre_old = $(button).parents('tr').find('td:eq(0)').text().trim();
         let estado = $('#inputEstadoCargo').val();
         let estado_cargo = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : "Seleccione una opcion...";
         //Obtenemos el token de autenticacion(Input Hidden)
@@ -52,13 +53,15 @@ $(document).ready(function () {
             url: "actualizar_cargos",
             data: {
                 '_token': token,
+                'id_cargo': id_cargo,
                 'nombre_cargo': nombre_cargo,
                 'nombre_cargo_old': nombre_old,
                 'estado_cargo': estado
             },
             success: function (data) {
                 $('#alertasModificar').html(data.alerta);//Mostramos el alerta que corresponda al caso
-                $('#tabla_cargos').html(data.tabla)//Ponemos la tabla actualizada en el DOM
+
+                $('#tablebody_cargos').html(data.tabla)//Ponemos la tabla actualizada en el DOM
             },
             error: function (xhr, status, error) {//En caso de recibir un error
                 if (xhr.status === 422) {

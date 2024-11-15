@@ -60,8 +60,8 @@ class proyectosInvestigacionController extends Controller
     public function showModalActualizar(Request $request) //Manda la modal de actualizar proyecto
     {
         //Obtenemos los datos para los selectores y los campos que ya estan vinculados al proyecto
-        $proyecto = ProyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp_old)->get();
-        $id_proyecto = $proyecto[0]->id_p_investigacion;
+        $proyecto = ProyectosInvestigacion::where('id_p_investigacion', $request->id_p_investigacion)->get();
+        $id_proyecto = $request->id_p_investigacion;
         $centros = CentrosFormacion::where('estado_centro', 1)->get();
         $centros_proyecto = DB::table('investigacion_has_centros')->where('id_p_investigacion', $id_proyecto)->get();
         $grupos = GrupoInvestigacion::where('estado_grupo', 1)->get();
@@ -497,10 +497,10 @@ class proyectosInvestigacionController extends Controller
                     $proyecto_investigacion->impacto = $request->impacto_esperado;
                     $proyecto_investigacion->estado_p_investigacion = $request->estado_p_investigacion;
 
-                    if (DB::table('proyectos_investigacion')->where('codigo_sigp', $request->codigo_sigp_old)
+                    if (DB::table('proyectos_investigacion')->where('id_p_investigacion', $request->id_p_investigacion)
                         ->update($proyecto_investigacion->toArray())
                     ) {
-                        $proyecto = ProyectosInvestigacion::where('codigo_sigp', $request->codigo_sigp)->get();
+                        $proyecto = ProyectosInvestigacion::where('id_p_investigacion', $request->id_p_investigacion)->get();
 
                         $actividades = $this->actualizarArray($datos, 'actividades');
                         $entregables = $this->actualizarArray($datos, 'entregables');
@@ -586,8 +586,8 @@ class proyectosInvestigacionController extends Controller
                             'estado_objetivo_i'
                         );
                         /* !!!IMPORTANTE¡¡¡
-                            El sistema debe mejorarse de manera que se detecte cuales campos fueron eliminados y cuales fueron agregados,
-                            se puede tomar como ejemplo la funcion actualizarElementos que realiza esta funcion pero para arrays simples.
+                            El sistema debe mejorarse de manera que se detecte cuales campos dinamicos fueron eliminados y cuales fueron agregados,
+                            se puede tomar como ejemplo la funcion actualizarElementos que realiza esta funcion pero para campos simples.
                             Copiar, pegar y adaptarlo para que funcione con la informacion de los Arrays anidados de los campos dinamicos 
                             del formulario.            
                             Ahora mismo el sistema solo actualiza el elemento solo si la clave del elemento es el ID del mismo(El cual se
@@ -690,12 +690,12 @@ class proyectosInvestigacionController extends Controller
                             'tabla' => $tabla,
                             'alerta' => $alerta
                         ]);
+                    } else {
+                        $alerta = view('alertas.modificarError')->render();
+                        return response()->json(['alerta' => $alerta]);
                     }
                 } catch (\Throwable $th) {
-                    dd($th);
                     DB::rollBack();
-                    $alerta = view('alertas.modificarError')->render();
-                    return response()->json(['alerta' => $alerta]);
                 }
             }
         }
