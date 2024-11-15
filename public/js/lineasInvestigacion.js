@@ -50,7 +50,7 @@ $(document).ready(function () {
 
         $.ajax({//Solicitud de Ajax para realizar la actualizacion del elemento
             type: "POST",
-            url: "actualizarLinea",
+            url: "actualizar_lineas",
             data: {
                 '_token': token,
                 'nombre_linea': nombre,
@@ -83,7 +83,7 @@ $(document).ready(function () {
 
         $.ajax({//Solicitud de Ajax para realizar el registro del elemento
             type: "POST",
-            url: "registrarLinea",
+            url: "crear_lineas",
             data: {
                 '_token': token,
                 'nombre_linea': nombre,

@@ -36,8 +36,8 @@ class centroController extends Controller
     public function registrarCentro(Request $request) //Proceso para el registro del centro
     {
         $reglas = [
-            'codigo_centro' => 'required|max:20|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
-            'nombre_centro' => 'required|max:50|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/'
+            'codigo_centro' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'nombre_centro' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/'
         ];
         $mensajes = [
             'codigo_centro.required' => 'Este campo es obligatorio',
@@ -78,33 +78,35 @@ class centroController extends Controller
                     $centro->setNombreCentroAttribute($request->nombre_centro);
                     $centro->setEstadoCentroAttribute(1);
                     //Registramos en la base de datos
-                    if (CentrosFormacion::create($centro->toArray())) {
-                        $sql = log_auditoria::createLog(
-                            'centro',
-                            $centro->getNombreCentroAttribute(),
-                            'registro'
-                        );
-                        Log::insert($sql);
 
-                        $listaCentros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('10');
-                        $controladores = $request->controladores;
-                        $tabla = view('modals.centros.tablaCentro', [
-                            'listaCentros' => $listaCentros,
-                            'controladores' => $controladores
-                        ])->render();
-                        $alerta = view('alertas.registrarExitoso')->render();
+                    CentrosFormacion::insert($centro->toArray());
 
-                        return response()->json([
-                            'tabla' => $tabla,
-                            'alerta' => $alerta
-                        ]);
-                    } else {
-                        $alerta = view('alertas.registroError')->render();
-                        return response()->json(['alerta' => $alerta]);
-                    }
+                    $sql = log_auditoria::createLog(
+                        'centro',
+                        $centro->getNombreCentroAttribute(),
+                        'registro'
+                    );
+                    Log::insert($sql);
+
+                    DB::commit();
+
+                    $listaCentros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('6');
+                    $controladores = $request->controladores;
+                    $tabla = view('modals.centros.tablaCentro', [
+                        'listaCentros' => $listaCentros,
+                        'controladores' => $controladores
+                    ])->render();
+                    $alerta = view('alertas.registrarExitoso')->render();
+
+                    return response()->json([
+                        'tabla' => $tabla,
+                        'alerta' => $alerta
+                    ]);
                 } catch (\Throwable $th) {
                     DB::rollBack();
                     throw ($th);
+                    $alerta = view('alertas.registroError')->render();
+                    return response()->json(['alerta' => $alerta]);
                 }
             }
         }
@@ -113,8 +115,8 @@ class centroController extends Controller
     public function actualizarCentro(Request $request) //Proceso para actualizar la informacion del centro
     {
         $reglas = [
-            'codigo_centro' => 'required|max:20|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
-            'nombre_centro' => 'required|max:50|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'codigo_centro' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'nombre_centro' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
             'estado_centro' => 'required|regex:/^[0-1]+$/'
         ];
         $mensajes = [
@@ -138,7 +140,8 @@ class centroController extends Controller
         } else {
             $ajax = CentrosFormacion::where([
                 'nombre_centro' => $datos['nombre_centro'],
-                'codigo_centro' => $datos['codigo_centro']
+                'codigo_centro' => $datos['codigo_centro'],
+                'estado_centro' => $datos['estado_centro']
             ])->get();
 
             if (count($ajax)) {
@@ -154,7 +157,10 @@ class centroController extends Controller
                     $centro->setCodigoCentroAttribute($request->codigo_centro);
                     $centro->setEstadoCentroAttribute($request->estado_centro);
 
-                    if (CentrosFormacion::where('nombre_centro', $datos['nombre_centro_old'])->update($centro->toArray())) {
+                    if (DB::table('centro_formacion')->where('nombre_centro', $datos['nombre_centro_old'])
+                        ->orWhere('codigo_centro', $datos['codigo_centro_old'])->update($centro->toArray())
+                    ) {
+
                         $sql = log_auditoria::createLog(
                             'centro',
                             $datos['nombre_centro_old'],

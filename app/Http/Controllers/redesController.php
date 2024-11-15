@@ -36,7 +36,7 @@ class RedesController extends Controller
     public function registrarRed(Request $request) //Proceso para registrar una nueva red de investigacion
     {
         $reglas = [
-            'nombre_red' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'nombre_red' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
         ];
         $mensajes = [
             'nombre_red.required' => 'Este campo es obligatorio',
@@ -102,7 +102,7 @@ class RedesController extends Controller
     public function actualizarRed(Request $request) //Proceso de actualizacion de la red
     {
         $reglas = [
-            'nombre_red' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'nombre_red' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
             'estado_red' => 'required|regex:/^[0-1]+$/'
         ];
         $mensajes = [
@@ -139,7 +139,7 @@ class RedesController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('10');
+                        $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $tabla = view('modals.redes.tablaRed', [

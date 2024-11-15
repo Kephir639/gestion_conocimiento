@@ -38,7 +38,7 @@ class cargoController extends Controller
     public function registrarCargo(Request $request) //Proceso de registro del nuevo cargo
     {
         $reglas = [
-            'nombre_cargo' => 'required|max:30|regex:/^[\pL\s]+$/u'
+            'nombre_cargo' => 'required|max:100|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/'
         ];
 
         $mensajes = [
@@ -108,8 +108,8 @@ class cargoController extends Controller
     public function actualizarCargo(Request $request) //Proceso de actualizacion de la informacion del cargo
     {
         $reglas = [
-            'nombre_cargo' => 'required|max:30|regex:/^[\pL\s]+$/u',
-            'estado_cargo' => 'required|gte:0|regex:/^[0-1]+$/'
+            'nombre_cargo' => 'required|max:100|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'estado_cargo' => 'required|regex:/^[0-1]+$/'
         ];
         $mensajes = [
             'nombre_cargo.required' => 'Este campo es obligatorio',
@@ -153,7 +153,7 @@ class cargoController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
+                        $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $alerta = view('alertas.actualizarExitoso')->render();

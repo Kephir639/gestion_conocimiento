@@ -58,7 +58,8 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $('#alertasModificar').html(data.alerta);//Mostramos el alerta que corresponda al caso
-                $('#tabla_cargos').html(data.tabla)//Ponemos la tabla actualizada en el DOM
+
+                $('#tablebody_cargos').html(data.tabla)//Ponemos la tabla actualizada en el DOM
             },
             error: function (xhr, status, error) {//En caso de recibir un error
                 if (xhr.status === 422) {

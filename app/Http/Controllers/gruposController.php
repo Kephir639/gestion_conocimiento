@@ -34,7 +34,7 @@ class gruposController extends Controller
     public function registrarGrupo(Request $request) //Proceso de registro del grupo
     {
         $reglas = [
-            'nombre_grupo' => 'required|max:30|regex:/^(?=.*[a-zA-ZñÑáéíóúÁÉÍÓÚ])(?=.*\d)[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]{15,}$/'
+            'nombre_grupo' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/'
         ];
         $mensajes = [
             'nombre_grupo.required' => 'Este campo es obligatorio',
@@ -72,7 +72,7 @@ class gruposController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
+                        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $tabla = view('modals.grupos.tablaGrupo', [
@@ -100,8 +100,8 @@ class gruposController extends Controller
     public function actualizarGrupo(Request $request) //Proceso de actualizacion del grupo
     {
         $reglas = [
-            'nombre_grupo' => 'required|max:30|regex:/^(?=.*[a-zA-ZñÑáéíóúÁÉÍÓÚ])(?=.*\d)[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]{15,}$/',
-            'estado_grupo' => 'required|gte:0|regex:/^[0-1]+$/'
+            'nombre_grupo' => 'required|max:150|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'estado_grupo' => 'required|regex:/^[0-1]+$/'
         ];
         $mensajes = [
             'nombre_grupo.required' => 'Este campo es obligatorio',
@@ -140,6 +140,7 @@ class gruposController extends Controller
                     $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
                     if (GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo->toArray())) {
+
                         $sql = log_auditoria::createLog(
                             'grupo',
                             $datos['nombre_grupo_old'],
@@ -148,14 +149,14 @@ class gruposController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
+                        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $tabla = view('modals.grupos.tablaGrupo', [
                             'listaGrupos' => $listaGrupos,
                             'controladores' => $controladores
                         ])->render();
-                        $alerta = view('alertas.modifcarExitoso')->render();
+                        $alerta = view('alertas.modificarExitoso')->render();
                         DB::commit();
                         return response()->json([
                             'tabla' => $tabla,
