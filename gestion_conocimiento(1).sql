@@ -2078,7 +2078,7 @@ INSERT INTO `tipos_poblaciones` (`id_tipo`, `tipo_poblacion`) VALUES
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `idRol` int(11) NOT NULL,
+  `id_rol` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
@@ -2092,7 +2092,7 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id`, `idRol`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+INSERT INTO `users` (`id`, `id_rol`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Ayzack', 'a@gmail.com', NULL, '$2y$12$EWC9DB7hdblyHz9BfjYw4eJCBEX88VaD0mdClqDk9HcJntSIcNVc2', NULL, '2024-07-23 21:18:33', '2024-07-23 21:18:33');
 
 --

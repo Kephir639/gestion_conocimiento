@@ -82,7 +82,7 @@ Route::middleware('auth', 'active', 'filter', 'checkRoutes', 'notifications', 'c
     Route::post('index/roles/crear_roles', [rolController::class, 'registrarRol']);
 
     Route::get('index/roles/showModalActualizar', [rolController::class, 'showModalActualizar'])->withoutMiddleware('checkRoutes');
-    Route::post('/roles/actualizar_roles', [rolController::class, 'actualizarRol']);
+    Route::post('index/roles/actualizar_roles', [rolController::class, 'actualizarRol']);
 
     //semilleros    
     Route::get('index/semilleros/consultar_semilleros', [SemillerosController::class, 'showSemilleros']);

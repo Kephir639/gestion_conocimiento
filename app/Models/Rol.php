@@ -47,6 +47,6 @@ class Rol extends Model
 
     public function setEstadoRolAttribute($value)
     {
-        $this->attributes['estado'] = $value;
+        $this->attributes['estado_rol'] = $value;
     }
 }

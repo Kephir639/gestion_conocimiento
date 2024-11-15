@@ -71,7 +71,7 @@ $(document).ready(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "actualizarRol",
+                    url: "actualizar_roles",
                     data: {
                         'nombre_rol': nombre,
                         'estado_rol': estado,
@@ -99,18 +99,26 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '#btnRegistrar', function () {
-        let nombre_rol = $('inputNombreRol').text().trim();
+    $(document).on('click', '#btnRegistrar', function (e) {
+        e.preventDefault();
+        let nombre_rol = $('#inputNombreRol').val();
         let token = $('#_token').val();
+        let funciones = [];
+
+        $('input[name="checkFunciones[]"]:checked').each(function () {
+            funciones.push($(this).val());
+        });
 
         $.ajax({
             type: "POST",
-            url: "registrarRol",
+            url: "crear_roles",
             data: {
+                '_token': token,
                 'nombre_rol': nombre_rol,
-                '_token': token
+                'funciones':funciones
             },
-            success: function (response) {
+            
+            success: function (data) {
                 //Mostrar los registros actualizados
                 $('#tablebody_roles').html(data.tabla);
                 //Mostrar Alerta
