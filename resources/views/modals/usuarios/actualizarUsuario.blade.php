@@ -45,7 +45,8 @@
                             <span class="errorValidacion mt-2"></span>
                         </div>
                     </div>
-                    <button id="btnActualizar" class="btn btn-success">Enviar</button>
+                    <button class="btn btn-success w-100"
+                        style="background-color: #007832; border-color: #28a745;">Enviar</button>
                 </form>
                 <div id="alertasActualizar">
                 </div>

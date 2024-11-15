@@ -77,16 +77,20 @@ class centroController extends Controller
                     $centro->setCodigoCentroAttribute($request->codigo_centro);
                     $centro->setNombreCentroAttribute($request->nombre_centro);
                     $centro->setEstadoCentroAttribute(1);
+
+                    // dd($centro);
                     //Registramos en la base de datos
                     if (CentrosFormacion::create($centro->toArray())) {
+
                         $sql = log_auditoria::createLog(
                             'centro',
                             $centro->getNombreCentroAttribute(),
                             'registro'
                         );
-                        Log::insert($sql);
 
+                        Log::insert($sql);
                         $listaCentros = CentrosFormacion::orderBy('id_centro', 'desc')->paginate('10');
+
                         $controladores = $request->controladores;
                         $tabla = view('modals.centros.tablaCentro', [
                             'listaCentros' => $listaCentros,
@@ -94,6 +98,7 @@ class centroController extends Controller
                         ])->render();
                         $alerta = view('alertas.registrarExitoso')->render();
 
+                        DB::commit();
                         return response()->json([
                             'tabla' => $tabla,
                             'alerta' => $alerta

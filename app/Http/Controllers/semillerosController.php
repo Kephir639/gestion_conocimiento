@@ -19,7 +19,7 @@ class semillerosController extends Controller
     public function showSemilleros(Request $request)
     {
         // Get all semilleros from the database
-        $listaSemilleros = DB::table('semilleros_investigacion')->orderBy('id_semillero', 'desc')->paginate(10);
+        $listaSemilleros = DB::table('semilleros_investigacion')->orderBy('id_semillero', 'desc')->paginate(6);
         $controladores = $request->controladores;
         // Return view with the list of semilleros
         return view('modals.semilleros.consultarSemilleros', compact('listaSemilleros', 'controladores'));
@@ -44,7 +44,7 @@ class semillerosController extends Controller
 
     public function showModalRegistrar()
     {
-        $usuarios = Integrantes::where('estado_integrantes', 0)->orderBy('id_integrante', 'desc')->paginate('10');
+        $usuarios = Integrantes::where('estado_integrantes', 0)->orderBy('id_integrante', 'desc')->paginate('6');
         $grupos = GrupoInvestigacion::all();
         $lineas = LineaInvestigacion::all();
         $programas = Programas::all();
@@ -128,7 +128,7 @@ class semillerosController extends Controller
     public function registrarSemilleros(Request $request)
     {
         $reglas = [
-            'nombre_semillero' => ['required', 'max:30', 'regex:/^[\pL\s]+$/u'],
+            'nombre_semillero' => ['required', 'max:250', 'regex:/^[\pL\s]+$/u'],
             'iniciales_semillero' => ['required', 'max:10', 'regex:/^[\pL\s]+$/u'],
             'fecha_creacion' => 'required|date',
             'lider_semillero' => ['required', 'max:30', 'regex:/^[\pL\s]+$/u'],

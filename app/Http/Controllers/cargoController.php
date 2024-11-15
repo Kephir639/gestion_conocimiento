@@ -76,7 +76,7 @@ class cargoController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
+                        $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $tabla = view('modals.cargo.tablaCargo', [
@@ -153,7 +153,7 @@ class cargoController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('10');
+                        $listaCargos = Cargo::orderBy('id_cargo', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $alerta = view('alertas.actualizarExitoso')->render();

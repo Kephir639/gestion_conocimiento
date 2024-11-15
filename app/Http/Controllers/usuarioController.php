@@ -134,6 +134,10 @@ class usuarioController extends Controller
             ],
         ];
 
+
+
+
+
         $mensajes = [
             'name.required' => 'El nombre es obligatorio.',
             'name.max' => 'El nombre no debe exceder de 30 caracteres.',
@@ -178,65 +182,67 @@ class usuarioController extends Controller
         ];
 
         $datos = $request->all();
-        $validacion = Validator::make($datos, $reglas, $mensajes); //Validacion de los datos que se reciben
 
+        // Validación de los datos
+        $validacion = Validator::make($datos, $reglas, $mensajes);
+
+        // Si la validación falla, redirige de regreso con los errores
         if ($validacion->fails()) {
-            return response()->json(['errors' => $validacion->errors()], 422); //Enviamos los errores de validacion al Ajax
-        } else {
-            $count = User::where('identificacion', $datos['identificacion'])->get();
-            if (count($count)) { //Verificamos si el usuario que se esta registrando ya existe en la base de datos
-                return view('alertas.repetido'); //Se devuelve alerta al Ajax
-            } else {
-                $usuario = new User();
-                $usuario->idRol = 0;
-                $usuario->name = $request->name;
-                $usuario->apellidos = $request->apellidos;
-                $usuario->tipo_documento = $request->tipo_documento;
-                $usuario->identificacion = $request->identificacion;
-                $usuario->id_genero = $request->id_genero;
-                $usuario->id_tipo = $request->id_tipo;
-                $usuario->email = $request->email;
-                $usuario->celular = $request->celular;
-                $usuario->id_departamento = $request->id_departamento;
-                $usuario->id_municipio = $request->id_municipio;
-                $usuario->direccion = $request->direccion;
-                $usuario->id_cargo = $request->id_cargo;
-                $usuario->id_profesion = $request->id_profesion;
-                $usuario->id_maestria = $request->id_maestria;
-                $usuario->id_doctorado = $request->id_doctorado;
-                $usuario->Nombre_programa = $request->Nombre_programa;
-                $usuario->ficha = $request->filled('ficha') ? $request->ficha : null;
-                $usuario->semillero_id = $request->semillero_id;
-                $usuario->password = Hash::make($request->password);
-                $usuario->estado_usu = in_array($request->id_cargo, ['3', '4', '22']) ? 1 : 0;
+            return redirect()->back()
+                ->withErrors($validacion)
+                ->withInput();
+        }
 
-                $usuario->save();
+        // Verificación de duplicados en la base de datos
+        $count = User::where('identificacion', $datos['identificacion'])->count();
+        if ($count > 0) {
+            // Redirecciona con un mensaje de error si el usuario ya existe
+            return redirect()->back()
+                ->with('error', 'El usuario ya está registrado.')
+                ->withInput();
+        }
 
-                if ($request->has('semilleros')) {
-                    foreach ($request->semilleros as $semillero) {
-                        DB::table('semilleros_has_user')->insert([ //Se afilian los usuarios al semillero correspondiente
-                            'id' => $usuario->id,
-                            'id_semillero' => $semillero,
-                            'estado_shu' => 0
-                        ]);
-                    }
-                }
+        // Registro del usuario
+        $usuario = new User();
+        $usuario->idRol = 0;
+        $usuario->name = $request->name;
+        $usuario->apellidos = $request->apellidos;
+        $usuario->tipo_documento = $request->tipo_documento;
+        $usuario->identificacion = $request->identificacion;
+        $usuario->id_genero = $request->id_genero;
+        $usuario->id_tipo = $request->id_tipo;
+        $usuario->email = $request->email;
+        $usuario->celular = $request->celular;
+        $usuario->id_departamento = $request->id_departamento;
+        $usuario->id_municipio = $request->id_municipio;
+        $usuario->direccion = $request->direccion;
+        $usuario->id_cargo = $request->id_cargo;
+        $usuario->id_profesion = $request->id_profesion;
+        $usuario->id_maestria = $request->id_maestria;
+        $usuario->id_doctorado = $request->id_doctorado;
+        $usuario->Nombre_programa = $request->Nombre_programa;
+        $usuario->ficha = $request->filled('ficha') ? $request->ficha : null;
+        $usuario->semillero_id = $request->semillero_id;
+        $usuario->password = Hash::make($request->password);
+        $usuario->estado_usu = in_array($request->id_cargo, ['3', '4', '22']) ? 1 : 0;
 
-                $listausuarios = User::orderBy('id', 'desc')->paginate(10);
-                $controladores = $request->controladores;
-                $tabla = view('modals.usuarios.tablaUsuario', [
-                    'listaUsuarios' => $listausuarios,
-                    'controladores' => $controladores
-                ])->render();
-                $alerta = view('alertas.registrarExitoso')->render();
+        $usuario->save();
 
-                return response()->json([ //Se devulevel al Ajax la tabla actualizada y el alerta correspondiente
-                    'tabla' => $tabla,
-                    'alerta' => $alerta
+        // Afiliación del usuario a semilleros
+        if ($request->has('semilleros')) {
+            foreach ($request->semilleros as $semillero) {
+                DB::table('semilleros_has_user')->insert([
+                    'id' => $usuario->id,
+                    'id_semillero' => $semillero,
+                    'estado_shu' => 0
                 ]);
             }
         }
+
+        // Redirige a login con un mensaje de éxito
+        return redirect()->route('login')->with('success', 'Usuario registrado con éxito. Debes esperar que un Administrador te acepte en el sistema.');
     }
+
 
     public function asignarRol(Request $request)
     {
@@ -424,7 +430,8 @@ class usuarioController extends Controller
     }
     #Fin peticiones
 
-    #Funciones individuales
+
+
     public function usersExport()
     {
         return Excel::download(new UsersExport, 'usuarios.xlsx');

@@ -58,7 +58,7 @@ class lineaController extends Controller
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
 
-            $ajax = LineaInvestigacion::where('nombre_linea', $datos['inputNombreLinea'])->get();
+            $ajax = LineaInvestigacion::where('nombre_linea', $datos['nombre_linea'])->get();
             if (count($ajax)) {
                 //Respuesta en caso de que el objeto que se quiere crear ya exista en la base de datos
                 $alerta = view('alertas.repetido')->render();
@@ -78,15 +78,15 @@ class lineaController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaLinea = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
+                        $listaLinea = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('6');
                         $controladores = $request->controladores;
+                        DB::commit();
 
-                        $tabla = view('modals.lineas.tablaLineas', [
+                        $tabla = view('modals.lineas.tablaLinea', [
                             'listaLineas' => $listaLinea,
                             'controladores' => $controladores
                         ])->render();
                         $alerta = view('alertas.registrarExitoso')->render();
-                        DB::commit();
                         return response()->json([
                             'tabla' => $tabla,
                             'alerta' => $alerta
@@ -156,7 +156,7 @@ class lineaController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
+                        $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $tabla = view('modals.lineas.tablaLinea', [

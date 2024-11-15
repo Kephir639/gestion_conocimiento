@@ -10,26 +10,38 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Registro de Usuario</h2>
         {{-- Alertas de validación --}}
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: '{{ session('success') }}',
+                    confirmButtonText: 'Aceptar'
+                });
+            </script>
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: '¡Error!',
+                    text: '{{ session('error') }}',
+                    confirmButtonText: 'Aceptar'
+                });
+            </script>
+        @endif
+
+        {{-- Para errores de validación --}}
+        @if ($errors->any())
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Errores en el formulario',
+                    html: '{!! implode('<br>', $errors->all()) !!}',
+                    confirmButtonText: 'Aceptar'
+                });
+            </script>
         @endif
 
         <hr>
@@ -63,8 +75,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="numero_identificacion" class="form-label">Número de Identificación</label>
-                    <input type="text" class="form-control" id="numero_identificacion" name="numero_identificacion"
-                        required>
+                    <input type="text" class="form-control" id="numero_identificacion" name="identificacion" required>
                     <div class="invalid-feedback">Por favor, ingrese su número de identificación.</div>
                 </div>
             </div>
@@ -286,3 +297,7 @@
 
 
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endpush

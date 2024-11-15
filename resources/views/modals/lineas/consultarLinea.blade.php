@@ -3,6 +3,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ url('css/botonesConsultar.css') }}">
     <link rel="stylesheet" href="{{ url('css/lineas.css') }}">
+    <link rel="stylesheet" href="{{ url('css/estiloModal.css') }}">
 @endpush
 @section('content')
     <div class="container mt-2">

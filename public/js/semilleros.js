@@ -95,7 +95,7 @@ $(document).ready(function () {
         // Perform the AJAX request
         $.ajax({
             type: "POST",
-            url: "crear_semillero",
+            url: "crear_semilleros",
             data: {
                 '_token': token,
                 'nombre_semillero': nombre_semillero,

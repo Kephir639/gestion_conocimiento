@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SemilleroObjetivo extends Model
 {
-    protected $table = 'semilleros_objetivos';
+    protected $table = 'semillero_has_objetivo';
     protected $fillable = ['semillero_id', 'objetivo_especifico'];
 
     public function semillero()

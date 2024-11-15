@@ -15,7 +15,7 @@ class RolController extends Controller
 {
     public function consultarRol(Request $request)
     {
-        $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate('5');
+        $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate('6');
         $controladores = $request->controladores;
         $notificaciones = $request->notificaciones;
         return view('modals.rol.consultarRoles', compact('listaRoles', 'controladores', 'notificaciones'));
@@ -87,7 +87,7 @@ class RolController extends Controller
 
                 if ($registro == true && $resultado == true) {
                     $controladores = $request->controladores;
-                    $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate('10');
+                    $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate('6');
 
                     $tabla = view('modals.roles.tablaRol', [
                         'controladores' => $controladores,

@@ -28,7 +28,7 @@ class proyectosInvestigacionController extends Controller
         WHERE pi.id_p_investigacion = ihu.id_p_investigacion
         AND ihu.id = " . Auth::user()->id . " ORDER BY pi.id_p_investigacion DESC LIMIT 6 OFFSET 0";
         //En este caso solo el administrador puede ver todos los proyectos registrados
-        $listaProyectos = (Auth::user()->idRol != 1) ? DB::select($sql) : DB::table('proyectos_investigacion')->orderBy('id_proyecto_i', 'desc')->paginate(6);
+        $listaProyectos = (Auth::user()->idRol != 1) ? DB::select($sql) : DB::table('proyectos_investigacion')->orderBy('id_p_investigacion', 'desc')->paginate(6);
         $controladores = $request->controladores;
         return view('modals.proyectos.investigacion.consultarProyectos', [
             'listaProyectos' => $listaProyectos,

@@ -1,8 +1,10 @@
 @extends('layouts.plantillaIndex')
 
 @section('title', 'Consultar Usuarios')
-<link rel="stylesheet" href="{{ url('css/tablas.css') }}">
-<link rel="stylesheet" href="{{ url('css/tablas.css') }}">
+{{-- <link rel="stylesheet" href="{{ url('css/tablas.css') }}">
+<link rel="stylesheet" href="{{ url('css/tablas.css') }}"> --}}
+<link rel="stylesheet" href="{{ url('css/estiloTablas.css') }}">
+<link rel="stylesheet" href="{{ url('css/estiloModal.css') }}">
 @push('styles')
 @endpush
 
@@ -66,7 +68,8 @@
             <div class="row mt-2">
                 <div class="col-12 justify-content-center align-items-center">
                     <a href="{{ url('index/usuarios/exportar_usuarios') }}">
-                        <button class="btn btn-success w-100">Descargar Reporte</button>
+                        <button class="btn btn-success w-100"
+                            style="background-color: #007832; border-color: #28a745;">Descargar Reporte</button>
                     </a>
                 </div>
             </div>

@@ -73,7 +73,7 @@ class RedesController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('10');
+                        $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $tabla = view('modals.redes.tablaRed', [
@@ -139,7 +139,7 @@ class RedesController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('10');
+                        $listaRedes = Redes::orderBy('id_red', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $tabla = view('modals.redes.tablaRed', [

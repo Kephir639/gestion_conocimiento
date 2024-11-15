@@ -34,7 +34,7 @@ class gruposController extends Controller
     public function registrarGrupo(Request $request) //Proceso de registro del grupo
     {
         $reglas = [
-            'nombre_grupo' => 'required|max:30|regex:/^(?=.*[a-zA-ZñÑáéíóúÁÉÍÓÚ])(?=.*\d)[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]{15,}$/'
+            'nombre_grupo' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/'
         ];
         $mensajes = [
             'nombre_grupo.required' => 'Este campo es obligatorio',
@@ -72,7 +72,7 @@ class gruposController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
+                        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $tabla = view('modals.grupos.tablaGrupo', [
@@ -148,7 +148,7 @@ class gruposController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('10');
+                        $listaGrupos = GrupoInvestigacion::orderBy('id_grupo', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $tabla = view('modals.grupos.tablaGrupo', [
