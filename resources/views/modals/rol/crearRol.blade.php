@@ -10,16 +10,7 @@
                     <div class="row mt-3">
                         <input type="hidden" value="{{ csrf_token() }}" id="_token">
                         <label for="inputNombreRol" class="form-label">Rol</label>
-                        <select name="nombre_rol" id="inputNombreRol">
-                            <option value="Administrador">Administrador</option>
-                            <option value="Aprendiz">Aprendiz</option>
-                            <option value="Auditor">Auditor</option>
-                            <option value="Coordinador">Coordinador</option>
-                            <option value="Dinamizador SENNOVA">Dinamizador SENNOVA</option>
-                            <option value="Instructor investigador">Instructor investigador</option>
-                            <option value="Líder de semillero">Líder de semillero</option>
-                            <option value="Líder de proyecto">Líder de proyecto</option>
-                        </select>
+                        <input type="text" class="form-control" name="nombre_rol" id="inputNombreRol">
                         <br>
                         <label for="inputPermisos" class="form-label">Permisos</label><br>
                         <div class="row">

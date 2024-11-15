@@ -12,11 +12,11 @@
         <h2 class="text-center mb-4">Perfil de Usuario</h2>
         <hr>
         <form action="{{ url('index/usuarios/change_profile') }}" method="POST">
-            @csrf
             <div class="row mb-3">
+                @csrf
                 <div class="col-md-6">
                     <label for=name" class="form-label">Nombres</label>
-                    <input type="text" class="form-control" id=name" name="name" value="{{ Auth::user()->name }}"
+                    <input type="text" class="form-control" id="name" name="name" value="{{ Auth::user()->name }}"
                         required>
                     <div class="invalid-feedback">Por favor, ingrese sus nombres.</div>
                 </div>
@@ -49,7 +49,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="numero_identificacion" class="form-label">Número de Identificación</label>
-                    <input type="text" class="form-control" id="numero_identificacion" name="numero_identificacion"
+                    <input type="text" class="form-control" id="identificacion" name="identificacion"
                         value="{{ Auth::user()->identificacion }}" required>
                     <div class="invalid-feedback">Por favor, ingrese su número de identificación.</div>
                 </div>
@@ -213,19 +213,6 @@
                 </div> --}}
             </div>
 
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="password" class="form-label">password</label>
-                    <div class="input-group">
-                        <input type="password" class="form-control" id="password" name="password"
-                            value="{{ Auth::user()->password }}" required>
-                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                    </div>
-                    <div class="invalid-feedback">Por favor, ingrese su password.</div>
-                </div>
-            </div>
             <div class="text-center">
                 <button id="btnHabilitar" class="btn btn-success">Habilitar Campos</button>
                 <button type="submit" id="btnActualizar" class="btn btn-primary btn-lg mt-3">Guardar Cambios</button>
