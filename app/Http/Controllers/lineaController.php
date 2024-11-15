@@ -147,7 +147,7 @@ class lineaController extends Controller
                     $linea->setNombreLineaAttribute($request->nombre_linea);
                     $linea->setEstadoAttribute($request->estado_linea);
 
-                    if (LineaInvestigacion::where('nombre_linea', $datos['nombre_linea_old'])
+                    if (LineaInvestigacion::where('id_linea', $datos['id_linea'])
                         ->update($linea->toArray())
                     ) {
                         $sql = log_auditoria::createLog(
@@ -158,7 +158,7 @@ class lineaController extends Controller
                         );
                         Log::insert($sql);
 
-                        $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('10');
+                        $listaLineas = LineaInvestigacion::orderBy('id_linea', 'desc')->paginate('6');
                         $controladores = $request->controladores;
 
                         $tabla = view('modals.lineas.tablaLinea', [

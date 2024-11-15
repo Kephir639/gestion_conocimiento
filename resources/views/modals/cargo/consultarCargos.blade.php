@@ -36,7 +36,8 @@
                                         @if ($controlador['nombre_controlador'] == 'cargos')
                                             @foreach ($controlador['funciones'] as $func)
                                                 @if ($func['nombre_funcion'] == 'actualizar_cargos')
-                                                    <button title="Modificar cargo" class="btn iconoModificar p-0">
+                                                    <button id="{{ $cargo->id_cargo }}" title="Modificar cargo"
+                                                        class="btn iconoModificar p-0">
                                                         <svg class="iconoM" width="34" height="34"
                                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                             <path

@@ -144,7 +144,7 @@ class cargoController extends Controller
                     $cargo->setNombreCargoAttribute($request->nombre_cargo);
                     $cargo->setEstadoAttribute($request->estado_cargo);
 
-                    if (Cargo::where('nombre_cargo', $datos['nombre_cargo_old'])->update($cargo->toArray())) {
+                    if (Cargo::where('id_cargo', $datos['id_cargo'])->update($cargo->toArray())) {
                         $sql = log_auditoria::createLog(
                             'cargo',
                             $datos['nombre_cargo_old'],

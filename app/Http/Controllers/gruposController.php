@@ -139,7 +139,7 @@ class gruposController extends Controller
                     $grupo->setNombreGrupoAttribute($request->nombre_grupo);
                     $grupo->setEstadoGrupoAttribute($request->estado_grupo);
 
-                    if (GrupoInvestigacion::where('nombre_grupo', $datos['nombre_grupo_old'])->update($grupo->toArray())) {
+                    if (GrupoInvestigacion::where('id_grupo', $datos['id_grupo'])->update($grupo->toArray())) {
 
                         $sql = log_auditoria::createLog(
                             'grupo',

@@ -42,9 +42,9 @@ $(document).ready(function () {
         //Obtenemos un valor de referencia para la actualizacion
         let nombre_old = $(button).parents('tr').find('td:eq(0)').text().trim();
         //Obtenemos los valores de los inputs
+        let id_linea = $(button).attr('id');
         let nombre = $('#inputNombreLinea').val();
-        let estado = $('#inputEstadoLinea').val();
-        let estado_text = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : null;
+        let estado = $('#inputEstadoLinea').val();        
         //Obtenemos el token de autenticacion(Input Hidden)
         let token = $('#_token').val();
 
@@ -53,6 +53,7 @@ $(document).ready(function () {
             url: "actualizar_lineas",
             data: {
                 '_token': token,
+                'id_linea': id_linea,
                 'nombre_linea': nombre,
                 'nombre_linea_old': nombre_old,
                 'estado_linea': estado
@@ -61,7 +62,7 @@ $(document).ready(function () {
                 //Mostramos el alerta correspondiente
                 $('#alertasModificar').html(data.alerta);
                 //Mostramos la tabla con los datos
-                $('#tabla_lineas').html(data.tabla)
+                $('#tablebody_lineas').html(data.tabla)
             },
             error: function (xhr, status, error) { //En caso de recibir un error
                 if (xhr.status === 422) {

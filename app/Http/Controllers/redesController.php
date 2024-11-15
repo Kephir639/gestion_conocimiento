@@ -130,7 +130,8 @@ class RedesController extends Controller
                     $red->setNombreRedAttribute($request->nombre_red);
                     $red->setEstadoRedAttribute($request->estado_red);
 
-                    if (Redes::where('nombre_red', $datos['nombre_red_old'])->update($red->toArray())) {
+                    if (Redes::where('id_red', $datos['id_red'])->update($red->toArray())) {
+
                         $sql = log_auditoria::createLog(
                             'red',
                             $datos['nombre_red_old'],

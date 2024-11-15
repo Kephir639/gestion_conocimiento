@@ -40,9 +40,9 @@ $(document).ready(function () {
         //Obtenemos el campo de referencia para la acutalizacion
         let nombre_old = $(button).parents('tr').find('td:eq(0)').text().trim();
         //Obtenemos los valores de los inputs
+        let id_red = $(button).attr('id');
         let nombre = $('#inputNombreRed').val();
-        let estado = $('#inputEstadoRed').val();
-        let estado_text = (estado == 1) ? "Activo" : (estado == 0) ? "Inactivo" : null;
+        let estado = $('#inputEstadoRed').val();        
         //Obtenemos el token de autenticacion
         let token = $('#_token').val();
         $.ajax({//Realizamos una peticion ajax para enviar la informacion al controlador
@@ -50,6 +50,7 @@ $(document).ready(function () {
             url: "actualizar_redes",
             data: {
                 '_token': token,
+                'id_red': id_red,
                 'nombre_red': nombre,
                 'nombre_red_old': nombre_old,
                 'estado_red': estado

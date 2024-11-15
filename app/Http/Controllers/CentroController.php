@@ -157,9 +157,7 @@ class centroController extends Controller
                     $centro->setCodigoCentroAttribute($request->codigo_centro);
                     $centro->setEstadoCentroAttribute($request->estado_centro);
 
-                    if (DB::table('centro_formacion')->where('nombre_centro', $datos['nombre_centro_old'])
-                        ->orWhere('codigo_centro', $datos['codigo_centro_old'])->update($centro->toArray())
-                    ) {
+                    if (DB::table('centro_formacion')->where('id_centro', $datos['id_centro'])->update($centro->toArray())) {
 
                         $sql = log_auditoria::createLog(
                             'centro',
