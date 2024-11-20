@@ -1,0 +1,25 @@
+:root {
+    --color-primario: #007832;
+    --color-secundario: #00324D;
+    --color-primario-hover: #08a835;
+    --color-secundario-hover: #0d5c86;
+    --fuente-primaria: 'Work Sans', sans-serif;
+    --color-fuente: #f2f2f2;
+    --color-texto: #000000;
+    --sombra: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --borde-radius: 10px;
+}
+
+
+
+.btn-primary{
+    background-color:var(--color-primario);
+    border-color:var(--color-primario);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+.btn-success{
+    background-color:grey ;
+}
+.btn-danger{
+    background-color: red;
+}

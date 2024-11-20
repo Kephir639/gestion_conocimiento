@@ -36,6 +36,7 @@ class User extends Authenticatable
         'id_cargo',
         'id_profesion',
         'id_doctorado',
+        'id_programa',
         'nombre_programa',
         'ficha',
         'id_semillero',
@@ -129,12 +130,16 @@ class User extends Authenticatable
     {
         return $this->attributes['id_cargo'];
     }
+    public function getIdProfesionAttribute()
+    {
+        return $this->attributes['id_profesion'];
+    }
 
     public function getIdProgramaAttribute()
     {
         return $this->attributes['id_programa'];
     }
-
+    
     public function getEstadoUsuAttribute()
     {
         return $this->attributes['estado_usu'];
@@ -211,6 +216,10 @@ class User extends Authenticatable
     public function setIdCargoAttribute($idCargo)
     {
         $this->attributes['id_cargo'] = $idCargo;
+    }
+    public function setIdProfesionAttribute($idProfesion)
+    {
+        $this->attributes['id_profesion'] = $idProfesion;
     }
 
     public function setIdProgramaAttribute($idPrograma)

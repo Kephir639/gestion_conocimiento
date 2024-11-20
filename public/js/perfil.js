@@ -1,63 +1,68 @@
 $(document).ready(function () {
-    let inputs = document.querySelectorAll('input');
-    let selects = document.querySelectorAll('select');
+  let inputs = document.querySelectorAll("input");
+  let selects = document.querySelectorAll("select");
+
+  $.each(inputs, function (clave, input) {
+    $(input).attr("disabled", true); // Corregido: Se debe asignar un valor.
+  });
+  $.each(selects, function (clave, select) {
+    $(select).attr("disabled", true); // Corregido: Se debe asignar un valor.
+  });
+
+  $("#btnHabilitar").on("click", function (e) {
+    e.preventDefault();
 
     $.each(inputs, function (clave, input) {
-        $(input).attr('disabled');
+      $(input).removeAttr("disabled"); // Corregido: Uso adecuado para quitar atributos.
     });
     $.each(selects, function (clave, select) {
-        $(select).attr('disabled');
+      $(select).removeAttr("disabled"); // Corregido: Uso adecuado para quitar atributos.
+    });
+  });
+
+  document
+    .getElementById("togglePassword")
+    .addEventListener("click", function (e) {
+      const passwordInput = document.getElementById("password");
+      const icon = this.querySelector("i");
+
+      // Cambia el tipo de input entre 'password' y 'text'
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+      } else {
+        passwordInput.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      }
     });
 
-    $('#btnHabilitar').on('click', function (e) {
-        e.preventDefault();
-
-        $.each(inputs, function (clave, input) {
-            $(input).attr('disabled').remove();
-        });
-        $.each(selects, function (clave, select) {
-            $(select).attr('disabled').remove();
-        });
+  (function () {
+    "use strict";
+    var forms = document.querySelectorAll(".needs-validation");
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener(
+        "submit",
+        function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add("was-validated");
+        },
+        false
+      );
     });
+  })();
 
-    document.getElementById('togglePassword').addEventListener('click', function (e) {
-        const passwordInput = document.getElementById('password');
-        const icon = this.querySelector('i');
+  // Mostrar errores de validación en los campos correspondientes
+  let errors = {}; // Se debe definir 'errors' antes de usarlo.
+  $.each(errors, function (clave, valor) {
+    $("#div_" + clave)
+      .find(".errorValidacion")
+      .html(valor);
+  });
 
-        // Cambia el tipo de input entre 'password' y 'text'
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    });
-
-    (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation');
-        Array.prototype.slice.call(forms)
-            .forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false)
-            })
-    });
-
-
-                    // Mostrar errores de validación en los campos correspondientes
-                    $.each(errors, function (clave, valor) {
-                        $("#div_" + clave).find('.errorValidacion').html(valor);
-                    });
-                }
-            }
-        });
-    });
+  
 });

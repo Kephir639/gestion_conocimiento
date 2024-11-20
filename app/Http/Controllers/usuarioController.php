@@ -15,8 +15,9 @@ use App\Models\Cargos;
 use App\Models\Doctorados;
 use App\Models\Maestrias;
 use App\Models\Profesiones;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Rol;
+use App\Models\Programas;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UsersExport;
 
@@ -48,6 +49,7 @@ class usuarioController extends Controller
         $profesiones = Profesiones::where('estado_profesion', 1)->get();
         $maestrias = Maestrias::where('estado_maestria', 1)->get();
         $doctorados = Doctorados::where('estado_doctorado', 1)->get();
+        $programas = Programas::where('estado_programa', 1)->get();
         $compact = ['departamentos', 'municipios', 'tipo_poblaciones', 'generos', 'cargos', 'profesiones', 'maestrias', 'doctorados'];
 
         return view('Auth.register', compact($compact));
@@ -90,8 +92,9 @@ class usuarioController extends Controller
         $profesiones = Profesiones::where('estado_profesion', 1)->get();
         $maestrias = Maestrias::where('estado_maestria', 1)->get();
         $doctorados = Doctorados::where('estado_doctorado', 1)->get();
+        $programas = Programas::where('estado_programa', 1)->get();
         $controladores = $request->controladores;
-        $compact = ['generos', 'tipo_poblaciones', 'departamentos', 'municipios', 'cargos', 'profesiones', 'maestrias', 'doctorados', 'controladores'];
+        $compact = ['generos', 'tipo_poblaciones', 'departamentos', 'municipios', 'cargos', 'profesiones', 'maestrias', 'doctorados','programas', 'controladores'];
         return view('modals.usuarios.perfil.verPerfil', compact($compact));
     }
 
@@ -284,7 +287,11 @@ class usuarioController extends Controller
             'celular' => 'required|max:15',
             'id_departamento' => 'required|integer',
             'id_municipio' => 'required|integer',
-            'direccion' => 'required'
+            'direccion' => 'required',
+            'id_maestria' => 'required|integer',
+            'id_doctorado' => 'required|integer',
+            'Nombre_programa' => 'required|max:100',
+            'ficha' => 'required|integer',
         ];
         $mensajes = [
             'name.required' => 'Este campo es obligatorio',
@@ -310,6 +317,16 @@ class usuarioController extends Controller
             'id_departamento.integer' => 'El campo debe ser un número entero',
             'id_municipio.required' => 'Este campo es obligatorio',
             'id_municipio.integer' => 'El campo debe ser un número entero',
+            'id_profesion'=>'Este campos es obligatorio',
+            'id_profesion'=>'Este campos debe ser un número entero',
+            'id_maestria.required' =>'Este campo es obligatorio',            
+            'id_maestria.integer' =>'El campo debe ser un número entero',            
+            'id_doctorado.required' =>'Este campo es obligatorio',            
+            'id_doctorado.integer' =>'El campo debe ser un número entero',            
+            'Nombre_programa.required' =>'El campo es obligatorio',            
+            'Nombre_programa.max' =>'Este campo debe contener máximo 100 caracteres',
+            'ficha.required'=>'El campo es obligatorio',            
+            'ficha.integer'=>'El campo debe ser un número entero'            
         ];
 
         $datos = $request->all();
@@ -329,19 +346,13 @@ class usuarioController extends Controller
             'id_municipio' => $request->input('id_municipio'),
             'id_departamento' => $request->input('id_departamento'),
             'direccion' => $request->input('direccion'),
+            'id_profesion' => $request->input('id_profesion'),
+            'id_maestria' => $request->input('id_maestria'),
+            'id_doctorado' => $request->input('id_doctorado'),
+            'id_programa' => $request->input('Nombre_programa'),
+            'ficha' => $request->input('ficha'),
         ]);
-        $listaUsuarios = User::paginate('10');
-
-        $alerta = view('alertas.actualizarExitoso');
-        $tabla = view('modals.usuarios.tablaUsuarios', [
-            'controladores' => $request->controladores,
-            'listaUsuarios' => $listaUsuarios
-        ]);
-
-        return response()->json([
-            'tabla' => $tabla,
-            'alerta' => $alerta
-        ]);
+        return redirect()->back()->with('success','¡Perfil actualizado exitosamente!');
     }
     public function editarUsuario(Request $request) //Actualiza la informacion del usuario(Admin)
     {

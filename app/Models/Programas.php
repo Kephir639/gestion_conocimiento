@@ -10,7 +10,7 @@ class Programas extends Model
     use HasFactory;
 
     protected $table = 'programas_formacion';
-
+    protected $primaryKey = 'id_programa';
     protected $fillable = [
         'id_programa',
         'numero_ficha',

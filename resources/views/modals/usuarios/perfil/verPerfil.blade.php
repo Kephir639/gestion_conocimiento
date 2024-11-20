@@ -11,6 +11,12 @@
     <div class="container mt-2">
         <h2 class="text-center mb-4">Perfil de Usuario</h2>
         <hr>
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
         <form action="{{ url('index/usuarios/change_profile') }}" method="POST">
             <div class="row mb-3">
                 @csrf
@@ -118,9 +124,15 @@
                 <div class="col-md-6">
                     <label for="municipio" class="form-label">Municipio</label>
                     <select class="form-select" id="municipio" name="id_municipio" required>
-
+                        
                         <option value="">Seleccione...</option>
                         <!-- Los municipios se cargarán dinámicamente aquí -->
+                        @foreach ($municipios as $municipio)
+                        <option value="{{ $municipio->id_municipio }}"
+                            {{ Auth::user()->id_municipio == $municipio->id_municipio ? 'selected' : null }}>
+                            {{ $municipio->municipio }}
+                        </option>
+                    @endforeach
                     </select>
                     <div class="invalid-feedback">Por favor, seleccione un municipio.</div>
                 </div>
@@ -155,8 +167,8 @@
                     <select class="form-select" id="profesion" name="id_profesion">
                         <option value="">Seleccione...</option>
                         @foreach ($profesiones as $profesion)
-                            <option value="{{ $profesion->id_profesiones }}"
-                                {{ Auth::user()->id_profesion == $profesion->id_profesiones ? 'selected' : null }}>
+                            <option value="{{ $profesion->id_profesion }}"
+                                {{ Auth::user()->id_profesion == $profesion->id_profesion ? 'selected' : null }}>
                                 {{ $profesion->nombre_profesion }}</option>
                         @endforeach
                     </select>
@@ -187,14 +199,20 @@
                     <div class="invalid-feedback">Por favor, seleccione un doctorado.</div>
                 </div>
             </div>
-
-
             <div class="row mb-3" id="aprendizFields">
                 <div class="col-md-6">
                     <label for="Nombre_programa" class="form-label">Nombre del Programa</label>
-                    <input type="text" class="form-control" id="Nombre_programa" name="Nombre_programa"
+                    <select class="form-select" id="id_programa" name="Nombre_programa">
+                        <option value="">Seleccione...</option>
+                        @foreach ($programas as $programa)
+                            <option value="{{ $programa->id_programa }}"
+                                {{ Auth::user()->id_programa == $programa->id_programa ? 'selected' : null }}>
+                                {{ $programa->nombre_programa }}</option>
+                        @endforeach
+                    </select>
+                    {{-- <input type="text" class="form-control" id="Nombre_programa" name=" "
                         value="{{ Auth::user()->nombre_programa }}">
-                    <div class="invalid-feedback">Por favor, ingrese el nombre del programa</div>
+                    <div class="invalid-feedback">Por favor, ingrese el nombre del programa</div> --}}
                 </div>
                 <div class="col-md-6">
                     <label for="ficha" class="form-label">Número de ficha</label>

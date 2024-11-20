@@ -11,7 +11,8 @@ class Permiso extends Model
     protected $fillable = [
         'id_permiso',
         'id_rol',
-        'id_funcion'
+        'id_funcion',
+        'estado_permiso'
     ];
 
     public function getIdPermisoAttribute()
@@ -42,5 +43,14 @@ class Permiso extends Model
     public function setIdFuncionAttribute($value)
     {
         return $this->attributes['id_funcion'] = $value;
+    }
+
+    public function getEstadoPermiso()
+    {
+        return $this->attributes['estado_permiso'];
+    }
+    public function setEstadoPermiso($value)
+    {
+        return $this->attributes['estado_permiso'] = $value;
     }
 }
