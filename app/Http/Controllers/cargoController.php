@@ -48,6 +48,7 @@ class cargoController extends Controller
         ];
 
         $datos = $request->all();
+
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
         unset($datos['_token']);

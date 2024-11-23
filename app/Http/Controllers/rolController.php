@@ -40,35 +40,35 @@ class RolController extends Controller
             'nombre_rol' => 'required|max:150',
             'funciones' => 'required'
         ];
-    
+
         $mensajes = [
             'nombre_rol.required' => 'Este campo es obligatorio',
             'nombre_rol.max' => 'Este campo debe contener máximo 150 caracteres',
         ];
-    
+
         $datos = $request->except('_token', 'controladores');
         $validacion = Validator::make($datos, $reglas, $mensajes);
-    
+
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
         }
-    
+
         $existe = Rol::where('rol', $datos['nombre_rol'])->exists();
-    
+
         if ($existe) {
             $alerta = view('alertas.repetido')->render();
             return response()->json(['alerta' => $alerta]);
         }
-    
+
         try {
             DB::beginTransaction();
-    
+
             // Crear el rol
             $rol = Rol::create([
                 'rol' => $request->nombre_rol,
                 'estado_rol' => 1,
             ]);
-    
+
             // Asignar permisos
             if ($request->has('funciones')) {
                 foreach ($request->funciones as $funcion) {
@@ -79,16 +79,16 @@ class RolController extends Controller
                     ]);
                 }
             }
-    
+
             // Renderizar tabla y alerta
             $controladores = $request->controladores;
             $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate(10);
-    
+
             $tabla = view('modals.rol.tablaRol', compact('controladores', 'listaRoles'))->render();
             $alerta = view('alertas.registrarExitoso')->render();
-    
+
             DB::commit();
-    
+
             return response()->json([
                 'tabla' => $tabla,
                 'alerta' => $alerta,
@@ -98,7 +98,7 @@ class RolController extends Controller
             throw $th;
         }
     }
-    
+
 
     // public function registrarRol(Request $request)
     // {
@@ -201,61 +201,63 @@ class RolController extends Controller
     public function actualizarRol(Request $request)
     {
         $reglas = [
-            'nombre_rol' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
-            'estado_rol' => 'required|regex:/^[0-1]+$/',
+            'nombre_rol' => 'required|max:25',
+            'estado_rol' => 'required',
         ];
-        
+
         $mensajes = [
             'nombre_rol.required' => 'Este campo es obligatorio',
             'nombre_rol.max' => 'Este campo debe contener maximo 25 caracteres',
             'estado_rol.required' => 'Este campo es obligatorio'
         ];
-        
+
         $datos = request()->all();
+
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
         if ($validacion->fails()) {
+            $respuestas['mensaje'] = $validacion;
+            $respuestas['error'] = true;
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             try {
                 DB::beginTransaction();
+                $ajax = Rol::where('rol', $request->nombre_old)->get();
+
 
                 $rol = new Rol();
+
                 $rol->setRolAttribute($request->nombre_rol);
                 $rol->setEstadoRolAttribute($request->estado_rol);
 
-                if (Rol::where('rol', $datos['nombre_rol'])->update($rol->toArray())) {
+                Rol::where('rol', $datos['nombre_rol_old'])->update($rol->toArray());
 
-                    $sql = log_auditoria::createLog(
-                        'rol',
-                        $rol->getRolAttribute(),
-                        'actualizo',
-                        $rol->nombre_rol
-                    );
-                    Log::insert($sql);
+                $sql = log_auditoria::createLog(
+                    'rol',
+                    $rol->getRolAttribute(),
+                    'actualizo',
+                    $request->nombre_old
+                );
+                Log::insert($sql);
 
-                    $eliminados = $request->funciones_eliminadas;
-                    $agregados = $request->funciones_agregadas;
+                $eliminados = $request->funciones_eliminadas;
+                $agregados = $request->funciones_agregadas;
 
-                    foreach ($eliminados as $eliminado) {
-                        if (isset($eliminados)) {
-                            DB::table('permisos')->where('id_permiso', $eliminado['id'])->update(['estado_permiso' => 0]);
-                        }
+                foreach ($eliminados as $eliminado) {
+                    if (isset($eliminados)) {
+                        DB::table('permisos')->where('id_permiso', $eliminado['id'])->update(['estado_permiso' => 0]);
                     }
-                    foreach ($agregados as $agregado) {
-                        if (isset($agregados)) {
-
-                            Permiso::where('id_permiso', $agregado)->update(['estado_permiso' => 1]);
-                        }
-                    }
-
-                    return view('alertas.actualizarExitoso');
-                } else {
-                    $alerta = view('alertas.modificarError')->render();
-                    return response()->json(['alerta' => $alerta]);
                 }
+                foreach ($agregados as $agregado) {
+                    if (isset($agregados)) {
+
+                        Permiso::where('id_permiso', $agregado)->update(['estado_permiso' => 1]);
+                    }
+                }
+                $alerta = view('alertas.actualizarExitoso')->render();
+                DB::commit();
+                return response()->json(['alerta' => $alerta]);
             } catch (\Throwable $th) {
-                dd($th);
                 DB::rollBack();
                 throw $th;
             }

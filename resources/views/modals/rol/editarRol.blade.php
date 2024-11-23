@@ -35,7 +35,7 @@
                     </div>
                     <button id="btnActualizar" class="btn btn-success">Actualizar</button>
                 </form>
-                <div id="alertasActualizar"></div>
+                <div id="alertasModificar"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
