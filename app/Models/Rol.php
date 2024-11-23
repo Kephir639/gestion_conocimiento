@@ -14,7 +14,6 @@ class Rol extends Model
 
     // Define the fillable properties
     protected $fillable = [
-        'id_rol',
         'rol',
         'estado_rol'
     ];
@@ -23,11 +22,6 @@ class Rol extends Model
     public function getIdRolAttribute()
     {
         return $this->attributes['id_rol'];
-    }
-
-    public function setIdRolAttribute($value)
-    {
-        $this->attributes['id_rol'] = $value;
     }
 
     public function getRolAttribute()

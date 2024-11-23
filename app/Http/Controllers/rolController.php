@@ -36,87 +36,69 @@ class RolController extends Controller
 
     public function registrarRol(Request $request)
     {
-
         $reglas = [
             'nombre_rol' => 'required|max:150',
             'funciones' => 'required'
         ];
-
+    
         $mensajes = [
             'nombre_rol.required' => 'Este campo es obligatorio',
             'nombre_rol.max' => 'Este campo debe contener máximo 150 caracteres',
         ];
-
-        $datos = request()->all();
+    
+        $datos = $request->except('_token', 'controladores');
         $validacion = Validator::make($datos, $reglas, $mensajes);
-
-        unset($datos['_token']);
-        unset($datos['controladores']);
-
+    
         if ($validacion->fails()) {
             return response()->json(['errors' => $validacion->errors()], 422);
-        } else {
-            $ajax = Rol::where('rol', $datos['nombre_rol'])->get();
-
-            if (count($ajax)) {
-                $alerta = view('alertas.repetido')->render();
-                return response()->json(['alerta' => $alerta]);
-            } else {
-                try {
-                    $rol = new Rol();
-                    $rol->setRolAttribute($request->nombre_rol);
-                    $rol->setEstadoRolAttribute(1);
-                    $rol->save();
-                    if (Rol::create($rol->toArray())) {
-                        $sql = log_auditoria::createLog(
-                            'rol',
-                            $rol->getRolAttribute(),
-                            'registro'
-                        );
-                        $idRol = $rol->getIdRolAttribute();
-                        Log::insert($sql);
-
-                        $permiso = new Permiso();
-                        $permiso->setEstadoPermiso(1);
-
-
-                        if ($request->has('funciones')) {
-                            foreach ($request->funciones as $funcion) {
-                                $resultado = Permiso::create([
-                                    'id_rol' => $idRol,
-                                    'id_funcion' => $funcion,
-                                    'estado_permiso' => $permiso
-                                ]);
-                            }
-                        }
-
-                        if ($rol == true && $resultado == true) {
-                            $controladores = $request->controladores;
-                            $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate('10');
-
-                            $tabla = view('modals.rol.tablaRol', [
-                                'controladores' => $controladores,
-                                'listaRoles' => $listaRoles
-                            ])->render();
-
-                            $alerta = view('alertas.registrarExitoso')->render();
-                            DB::commit();
-                            return response()->json([
-                                'tabla' => $tabla,
-                                'alerta' => $alerta
-                            ]);
-                        }
-                        Log::insert($sql);
-                    } else {
-                        return 'Error';
-                    }
-                } catch (\Throwable $th) {
-                    DB::rollBack();
-                    throw $th;
+        }
+    
+        $existe = Rol::where('rol', $datos['nombre_rol'])->exists();
+    
+        if ($existe) {
+            $alerta = view('alertas.repetido')->render();
+            return response()->json(['alerta' => $alerta]);
+        }
+    
+        try {
+            DB::beginTransaction();
+    
+            // Crear el rol
+            $rol = Rol::create([
+                'rol' => $request->nombre_rol,
+                'estado_rol' => 1,
+            ]);
+    
+            // Asignar permisos
+            if ($request->has('funciones')) {
+                foreach ($request->funciones as $funcion) {
+                    Permiso::create([
+                        'id_rol' => $rol->id_rol,
+                        'id_funcion' => $funcion,
+                        'estado_permiso' => 1
+                    ]);
                 }
             }
+    
+            // Renderizar tabla y alerta
+            $controladores = $request->controladores;
+            $listaRoles = Rol::orderBy('id_rol', 'desc')->paginate(10);
+    
+            $tabla = view('modals.rol.tablaRol', compact('controladores', 'listaRoles'))->render();
+            $alerta = view('alertas.registrarExitoso')->render();
+    
+            DB::commit();
+    
+            return response()->json([
+                'tabla' => $tabla,
+                'alerta' => $alerta,
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
         }
     }
+    
 
     // public function registrarRol(Request $request)
     // {
@@ -218,38 +200,37 @@ class RolController extends Controller
 
     public function actualizarRol(Request $request)
     {
-        $datos = request()->all();
         $reglas = [
-            'nombre_rol' => 'required|max:25',
-            'estado_rol' => 'required',
+            'nombre_rol' => 'required|max:30|regex:/^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$/',
+            'estado_rol' => 'required|regex:/^[0-1]+$/',
         ];
-
+        
         $mensajes = [
             'nombre_rol.required' => 'Este campo es obligatorio',
             'nombre_rol.max' => 'Este campo debe contener maximo 25 caracteres',
             'estado_rol.required' => 'Este campo es obligatorio'
         ];
-
+        
+        $datos = request()->all();
         $validacion = Validator::make($datos, $reglas, $mensajes);
 
         if ($validacion->fails()) {
-            $respuestas['mensaje'] = $validacion;
-            $respuestas['error'] = true;
             return response()->json(['errors' => $validacion->errors()], 422);
         } else {
             try {
-                $rol = new Rol();
+                DB::beginTransaction();
 
+                $rol = new Rol();
                 $rol->setRolAttribute($request->nombre_rol);
                 $rol->setEstadoRolAttribute($request->estado_rol);
 
-                if (Rol::where('rol', $request->nombre_rol_old)->update($rol->toArray())) {
+                if (Rol::where('rol', $datos['nombre_rol'])->update($rol->toArray())) {
 
                     $sql = log_auditoria::createLog(
                         'rol',
                         $rol->getRolAttribute(),
                         'actualizo',
-                        $request->nombre_rol_old
+                        $rol->nombre_rol
                     );
                     Log::insert($sql);
 

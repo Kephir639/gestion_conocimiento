@@ -51,61 +51,121 @@ $(document).ready(function () {
 
   $(document).on("click", "#btnActualizar", function (e) {
     e.preventDefault();
+
+    let button = $(this);
+    let nombre = $("#inputNombreRol").val();
+    let nombre_old = button.parents("tr").find("td:eq(0)").text().trim();
+    let estado = $("#inputEstadoRol").val();
+    let token = $("#_token").val();
+
     $.ajax({
-      type: "GET",
-      url: "funciones",
-      success: function (dataGET) {
-        let nombre = $("#inputNombreRol").val();
-        let nombre_old = $(this).parents("tr").find("td:eq(0)").text().trim();
-        let estado = $("#inputEstadoRol").val();
-        let token = $("#_token").val();
-        let funciones = dataGET; //Antes de actualizar
-        let funciones_actualizadas = [];
-        $('input[type="checkbox"][name="checkFunciones[]"]:checked').each(
-          function () {
-            funciones_actualizadas.push(this.value);
-          }
-        );
-        let funcionesAgregadas = null;
-        let funcionesEliminadas = null;
-        funcionesAgregadas = funciones_actualizadas.filter(
-          (funcion) => !funciones.includes(funcion)
-        );
-        funcionesEliminadas = funciones.filter(
-          (funcion) => !funciones_actualizadas.includes(funcion)
-        );
+        type: "GET",
+        url: "funciones",
+        success: function (funciones) {
+            let funciones_actualizadas = [];
+            $('input[type="checkbox"][name="checkFunciones[]"]:checked').each(function () {
+                funciones_actualizadas.push(this.value);
+            });
 
-        $.ajax({
-          type: "POST",
-          url: "actualizar_roles",
-          data: {
-            nombre_rol: nombre,
-            estado_rol: estado,
-            funciones_agregadas: funcionesAgregadas,
-            funciones_eliminadas: funcionesEliminadas,
-            nombre_rol_old: nombre_old,
-            _token: token,
-          },
-          success: function (dataPost) {
-            $("#alertasModificar").html(dataPost);
-            $(button).parents("tr").find("td:eq(0)").text(nombre);
-            $(button).parents("tr").find("td:eq(1)").val(estado);
-          },
-          error: function (xhr, status, error) {
-            if (xhr.status === 422) {
-              let errors = xhr.responseJSON.errors;
+            let funcionesAgregadas = funciones_actualizadas.filter(funcion => !funciones.includes(funcion));
+            let funcionesEliminadas = funciones.filter(funcion => !funciones_actualizadas.includes(funcion));
 
-              $.each(errors, function (clave, valor) {
-                $("#div_" + clave)
-                  .find(".errorValidacion")
-                  .html(valor);
-              });
-            }
-          },
-        });
-      },
+            $.ajax({
+                type: "POST",
+                url: "actualizar_roles",
+                data: {
+                    nombre_rol: nombre,
+                    estado_rol: estado,
+                    funciones_agregadas: funcionesAgregadas,
+                    funciones_eliminadas: funcionesEliminadas,
+                    nombre_rol_old: nombre_old,
+                    _token: token,
+                },
+                success: function (response) {
+                    if (response.estado === 'success') {
+                        $("#alertasModificar").html('<div class="alert alert-success">' + response.mensaje + '</div>');
+                        button.closest("tr").find("td:eq(0)").text(nombre);
+                        button.closest("tr").find("td:eq(1)").text(estado);
+                    }
+                },
+                error: function (xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        $.each(errors, function (key, message) {
+                            $("#div_" + key)
+                                .find(".errorValidacion")
+                                .html(message);
+                        });
+                    } else {
+                        $("#alertasModificar").html('<div class="alert alert-danger">Ocurrió un error inesperado.</div>');
+                    }
+                },
+            });
+        },
+        error: function () {
+            $("#alertasModificar").html('<div class="alert alert-danger">Error al obtener las funciones actuales.</div>');
+        },
     });
-  });
+});
+
+  // $(document).on("click", "#btnActualizar", function (e) {
+  //   e.preventDefault();
+    
+  //   $.ajax({
+  //     type: "GET",
+  //     url: "funciones",
+  //     success: function (dataGET) {
+  //       let nombre = $("#inputNombreRol").val();
+  //       let nombre_old = $(this).parents("tr").find("td:eq(0)").text().trim();
+  //       let estado = $("#inputEstadoRol").val();
+  //       let token = $("#_token").val();
+  //       let funciones = dataGET; //Antes de actualizar
+  //       let funciones_actualizadas = [];
+  //       $('input[type="checkbox"][name="checkFunciones[]"]:checked').each(
+  //         function () {
+  //           funciones_actualizadas.push(this.value);
+  //         }
+  //       );
+  //       let funcionesAgregadas = null;
+  //       let funcionesEliminadas = null;
+  //       funcionesAgregadas = funciones_actualizadas.filter(
+  //         (funcion) => !funciones.includes(funcion)
+  //       );
+  //       funcionesEliminadas = funciones.filter(
+  //         (funcion) => !funciones_actualizadas.includes(funcion)
+  //       );
+
+  //       $.ajax({
+  //         type: "POST",
+  //         url: "actualizar_roles",
+  //         data: {
+  //           nombre_rol: nombre,
+  //           estado_rol: estado,
+  //           funciones_agregadas: funcionesAgregadas,
+  //           funciones_eliminadas: funcionesEliminadas,
+  //           nombre_rol_old: nombre_old,
+  //           _token: token,
+  //         },
+  //         success: function (dataPost) {
+  //           $("#alertasModificar").html(dataPost);
+  //           $(button).parents("tr").find("td:eq(0)").text(nombre);
+  //           $(button).parents("tr").find("td:eq(1)").val(estado);
+  //         },
+  //         error: function (xhr, status, error) {
+  //           if (xhr.status === 422) {
+  //             let errors = xhr.responseJSON.errors;
+
+  //             $.each(errors, function (clave, valor) {
+  //               $("#div_" + clave)
+  //                 .find(".errorValidacion")
+  //                 .html(valor);
+  //             });
+  //           }
+  //         },
+  //       });
+  //     },
+  //   });
+  // });
 
   $(document).on("click", "#btnRegistrar", function (e) {
     e.preventDefault();
